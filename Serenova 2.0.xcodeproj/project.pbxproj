@@ -14,7 +14,6 @@
 		23D1E0F42B7A8FDF00539A62 /* Serenova_2_0Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D1E0F32B7A8FDF00539A62 /* Serenova_2_0Tests.swift */; };
 		23D1E0FE2B7A8FDF00539A62 /* Serenova_2_0UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D1E0FD2B7A8FDF00539A62 /* Serenova_2_0UITests.swift */; };
 		23D1E1002B7A8FDF00539A62 /* Serenova_2_0UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D1E0FF2B7A8FDF00539A62 /* Serenova_2_0UITestsLaunchTests.swift */; };
-		23D1E10D2B7A901C00539A62 /* Serenova 2.0 in Resources */ = {isa = PBXBuildFile; fileRef = 23D1E10C2B7A901C00539A62 /* Serenova 2.0 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,7 +44,6 @@
 		23D1E0F92B7A8FDF00539A62 /* Serenova 2.0UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Serenova 2.0UITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23D1E0FD2B7A8FDF00539A62 /* Serenova_2_0UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serenova_2_0UITests.swift; sourceTree = "<group>"; };
 		23D1E0FF2B7A8FDF00539A62 /* Serenova_2_0UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serenova_2_0UITestsLaunchTests.swift; sourceTree = "<group>"; };
-		23D1E10C2B7A901C00539A62 /* Serenova 2.0 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Serenova 2.0"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,7 +96,6 @@
 			children = (
 				23D1E0E22B7A8FDE00539A62 /* Serenova_2_0App.swift */,
 				23D1E0E42B7A8FDE00539A62 /* ContentView.swift */,
-				23D1E10C2B7A901C00539A62 /* Serenova 2.0 */,
 				23D1E0E62B7A8FDF00539A62 /* Assets.xcassets */,
 				23D1E0E82B7A8FDF00539A62 /* Preview Content */,
 			);
@@ -236,7 +233,6 @@
 			files = (
 				23D1E0EA2B7A8FDF00539A62 /* Preview Assets.xcassets in Resources */,
 				23D1E0E72B7A8FDF00539A62 /* Assets.xcassets in Resources */,
-				23D1E10D2B7A901C00539A62 /* Serenova 2.0 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
