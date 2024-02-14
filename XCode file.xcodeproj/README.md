@@ -1,1 +1,0 @@
-# Serenova - Team 24
