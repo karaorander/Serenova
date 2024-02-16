@@ -80,7 +80,7 @@ struct SignUpView: View {
                     }
                     Spacer()
                     
-                    NavigationLink(destination: LoginView()) {
+                    NavigationLink(destination: LoginView().navigationBarBackButtonHidden()) {
                         Text("Already have an account? Login here.").underline()
                         
                     }
@@ -94,6 +94,7 @@ struct SignUpView: View {
     }
 
     func createUser() {
+        //ensure no fields are empty
         if (name != "" && email != "" && phone != "" && password1 != "" && password2 != "") {
             if(password1 == password2) {
                 //firebase authentication
