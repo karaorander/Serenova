@@ -15,7 +15,7 @@ struct SignUpView: View {
     @State private var password2 = ""
     
     @State private var toggleIsOn: Bool = false
-    @State private var showAlert1 = true
+    @State private var showlogin = false
     @State private var showAlert2 = false
     
     
@@ -80,7 +80,10 @@ struct SignUpView: View {
                 Spacer()
                 Text("Already have an account? Login here.").underline().onTapGesture {
                     //TODO: toggle login page here
+                    showlogin.toggle()
                     
+                }.sheet(isPresented: $showlogin){
+                   LoginView()
                 }
                 
             }
