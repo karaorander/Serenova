@@ -16,6 +16,7 @@
 		23D1E1002B7A8FDF00539A62 /* Serenova_2_0UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D1E0FF2B7A8FDF00539A62 /* Serenova_2_0UITestsLaunchTests.swift */; };
 		E0231FFE2B7DB93D009A4E39 /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0231FFD2B7DB93D009A4E39 /* ColorExtensions.swift */; };
 		E029E4FB2B7DAC4F00E8220B /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */; };
+		F23D7CDF2B7FAF320018F325 /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,7 @@
 		23D1E0FF2B7A8FDF00539A62 /* Serenova_2_0UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serenova_2_0UITestsLaunchTests.swift; sourceTree = "<group>"; };
 		E0231FFD2B7DB93D009A4E39 /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
 		E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +103,7 @@
 				E0231FFB2B7DB8F8009A4E39 /* Extensions */,
 				23D1E0E22B7A8FDE00539A62 /* Serenova_2_0App.swift */,
 				E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */,
+				F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */,
 				23D1E0E42B7A8FDE00539A62 /* ContentView.swift */,
 				23D1E0E62B7A8FDF00539A62 /* Assets.xcassets */,
 				23D1E0E82B7A8FDF00539A62 /* Preview Content */,
@@ -273,6 +276,7 @@
 			files = (
 				23D1E0E52B7A8FDE00539A62 /* ContentView.swift in Sources */,
 				E0231FFE2B7DB93D009A4E39 /* ColorExtensions.swift in Sources */,
+				F23D7CDF2B7FAF320018F325 /* ResetPasswordView.swift in Sources */,
 				E029E4FB2B7DAC4F00E8220B /* SignUpView.swift in Sources */,
 				23D1E0E32B7A8FDE00539A62 /* Serenova_2_0App.swift in Sources */,
 			);
