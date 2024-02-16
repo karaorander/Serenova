@@ -56,11 +56,13 @@ struct SignUpView: View {
                             .background(.white.opacity(0.15))
                             .cornerRadius(10)
                         SecureField("Create Password",text: $password1)
+                            .textContentType(.newPassword)
                             .padding()
                             .frame(width: 300, height: 50)
                             .background(.white.opacity(0.15))
                             .cornerRadius(10)
                         SecureField("Confirm Password",text: $password2)
+                            .textContentType(.newPassword)
                             .padding()
                             .frame(width: 300, height: 50)
                             .background(.white.opacity(0.15))
@@ -80,7 +82,7 @@ struct SignUpView: View {
                     }
                     Spacer()
                     
-                    NavigationLink(destination: LoginView()) {
+                    NavigationLink(destination: LoginView().navigationBarBackButtonHidden(true)) {
                         Text("Already have an account? Login here.").underline()
                         
                     }
