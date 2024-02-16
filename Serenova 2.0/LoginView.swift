@@ -13,7 +13,7 @@ struct LoginView: View {
     @State private var showsignup = false
     @State private var showreset = false
     var body: some View {
-        NavigationView{
+    NavigationView{
             ZStack {
                 
                 // Color gradient
@@ -68,6 +68,7 @@ struct LoginView: View {
                 }
             }
         }
+    .buttonStyle(PlainButtonStyle())
     }
 }
 
