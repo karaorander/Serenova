@@ -97,6 +97,7 @@ struct SignUpView: View {
     }
 
     func createUser() {
+        //ensure no fields are empty
         if (name != "" && email != "" && phone != "" && password1 != "" && password2 != "") {
             if(password1 == password2) {
                 //firebase authentication
