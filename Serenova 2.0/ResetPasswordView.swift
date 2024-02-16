@@ -66,7 +66,7 @@ struct ResetPasswordView: View {
                         Text("Reset Password").font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(10)
                     }
                     Spacer().frame(height: 80)
-                    NavigationLink(destination: SignUpView().navigationBarBackButtonHidden(true)) {
+                    NavigationLink(destination: LoginView().navigationBarBackButtonHidden(true)) {
                         Text("Don't Need to Reset Password?").underline()
                     }
                     
