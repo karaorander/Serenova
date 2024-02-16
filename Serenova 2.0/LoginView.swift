@@ -10,6 +10,8 @@ import SwiftUI
 struct LoginView: View {
     @ State private var username: String = ""
     @ State private var password: String = ""
+    @State private var showsignup = false
+    @State private var showreset = false
     var body: some View {
         ZStack {
             
@@ -46,28 +48,31 @@ struct LoginView: View {
                 }
                 
                 // Forgot password link
-                Spacer().frame(height: 30)
-                NavigationLink(destination: ResetPasswordView()) {
-                    Text("Forgot Password?")
-                        .frame(alignment: .leading)
-                        .underline()
-                        .foregroundColor(.white)
+                Spacer().frame(height: 20)
+                Text("Forgot Password").underline().onTapGesture {
+                    //TODO: toggle login page here
+                    showreset.toggle()
+                    
+                }.sheet(isPresented: $showreset){
+                   ResetPasswordView()
                 }
                 
                 // Login button
-                Spacer().frame(height:30)
+                Spacer().frame(height:25)
                 Button(action:{login()}){
                     Text("Login").font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(10)
                 }
                 
-                VStack(spacing:20){
-                    Spacer().frame(height: 1)
-                    NavigationLink(destination: SignUpView()) {
-                        Text("Sign Up")
-                            .underline()
-                            .foregroundColor(.white)
-                    }
+                
+                Spacer().frame(height: 20)
+                Text("Sign Up").underline().onTapGesture {
+                    //TODO: toggle login page here
+                    showsignup.toggle()
+                    
+                }.sheet(isPresented: $showsignup){
+                    SignUpView()
                 }
+            
             }
         }
     }
