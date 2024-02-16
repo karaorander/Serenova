@@ -41,8 +41,7 @@ struct LoginView: View {
                             .background(.white.opacity(0.15))
                             .cornerRadius(10)
                         
-                        SecureField("Password",text: $password)
-                            .textContentType(.newPassword)
+                        TextField("Password",text: $password)
                             .padding()
                             .frame(width: 300, height: 50)
                             .background(.white.opacity(0.15))
