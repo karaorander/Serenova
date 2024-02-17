@@ -29,7 +29,7 @@ struct ResetPasswordView: View {
                     VStack(spacing:20) {
                         Text("Reset Password")
                             .font(.system(size: 45, weight: .heavy))
-                            .foregroundColor(.nightfallHarmonyNavyBlue)
+                            .foregroundColor(.nightfallHarmonyNavyBlue.opacity(0.6))
                             .frame(height: 2.0)
                             .padding()
                         Text("Reset your Servenova Account Password")
@@ -44,13 +44,11 @@ struct ResetPasswordView: View {
                             .cornerRadius(10)
                         
                         SecureField("New Password",text: $newPassword)
-                            .textContentType(.newPassword)
                             .padding()
                             .frame(width: 300, height: 50)
                             .background(.white.opacity(0.15))
                             .cornerRadius(10)
-                        SecureField("Confirm Password",text: $confirmPassword)
-                            .textContentType(.newPassword)
+                        SecureField("Confirm Password",text: $newPassword)
                             .padding()
                             .frame(width: 300, height: 50)
                             .background(.white.opacity(0.15))
@@ -68,7 +66,7 @@ struct ResetPasswordView: View {
                         Text("Reset Password").font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(10)
                     }
                     Spacer().frame(height: 80)
-                    NavigationLink(destination: LoginView().navigationBarBackButtonHidden(true)) {
+                    NavigationLink(destination: SignUpView().navigationBarBackButtonHidden(true)) {
                         Text("Don't Need to Reset Password?").underline()
                     }
                     

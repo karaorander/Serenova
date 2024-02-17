@@ -25,7 +25,7 @@ struct LoginView: View {
                     VStack(spacing:20) {
                         Text("Login")
                             .font(.system(size: 45, weight: .heavy))
-                            .foregroundColor(.nightfallHarmonyNavyBlue)
+                            .foregroundColor(.nightfallHarmonyNavyBlue.opacity(0.6))
                             .frame(height: 2.0)
                             .padding()
                         
@@ -41,8 +41,7 @@ struct LoginView: View {
                             .background(.white.opacity(0.15))
                             .cornerRadius(10)
                         
-                        SecureField("Password",text: $password)
-                            .textContentType(.newPassword)
+                        TextField("Password",text: $password)
                             .padding()
                             .frame(width: 300, height: 50)
                             .background(.white.opacity(0.15))

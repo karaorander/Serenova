@@ -40,6 +40,7 @@
 /* Begin PBXFileReference section */
 		239E08192B7FC8990036AD81 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; tabWidth = 4; };
 		239E081B2B80125C0036AD81 /* Serenova-2-0-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Serenova-2-0-Info.plist"; sourceTree = SOURCE_ROOT; };
+		239E081C2B803E910036AD81 /* Serenova 2.0.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Serenova 2.0.entitlements"; sourceTree = "<group>"; };
 		23D1E0DF2B7A8FDE00539A62 /* Serenova 2.0.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Serenova 2.0.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23D1E0E22B7A8FDE00539A62 /* Serenova_2_0App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serenova_2_0App.swift; sourceTree = "<group>"; };
 		23D1E0E42B7A8FDE00539A62 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -103,6 +104,7 @@
 		23D1E0E12B7A8FDE00539A62 /* Serenova 2.0 */ = {
 			isa = PBXGroup;
 			children = (
+				239E081C2B803E910036AD81 /* Serenova 2.0.entitlements */,
 				239E081B2B80125C0036AD81 /* Serenova-2-0-Info.plist */,
 				E0231FFB2B7DB8F8009A4E39 /* Extensions */,
 				23D1E0E22B7A8FDE00539A62 /* Serenova_2_0App.swift */,
@@ -445,6 +447,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Serenova 2.0/Serenova 2.0.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Serenova 2.0/Preview Content\"";
@@ -474,6 +477,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Serenova 2.0/Serenova 2.0.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Serenova 2.0/Preview Content\"";

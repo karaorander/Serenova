@@ -31,7 +31,7 @@ struct SignUpView: View {
                     VStack(spacing:20) {
                         Text("Sign Up")
                             .font(.system(size: 60, weight: .heavy))
-                            .foregroundColor(.nightfallHarmonyNavyBlue)
+                            .foregroundColor(.nightfallHarmonyNavyBlue.opacity(0.6))
                             .frame(height: 2.0)
                             .padding()
                         Text("Create your Serenova account")
@@ -56,13 +56,11 @@ struct SignUpView: View {
                             .background(.white.opacity(0.15))
                             .cornerRadius(10)
                         SecureField("Create Password",text: $password1)
-                            .textContentType(.newPassword)
                             .padding()
                             .frame(width: 300, height: 50)
                             .background(.white.opacity(0.15))
                             .cornerRadius(10)
                         SecureField("Confirm Password",text: $password2)
-                            .textContentType(.newPassword)
                             .padding()
                             .frame(width: 300, height: 50)
                             .background(.white.opacity(0.15))
@@ -73,7 +71,7 @@ struct SignUpView: View {
                     Toggle(isOn: $toggleIsOn, label: {Text ("Allow Push Notifications")})
                         .toggleStyle(SwitchToggleStyle(tint: .moonlitSerenityCharcoalGray))
                         .padding().frame(width:300, height: 20)
-                        .foregroundColor(.dreamyTwilightMidnightBlue).fontWeight(.medium)
+                        .fontWeight(.medium)
                     //TODO: need to enbale push notifications
                     
                     Spacer()
@@ -82,7 +80,7 @@ struct SignUpView: View {
                     }
                     Spacer()
                     
-                    NavigationLink(destination: LoginView().navigationBarBackButtonHidden(true)) {
+                    NavigationLink(destination: LoginView().navigationBarBackButtonHidden()) {
                         Text("Already have an account? Login here.").underline()
                         
                     }
