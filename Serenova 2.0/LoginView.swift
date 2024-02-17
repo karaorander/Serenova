@@ -21,7 +21,6 @@ struct LoginView: View {
                     .ignoresSafeArea()
                 
                 VStack {
-                    //Spacer()
                     VStack(spacing:20) {
                         Text("Login")
                             .font(.system(size: 45, weight: .heavy))
@@ -41,7 +40,8 @@ struct LoginView: View {
                             .background(.white.opacity(0.15))
                             .cornerRadius(10)
                         
-                        TextField("Password",text: $password)
+                        SecureField("Password",text: $password)
+                            .textContentType(.newPassword)
                             .padding()
                             .frame(width: 300, height: 50)
                             .background(.white.opacity(0.15))

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		239E081A2B7FC8990036AD81 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239E08192B7FC8990036AD81 /* LoginView.swift */; };
+		239E081E2B80424A0036AD81 /* AccountInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239E081D2B80424A0036AD81 /* AccountInfoView.swift */; };
 		23D1E0E32B7A8FDE00539A62 /* Serenova_2_0App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D1E0E22B7A8FDE00539A62 /* Serenova_2_0App.swift */; };
 		23D1E0E52B7A8FDE00539A62 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D1E0E42B7A8FDE00539A62 /* ContentView.swift */; };
 		23D1E0E72B7A8FDF00539A62 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 23D1E0E62B7A8FDF00539A62 /* Assets.xcassets */; };
@@ -41,6 +42,7 @@
 		239E08192B7FC8990036AD81 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; tabWidth = 4; };
 		239E081B2B80125C0036AD81 /* Serenova-2-0-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Serenova-2-0-Info.plist"; sourceTree = SOURCE_ROOT; };
 		239E081C2B803E910036AD81 /* Serenova 2.0.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Serenova 2.0.entitlements"; sourceTree = "<group>"; };
+		239E081D2B80424A0036AD81 /* AccountInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountInfoView.swift; sourceTree = "<group>"; };
 		23D1E0DF2B7A8FDE00539A62 /* Serenova 2.0.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Serenova 2.0.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23D1E0E22B7A8FDE00539A62 /* Serenova_2_0App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serenova_2_0App.swift; sourceTree = "<group>"; };
 		23D1E0E42B7A8FDE00539A62 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -108,6 +110,7 @@
 				239E081B2B80125C0036AD81 /* Serenova-2-0-Info.plist */,
 				E0231FFB2B7DB8F8009A4E39 /* Extensions */,
 				23D1E0E22B7A8FDE00539A62 /* Serenova_2_0App.swift */,
+				239E081D2B80424A0036AD81 /* AccountInfoView.swift */,
 				E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */,
 				F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */,
 				239E08192B7FC8990036AD81 /* LoginView.swift */,
@@ -287,6 +290,7 @@
 				F23D7CDF2B7FAF320018F325 /* ResetPasswordView.swift in Sources */,
 				E029E4FB2B7DAC4F00E8220B /* SignUpView.swift in Sources */,
 				23D1E0E32B7A8FDE00539A62 /* Serenova_2_0App.swift in Sources */,
+				239E081E2B80424A0036AD81 /* AccountInfoView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
