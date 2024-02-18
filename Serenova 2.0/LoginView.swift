@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct LoginView: View {
     @ State private var username: String = ""
@@ -74,6 +75,35 @@ struct LoginView: View {
 
 func login() {
     // firebase authentication login
+    // won't work until firebase set up
+    Firebase.Auth.auth.signIn(withEmail: username, password: password, completion: { [weak self] result, error in
+        guard let strongSelf = self else {
+            return
+        }
+
+        guard error == nil else {
+            strongSelf.failedLogin()
+            return
+        }
+
+        ContentView()
+    })
+}
+
+func failedLogin() {
+    let alert = UIAlertController(title: "Failed Login",
+                                  message: "Email or Password is incorrect",
+                                  preferredStyle: .alert)
+    alert.addAction(UIAlertAction(title: "Continue",
+                                  style: .default
+                                  handler: { in
+    }))
+    alert.addAction(UIAlertAction(title: "Cancel",
+                                      style: .cancel
+                                      handler: { in
+    }))
+
+    present(alert, animated: true)
 }
 
 #Preview {
