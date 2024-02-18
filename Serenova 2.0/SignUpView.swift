@@ -6,7 +6,10 @@
 //
 
 import SwiftUI
-// Need to implement after adding project to firebase: import Firebase
+import FirebaseCore
+import FirebaseDatabase
+import FirebaseAuth
+
 struct SignUpView: View {
     @State private var name = ""
     @State private var email = ""
@@ -98,13 +101,15 @@ struct SignUpView: View {
 
     func createUser() {
         //Ensure no fields are empty
-        if (name != "" && email != "" && phone != "" && password1 != "" && password2 != "") {
-            print("Error!")
+        if (name == "" || email == "" || phone == "" || password1 == "" || password2 == "") {
+            print("Error! Not all fields completed!")
+            return
         }
         
         // Ensure both password fields match
         if (password1 != password2) {
-            print("Error!")
+            print("Error! Passwords do not match!")
+            return
         }
         
         // Ensure password matches criteria:
@@ -112,21 +117,37 @@ struct SignUpView: View {
         // one number, one special character
         if (password1.count < 8) {
             print("Error! Need at least 8 characters!")
+            return
         }
         
         if (!password1.contains(/[\W]/) && !password1.contains(/[_]/)) {
             print("Error! Need a special character!")
+            return
         }
         
         if (!password1.contains(where: {$0.isUppercase})) {
             print("Error! Need an uppercase letter!")
+            return
         }
         
         if(!password1.contains(where: {$0.isNumber})) {
             print("Error! Need a number!")
+            return
         }
         
-        // Handle user creation
+        // Handle User Creation
+        Auth.auth().createUser(withEmail: email, password: password1) { authResult, error in
+          
+            if let error = error {
+                print(error)
+                return
+            }
+            
+            if let authResult = authResult {
+                print(authResult)
+            }
+            
+        }
         
     }
     
