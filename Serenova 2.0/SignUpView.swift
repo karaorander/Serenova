@@ -97,22 +97,38 @@ struct SignUpView: View {
     }
 
     func createUser() {
-        //ensure no fields are empty
+        //Ensure no fields are empty
         if (name != "" && email != "" && phone != "" && password1 != "" && password2 != "") {
-            if(password1 == password2) {
-                //firebase authentication
-                //i.e. Auth.auth.createUser()
-            } else {
-                print("error!")
-            }
-        } else {
             print("Error!")
         }
+        
+        // Ensure both password fields match
+        if (password1 != password2) {
+            print("Error!")
+        }
+        
+        // Ensure password matches criteria:
+        // At least 8 characters, one uppercase,
+        // one number, one special character
+        if (password1.count < 8) {
+            print("Error! Need at least 8 characters!")
+        }
+        
+        if (!password1.contains(/[\W]/) && !password1.contains(/[_]/)) {
+            print("Error! Need a special character!")
+        }
+        
+        if (!password1.contains(where: {$0.isUppercase})) {
+            print("Error! Need an uppercase letter!")
+        }
+        
+        if(!password1.contains(where: {$0.isNumber})) {
+            print("Error! Need a number!")
+        }
+        
+        // Handle user creation
+        
     }
-    
-    //not sure if this falls under UI
-    //making sure all text fields are valid upon submission
-    
     
 }
 #Preview {
