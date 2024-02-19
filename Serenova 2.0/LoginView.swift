@@ -115,7 +115,7 @@ struct LoginView: View {
     }
 }
 
-
+/*
 func login() {
     // firebase authentication login
     // won't work until firebase set up
@@ -148,7 +148,7 @@ func failedLogin() {
 
     present(alert, animated: true)
 }
-
+*/
 #Preview {
     LoginView()
 }

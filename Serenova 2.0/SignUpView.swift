@@ -247,7 +247,7 @@ struct SignUpView: View {
                 FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password1, completion: { result, error in
                     ContentView()
                     // move to ContentView
-                }
+                })
             } else {
                 print("error!")
             }
