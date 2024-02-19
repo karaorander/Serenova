@@ -6,8 +6,10 @@
 //
 
 import SwiftUI
+import FirebaseCore
+import FirebaseDatabase
 import FirebaseAuth
-// Need to implement after adding project to firebase: import Firebase
+
 struct SignUpView: View {
     @State private var name = ""
     @State private var email = ""
@@ -98,25 +100,56 @@ struct SignUpView: View {
     }
 
     func createUser() {
-        //ensure no fields are empty
-        if (name != "" && email != "" && phone != "" && password1 != "" && password2 != "") {
-            if(password1 == password2) {
-                // won't work until firebase set up (set email/password login)
-                FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password1, completion: { result, error in
-                    ContentView()
-                    // move to ContentView
-                }
-            } else {
-                print("error!")
-            }
-        } else {
-            print("Error!")
+        //Ensure no fields are empty
+        if (name == "" || email == "" || phone == "" || password1 == "" || password2 == "") {
+            print("Error! Not all fields completed!")
+            return
         }
+        
+        // Ensure both password fields match
+        if (password1 != password2) {
+            print("Error! Passwords do not match!")
+            return
+        }
+        
+        // Ensure password matches criteria:
+        // At least 8 characters, one uppercase,
+        // one number, one special character
+        if (password1.count < 8) {
+            print("Error! Need at least 8 characters!")
+            return
+        }
+        
+        if (!password1.contains(/[\W]/) && !password1.contains(/[_]/)) {
+            print("Error! Need a special character!")
+            return
+        }
+        
+        if (!password1.contains(where: {$0.isUppercase})) {
+            print("Error! Need an uppercase letter!")
+            return
+        }
+        
+        if(!password1.contains(where: {$0.isNumber})) {
+            print("Error! Need a number!")
+            return
+        }
+        
+        // Handle User Creation
+        Auth.auth().createUser(withEmail: email, password: password1) { authResult, error in
+          
+            if let error = error {
+                print(error)
+                return
+            }
+            
+            if let authResult = authResult {
+                print(authResult)
+            }
+            
+        }
+        
     }
-    
-    //not sure if this falls under UI
-    //making sure all text fields are valid upon submission
-    
     
 }
 #Preview {
