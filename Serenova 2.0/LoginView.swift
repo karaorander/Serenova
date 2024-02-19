@@ -93,7 +93,7 @@ struct LoginView: View {
         loginErrorMsg = ""
         
         if (username.isEmpty) {
-            loginErrorMsg = "Please enter your email"
+            loginErrorMsg = "Please enter your username"
         }
         if (password.isEmpty) {
             if ( loginErrorMsg == "") {
