@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 // Need to implement after adding project to firebase: import Firebase
 struct SignUpView: View {
     @State private var name = ""
@@ -100,8 +101,11 @@ struct SignUpView: View {
         //ensure no fields are empty
         if (name != "" && email != "" && phone != "" && password1 != "" && password2 != "") {
             if(password1 == password2) {
-                //firebase authentication
-                //i.e. Auth.auth.createUser()
+                // won't work until firebase set up (set email/password login)
+                FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password1, completion: { result, error in
+                    ContentView()
+                    // move to ContentView
+                }
             } else {
                 print("error!")
             }
