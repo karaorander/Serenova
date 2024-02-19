@@ -140,8 +140,7 @@ struct SignUpView: View {
             ) {
                 Button("OK") {}
             } message: {
-                Text("Make sure to complete all fields accurately before continuing")
-                    .multilineTextAlignment(.center)
+                Text(signupErrorMsg)
             }
         }
     }
@@ -162,6 +161,10 @@ struct SignUpView: View {
     
     /*
      * Function to verify that the password is valid
+     * Must be at least 8 characters
+     * Must have at least one capital letter
+     * Must have at least one number
+     * Must have at least one special character
      */
     func isValidPassword() -> Bool {
         // Ensure password matches criteria:
@@ -207,25 +210,24 @@ struct SignUpView: View {
         // Form Error Msg for Alert
         signupErrorMsg = ""
         
-        if (name.isEmpty) {
-            signupErrorMsg += "* Full Name field\n"
-        }
-        if (!isValidEmail()) {
-            signupErrorMsg += "* Email field\n"
-        }
-        if (!isValidPhoneNumber()) {
-            signupErrorMsg += "* Phone field\n"
+        if (!isValidConfirmedPassword()) {
+            signupErrorMsg = "Please confirm your password"
         }
         if (!isValidPassword()) {
-            signupErrorMsg += "* Password field\n"
+            signupErrorMsg = "Please enter a valid password"
         }
-        if (!isValidConfirmedPassword()) {
-            signupErrorMsg += "* Confirm Password field\n"
+        if (!isValidPhoneNumber()) {
+            signupErrorMsg = "Please enter a valid phone number"
+        }
+        if (!isValidEmail()) {
+            signupErrorMsg = "Please enter a valid email address"
+        }
+        if (name.isEmpty) {
+            signupErrorMsg = "Please enter your full name"
         }
         
         if (signupErrorMsg != "") {
             // Add message to alert later after formatting is finished
-            signupErrorMsg = "Please fix the following:\n" + signupErrorMsg
             signupError = true
             return
         }
