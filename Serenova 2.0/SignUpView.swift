@@ -232,8 +232,7 @@ struct SignUpView: View {
             return
         }
         
-        //createUser()
-        
+        createUser()
     }
     
     /*
