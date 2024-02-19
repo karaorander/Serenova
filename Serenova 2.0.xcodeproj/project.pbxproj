@@ -17,6 +17,7 @@
 		23D1E0FE2B7A8FDF00539A62 /* Serenova_2_0UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D1E0FD2B7A8FDF00539A62 /* Serenova_2_0UITests.swift */; };
 		23D1E1002B7A8FDF00539A62 /* Serenova_2_0UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D1E0FF2B7A8FDF00539A62 /* Serenova_2_0UITestsLaunchTests.swift */; };
 		B146071D2B827F4300DDC3F3 /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B146071C2B827F4300DDC3F3 /* FirebaseManager.swift */; };
+		B14607202B82AACB00DDC3F3 /* iPhoneNumberField in Frameworks */ = {isa = PBXBuildFile; productRef = B146071F2B82AACB00DDC3F3 /* iPhoneNumberField */; };
 		B1961BE82B81517100B27781 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B1961BE72B81517100B27781 /* GoogleService-Info.plist */; };
 		B1961BE92B81517100B27781 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B1961BE72B81517100B27781 /* GoogleService-Info.plist */; };
 		B1961BEA2B81517100B27781 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B1961BE72B81517100B27781 /* GoogleService-Info.plist */; };
@@ -85,6 +86,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B1961BF92B81520F00B27781 /* FirebaseDatabaseSwift in Frameworks */,
+				B14607202B82AACB00DDC3F3 /* iPhoneNumberField in Frameworks */,
 				B1961BF72B81520F00B27781 /* FirebaseDatabase in Frameworks */,
 				B1961C032B81520F00B27781 /* FirebasePerformance in Frameworks */,
 				B1961C072B81520F00B27781 /* FirebaseRemoteConfigSwift in Frameworks */,
@@ -224,6 +226,7 @@
 				B1961C042B81520F00B27781 /* FirebaseRemoteConfig */,
 				B1961C062B81520F00B27781 /* FirebaseRemoteConfigSwift */,
 				B1961C082B81520F00B27781 /* FirebaseStorage */,
+				B146071F2B82AACB00DDC3F3 /* iPhoneNumberField */,
 			);
 			productName = "Serenova 2.0";
 			productReference = 23D1E0DF2B7A8FDE00539A62 /* Serenova 2.0.app */;
@@ -299,6 +302,7 @@
 			mainGroup = 23D1E0D62B7A8FDE00539A62;
 			packageReferences = (
 				B1961BEB2B81520F00B27781 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				B146071E2B82AACB00DDC3F3 /* XCRemoteSwiftPackageReference "iPhoneNumberField" */,
 			);
 			productRefGroup = 23D1E0E02B7A8FDE00539A62 /* Products */;
 			projectDirPath = "";
@@ -688,6 +692,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		B146071E2B82AACB00DDC3F3 /* XCRemoteSwiftPackageReference "iPhoneNumberField" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MojtabaHs/iPhoneNumberField";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.10.1;
+			};
+		};
 		B1961BEB2B81520F00B27781 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -699,6 +711,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		B146071F2B82AACB00DDC3F3 /* iPhoneNumberField */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B146071E2B82AACB00DDC3F3 /* XCRemoteSwiftPackageReference "iPhoneNumberField" */;
+			productName = iPhoneNumberField;
+		};
 		B1961BEC2B81520F00B27781 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = B1961BEB2B81520F00B27781 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
