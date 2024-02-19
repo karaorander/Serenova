@@ -144,9 +144,9 @@
 		23D1E0E12B7A8FDE00539A62 /* Serenova 2.0 */ = {
 			isa = PBXGroup;
 			children = (
-				B1AD0B2B2B83916F003E1A4B /* GoogleService-Info.plist */,
 				239E081C2B803E910036AD81 /* Serenova 2.0.entitlements */,
 				239E081B2B80125C0036AD81 /* Serenova-2-0-Info.plist */,
+				B1AD0B2B2B83916F003E1A4B /* GoogleService-Info.plist */,
 				E0231FFB2B7DB8F8009A4E39 /* Extensions */,
 				23D1E0E22B7A8FDE00539A62 /* Serenova_2_0App.swift */,
 				B146071C2B827F4300DDC3F3 /* FirebaseManager.swift */,
