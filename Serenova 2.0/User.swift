@@ -6,7 +6,7 @@ class User {
     var journals = []
     var articlesRead = []
     var longTermSleep = []
-    var colorScheme;
-    var profilePhoto;
+    var colorScheme
+    var profilePhoto
     var userId = -1
 }
