@@ -156,7 +156,7 @@ struct SignUpView: View {
      * Function to verify that the phone-number is valid
      */
     func isValidPhoneNumber() -> Bool {
-        return phone.count == 14
+        return phone.contains(/^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$/)
     }
     
     /*
