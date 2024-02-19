@@ -240,7 +240,20 @@ struct SignUpView: View {
      * Function to create new user
      */
     func createUser() {
-
+        //ensure no fields are empty
+        if (name != "" && email != "" && phone != "" && password1 != "" && password2 != "") {
+            if(password1 == password2) {
+                // won't work until firebase set up (set email/password login)
+                FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password1, completion: { result, error in
+                    ContentView()
+                    // move to ContentView
+                }
+            } else {
+                print("error!")
+            }
+        } else {
+            print("Error!")
+        }
     }
     
 }

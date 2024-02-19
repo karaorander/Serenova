@@ -83,6 +83,9 @@ struct ResetPasswordView: View {
     func resetPass() {
         if (username != "" && newPassword != "" && confirmPassword != "") {
             if(newPassword == confirmPassword) {
+                // won't work until firebase set up
+
+
                 //firebase authentication
                 //i.e. Auth.auth.createUser()
             } else {
