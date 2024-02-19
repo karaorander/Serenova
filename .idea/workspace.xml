@@ -9,14 +9,10 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3bae5dbe-8b5c-4b30-aaf2-f3eabbf480b0" name="Changes" comment="Article and User classes added">
-      <change afterPath="$PROJECT_DIR$/Serenova 2.0/Conversation.swift" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Serenova 2.0/Message.swift" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Serenova 2.0/Post.swift" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Serenova 2.0/SocialData.swift" afterDir="false" />
+    <list default="true" id="3bae5dbe-8b5c-4b30-aaf2-f3eabbf480b0" name="Changes" comment="Added Article Class and Social/Messaging related classes">
+      <change afterPath="$PROJECT_DIR$/Serenova 2.0/Journal.swift" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Serenova 2.0/SleepLog.swift" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Serenova 2.0/Article.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Serenova 2.0/Article.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Serenova 2.0/User.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Serenova 2.0/User.swift" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,7 +93,7 @@
       <workItem from="1708036014736" duration="763000" />
       <workItem from="1708036791282" duration="60000" />
       <workItem from="1708363465187" duration="334000" />
-      <workItem from="1708363810012" duration="1749000" />
+      <workItem from="1708363810012" duration="2128000" />
     </task>
     <task id="LOCAL-00001" summary="Article and User classes added">
       <option name="closed" value="true" />
@@ -107,7 +103,15 @@
       <option name="project" value="LOCAL" />
       <updated>1708365037639</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Added Article Class and Social/Messaging related classes">
+      <option name="closed" value="true" />
+      <created>1708365775353</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1708365775353</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -115,6 +119,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Article and User classes added" />
-    <option name="LAST_COMMIT_MESSAGE" value="Article and User classes added" />
+    <MESSAGE value="Added Article Class and Social/Messaging related classes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added Article Class and Social/Messaging related classes" />
   </component>
 </project>
