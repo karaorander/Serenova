@@ -33,11 +33,11 @@
 		B1961C052B81520F00B27781 /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = B1961C042B81520F00B27781 /* FirebaseRemoteConfig */; };
 		B1961C072B81520F00B27781 /* FirebaseRemoteConfigSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B1961C062B81520F00B27781 /* FirebaseRemoteConfigSwift */; };
 		B1961C092B81520F00B27781 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = B1961C082B81520F00B27781 /* FirebaseStorage */; };
-		B1AD0B2C2B83916F003E1A4B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B1AD0B2B2B83916F003E1A4B /* GoogleService-Info.plist */; };
-		B1AD0B2D2B83916F003E1A4B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B1AD0B2B2B83916F003E1A4B /* GoogleService-Info.plist */; };
-		B1AD0B2E2B83916F003E1A4B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B1AD0B2B2B83916F003E1A4B /* GoogleService-Info.plist */; };
 		E0231FFE2B7DB93D009A4E39 /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0231FFD2B7DB93D009A4E39 /* ColorExtensions.swift */; };
 		E029E4FB2B7DAC4F00E8220B /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */; };
+		E0A077292B851BCD001C9E5D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0A077282B851BCD001C9E5D /* GoogleService-Info.plist */; };
+		E0A0772A2B851BCD001C9E5D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0A077282B851BCD001C9E5D /* GoogleService-Info.plist */; };
+		E0A0772B2B851BCD001C9E5D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0A077282B851BCD001C9E5D /* GoogleService-Info.plist */; };
 		F23D7CDF2B7FAF320018F325 /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */; };
 /* End PBXBuildFile section */
 
@@ -74,9 +74,9 @@
 		23D1E0FD2B7A8FDF00539A62 /* Serenova_2_0UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serenova_2_0UITests.swift; sourceTree = "<group>"; };
 		23D1E0FF2B7A8FDF00539A62 /* Serenova_2_0UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serenova_2_0UITestsLaunchTests.swift; sourceTree = "<group>"; };
 		B146071C2B827F4300DDC3F3 /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
-		B1AD0B2B2B83916F003E1A4B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E0231FFD2B7DB93D009A4E39 /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
 		E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		E0A077282B851BCD001C9E5D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -144,9 +144,9 @@
 		23D1E0E12B7A8FDE00539A62 /* Serenova 2.0 */ = {
 			isa = PBXGroup;
 			children = (
+				E0A077282B851BCD001C9E5D /* GoogleService-Info.plist */,
 				239E081C2B803E910036AD81 /* Serenova 2.0.entitlements */,
 				239E081B2B80125C0036AD81 /* Serenova-2-0-Info.plist */,
-				B1AD0B2B2B83916F003E1A4B /* GoogleService-Info.plist */,
 				E0231FFB2B7DB8F8009A4E39 /* Extensions */,
 				23D1E0E22B7A8FDE00539A62 /* Serenova_2_0App.swift */,
 				B146071C2B827F4300DDC3F3 /* FirebaseManager.swift */,
@@ -322,7 +322,7 @@
 			files = (
 				23D1E0EA2B7A8FDF00539A62 /* Preview Assets.xcassets in Resources */,
 				23D1E0E72B7A8FDF00539A62 /* Assets.xcassets in Resources */,
-				B1AD0B2C2B83916F003E1A4B /* GoogleService-Info.plist in Resources */,
+				E0A077292B851BCD001C9E5D /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -330,7 +330,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B1AD0B2D2B83916F003E1A4B /* GoogleService-Info.plist in Resources */,
+				E0A0772A2B851BCD001C9E5D /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -338,7 +338,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B1AD0B2E2B83916F003E1A4B /* GoogleService-Info.plist in Resources */,
+				E0A0772B2B851BCD001C9E5D /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
