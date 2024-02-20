@@ -11,14 +11,14 @@ import FirebaseAuth
 
 struct LoginView: View {
     
-    @State private var username: String = ""
+    @State private var email: String = ""
     @State private var password: String = ""
     @State private var showsignup = false
     @State private var showreset = false
 
     
-    func getName() -> String {
-        return username
+    func getEmail() -> String {
+        return email
     }
     
     func getPassword() -> String {
@@ -48,7 +48,7 @@ struct LoginView: View {
                             .opacity(0.8)
                             .padding()
                         
-                        TextField("Username",text: $username)
+                        TextField("Email",text: $email)
                             .padding()
                             .frame(width: 300, height: 50)
                             .background(.white.opacity(0.15))
@@ -85,33 +85,24 @@ struct LoginView: View {
         }
     .buttonStyle(PlainButtonStyle())
     }
-    
-    var signUpInfo = SignUpView()
-    
+
     func login() {
-        print("email:  " + signUpInfo.getEmail())
-        print("password: " + signUpInfo.getPassword1())
-        if ((username == signUpInfo.getEmail()) && (password == signUpInfo.getPassword1())) {
-            Auth.auth().signIn(withEmail: username, password: password) { result, error in
-                if let error = error {
-                    print("hi!!!")
-                    print(error)
-                }
-                
-                if let result = result {
-                    print("hi2!!!!")
-                    print(result)
-                }
-                
+        Auth.auth().signIn(withEmail: email, password: password) { [weak self] authResult, error in
+            guard let strongSelf = self else { return }
+
+            if let error = error {
+                print("hi!!!")
+                print(error)
             }
-        } else {
-            print("did not go in")
+
+            if let result = result {
+                print("hi2!!!!")
+                print(result)
+            }
         }
     }
     
 }
-
-
 
 
 /*
