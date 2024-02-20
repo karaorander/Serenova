@@ -17,9 +17,8 @@ struct LoginView: View {
     @State private var showsignup = false
     @State private var showreset = false
     @State private var isAuthenticated = false
-
-
-
+    @State private var showingAlert = false  // State variable to control the visibility of the alert
+    @State private var alertMessage = ""  // State variable to hold the error message
     
     weak var viewController: UIViewController?
     
@@ -40,6 +39,11 @@ struct LoginView: View {
     NavigationView{
             ZStack {
                 NavigationLink(destination: ContentView().navigationBarBackButtonHidden(), isActive: $isAuthenticated) { EmptyView() } // Add this line
+                
+                    .alert(isPresented: $showingAlert) {
+                        Alert(title: Text("Login Failed"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                }
+                
                 // Color gradient
                 LinearGradient(gradient: Gradient(colors: [.nightfallHarmonySilverGray.opacity(0.9), .nightfallHarmonyRoyalPurple.opacity(0.5), .dreamyTwilightMidnightBlue.opacity(0.7), .nightfallHarmonyNavyBlue.opacity(0.8)]), startPoint: .top, endPoint: .bottom)
                     .ignoresSafeArea()
@@ -103,8 +107,8 @@ struct LoginView: View {
             print("password: " + password)
         
             if let error = error {
-                failedLogin()
-                print(error)
+                self.failedLogin()
+                //print(error)
             }
 
             if let authResult = authResult {
@@ -116,15 +120,8 @@ struct LoginView: View {
     }
 
     func failedLogin() {
-        let alert = UIAlertController(title: "Failed Login", message: "Email or Password is incorrect", preferredStyle: .alert)
-        
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in }))
-
-        
-        // Present the alert if this code is within a UIViewController
-        //present(alert, animated: true)
-        //viewController?.present(alert, animated: true)
-        //self.present(alert, animated: true)
+        self.alertMessage = "Email or password is incorrect."
+        self.showingAlert = true
     }
 }
 
