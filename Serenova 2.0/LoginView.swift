@@ -8,11 +8,24 @@
 import SwiftUI
 import FirebaseAuth
 
+
 struct LoginView: View {
-    @ State private var username: String = ""
-    @ State private var password: String = ""
+    
+    @State private var username: String = ""
+    @State private var password: String = ""
     @State private var showsignup = false
     @State private var showreset = false
+
+    
+    func getName() -> String {
+        return username
+    }
+    
+    func getPassword() -> String {
+        return password
+    }
+    
+    
     var body: some View {
     NavigationView{
             ZStack {
@@ -57,7 +70,8 @@ struct LoginView: View {
                     
                     // Login button
                     Spacer().frame(height:25)
-                    Button(action:{login()}){
+                    Button(action:{
+                        login()}){
                         Text("Login").font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(10)
                     }
                     
@@ -71,25 +85,36 @@ struct LoginView: View {
         }
     .buttonStyle(PlainButtonStyle())
     }
+    
+    var signUpInfo = SignUpView()
+    
+    func login() {
+        print("email:  " + signUpInfo.getEmail())
+        print("password: " + signUpInfo.getPassword1())
+        if ((username == signUpInfo.getEmail()) && (password == signUpInfo.getPassword1())) {
+            Auth.auth().signIn(withEmail: username, password: password) { result, error in
+                if let error = error {
+                    print("hi!!!")
+                    print(error)
+                }
+                
+                if let result = result {
+                    print("hi2!!!!")
+                    print(result)
+                }
+                
+            }
+        } else {
+            print("did not go in")
+        }
+    }
+    
 }
 
-func login() {
-    // firebase authentication login
-    // won't work until firebase set up
-    Firebase.Auth.auth.signIn(withEmail: username, password: password, completion: { [weak self] result, error in
-        guard let strongSelf = self else {
-            return
-        }
 
-        guard error == nil else {
-            strongSelf.failedLogin()
-            return
-        }
 
-        ContentView()
-    })
-}
 
+/*
 func failedLogin() {
     let alert = UIAlertController(title: "Failed Login",
                                   message: "Email or Password is incorrect",
@@ -104,7 +129,7 @@ func failedLogin() {
     }))
 
     present(alert, animated: true)
-}
+}*/
 
 #Preview {
     LoginView()
