@@ -119,7 +119,7 @@ struct LoginView: View {
 func login() {
     // firebase authentication login
     // won't work until firebase set up
-    Firebase.Auth.auth.signIn(withEmail: username, password: password, completion: { [weak self] result, error in
+    FirebaseAuth.Auth.auth().signIn(withEmail: username, password: password, completion: { [weak self] result, error in
         guard let strongSelf = self else {
             return
         }
