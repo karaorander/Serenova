@@ -21,6 +21,8 @@ struct SignUpView: View {
     @State private var showSignUp2: Bool = false
     @State private var signupError: Bool = false
     @State private var signupErrorMsg = ""
+    @State private var authError: Bool = false;
+    @State private var authErrorMsg = ""
     
     @State private var toggleIsOn: Bool = false
 
@@ -180,7 +182,7 @@ struct SignUpView: View {
             }
             .buttonStyle(PlainButtonStyle())
 
-            // ALERT
+            // ALERT (for signup form error)
             .alert(
                 "Sign Up Form Incomplete",
                 isPresented: $signupError
@@ -189,6 +191,16 @@ struct SignUpView: View {
             } message: {
                 Text(signupErrorMsg)
             }
+            
+            // ALERT (for signup error)
+            .alert(
+                "Sign Up Failed",
+                isPresented: $authError
+            ) {
+                Button("OK") {}
+            } message: {
+                Text(authErrorMsg)
+            }
         }
     }
 
@@ -196,7 +208,10 @@ struct SignUpView: View {
      * Function to verify that the email is valid
      */
     func isValidEmail() -> Bool {
-        return email.contains(/.+@.+\..+/)
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        
+        return emailTest.evaluate(with: email)
     }
     
     /*
@@ -257,20 +272,16 @@ struct SignUpView: View {
         // Form Error Msg for Alert
         signupErrorMsg = ""
         
-        if (!isValidConfirmedPassword()) {
-            signupErrorMsg = "Please confirm your password"
-        }
-        if (!isValidPassword()) {
-            signupErrorMsg = "Please enter a valid password"
-        }
-        if (!isValidPhoneNumber()) {
-            signupErrorMsg = "Please enter a valid phone number"
-        }
-        if (!isValidEmail()) {
-            signupErrorMsg = "Please enter a valid email address"
-        }
         if (name.isEmpty) {
             signupErrorMsg = "Please enter your full name"
+        } else if (!isValidEmail()) {
+            signupErrorMsg = "Please enter a valid email address"
+        } else if (!isValidPhoneNumber()) {
+            signupErrorMsg = "Please enter a valid phone number"
+        }  else if (!isValidPassword()) {
+            signupErrorMsg = "Please enter a valid password"
+        } else if (!isValidConfirmedPassword()) {
+            signupErrorMsg = "Please confirm your password"
         }
         
         if (signupErrorMsg != "") {
@@ -278,65 +289,44 @@ struct SignUpView: View {
             signupError = true
             return
         }
-        showSignUp2 = true
-        createUser()
+        
+        createUser { success in
+            if (success) {
+                showSignUp2 = true
+            } else {
+                authError = true
+                return
+            }
+        }
     }
     
-    func createUser() {
-        //Ensure no fields are empty
-        if (name == "" || email == "" || phone == "" || password1 == "" || password2 == "") {
-            print("Error! Not all fields completed!")
-            return
-        }
-        
-        // Ensure both password fields match
-        if (password1 != password2) {
-            print("Error! Passwords do not match!")
-            return
-        }
-        
-        // Ensure password matches criteria:
-        // At least 8 characters, one uppercase,
-        // one number, one special character
-        if (password1.count < 8) {
-            print("Error! Need at least 8 characters!")
-            return
-        }
-        
-        if (!password1.contains(/[\W]/) && !password1.contains(/[_]/)) {
-            print("Error! Need a special character!")
-            return
-        }
-        
-        if (!password1.contains(where: {$0.isUppercase})) {
-            print("Error! Need an uppercase letter!")
-            return
-        }
-        
-        if(!password1.contains(where: {$0.isNumber})) {
-            print("Error! Need a number!")
-            return
-        }
-        
-        
-        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
-        
-        if (!emailTest.evaluate(with: email)) {
-            print("Error! Invalid Email Entered")
-        }
-        
+    /*
+     * Function to create new user
+     */
+    func createUser(completion: @escaping (Bool) -> Void) {
         // Handle User Creation
         Auth.auth().createUser(withEmail: email, password: password1) { authResult, error in
           
-            if let error = error {
-                print(error)
-                return
+            authErrorMsg = ""
+            
+            if let error = error as NSError? {
+
+                if (error.code == 17007) {
+                    // Check if email already in use
+                    authErrorMsg = "Email already taken. Try again."
+                    email = ""
+                } else {
+                    // Handle other error messages
+                    authErrorMsg = error.localizedDescription
+                }
+
             }
             
             if let authResult = authResult {
                 print(authResult)
             }
+            
+            completion(authErrorMsg.isEmpty)
             
         }
         
