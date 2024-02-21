@@ -101,26 +101,16 @@ struct LoginView: View {
             }
         }
     }
+
+    func failedLogin() {
+        let alert = UIAlertController(title: "Failed Login", message: "Email or Password is incorrect", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Continue", style: .default, handler { _ in }))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler { _ in }))
+
+        self.present(alert, animated: true)
+    }
     
 }
-
-
-/*
-func failedLogin() {
-    let alert = UIAlertController(title: "Failed Login",
-                                  message: "Email or Password is incorrect",
-                                  preferredStyle: .alert)
-    alert.addAction(UIAlertAction(title: "Continue",
-                                  style: .default
-                                  handler: { in
-    }))
-    alert.addAction(UIAlertAction(title: "Cancel",
-                                      style: .cancel
-                                      handler: { in
-    }))
-
-    present(alert, animated: true)
-}*/
 
 #Preview {
     LoginView()
