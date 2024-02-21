@@ -160,7 +160,7 @@ struct LoginView: View {
     }
 
     func failedLogin() {
-        self.alertMessage = "Email or password is incorrect."
+        self.alertMessage = "Email or password is incorrect. Try again."
         self.showingAlert = true
     }
 }
