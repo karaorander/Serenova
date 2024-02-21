@@ -37,6 +37,10 @@
 		B1961C092B81520F00B27781 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = B1961C082B81520F00B27781 /* FirebaseStorage */; };
 		E0231FFE2B7DB93D009A4E39 /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0231FFD2B7DB93D009A4E39 /* ColorExtensions.swift */; };
 		E029E4FB2B7DAC4F00E8220B /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */; };
+		E0934ECA2B85BA8B00494176 /* CreateUserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0934EC92B85BA8B00494176 /* CreateUserInfoView.swift */; };
+		E0A077292B851BCD001C9E5D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0A077282B851BCD001C9E5D /* GoogleService-Info.plist */; };
+		E0A0772A2B851BCD001C9E5D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0A077282B851BCD001C9E5D /* GoogleService-Info.plist */; };
+		E0A0772B2B851BCD001C9E5D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0A077282B851BCD001C9E5D /* GoogleService-Info.plist */; };
 		F23D7CDF2B7FAF320018F325 /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */; };
 		F291C8F12B83CF0E00C2D9ED /* QuestionareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F291C8F02B83CF0E00C2D9ED /* QuestionareView.swift */; };
 		F2E2195E2B82EC6200235824 /* SignUpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E2195D2B82EC6200235824 /* SignUpTests.swift */; };
@@ -85,6 +89,8 @@
 		B1961BE72B81517100B27781 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E0231FFD2B7DB93D009A4E39 /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
 		E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		E0934EC92B85BA8B00494176 /* CreateUserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateUserInfoView.swift; sourceTree = "<group>"; };
+		E0A077282B851BCD001C9E5D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
 		F291C8F02B83CF0E00C2D9ED /* QuestionareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionareView.swift; sourceTree = "<group>"; };
 		F2E219542B82EBEB00235824 /* Serenova 2.0Tests2.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Serenova 2.0Tests2.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -97,6 +103,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B1961BF92B81520F00B27781 /* FirebaseDatabaseSwift in Frameworks */,
+				B14607202B82AACB00DDC3F3 /* iPhoneNumberField in Frameworks */,
 				B1961BF72B81520F00B27781 /* FirebaseDatabase in Frameworks */,
 				B1961C032B81520F00B27781 /* FirebasePerformance in Frameworks */,
 				B1961C072B81520F00B27781 /* FirebaseRemoteConfigSwift in Frameworks */,
@@ -162,6 +169,7 @@
 		23D1E0E12B7A8FDE00539A62 /* Serenova 2.0 */ = {
 			isa = PBXGroup;
 			children = (
+				E0A077282B851BCD001C9E5D /* GoogleService-Info.plist */,
 				239E081C2B803E910036AD81 /* Serenova 2.0.entitlements */,
 				239E081B2B80125C0036AD81 /* Serenova-2-0-Info.plist */,
 				B1961BE72B81517100B27781 /* GoogleService-Info.plist */,
@@ -170,7 +178,7 @@
 				B146071C2B827F4300DDC3F3 /* FirebaseManager.swift */,
 				239E081D2B80424A0036AD81 /* AccountInfoView.swift */,
 				E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */,
-				F291C8F02B83CF0E00C2D9ED /* QuestionareView.swift */,
+				E0934EC92B85BA8B00494176 /* CreateUserInfoView.swift */,
 				F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */,
 				239E08192B7FC8990036AD81 /* LoginView.swift */,
 				23D1E0E42B7A8FDE00539A62 /* ContentView.swift */,
@@ -246,6 +254,7 @@
 				B1961C042B81520F00B27781 /* FirebaseRemoteConfig */,
 				B1961C062B81520F00B27781 /* FirebaseRemoteConfigSwift */,
 				B1961C082B81520F00B27781 /* FirebaseStorage */,
+				B146071F2B82AACB00DDC3F3 /* iPhoneNumberField */,
 			);
 			productName = "Serenova 2.0";
 			productReference = 23D1E0DF2B7A8FDE00539A62 /* Serenova 2.0.app */;
@@ -343,6 +352,7 @@
 			mainGroup = 23D1E0D62B7A8FDE00539A62;
 			packageReferences = (
 				B1961BEB2B81520F00B27781 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				B146071E2B82AACB00DDC3F3 /* XCRemoteSwiftPackageReference "iPhoneNumberField" */,
 			);
 			productRefGroup = 23D1E0E02B7A8FDE00539A62 /* Products */;
 			projectDirPath = "";
@@ -363,7 +373,7 @@
 			files = (
 				23D1E0EA2B7A8FDF00539A62 /* Preview Assets.xcassets in Resources */,
 				23D1E0E72B7A8FDF00539A62 /* Assets.xcassets in Resources */,
-				B1961BE82B81517100B27781 /* GoogleService-Info.plist in Resources */,
+				E0A077292B851BCD001C9E5D /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -371,7 +381,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B1961BE92B81517100B27781 /* GoogleService-Info.plist in Resources */,
+				E0A0772A2B851BCD001C9E5D /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -379,14 +389,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B1961BEA2B81517100B27781 /* GoogleService-Info.plist in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F2E219522B82EBEB00235824 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				E0A0772B2B851BCD001C9E5D /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -404,6 +407,7 @@
 				B146071D2B827F4300DDC3F3 /* FirebaseManager.swift in Sources */,
 				F291C8F12B83CF0E00C2D9ED /* QuestionareView.swift in Sources */,
 				E029E4FB2B7DAC4F00E8220B /* SignUpView.swift in Sources */,
+				E0934ECA2B85BA8B00494176 /* CreateUserInfoView.swift in Sources */,
 				23D1E0E32B7A8FDE00539A62 /* Serenova_2_0App.swift in Sources */,
 				239E081E2B80424A0036AD81 /* AccountInfoView.swift in Sources */,
 			);
@@ -799,6 +803,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		B146071E2B82AACB00DDC3F3 /* XCRemoteSwiftPackageReference "iPhoneNumberField" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MojtabaHs/iPhoneNumberField";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.10.1;
+			};
+		};
 		B1961BEB2B81520F00B27781 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -810,6 +822,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		B146071F2B82AACB00DDC3F3 /* iPhoneNumberField */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B146071E2B82AACB00DDC3F3 /* XCRemoteSwiftPackageReference "iPhoneNumberField" */;
+			productName = iPhoneNumberField;
+		};
 		B1961BEC2B81520F00B27781 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = B1961BEB2B81520F00B27781 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

@@ -84,8 +84,7 @@ struct LoginView: View {
                     
                     // Login button
                     Spacer().frame(height:25)
-                    Button(action:{
-                        login()}){
+                    Button(action:{checkFormComplete()}){
                         Text("Login").font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(10)
                     }
                     
@@ -97,7 +96,45 @@ struct LoginView: View {
                 }
             }
         }
-    .buttonStyle(PlainButtonStyle())
+        .buttonStyle(PlainButtonStyle())
+        // ALERT
+        .alert(
+            "Login Form Incomplete",
+            isPresented: $loginError
+        ) {
+            Button("OK") {}
+        } message: {
+            Text(loginErrorMsg)
+        }
+    }
+    
+    /*
+     * Function to check if user can login
+     */
+    func checkFormComplete() {
+
+        // Form Error Msg for Alert
+        loginErrorMsg = ""
+        
+        if (username.isEmpty) {
+            loginErrorMsg = "Please enter your username"
+        }
+        if (password.isEmpty) {
+            if ( loginErrorMsg == "") {
+                 loginErrorMsg = "Please enter your password"
+            } else {
+                loginErrorMsg += " and password"
+            }
+        }
+        
+        // Alert User for Error
+        if (loginErrorMsg != "") {
+            loginError = true
+            return
+        }
+        
+        //login()
+            
     }
 
     func login() {
@@ -124,7 +161,7 @@ struct LoginView: View {
         self.showingAlert = true
     }
 }
-
+*/
 #Preview {
     LoginView()
 }
