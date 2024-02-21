@@ -27,6 +27,52 @@ struct SignUpView: View {
     @Environment(\.presentationMode) var presentationMode
     
     
+    // Getter functions
+    func getName() -> String {
+        return name
+    }
+    
+    func getEmail() -> String {
+        return email
+    }
+
+    func getPhone() -> String {
+        return phone
+    }
+
+    func getPassword1() -> String {
+        return password1
+    }
+
+    func getPassword2() -> String {
+        return password2
+    }
+    
+    mutating func setName(_ newName: String) {
+        name = newName
+    }
+
+    mutating func setEmail(_ newEmail: String) {
+        email = newEmail
+    }
+
+    mutating func setPhone(_ newPhone: String) {
+        phone = newPhone
+    }
+
+    mutating func setPassword1(_ newPassword: String) {
+        password1 = newPassword
+    }
+
+    mutating func setPassword2(_ newPassword: String) {
+        password2 = newPassword
+    }
+
+    func getToggleIsOn() -> Bool {
+        return toggleIsOn
+    }
+    
+    
     var body: some View {
         NavigationView {
             ZStack {
@@ -240,11 +286,63 @@ struct SignUpView: View {
      * Function to create new user
      */
     func createUser() {
-        // won't work until firebase set up (set email/password login)
-        FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password1, completion: { result, error in
-            ContentView()
-            // move to ContentView
-        })
+        //Ensure no fields are empty
+        if (name == "" || email == "" || phone == "" || password1 == "" || password2 == "") {
+            print("Error! Not all fields completed!")
+            return
+        }
+        
+        // Ensure both password fields match
+        if (password1 != password2) {
+            print("Error! Passwords do not match!")
+            return
+        }
+        
+        // Ensure password matches criteria:
+        // At least 8 characters, one uppercase,
+        // one number, one special character
+        if (password1.count < 8) {
+            print("Error! Need at least 8 characters!")
+            return
+        }
+        
+        if (!password1.contains(/[\W]/) && !password1.contains(/[_]/)) {
+            print("Error! Need a special character!")
+            return
+        }
+        
+        if (!password1.contains(where: {$0.isUppercase})) {
+            print("Error! Need an uppercase letter!")
+            return
+        }
+        
+        if(!password1.contains(where: {$0.isNumber})) {
+            print("Error! Need a number!")
+            return
+        }
+        
+        
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        
+        if (!emailTest.evaluate(with: email)) {
+            print("Error! Invalid Email Entered")
+        }
+        
+        // Handle User Creation
+        Auth.auth().createUser(withEmail: email, password: password1) { authResult, error in
+          
+            if let error = error {
+                print(error)
+                return
+            }
+            
+            if let authResult = authResult {
+                print(authResult)
+            }
+            
+        }
+        
     }
     
 }

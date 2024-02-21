@@ -2,7 +2,7 @@
 //  SignUpView.swift
 //  Serenova 2.0
 //
-//  Created by Ava Schrandt on 2/14/24.
+//  Created by Ishwarya Samavedhi on 2/14/24.
 //
 
 import SwiftUI

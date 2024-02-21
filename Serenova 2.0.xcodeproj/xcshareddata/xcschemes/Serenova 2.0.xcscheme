@@ -51,6 +51,17 @@
                ReferencedContainer = "container:Serenova 2.0.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "F2E219532B82EBEB00235824"
+               BuildableName = "Serenova 2.0Tests2.xctest"
+               BlueprintName = "Serenova 2.0Tests2"
+               ReferencedContainer = "container:Serenova 2.0.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

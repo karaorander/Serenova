@@ -7,19 +7,42 @@
 
 import SwiftUI
 import FirebaseAuth
+import UIKit
+
 
 struct LoginView: View {
-    @ State private var username: String = ""
-    @ State private var password: String = ""
+    
+    @State private var email: String = ""
+    @State private var password: String = ""
     @State private var showsignup = false
     @State private var showreset = false
+    @State private var isAuthenticated = false
+    @State private var showingAlert = false  // State variable to control the visibility of the alert
+    @State private var alertMessage = ""  // State variable to hold the error message
     
-    @State private var loginError: Bool = false
-    @State private var loginErrorMsg = ""
+    weak var viewController: UIViewController?
+    
+    func getEmail() -> String {
+        return email
+    }
+    
+    func getPassword() -> String {
+        return password
+    }
+    
     
     var body: some View {
+
+                
+               
+        
     NavigationView{
             ZStack {
+                NavigationLink(destination: ContentView().navigationBarBackButtonHidden(), isActive: $isAuthenticated) { EmptyView() } // Add this line
+                
+                    .alert(isPresented: $showingAlert) {
+                        Alert(title: Text("Login Failed"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                }
                 
                 // Color gradient
                 LinearGradient(gradient: Gradient(colors: [.nightfallHarmonySilverGray.opacity(0.9), .nightfallHarmonyRoyalPurple.opacity(0.5), .dreamyTwilightMidnightBlue.opacity(0.7), .nightfallHarmonyNavyBlue.opacity(0.8)]), startPoint: .top, endPoint: .bottom)
@@ -39,7 +62,7 @@ struct LoginView: View {
                             .opacity(0.8)
                             .padding()
                         
-                        TextField("Username",text: $username)
+                        TextField("Email",text: $email)
                             .padding()
                             .frame(width: 300, height: 50)
                             .background(.white.opacity(0.15))
@@ -113,40 +136,30 @@ struct LoginView: View {
         //login()
             
     }
-}
 
-/*
-func login() {
-    // firebase authentication login
-    // won't work until firebase set up
-    FirebaseAuth.Auth.auth().signIn(withEmail: username, password: password, completion: { [weak self] result, error in
-        guard let strongSelf = self else {
-            return
+    func login() {
+        
+        Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
+            print("email: " + email)
+            print("password: " + password)
+        
+            if let error = error {
+                self.failedLogin()
+                //print(error)
+            }
+
+            if let authResult = authResult {
+                isAuthenticated = true
+                print(authResult)
+
+            }
         }
+    }
 
-        guard error == nil else {
-            strongSelf.failedLogin()
-            return
-        }
-
-        ContentView()
-    })
-}
-
-func failedLogin() {
-    let alert = UIAlertController(title: "Failed Login",
-                                  message: "Email or Password is incorrect",
-                                  preferredStyle: .alert)
-    alert.addAction(UIAlertAction(title: "Continue",
-                                  style: .default
-                                  handler: { in
-    }))
-    alert.addAction(UIAlertAction(title: "Cancel",
-                                      style: .cancel
-                                      handler: { in
-    }))
-
-    present(alert, animated: true)
+    func failedLogin() {
+        self.alertMessage = "Email or password is incorrect."
+        self.showingAlert = true
+    }
 }
 */
 #Preview {
