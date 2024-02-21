@@ -35,6 +35,7 @@
 		B1961C092B81520F00B27781 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = B1961C082B81520F00B27781 /* FirebaseStorage */; };
 		E0231FFE2B7DB93D009A4E39 /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0231FFD2B7DB93D009A4E39 /* ColorExtensions.swift */; };
 		E029E4FB2B7DAC4F00E8220B /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */; };
+		E0934ECA2B85BA8B00494176 /* CreateUserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0934EC92B85BA8B00494176 /* CreateUserInfoView.swift */; };
 		E0A077292B851BCD001C9E5D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0A077282B851BCD001C9E5D /* GoogleService-Info.plist */; };
 		E0A0772A2B851BCD001C9E5D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0A077282B851BCD001C9E5D /* GoogleService-Info.plist */; };
 		E0A0772B2B851BCD001C9E5D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0A077282B851BCD001C9E5D /* GoogleService-Info.plist */; };
@@ -76,6 +77,7 @@
 		B146071C2B827F4300DDC3F3 /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
 		E0231FFD2B7DB93D009A4E39 /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
 		E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		E0934EC92B85BA8B00494176 /* CreateUserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateUserInfoView.swift; sourceTree = "<group>"; };
 		E0A077282B851BCD001C9E5D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -152,6 +154,7 @@
 				B146071C2B827F4300DDC3F3 /* FirebaseManager.swift */,
 				239E081D2B80424A0036AD81 /* AccountInfoView.swift */,
 				E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */,
+				E0934EC92B85BA8B00494176 /* CreateUserInfoView.swift */,
 				F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */,
 				239E08192B7FC8990036AD81 /* LoginView.swift */,
 				23D1E0E42B7A8FDE00539A62 /* ContentView.swift */,
@@ -355,6 +358,7 @@
 				F23D7CDF2B7FAF320018F325 /* ResetPasswordView.swift in Sources */,
 				B146071D2B827F4300DDC3F3 /* FirebaseManager.swift in Sources */,
 				E029E4FB2B7DAC4F00E8220B /* SignUpView.swift in Sources */,
+				E0934ECA2B85BA8B00494176 /* CreateUserInfoView.swift in Sources */,
 				23D1E0E32B7A8FDE00539A62 /* Serenova_2_0App.swift in Sources */,
 				239E081E2B80424A0036AD81 /* AccountInfoView.swift in Sources */,
 			);
