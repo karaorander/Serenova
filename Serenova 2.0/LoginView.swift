@@ -91,6 +91,7 @@ struct LoginView: View {
             guard let strongSelf = self else { return }
 
             if let error = error {
+                failedLogin()
                 print("hi!!!")
                 print(error)
             }
