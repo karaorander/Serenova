@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AccountInfoView: View {
-    @State private var color_theme = "Purple"
+    @State private var color_theme = "Dreamy Twilight"
     // TODO: Get username, full name, email, notification preferences from database
     @State private var username = "MYUSERNAME"
     @State private var email = "MYEMAIL"
@@ -24,7 +24,8 @@ struct AccountInfoView: View {
                         .ignoresSafeArea()
                     VStack {
                             Text("Account Info")
-                                .font(.system(size: 40, weight: .heavy))
+                            .font(Font.custom("NovaSquare-Bold", size: 40))
+                                  
                                 .frame(height: 2.0, alignment: .leading)
                                 .padding()
                         Spacer().frame(height: 20)
@@ -162,7 +163,7 @@ struct BioInfoView: View {
                     .ignoresSafeArea()
                 VStack {
                         Text("Bio")
-                            .font(.system(size: 40, weight: .heavy))
+                        .font(Font.custom("NovaSquare-Bold", size: 40))
                             .frame(height: 2.0, alignment: .leading)
                             .padding()
                     Spacer().frame(height: 25)
@@ -186,7 +187,7 @@ struct BioInfoView: View {
                     Spacer().frame(height: 60)
                     // Night Owl or Early Bird Question
                     Text("Night Owl or Early Bird?")
-                        .font(.system(size: 25, weight: .heavy))
+                        .font(Font.custom("NovaSquare-Bold", size: 25))
                     Spacer().frame(height: 30)
                     
                     LazyVGrid(columns: preferenceColumns, spacing: 20) {
