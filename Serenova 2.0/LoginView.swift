@@ -20,6 +20,9 @@ struct LoginView: View {
     @State private var showingAlert = false  // State variable to control the visibility of the alert
     @State private var alertMessage = ""  // State variable to hold the error message
     
+    @State private var loginError: Bool = false
+    @State private var loginErrorMsg = ""
+    
     weak var viewController: UIViewController?
     
     func getEmail() -> String {
@@ -116,8 +119,8 @@ struct LoginView: View {
         // Form Error Msg for Alert
         loginErrorMsg = ""
         
-        if (username.isEmpty) {
-            loginErrorMsg = "Please enter your username"
+        if (email.isEmpty) {
+            loginErrorMsg = "Please enter your email"
         }
         if (password.isEmpty) {
             if ( loginErrorMsg == "") {
@@ -133,7 +136,7 @@ struct LoginView: View {
             return
         }
         
-        //login()
+        login()
             
     }
 
@@ -161,7 +164,7 @@ struct LoginView: View {
         self.showingAlert = true
     }
 }
-*/
+
 #Preview {
     LoginView()
 }
