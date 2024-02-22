@@ -308,7 +308,7 @@ struct SignUp5View: View{
                     }
                     Spacer()
                     //TODO: change destination to Serenova homepage
-                    NavigationLink (destination: SignUp5View().navigationBarBackButtonHidden(true)) {
+                    NavigationLink (destination: SleepGoalsView().navigationBarBackButtonHidden(true)) {
                             Text("Next").font(.system(size: 20)).fontWeight(.medium).frame(width: 320, height: 50).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(10)
                     }
                 }
