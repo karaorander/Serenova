@@ -2,6 +2,17 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Nova_Square/NovaSquare-Bold.ttf</string>
+		<string>Nova_Square/NovaSquare-BoldOblique.ttf</string>
+		<string>Nova_Square/NovaSquare-Book.ttf</string>
+		<string>Nova_Square/NovaSquare-BookOblique.ttf</string>
+		<string>Nova_Square/NovaSquareSlim-Bold.ttf</string>
+		<string>Nova_Square/NovaSquareSlim-BoldOblique.ttf</string>
+		<string>Nova_Square/NovaSquareSlim-Book.ttf</string>
+		<string>Nova_Square/NovaSquareSlim-BookOblique.ttf</string>
+	</array>
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIImageName</key>

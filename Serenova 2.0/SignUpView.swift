@@ -18,12 +18,62 @@ struct SignUpView: View {
     @State private var password1 = ""
     @State private var password2 = ""
     
+    @State private var showSignUp2: Bool = false
     @State private var signupError: Bool = false
     @State private var signupErrorMsg = ""
+    @State private var authError: Bool = false;
+    @State private var authErrorMsg = ""
     
     @State private var toggleIsOn: Bool = false
+    @State private var passwordTapped: Bool = false;
 
     @Environment(\.presentationMode) var presentationMode
+    
+    
+    // Getter functions
+    func getName() -> String {
+        return name
+    }
+    
+    func getEmail() -> String {
+        return email
+    }
+
+    func getPhone() -> String {
+        return phone
+    }
+
+    func getPassword1() -> String {
+        return password1
+    }
+
+    func getPassword2() -> String {
+        return password2
+    }
+    
+    mutating func setName(_ newName: String) {
+        name = newName
+    }
+
+    mutating func setEmail(_ newEmail: String) {
+        email = newEmail
+    }
+
+    mutating func setPhone(_ newPhone: String) {
+        phone = newPhone
+    }
+
+    mutating func setPassword1(_ newPassword: String) {
+        password1 = newPassword
+    }
+
+    mutating func setPassword2(_ newPassword: String) {
+        password2 = newPassword
+    }
+
+    func getToggleIsOn() -> Bool {
+        return toggleIsOn
+    }
     
     
     var body: some View {
@@ -38,7 +88,7 @@ struct SignUpView: View {
                     VStack(spacing:20) {
                         // SIGN UP
                         Text("Sign Up")
-                            .font(.system(size: 60, weight: .heavy))
+                            .font(Font.custom("NovaSquare-Bold", size: 45))
                             .foregroundColor(.nightfallHarmonyNavyBlue.opacity(0.6))
                             .frame(height: 2.0)
                             .padding()
@@ -90,12 +140,48 @@ struct SignUpView: View {
                             HStack {
                                 SecureField("Create Password",text: $password1)
                                     .textContentType(.newPassword)
+                                    .onTapGesture {
+                                        passwordTapped = true
+                                    }
                                 Image(systemName: isValidPassword() ? "checkmark":"")
                                     .foregroundColor(.nightfallHarmonyNavyBlue.opacity(0.6))
                             }
                             .padding()
                             .frame(width: 300, height: 50)
                             .background(.white.opacity(0.15))
+                            .cornerRadius(10)
+                        }
+                        // PASSWORD CRITERIA
+                        if (passwordTapped) {
+                            VStack (alignment: .leading){
+                                Text("Password Requirements:")
+                                    .fontWeight(.bold)
+                                Spacer().frame(height: 10)
+                                HStack {
+                                    Image(systemName: isValidLength() ? "checkmark":"xmark")
+                                        .foregroundColor(Color.nightfallHarmonySilverGray.opacity(0.9))
+                                    Text("at least 8 characters")
+                                }
+                                HStack {
+                                    Image(systemName: hasSpecialChar() ? "checkmark":"xmark")
+                                        .foregroundColor(Color.nightfallHarmonySilverGray.opacity(0.9))
+                                    Text("at least 1 special character")
+                                }
+                                HStack {
+                                    Image(systemName: hasUppercaseChar() ? "checkmark":"xmark")
+                                        .foregroundColor(Color.nightfallHarmonySilverGray.opacity(0.9))
+                                    Text("at least 1 uppercase character")
+                                }
+                                HStack {
+                                    Image(systemName: hasNumber() ? "checkmark":"xmark")
+                                        .foregroundColor(Color.nightfallHarmonySilverGray.opacity(0.9))
+                                    Text("at least 1 number")
+                                }
+                            }
+                            .font(.caption)
+                            .frame(width: passwordTapped ? 300: 0, height: passwordTapped ? 110 : 0)
+                            .foregroundColor(Color.nightfallHarmonySilverGray.opacity(0.9))
+                            .background(Color.nightfallHarmonyNavyBlue.opacity(0.6))
                             .cornerRadius(10)
                         }
                         // PASSWORD2
@@ -123,8 +209,8 @@ struct SignUpView: View {
                     Button(action:{checkFormComplete()}){
                         Text("Create Account").font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(10)
                     }
+                    NavigationLink ("", destination: SignUp2View().navigationBarBackButtonHidden(true), isActive: $showSignUp2)
                     Spacer()
-                    
                     NavigationLink(destination: LoginView().navigationBarBackButtonHidden()) {
                         Text("Already have an account? Login here.").underline()
                         
@@ -132,8 +218,11 @@ struct SignUpView: View {
                 }
             }
             .buttonStyle(PlainButtonStyle())
+            .onTapGesture {
+                passwordTapped = false
+            }
 
-            // ALERT
+            // ALERT (for signup form error)
             .alert(
                 "Sign Up Form Incomplete",
                 isPresented: $signupError
@@ -142,6 +231,16 @@ struct SignUpView: View {
             } message: {
                 Text(signupErrorMsg)
             }
+            
+            // ALERT (for signup error)
+            .alert(
+                "Sign Up Failed",
+                isPresented: $authError
+            ) {
+                Button("OK") {}
+            } message: {
+                Text(authErrorMsg)
+            }
         }
     }
 
@@ -149,7 +248,10 @@ struct SignUpView: View {
      * Function to verify that the email is valid
      */
     func isValidEmail() -> Bool {
-        return email.contains(/.+@.+\..+/)
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        
+        return emailTest.evaluate(with: email)
     }
     
     /*
@@ -157,6 +259,42 @@ struct SignUpView: View {
      */
     func isValidPhoneNumber() -> Bool {
         return phone.contains(/^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$/)
+    }
+    
+    /*
+     * Function to verify that there are 8 characters
+     * in the password
+     */
+    func isValidLength() -> Bool {
+        // 1) Password must be at least 8 characters
+        return password1.count >= 8
+    }
+    
+    /*
+     * Function to verify that there is a special
+     * character in the password
+     */
+    func hasSpecialChar() -> Bool {
+        // 2) Password must contain at least one special character
+        return password1.contains(/[\W]/) && !password1.contains(/[_]/)
+    }
+    
+    /*
+     * Function to verify that there is an uppercase
+     * letter in the password
+     */
+    func hasUppercaseChar() -> Bool {
+        // 3) Password must contain an uppercase letter
+        return password1.contains(where: {$0.isUppercase})
+    }
+    
+    /*
+     * Function to verify that there is a number
+     * in the password
+     */
+    func hasNumber() -> Bool {
+        // 4) Password must contain a number
+        return password1.contains(where: {$0.isNumber})
     }
     
     /*
@@ -168,28 +306,7 @@ struct SignUpView: View {
      */
     func isValidPassword() -> Bool {
         // Ensure password matches criteria:
-        
-        // 1) Password must be at least 8 characters
-        if (password1.count < 8) {
-            return false
-        }
-        
-        // 2) Password must contain at least one special character
-        if (!password1.contains(/[\W]/) && !password1.contains(/[_]/)) {
-            return false
-        }
-        
-        // 3) Password must contain an uppercase letter
-        if (!password1.contains(where: {$0.isUppercase})) {
-            return false
-        }
-        
-        // 4) Password must contain a number
-        if(!password1.contains(where: {$0.isNumber})) {
-            return false
-        }
-        
-        return true
+        return isValidLength() && hasSpecialChar() && hasUppercaseChar() && hasNumber()
     }
     
     /*
@@ -210,20 +327,16 @@ struct SignUpView: View {
         // Form Error Msg for Alert
         signupErrorMsg = ""
         
-        if (!isValidConfirmedPassword()) {
-            signupErrorMsg = "Please confirm your password"
-        }
-        if (!isValidPassword()) {
-            signupErrorMsg = "Please enter a valid password"
-        }
-        if (!isValidPhoneNumber()) {
-            signupErrorMsg = "Please enter a valid phone number"
-        }
-        if (!isValidEmail()) {
-            signupErrorMsg = "Please enter a valid email address"
-        }
         if (name.isEmpty) {
             signupErrorMsg = "Please enter your full name"
+        } else if (!isValidEmail()) {
+            signupErrorMsg = "Please enter a valid email address"
+        } else if (!isValidPhoneNumber()) {
+            signupErrorMsg = "Please enter a valid phone number"
+        }  else if (!isValidPassword()) {
+            signupErrorMsg = "Please enter a valid password"
+        } else if (!isValidConfirmedPassword()) {
+            signupErrorMsg = "Please confirm your password"
         }
         
         if (signupErrorMsg != "") {
@@ -232,21 +345,49 @@ struct SignUpView: View {
             return
         }
         
-        createUser()
+        createUser { success in
+            if (success) {
+                showSignUp2 = true
+            } else {
+                authError = true
+                return
+            }
+        }
     }
     
     /*
      * Function to create new user
      */
-    func createUser() {
-        // won't work until firebase set up (set email/password login)
-        FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password1, completion: { result, error in
-            ContentView()
-            // move to ContentView
-        })
+    func createUser(completion: @escaping (Bool) -> Void) {
+        // Handle User Creation
+        Auth.auth().createUser(withEmail: email, password: password1) { authResult, error in
+          
+            authErrorMsg = ""
+            
+            if let error = error as NSError? {
+
+                if (error.code == 17007) {
+                    // Check if email already in use
+                    authErrorMsg = "Email already taken. Try again."
+                    email = ""
+                } else {
+                    // Handle other error messages
+                    authErrorMsg = error.localizedDescription
+                }
+
+            }
+            
+            if let authResult = authResult {
+                print(authResult)
+            }
+            
+            completion(authErrorMsg.isEmpty)
+            
+        }
     }
     
 }
+
 #Preview {
     SignUpView()
 }
