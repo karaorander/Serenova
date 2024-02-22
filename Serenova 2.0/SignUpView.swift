@@ -88,7 +88,7 @@ struct SignUpView: View {
                     VStack(spacing:20) {
                         // SIGN UP
                         Text("Sign Up")
-                            .font(.system(size: 60, weight: .heavy))
+                            .font(Font.custom("NovaSquare-Bold", size: 45))
                             .foregroundColor(.nightfallHarmonyNavyBlue.opacity(0.6))
                             .frame(height: 2.0)
                             .padding()

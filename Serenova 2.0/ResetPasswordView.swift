@@ -28,7 +28,7 @@ struct ResetPasswordView: View {
                     Spacer()
                     VStack(spacing:20) {
                         Text("Reset Password")
-                            .font(.system(size: 45, weight: .heavy))
+                            .font(Font.custom("NovaSquare-Bold", size: 45))
                             .foregroundColor(.nightfallHarmonyNavyBlue.opacity(0.6))
                             .frame(height: 2.0)
                             .padding()

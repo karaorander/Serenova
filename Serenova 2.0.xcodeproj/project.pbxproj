@@ -88,7 +88,7 @@
 		23D1E0FD2B7A8FDF00539A62 /* Serenova_2_0UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serenova_2_0UITests.swift; sourceTree = "<group>"; };
 		23D1E0FF2B7A8FDF00539A62 /* Serenova_2_0UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serenova_2_0UITestsLaunchTests.swift; sourceTree = "<group>"; };
 		B146071C2B827F4300DDC3F3 /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
-		B1961BE72B81517100B27781 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B1961BE72B81517100B27781 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B1CB24542B866E0500AE8685 /* Nova_Square */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Nova_Square; sourceTree = "<group>"; };
 		E0231FFD2B7DB93D009A4E39 /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
 		E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
