@@ -153,6 +153,9 @@ struct LoginView: View {
 
             if let authResult = authResult {
                 isAuthenticated = true
+                Task {
+                    currUser = await User(authResult: authResult, login: true)
+                }
                 print(authResult)
 
             }

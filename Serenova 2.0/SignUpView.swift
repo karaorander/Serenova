@@ -379,6 +379,9 @@ struct SignUpView: View {
             
             if let authResult = authResult {
                 print(authResult)
+                Task {
+                    currUser = await User(authResult: authResult, login: false)
+                }
             }
             
             completion(authErrorMsg.isEmpty)
