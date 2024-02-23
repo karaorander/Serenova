@@ -23,11 +23,11 @@ struct AccountInfoView: View {
                     LinearGradient(gradient: Gradient(colors: [.dreamyTwilightMidnightBlue.opacity(0.2), .nightfallHarmonyNavyBlue.opacity(0.6)]), startPoint: .top, endPoint: .bottom)
                         .ignoresSafeArea()
                     VStack {
-                            Text("Account Info")
+                        Text("Account Info")
                             .font(Font.custom("NovaSquare-Bold", size: 40))
-                                  
-                                .frame(height: 2.0, alignment: .leading)
-                                .padding()
+                        
+                            .frame(height: 2.0, alignment: .leading)
+                            .padding()
                         Spacer().frame(height: 20)
                         
                         // Color drop down menu
@@ -86,28 +86,28 @@ struct AccountInfoView: View {
                             .padding()
                         
                         
-                            // Username Field
+                        // Username Field
                         Text("Username: \(username)")
                             .padding()
                             .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
                         
-                            // Email
+                        // Email
                         Text("Email: \(username)")
                             .padding()
                             .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
                         
-                            // Reset Password Button
-                            NavigationLink(destination: ResetPasswordView()){
-                                HStack{
-                                    Text("Reset Password")
+                        // Reset Password Button
+                        NavigationLink(destination: ResetPasswordView()){
+                            HStack{
+                                Text("Reset Password")
                                     .padding()
-                                    Spacer()
+                                Spacer()
                                 Image(systemName:
-                                    "arrow.right")
+                                        "arrow.right")
                                 .padding()
-                                }
-                                .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
                             }
+                            .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
+                        }
                         
                         //Notification Toggle
                         Toggle(isOn: $toggleIsOn, label: {Text ("Notifications")})
@@ -121,11 +121,11 @@ struct AccountInfoView: View {
                         NavigationLink(destination: BioInfoView()){
                             HStack{
                                 Text("Bio")
-                                .padding()
+                                    .padding()
                                 Spacer()
-                            Image(systemName:
-                                "arrow.right")
-                            .padding()
+                                Image(systemName:
+                                        "arrow.right")
+                                .padding()
                             }
                             .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
                         }
@@ -134,19 +134,21 @@ struct AccountInfoView: View {
                         NavigationLink(destination: ResetPasswordView()){
                             HStack{
                                 Text("Rewards Dashboard")
-                                .padding()
+                                    .padding()
                                 Spacer()
-                            Image(systemName:
-                                "arrow.right")
-                            .padding()
+                                Image(systemName:
+                                        "arrow.right")
+                                .padding()
                             }
                             .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
                         }
-                        }
+                    }
                     
-                        Spacer()
+                    Spacer()
                 }
+                
             }.buttonStyle(PlainButtonStyle())
+            
         }
     }
 }

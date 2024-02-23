@@ -53,6 +53,8 @@
 		E0D1C1632B880F7500A7609C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0D1C1602B880F7500A7609C /* GoogleService-Info.plist */; };
 		E0D1C1642B880F7500A7609C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0D1C1602B880F7500A7609C /* GoogleService-Info.plist */; };
 		E0D1C1662B8810B900A7609C /* ViewExensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D1C1652B8810B900A7609C /* ViewExensions.swift */; };
+		E0D1C1682B8815DF00A7609C /* SleepLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D1C1672B8815DF00A7609C /* SleepLogView.swift */; };
+		E0D1C16A2B88244700A7609C /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D1C1692B88244700A7609C /* DateExtensions.swift */; };
 		F23D7CDF2B7FAF320018F325 /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */; };
 		F291C8F12B83CF0E00C2D9ED /* QuestionareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F291C8F02B83CF0E00C2D9ED /* QuestionareView.swift */; };
 		F2E2195E2B82EC6200235824 /* SignUpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E2195D2B82EC6200235824 /* SignUpTests.swift */; };
@@ -112,6 +114,8 @@
 		E0D1C15E2B880EED00A7609C /* SleepGoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepGoalsView.swift; sourceTree = "<group>"; };
 		E0D1C1602B880F7500A7609C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E0D1C1652B8810B900A7609C /* ViewExensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExensions.swift; sourceTree = "<group>"; };
+		E0D1C1672B8815DF00A7609C /* SleepLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepLogView.swift; sourceTree = "<group>"; };
+		E0D1C1692B88244700A7609C /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
 		F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
 		F291C8F02B83CF0E00C2D9ED /* QuestionareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionareView.swift; sourceTree = "<group>"; };
 		F2E219542B82EBEB00235824 /* Serenova 2.0Tests2.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Serenova 2.0Tests2.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -201,6 +205,7 @@
 				E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */,
 				E0934EC92B85BA8B00494176 /* CreateUserInfoView.swift */,
 				E0D1C15E2B880EED00A7609C /* SleepGoalsView.swift */,
+				E0D1C1672B8815DF00A7609C /* SleepLogView.swift */,
 				F291C8F02B83CF0E00C2D9ED /* QuestionareView.swift */,
 				F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */,
 				239E08192B7FC8990036AD81 /* LoginView.swift */,
@@ -256,6 +261,7 @@
 			isa = PBXGroup;
 			children = (
 				E0231FFD2B7DB93D009A4E39 /* ColorExtensions.swift */,
+				E0D1C1692B88244700A7609C /* DateExtensions.swift */,
 				E0D1C1652B8810B900A7609C /* ViewExensions.swift */,
 			);
 			path = Extensions;
@@ -453,6 +459,7 @@
 			files = (
 				B1CB24712B87C58900AE8685 /* SocialData.swift in Sources */,
 				23D1E0E52B7A8FDE00539A62 /* ContentView.swift in Sources */,
+				E0D1C16A2B88244700A7609C /* DateExtensions.swift in Sources */,
 				E0D1C15F2B880EED00A7609C /* SleepGoalsView.swift in Sources */,
 				E0231FFE2B7DB93D009A4E39 /* ColorExtensions.swift in Sources */,
 				B1CB24752B87C5D700AE8685 /* Message.swift in Sources */,
@@ -470,6 +477,7 @@
 				B1CB246F2B87C58700AE8685 /* SleepLog.swift in Sources */,
 				239E081E2B80424A0036AD81 /* AccountInfoView.swift in Sources */,
 				B1CB24692B87C57500AE8685 /* Journal.swift in Sources */,
+				E0D1C1682B8815DF00A7609C /* SleepLogView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

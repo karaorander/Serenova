@@ -22,6 +22,17 @@ struct SleepGoalsView: View {
                 
                 LinearGradient(gradient: Gradient(colors: [ .nightfallHarmonyRoyalPurple.opacity(0.8), .dreamyTwilightMidnightBlue.opacity(0.7), .nightfallHarmonyNavyBlue.opacity(0.8)]), startPoint: .top, endPoint: .bottom)
                     .ignoresSafeArea()
+                NavigationLink(destination: AccountInfoView().navigationBarBackButtonHidden(true)) {
+
+                    Image(systemName: "person.crop.circle.fill")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 45, height: 45)
+                        .clipShape(.circle)
+                        .foregroundColor(.white)
+                        .position(x:350, y: 20)
+                
+            }
                 VStack {
                 ScrollView(.vertical, showsIndicators: false){
                     
@@ -88,40 +99,50 @@ struct SleepGoalsView: View {
                                             .trim(from: 0, to: (goal.currentData/goal.goal))
                                             .stroke(goal.color, style: StrokeStyle(lineWidth: 15, lineCap: .round))
                                             .frame(width: (UIScreen.main.bounds.width - 150)/2, height: (UIScreen.main.bounds.width - 150)/2)
-                                        Text("\(getPercent(current: goal.currentData, Goal: goal.goal))%").font(.system(size: 22)).fontWeight(.bold).foregroundStyle(goal.color)
+                                        Text("\(getPercent(current: goal.currentData, Goal: goal.goal))%")
+                                            .font(.system(size: 22))
+                                            .fontWeight(.bold).foregroundStyle(goal.color)
                                             .rotationEffect(.init(degrees: 90))
                                     }
                                     .rotationEffect(.init(degrees: -90))
-                                    Text(getHrs(value:goal.currentData) + " Hrs").font(.system(size:22, weight: .bold)).foregroundColor(goal.color)
-                                }.padding().background(.white.opacity(0.06)).cornerRadius(15)
+                                    Text(getHrs(value:goal.currentData) + " Hrs")
+                                        .font(.system(size:22, weight: .bold))
+                                        .foregroundColor(goal.color)
+                                }.padding()
+                                    .background(.white.opacity(0.06))
+                                    .cornerRadius(15)
                                     .shadow(color: .white.opacity(0.1), radius: 10)
                             }
                         }
                         .padding()
                         NavigationLink (destination: EditGoalsView().navigationBarBackButtonHidden(true)) {
                             HStack {
-                                Text("Edit Sleep Goals").font(.system(size: 18)).fontWeight(.medium).foregroundColor(.white).cornerRadius(10)
+                                Text("Edit Sleep Goals").font(.system(size: 18)).fontWeight(.medium)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(10)
                                 Image(systemName: "arrow.right").foregroundColor(.white)
-                            }.frame(width: 320, height: 50).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(10)
+                            }.frame(width: 320, height: 50)
+                                .background(Color.tranquilMistAshGray)
+                                .foregroundColor(.nightfallHarmonyNavyBlue)
+                                .cornerRadius(10)
                         }
                     }.padding()
                 }
                     HStack (spacing: 40){
-                    NavigationLink(destination: AccountInfoView().navigationBarBackButtonHidden(true)) {
-
-                            Image(systemName: "person.crop.circle.fill")
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 45, height: 45)
-                                .clipShape(.circle)
-                                .foregroundColor(.white)
-                        
-                    }
-                    NavigationLink(destination: AccountInfoView().navigationBarBackButtonHidden(true)) {
+                    
+                    NavigationLink(destination: SleepLogView().navigationBarBackButtonHidden(true)) {
 
                             Image(systemName: "zzz")
                                 .resizable()
                                 .frame(width: 30, height: 30)
+                                .foregroundColor(.white)
+                        
+                    }
+                        NavigationLink(destination: SleepGoalsView().navigationBarBackButtonHidden(true)) {
+
+                            Image(systemName: "list.clipboard")
+                                .resizable()
+                                .frame(width: 30, height: 40)
                                 .foregroundColor(.white)
                         
                     }
@@ -173,11 +194,13 @@ struct EditGoalsView: View {
                 
                 LinearGradient(gradient: Gradient(colors: [ .nightfallHarmonyRoyalPurple.opacity(0.8), .dreamyTwilightMidnightBlue.opacity(0.7), .nightfallHarmonyNavyBlue.opacity(0.8)]), startPoint: .top, endPoint: .bottom)
                     .ignoresSafeArea()
-                //StarsBackground()
+                
+                
                 NavigationLink (destination: SleepGoalsView().navigationBarBackButtonHidden(true)) {
                     Image(systemName: "arrow.left").foregroundColor(.white).position(x:40, y: 20).font(.system(size: 22, weight: .bold))
                     
                 }
+                
                 VStack (spacing: 30){
                     HStack{
                         Text("Let's set your weekly goals").font(.system(size:22, weight: .bold)).foregroundColor(.dreamyTwilightMidnightBlue.opacity(0.9))
@@ -208,11 +231,12 @@ struct EditGoalsView: View {
                         }
                     }.padding().background(.white.opacity(0.06)).cornerRadius(15)
                         .shadow(color: .white.opacity(0.1), radius: 10)
-                    NavigationLink (destination: EditGoalsView().navigationBarBackButtonHidden(true)) {
+                    NavigationLink (destination: SleepGoalsView().navigationBarBackButtonHidden(true)) {
                         HStack {
                             Text("Save Goals").font(.system(size: 18)).fontWeight(.medium).foregroundColor(.white).cornerRadius(10)
                         }.frame(width: 320, height: 50).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(10)
                     }
+                    
                     
                 }
                 
