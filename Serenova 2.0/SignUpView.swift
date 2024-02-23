@@ -25,6 +25,7 @@ struct SignUpView: View {
     @State private var authErrorMsg = ""
     
     @State private var toggleIsOn: Bool = false
+    @State private var passwordTapped: Bool = false;
 
     @Environment(\.presentationMode) var presentationMode
     
@@ -87,7 +88,7 @@ struct SignUpView: View {
                     VStack(spacing:20) {
                         // SIGN UP
                         Text("Sign Up")
-                            .font(.system(size: 60, weight: .heavy))
+                            .font(Font.custom("NovaSquare-Bold", size: 45))
                             .foregroundColor(.nightfallHarmonyNavyBlue.opacity(0.6))
                             .frame(height: 2.0)
                             .padding()
@@ -139,12 +140,48 @@ struct SignUpView: View {
                             HStack {
                                 SecureField("Create Password",text: $password1)
                                     .textContentType(.newPassword)
+                                    .onTapGesture {
+                                        passwordTapped = true
+                                    }
                                 Image(systemName: isValidPassword() ? "checkmark":"")
                                     .foregroundColor(.nightfallHarmonyNavyBlue.opacity(0.6))
                             }
                             .padding()
                             .frame(width: 300, height: 50)
                             .background(.white.opacity(0.15))
+                            .cornerRadius(10)
+                        }
+                        // PASSWORD CRITERIA
+                        if (passwordTapped) {
+                            VStack (alignment: .leading){
+                                Text("Password Requirements:")
+                                    .fontWeight(.bold)
+                                Spacer().frame(height: 10)
+                                HStack {
+                                    Image(systemName: isValidLength() ? "checkmark":"xmark")
+                                        .foregroundColor(Color.nightfallHarmonySilverGray.opacity(0.9))
+                                    Text("at least 8 characters")
+                                }
+                                HStack {
+                                    Image(systemName: hasSpecialChar() ? "checkmark":"xmark")
+                                        .foregroundColor(Color.nightfallHarmonySilverGray.opacity(0.9))
+                                    Text("at least 1 special character")
+                                }
+                                HStack {
+                                    Image(systemName: hasUppercaseChar() ? "checkmark":"xmark")
+                                        .foregroundColor(Color.nightfallHarmonySilverGray.opacity(0.9))
+                                    Text("at least 1 uppercase character")
+                                }
+                                HStack {
+                                    Image(systemName: hasNumber() ? "checkmark":"xmark")
+                                        .foregroundColor(Color.nightfallHarmonySilverGray.opacity(0.9))
+                                    Text("at least 1 number")
+                                }
+                            }
+                            .font(.caption)
+                            .frame(width: passwordTapped ? 300: 0, height: passwordTapped ? 110 : 0)
+                            .foregroundColor(Color.nightfallHarmonySilverGray.opacity(0.9))
+                            .background(Color.nightfallHarmonyNavyBlue.opacity(0.6))
                             .cornerRadius(10)
                         }
                         // PASSWORD2
@@ -181,6 +218,9 @@ struct SignUpView: View {
                 }
             }
             .buttonStyle(PlainButtonStyle())
+            .onTapGesture {
+                passwordTapped = false
+            }
 
             // ALERT (for signup form error)
             .alert(
@@ -222,6 +262,42 @@ struct SignUpView: View {
     }
     
     /*
+     * Function to verify that there are 8 characters
+     * in the password
+     */
+    func isValidLength() -> Bool {
+        // 1) Password must be at least 8 characters
+        return password1.count >= 8
+    }
+    
+    /*
+     * Function to verify that there is a special
+     * character in the password
+     */
+    func hasSpecialChar() -> Bool {
+        // 2) Password must contain at least one special character
+        return password1.contains(/[\W]/) && !password1.contains(/[_]/)
+    }
+    
+    /*
+     * Function to verify that there is an uppercase
+     * letter in the password
+     */
+    func hasUppercaseChar() -> Bool {
+        // 3) Password must contain an uppercase letter
+        return password1.contains(where: {$0.isUppercase})
+    }
+    
+    /*
+     * Function to verify that there is a number
+     * in the password
+     */
+    func hasNumber() -> Bool {
+        // 4) Password must contain a number
+        return password1.contains(where: {$0.isNumber})
+    }
+    
+    /*
      * Function to verify that the password is valid
      * Must be at least 8 characters
      * Must have at least one capital letter
@@ -230,28 +306,7 @@ struct SignUpView: View {
      */
     func isValidPassword() -> Bool {
         // Ensure password matches criteria:
-        
-        // 1) Password must be at least 8 characters
-        if (password1.count < 8) {
-            return false
-        }
-        
-        // 2) Password must contain at least one special character
-        if (!password1.contains(/[\W]/) && !password1.contains(/[_]/)) {
-            return false
-        }
-        
-        // 3) Password must contain an uppercase letter
-        if (!password1.contains(where: {$0.isUppercase})) {
-            return false
-        }
-        
-        // 4) Password must contain a number
-        if(!password1.contains(where: {$0.isNumber})) {
-            return false
-        }
-        
-        return true
+        return isValidLength() && hasSpecialChar() && hasUppercaseChar() && hasNumber()
     }
     
     /*
@@ -324,6 +379,9 @@ struct SignUpView: View {
             
             if let authResult = authResult {
                 print(authResult)
+                Task {
+                    currUser = await User(authResult: authResult, login: false)
+                }
             }
             
             completion(authErrorMsg.isEmpty)

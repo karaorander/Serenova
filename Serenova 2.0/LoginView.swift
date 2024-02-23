@@ -54,7 +54,7 @@ struct LoginView: View {
                 VStack {
                     VStack(spacing:20) {
                         Text("Login")
-                            .font(.system(size: 45, weight: .heavy))
+                            .font(Font.custom("NovaSquare-Bold", size: 45))
                             .foregroundColor(.nightfallHarmonyNavyBlue.opacity(0.6))
                             .frame(height: 2.0)
                             .padding()
@@ -153,6 +153,9 @@ struct LoginView: View {
 
             if let authResult = authResult {
                 isAuthenticated = true
+                Task {
+                    currUser = await User(authResult: authResult, login: true)
+                }
                 print(authResult)
 
             }
@@ -160,7 +163,7 @@ struct LoginView: View {
     }
 
     func failedLogin() {
-        self.alertMessage = "Email or password is incorrect."
+        self.alertMessage = "Email or password is incorrect. Try again."
         self.showingAlert = true
     }
 }
