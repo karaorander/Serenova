@@ -113,7 +113,7 @@
 		E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		E0934EC92B85BA8B00494176 /* CreateUserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateUserInfoView.swift; sourceTree = "<group>"; };
 		E0D1C15E2B880EED00A7609C /* SleepGoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepGoalsView.swift; sourceTree = "<group>"; };
-		E0D1C1602B880F7500A7609C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		E0D1C1602B880F7500A7609C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E0D1C1652B8810B900A7609C /* ViewExensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExensions.swift; sourceTree = "<group>"; };
 		E0D1C1672B8815DF00A7609C /* SleepLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepLogView.swift; sourceTree = "<group>"; };
 		E0D1C1692B88244700A7609C /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
