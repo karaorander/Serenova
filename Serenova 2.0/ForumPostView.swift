@@ -16,6 +16,7 @@ struct ForumPostView: View {
     //var onPos: (Post)->()
     
     @State var postText: String = ""
+    @State var postTitle: String = ""
     @State var postImageData: Data?
     
     ///use app storage to get user data from firebase.  EX:
@@ -51,8 +52,8 @@ struct ForumPostView: View {
                                 .padding(.vertical, 6)
                                 .background(.white, in: Capsule())
                         }
-                        .disabled(postText == "")
-                        .opacity((postText == "") ? 0.4 : 1)
+                        .disabled(postText == "" || postTitle == "")
+                        .opacity((postText == "" || postTitle == "") ? 0.4 : 1)
                     }.padding(.horizontal, 15).padding(.vertical, 10)
                         .background{
                             Rectangle()
@@ -61,8 +62,20 @@ struct ForumPostView: View {
                         }
                     ScrollView(.vertical, showsIndicators:false) {
                         VStack(spacing: 15){
-                            TextField("What's new with your sleep?", text: $postText, axis: .vertical)
-                                .focused($showkeyboard)
+                            HStack {
+                                TextField("Title:", text: $postTitle)
+                                    .fontWeight(.bold)
+                                    
+                                    .focused($showkeyboard)
+                            }.padding()
+                                .background(.gray.opacity(0.15))
+                                .cornerRadius(10)
+                            HStack {
+                                TextField("Share sleep exeriences + tips!", text: $postText, axis: .vertical)
+                                    .focused($showkeyboard)
+                            }.padding()
+                                .background(.gray.opacity(0.15))
+                                .cornerRadius(10)
                             if let postImageData, let image = UIImage(data: postImageData) {
                                 GeometryReader{
                                     let size = $0.size
@@ -118,7 +131,7 @@ struct ForumPostView: View {
                         }.hSpacing(.leading)
                         Button("Done") {
                             showkeyboard = false
-                        }
+                        }.foregroundColor(.white)
                     }.padding(.horizontal, 15)
                         .padding(.vertical, 10)
                         .background{
