@@ -143,9 +143,35 @@ struct AccountInfoView: View {
                             .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
                         }
                     }
-                    
                     Spacer()
-                }
+                    
+                //Menu Bar
+                }.overlay(alignment: .bottom, content: {
+                    
+                    HStack (spacing: 40){
+                        
+                        NavigationLink(destination: SleepLogView().navigationBarBackButtonHidden(true)) {
+
+                            Image(systemName: "zzz")
+                                .resizable()
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(.white)
+                        
+                    }
+                        NavigationLink(destination: SleepGoalsView().navigationBarBackButtonHidden(true)) {
+
+                            Image(systemName: "list.clipboard")
+                                .resizable()
+                                .frame(width: 30, height: 40)
+                                .foregroundColor(.white)
+                        
+                    }
+                }.padding()
+                .vSpacing(.bottom)
+                .hSpacing(.leading)
+                .background(Color.dreamyTwilightMidnightBlue)
+                
+            })
                 
             }.buttonStyle(PlainButtonStyle())
             

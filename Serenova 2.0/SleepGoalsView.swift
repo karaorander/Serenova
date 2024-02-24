@@ -22,17 +22,7 @@ struct SleepGoalsView: View {
                 
                 LinearGradient(gradient: Gradient(colors: [ .nightfallHarmonyRoyalPurple.opacity(0.8), .dreamyTwilightMidnightBlue.opacity(0.7), .nightfallHarmonyNavyBlue.opacity(0.8)]), startPoint: .top, endPoint: .bottom)
                     .ignoresSafeArea()
-                NavigationLink(destination: AccountInfoView().navigationBarBackButtonHidden(true)) {
-
-                    Image(systemName: "person.crop.circle.fill")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 45, height: 45)
-                        .clipShape(.circle)
-                        .foregroundColor(.white)
-                        .position(x:350, y: 20)
-                
-            }
+               
                 VStack {
                 ScrollView(.vertical, showsIndicators: false){
                     
@@ -43,6 +33,21 @@ struct SleepGoalsView: View {
                             .foregroundColor(.white.opacity(0.7))
                             .scaledToFit().minimumScaleFactor(0.01)
                             .lineLimit(1)
+                            .overlay(alignment: .topTrailing, content: {
+                                
+                                    NavigationLink(destination: AccountInfoView().navigationBarBackButtonHidden(true)) {
+
+                                        Image(systemName: "person.crop.circle.fill")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width: 45, height: 45)
+                                            .clipShape(.circle)
+                                            .foregroundColor(.white)
+                                            .position(x:300, y:0)
+                                    
+                                    }.padding(.bottom)
+                                
+                            })
                         
                         //Daily Sleep Columns
                         VStack (alignment: .leading, spacing:2){
