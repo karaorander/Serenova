@@ -117,9 +117,16 @@ struct SleepLogView: View {
                                 .foregroundColor(.white)
                         
                     }
+                        NavigationLink(destination: ForumPostView().navigationBarBackButtonHidden(true)) {
+
+                                Image(systemName: "person.2")
+                                    .resizable()
+                                    .frame(width: 45, height: 30)
+                                    .foregroundColor(.white)
+                            
+                        }
                 }.padding()
-                .vSpacing(.bottom)
-                .hSpacing(.leading)
+                .hSpacing(.center)
                 .background(Color.dreamyTwilightMidnightBlue)
                 }
             }
@@ -183,8 +190,7 @@ struct SleepLogView: View {
             ForEach(week) { day in
                 VStack(spacing: 8) {
                     Text(day.date.format("E"))
-                        .font(.callout)
-                        .fontWeight(.medium)
+                        .font(.system(size: 20, weight: .medium))
                         .textScale(.secondary)
                         .foregroundStyle(.gray)
                     

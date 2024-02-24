@@ -151,9 +151,16 @@ struct SleepGoalsView: View {
                                 .foregroundColor(.white)
                         
                     }
+                        NavigationLink(destination: ForumPostView().navigationBarBackButtonHidden(true)) {
+
+                                Image(systemName: "person.2")
+                                    .resizable()
+                                    .frame(width: 45, height: 30)
+                                    .foregroundColor(.white)
+                            
+                        }
                 }.padding()
-                .vSpacing(.bottom)
-                .hSpacing(.leading)
+                .hSpacing(.center)
                 .background(Color.dreamyTwilightMidnightBlue)
                     
             }
