@@ -173,8 +173,26 @@ struct ForumPostView: View {
         isLoading = true
 
         var newPost = Post(title: postTitle, content: postText)
-        storeImage(postID: newPost.getPostID())
-        newPost.createPost()
+        
+        if let postImageData = postImageData {
+            storeImage(postID: newPost.getPostID()) { success in
+                // If image upload was successful ...
+                if success {
+                    // Set imageURL
+                    if let postImageURL = postImageURL {
+                        newPost.setPostMediaURL(imageURL: postImageURL)
+                    }
+                    newPost.createPost()
+                } else {
+                    print("Error! Could not upload image!")
+                    return
+                }
+            }
+        } else {
+            // Create post
+            newPost.createPost()
+        }
+
         /*
         Task {
             do {
@@ -189,7 +207,7 @@ struct ForumPostView: View {
     /*
      * Function to store image in Firebase Storage
      */
-    func storeImage(postID: String) {
+    func storeImage(postID: String, completion: @escaping (Bool) -> Void) {
         //Create reference to postMedia bucket
         let storageRef = Storage.storage().reference()
         
@@ -201,6 +219,7 @@ struct ForumPostView: View {
             let uploadTask = postImageRef.putData(postImageData, metadata: nil) { (metadata, error) in
                 guard let metadata = metadata else {
                     // Error
+                    completion(false)
                     return
                 }
                 // Metadata
@@ -209,9 +228,11 @@ struct ForumPostView: View {
                 postImageRef.downloadURL { (url, error) in
                     guard let downloadURL = url else {
                         // Error
+                        completion(false)
                         return
                     }
-                    postImageURL = downloadURL
+                    postImageURL = url
+                    completion(true)
                 }
             }
         }
