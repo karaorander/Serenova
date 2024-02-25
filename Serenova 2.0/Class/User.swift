@@ -24,7 +24,7 @@ class User {
     //private var longTermSleep: [SleepLog] = []
     //private var colorScheme: ColorSchemes // TODO: Set default value
     //private var profilePhoto // TODO: Set default value
-    private var userId: String = ""
+    private var userID: String = ""
     private var typicalSleepTime: String = ""
     private var gender: Gender = Gender.Female //TODO: Set default value
     private var weight: Int = -1
@@ -72,7 +72,7 @@ class User {
     init(authResult: AuthDataResult, login: Bool) async {
         
         // Set unique identifier for User
-        self.userId = authResult.user.uid
+        self.userID = authResult.user.uid
         
         if (login) {
             // 1) Get snapshot of User data
@@ -120,7 +120,7 @@ class User {
     func readUserData() async -> NSDictionary? {
         // Read in User data given the uniqueID
         do {
-            let snapshot = try await ref.child("Users/\(self.userId)").getData()
+            let snapshot = try await ref.child("Users/\(self.userID)").getData()
             return snapshot.value as? NSDictionary
         } catch {
             print(error.localizedDescription)
@@ -157,7 +157,7 @@ class User {
                                           "typicalWakeUpTime": self.typicalWakeUpTime,
                                           "typicalBedTime": self.typicalBedTime,
                                           "isEarlyBird": self.isEarlyBird    ]
-        let savedUserUpdates = ["Users/\(self.userId)": savedUser]
+        let savedUserUpdates = ["Users/\(self.userID)": savedUser]
         ref.updateChildValues(savedUserUpdates)
     }
     
@@ -167,7 +167,7 @@ class User {
      */
     func updateUserValue(attribute: String, value: Any) {
         // Update variable to specified user
-        ref.child("Users/\(self.userId)/\(attribute)").setValue(value)
+        ref.child("Users/\(self.userID)/\(attribute)").setValue(value)
     }
     
     /*

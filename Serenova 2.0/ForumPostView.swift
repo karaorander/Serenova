@@ -170,6 +170,10 @@ struct ForumPostView: View {
     func createPost() {
         showkeyboard = false
         isLoading = true
+
+        var newPost = Post(title: postTitle, content: postText)
+        
+        /*
         Task {
             do {
                 
@@ -177,6 +181,7 @@ struct ForumPostView: View {
                 await errorAlerts(error)
             }
         }
+        */
     }
     
 }
