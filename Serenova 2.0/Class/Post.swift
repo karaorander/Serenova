@@ -8,36 +8,30 @@ import Foundation
 import FirebaseDatabase
 
 class Post {
-    //var authorID: String = ""
-    //var authorUserName: String = ""
-    var title: String = ""
-    var content: String = ""
-    var timeStamp: String = ""
-    // var likeIDs: [String] = []
-    // var userProfileURL: URL
-    // var imageURL: URL?
-    // var imageReferenceID: String = ""
-    // var likeIDs: [String] = []
+    private var postID: String = ""
+    private var title: String = ""
+    private var content: String = ""
+    private var timeStamp: String = ""
+    private var imageURL: URL?
+    //private var authorID: String = ""
+    //private var authorUserName: String = ""
+    //private var likeIDs: [String] = []
+    //private var userProfileURL: URL
+    //private var imageReferenceID: String = ""
     
-    // *** If we want to use structs instead
-    // *** just move the necessary code wherever
+    // Create reference to "Post" objects within Database
+    private var ref: DatabaseReference! = Database.database().reference().child("Post")
     
     /*
      * Constructor for creating new post
+     * (Add other values later)
      */
     init(title: String, content: String) {
-        //self.authorID = authorID
         self.title = title
         self.content = content
         
-        // Set correct date format
-        let date = Date()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .full
-        dateFormatter.timeStyle = .short
-        self.timeStamp = dateFormatter.string(from: date)
-        
-        self.writePost()
+        // Generates unique ID for post (HANDLE ERROR LATER)
+        self.postID = self.ref.childByAutoId().key ?? "ERROR"
     }
     
     /*
@@ -48,21 +42,55 @@ class Post {
     /*
      * Function to write new post to Firebase
      */
-    func writePost() {
-        let ref: DatabaseReference! = Database.database().reference().child("Post")
+    func createPost() {        
+        // Set Date to time that the actual Post is posted
+        let date = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .full
+        dateFormatter.timeStyle = .short
+        self.timeStamp = dateFormatter.string(from: date)
         
         // Create JSON-like object for data storage
-        let newPost: [String: Any] = [  /*"authorID": self.authorID,*/
+        var newPost: [String: Any] = [  /*"authorID": self.authorID,*/
                                         "title": self.title,
                                         "content": self.content,
-                                        "timeStamp": self.timeStamp   ]
-        // Upload post to Firebase
-        ref.childByAutoId().setValue(newPost)
+                                        "timeStamp": self.timeStamp ]
+        
+        // Add image if possible
+        if let imageURL = self.imageURL {
+            newPost["imageURL"] = imageURL.absoluteString
+        }
+        // Upload Post to Firebase
+        self.ref.child(self.postID).setValue(newPost)
     }
     
     /*
-     * TODO: Function to update value(s) to Firebase
+     * Function to update certain values of the post (edit mode)
      */
+    func updateValues(newValues: [String: Any]) {
+        self.ref.child(self.postID).updateChildValues(newValues)
+    }
+    
+    /*
+     * Function to delete a post
+     */
+    func deletePost() {
+        self.ref.child(self.postID).removeValue()
+    }
+    
+    /*
+     * Function to get generate postID
+     */
+    func getPostID() -> String {
+        return self.postID
+    }
+    
+    /*
+     * Function to set the image URL
+     */
+    func setPostMediaURL(imageURL: URL) {
+        self.imageURL = imageURL
+    }
     
 }
 

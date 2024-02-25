@@ -18,6 +18,7 @@ struct ForumPostView: View {
     @State var postText: String = ""
     @State var postTitle: String = ""
     @State var postImageData: Data?
+    @State var postImageURL: URL?
     
     ///use app storage to get user data from firebase.  EX:
     //@AppStorage("userName") var userName: String = ""
@@ -172,7 +173,8 @@ struct ForumPostView: View {
         isLoading = true
 
         var newPost = Post(title: postTitle, content: postText)
-        
+        storeImage(postID: newPost.getPostID())
+        newPost.createPost()
         /*
         Task {
             do {
@@ -184,6 +186,36 @@ struct ForumPostView: View {
         */
     }
     
+    /*
+     * Function to store image in Firebase Storage
+     */
+    func storeImage(postID: String) {
+        //Create reference to postMedia bucket
+        let storageRef = Storage.storage().reference()
+        
+        // Create a reference to the file you want to upload
+        let postImageRef = storageRef.child("postMedia/\(postID)/\(UUID().uuidString).jpg")
+
+        // Upload image
+        if let postImageData = postImageData {
+            let uploadTask = postImageRef.putData(postImageData, metadata: nil) { (metadata, error) in
+                guard let metadata = metadata else {
+                    // Error
+                    return
+                }
+                // Metadata
+                let size = metadata.size
+                // URL
+                postImageRef.downloadURL { (url, error) in
+                    guard let downloadURL = url else {
+                        // Error
+                        return
+                    }
+                    postImageURL = downloadURL
+                }
+            }
+        }
+    }
 }
 
 
