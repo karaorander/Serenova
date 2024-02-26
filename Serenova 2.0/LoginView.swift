@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FirebaseAuth
+import FirebaseDatabase
 import UIKit
 
 
@@ -148,18 +149,29 @@ struct LoginView: View {
         
             if let error = error {
                 self.failedLogin()
-                //print(error)
+                print(error)
             }
 
             if let authResult = authResult {
                 isAuthenticated = true
-                /*
                 Task {
-                    currUser = await User(authResult: authResult, login: true)
+                    do {
+                        // Make Database reference to User
+                        let ref = Database.database().reference().child("User")
+                        
+                        // Retrieve User Snapshot
+                        let snapshot = try await ref.child(authResult.user.uid).getData()
+                        
+                        // Decode Snapshot + set currUser
+                        // If this is giving you an error, it's because
+                        // you created your account before User class was updated.
+                        // Delete your account and sign up again.
+                        currUser = try snapshot.data(as: User.self)
+                    } catch {
+                        print(error)
+                    }
                 }
-                */
                 print(authResult)
-
             }
         }
     }

@@ -17,6 +17,7 @@ class User: Codable {
     public var username: String = ""
     public var email: String = ""
     public var phoneNumber: String = ""
+    public var bio: String = ""
     public var colorScheme: ColorScheme = ColorScheme.MoonlitSerenity // TODO: Set default ColorScheme
     public var profileURL: URL?
     public var typicalSleepTime: String = ""
@@ -51,7 +52,7 @@ class User: Codable {
     
     /* CodingKeys */
     enum CodingKeys: CodingKey {
-        case name, username, email, phoneNumber,
+        case name, username, email, phoneNumber, bio,
              colorScheme, profileURL, typicalSleepTime,
              gender, weight, height, age, hadInsomnia,
              hasInsomnia, exercisesRegularly, hasMedication,
@@ -76,6 +77,12 @@ class User: Codable {
     }
     
     /*
+     * Constructor for creating User object
+     * (not for new Users)
+     */
+    init () {}
+    
+    /*
      * Function to add a User
      * Throws error related to encoding the object
      */
@@ -85,11 +92,6 @@ class User: Codable {
         // Write new User object to Database
         ref.child(self.userID).setValue(encodedData)
     }
-    
-    /*
-     * TODO: Function to read user data from
-     * Firebase
-     */
     
     /*
      * Function to update values
