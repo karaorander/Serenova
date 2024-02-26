@@ -6,15 +6,39 @@
 //
 
 import SwiftUI
+import Firebase
 
 struct AccountInfoView: View {
     @State private var color_theme = "Dreamy Twilight"
     // TODO: Get username, full name, email, notification preferences from database
-    @State private var username = "MYUSERNAME"
-    @State private var email = "MYEMAIL"
+    @State public var myusername = "MYUSERNAME"
+    @State public var myemail = "MYEMAIL"
     @State private var fullname = "MYNAME"
     @State private var notifications: Bool = false
     @State private var toggleIsOn: Bool = false
+    
+    init() {
+        fetchUsername();
+    }
+    
+    func fetchUsername() {
+        if let user = Auth.auth().currentUser {
+            let username = user.displayName
+            // Do something with the username
+            print("Username: \(username ?? "No username available")")
+            if (username != nil) {
+                myusername = (username ?? "No username found")
+            }
+            if (user.email != nil) {
+                myemail = (user.email ?? "No username found")
+            } else {
+                print("No email")
+            }
+        } else {
+            // No user is signed in
+            print("No user signed in")
+        }
+    }
     
     var body: some View {
         VStack{
@@ -85,14 +109,13 @@ struct AccountInfoView: View {
                             .fontWeight(.medium)
                             .padding()
                         
-                        
                         // Username Field
-                        Text("Username: \(username)")
+                        Text("Username: \(myusername)")
                             .padding()
                             .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
                         
                         // Email
-                        Text("Email: \(username)")
+                        Text("Email: \(myemail)")
                             .padding()
                             .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
                         
@@ -143,9 +166,42 @@ struct AccountInfoView: View {
                             .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
                         }
                     }
-                    
                     Spacer()
-                }
+                    
+                //Menu Bar
+                }.overlay(alignment: .bottom, content: {
+                    
+                    HStack (spacing: 40){
+                        
+                        NavigationLink(destination: SleepLogView().navigationBarBackButtonHidden(true)) {
+
+                            Image(systemName: "zzz")
+                                .resizable()
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(.white)
+                        
+                    }
+                        NavigationLink(destination: SleepGoalsView().navigationBarBackButtonHidden(true)) {
+
+                            Image(systemName: "list.clipboard")
+                                .resizable()
+                                .frame(width: 30, height: 40)
+                                .foregroundColor(.white)
+                        
+                    }
+                        NavigationLink(destination: ForumPostView().navigationBarBackButtonHidden(true)) {
+
+                                Image(systemName: "person.2")
+                                    .resizable()
+                                    .frame(width: 45, height: 30)
+                                    .foregroundColor(.white)
+                            
+                        }
+                }.padding()
+                .hSpacing(.center)
+                .background(Color.dreamyTwilightMidnightBlue)
+                
+            })
                 
             }.buttonStyle(PlainButtonStyle())
             
@@ -212,6 +268,7 @@ struct BioInfoView: View {
         }
     }
 }
+
 
 #Preview {
     AccountInfoView()

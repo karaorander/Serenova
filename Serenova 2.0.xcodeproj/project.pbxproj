@@ -55,6 +55,7 @@
 		E0D1C1662B8810B900A7609C /* ViewExensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D1C1652B8810B900A7609C /* ViewExensions.swift */; };
 		E0D1C1682B8815DF00A7609C /* SleepLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D1C1672B8815DF00A7609C /* SleepLogView.swift */; };
 		E0D1C16A2B88244700A7609C /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D1C1692B88244700A7609C /* DateExtensions.swift */; };
+		E0EF57532B8A489D00D72221 /* ForumPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EF57522B8A489D00D72221 /* ForumPostView.swift */; };
 		F23D7CDF2B7FAF320018F325 /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */; };
 		F291C8F12B83CF0E00C2D9ED /* QuestionareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F291C8F02B83CF0E00C2D9ED /* QuestionareView.swift */; };
 		F2E2195E2B82EC6200235824 /* SignUpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E2195D2B82EC6200235824 /* SignUpTests.swift */; };
@@ -112,10 +113,11 @@
 		E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		E0934EC92B85BA8B00494176 /* CreateUserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateUserInfoView.swift; sourceTree = "<group>"; };
 		E0D1C15E2B880EED00A7609C /* SleepGoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepGoalsView.swift; sourceTree = "<group>"; };
-		E0D1C1602B880F7500A7609C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		E0D1C1602B880F7500A7609C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E0D1C1652B8810B900A7609C /* ViewExensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExensions.swift; sourceTree = "<group>"; };
 		E0D1C1672B8815DF00A7609C /* SleepLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepLogView.swift; sourceTree = "<group>"; };
 		E0D1C1692B88244700A7609C /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
+		E0EF57522B8A489D00D72221 /* ForumPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForumPostView.swift; sourceTree = "<group>"; };
 		F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
 		F291C8F02B83CF0E00C2D9ED /* QuestionareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionareView.swift; sourceTree = "<group>"; };
 		F2E219542B82EBEB00235824 /* Serenova 2.0Tests2.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Serenova 2.0Tests2.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -203,6 +205,7 @@
 				23D1E0E22B7A8FDE00539A62 /* Serenova_2_0App.swift */,
 				239E081D2B80424A0036AD81 /* AccountInfoView.swift */,
 				E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */,
+				E0EF57522B8A489D00D72221 /* ForumPostView.swift */,
 				E0934EC92B85BA8B00494176 /* CreateUserInfoView.swift */,
 				E0D1C15E2B880EED00A7609C /* SleepGoalsView.swift */,
 				E0D1C1672B8815DF00A7609C /* SleepLogView.swift */,
@@ -471,6 +474,7 @@
 				B1CB24732B87C5A000AE8685 /* User.swift in Sources */,
 				B1CB24672B87C57100AE8685 /* Conversation.swift in Sources */,
 				F291C8F12B83CF0E00C2D9ED /* QuestionareView.swift in Sources */,
+				E0EF57532B8A489D00D72221 /* ForumPostView.swift in Sources */,
 				E029E4FB2B7DAC4F00E8220B /* SignUpView.swift in Sources */,
 				E0934ECA2B85BA8B00494176 /* CreateUserInfoView.swift in Sources */,
 				23D1E0E32B7A8FDE00539A62 /* Serenova_2_0App.swift in Sources */,

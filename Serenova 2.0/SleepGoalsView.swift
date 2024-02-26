@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import FirebaseDatabase
+import FirebaseDatabaseSwift
 //potential opening screen
 struct SleepGoalsView: View {
     
@@ -22,17 +24,7 @@ struct SleepGoalsView: View {
                 
                 LinearGradient(gradient: Gradient(colors: [ .nightfallHarmonyRoyalPurple.opacity(0.8), .dreamyTwilightMidnightBlue.opacity(0.7), .nightfallHarmonyNavyBlue.opacity(0.8)]), startPoint: .top, endPoint: .bottom)
                     .ignoresSafeArea()
-                NavigationLink(destination: AccountInfoView().navigationBarBackButtonHidden(true)) {
-
-                    Image(systemName: "person.crop.circle.fill")
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 45, height: 45)
-                        .clipShape(.circle)
-                        .foregroundColor(.white)
-                        .position(x:350, y: 20)
-                
-            }
+               
                 VStack {
                 ScrollView(.vertical, showsIndicators: false){
                     
@@ -43,6 +35,21 @@ struct SleepGoalsView: View {
                             .foregroundColor(.white.opacity(0.7))
                             .scaledToFit().minimumScaleFactor(0.01)
                             .lineLimit(1)
+                            .overlay(alignment: .topTrailing, content: {
+                                
+                                    NavigationLink(destination: AccountInfoView().navigationBarBackButtonHidden(true)) {
+
+                                        Image(systemName: "person.crop.circle.fill")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width: 45, height: 45)
+                                            .clipShape(.circle)
+                                            .foregroundColor(.white)
+                                            .position(x:300, y:0)
+                                    
+                                    }.padding(.bottom)
+                                
+                            })
                         
                         //Daily Sleep Columns
                         VStack (alignment: .leading, spacing:2){
@@ -146,9 +153,16 @@ struct SleepGoalsView: View {
                                 .foregroundColor(.white)
                         
                     }
+                        NavigationLink(destination: ForumPostView().navigationBarBackButtonHidden(true)) {
+
+                                Image(systemName: "person.2")
+                                    .resizable()
+                                    .frame(width: 45, height: 30)
+                                    .foregroundColor(.white)
+                            
+                        }
                 }.padding()
-                .vSpacing(.bottom)
-                .hSpacing(.leading)
+                .hSpacing(.center)
                 .background(Color.dreamyTwilightMidnightBlue)
                     
             }
@@ -234,6 +248,7 @@ struct EditGoalsView: View {
                     NavigationLink (destination: SleepGoalsView().navigationBarBackButtonHidden(true)) {
                         HStack {
                             Text("Save Goals").font(.system(size: 18)).fontWeight(.medium).foregroundColor(.white).cornerRadius(10)
+                            // saveGoals(goal)
                         }.frame(width: 320, height: 50).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(10)
                     }
                     
@@ -288,7 +303,22 @@ var goal_stats = [
 ]
 
 
-            
+//func saveGoals(goal: int) {
+//    var ref = Database.database().reference()
+//    // could store as object to hold more info
+//     ref.child("SleepGoals").setValue(goal)
+//}
+//
+//// TODO: read from API to get other value for comparison
+//func readValueGoal() {
+//    var ref = Database.database().reference()
+//
+//    var goal = ref.child("SleepGoals")
+//    child.observeSingleEvent(of: .value) { snapshot in
+//        self.value = snapshot.value as? int ?? "Error"
+//    }
+//
+//}
 
 #Preview {
     SleepGoalsView()
