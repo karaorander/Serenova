@@ -390,10 +390,10 @@ struct SignUp5View: View{
         /* Update user values asynchronously */
         if let currUser = currUser {
             currUser.typicalWakeUpTime = wakeupSelection
-            currUser.typicalSleepTime = sleepSelection
+            currUser.typicalBedTime = sleepSelection
             
             currUser.updateValues(newValues: ["typicalWakeUpTime" : currUser.typicalWakeUpTime,
-                                              "typicalSleepTime"  : currUser.typicalSleepTime
+                                              "typicalBedTime"  : currUser.typicalBedTime
                                              ])
         }  else {
             print("ERROR! No account found (preview mode?)")
