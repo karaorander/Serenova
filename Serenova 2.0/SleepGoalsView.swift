@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import FirebaseDatabase
+import FirebaseDatabaseSwift
 //potential opening screen
 struct SleepGoalsView: View {
     
@@ -246,6 +248,7 @@ struct EditGoalsView: View {
                     NavigationLink (destination: SleepGoalsView().navigationBarBackButtonHidden(true)) {
                         HStack {
                             Text("Save Goals").font(.system(size: 18)).fontWeight(.medium).foregroundColor(.white).cornerRadius(10)
+                            // saveGoals(goal)
                         }.frame(width: 320, height: 50).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(10)
                     }
                     
@@ -300,7 +303,22 @@ var goal_stats = [
 ]
 
 
-            
+//func saveGoals(goal: int) {
+//    var ref = Database.database().reference()
+//    // could store as object to hold more info
+//     ref.child("SleepGoals").setValue(goal)
+//}
+//
+//// TODO: read from API to get other value for comparison
+//func readValueGoal() {
+//    var ref = Database.database().reference()
+//
+//    var goal = ref.child("SleepGoals")
+//    child.observeSingleEvent(of: .value) { snapshot in
+//        self.value = snapshot.value as? int ?? "Error"
+//    }
+//
+//}
 
 #Preview {
     SleepGoalsView()
