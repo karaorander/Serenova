@@ -12,27 +12,27 @@ import FirebaseDatabase
 var currUser: User?
 
 class User: Codable {
-    private var userID: String = ""
-    private var name: String = ""
-    private var username: String = ""
-    private var email: String = ""
-    private var phoneNumber: String = ""
-    private var colorScheme: ColorScheme = ColorScheme.MoonlitSerenity // TODO: Set default ColorScheme
-    private var profileURL: URL?
-    private var typicalSleepTime: String = ""
-    private var gender: Gender = Gender.Female
-    private var weight: Int = -1
-    private var height: Int = -1
-    private var age: Int = -1
-    private var hadInsomnia: Bool = false
-    private var hasInsomnia: Bool = false
-    private var exercisesRegularly: Bool = false
-    private var hasMedication: Bool = false
-    private var doesSnore: Bool = false
-    private var hasNightmares: Bool = false
-    private var typicalWakeUpTime: String = ""
-    private var typicalBedTime: String = ""
-    private var isEarlyBird: Bool = true
+    public var userID: String = ""
+    public var name: String = ""
+    public var username: String = ""
+    public var email: String = ""
+    public var phoneNumber: String = ""
+    public var colorScheme: ColorScheme = ColorScheme.MoonlitSerenity // TODO: Set default ColorScheme
+    public var profileURL: URL?
+    public var typicalSleepTime: String = ""
+    public var gender: Gender = Gender.Female
+    public var weight: Int = -1
+    public var height: Int = -1
+    public var age: Int = -1
+    public var hadInsomnia: Bool = false
+    public var hasInsomnia: Bool = false
+    public var exercisesRegularly: Bool = false
+    public var hasMedication: Bool = false
+    public var doesSnore: Bool = false
+    public var hasNightmares: Bool = false
+    public var typicalWakeUpTime: String = ""
+    public var typicalBedTime: String = ""
+    public var isEarlyBird: Bool = true
     
     /* Gender */
     enum Gender: String, Codable {
@@ -49,6 +49,7 @@ class User: Codable {
         case NightfallHarmony = "Nightfall Harmony"
     }
     
+    /* CodingKeys */
     enum CodingKeys: CodingKey {
         case name, username, email, phoneNumber,
              colorScheme, profileURL, typicalSleepTime,
@@ -58,7 +59,7 @@ class User: Codable {
              typicalBedTime, isEarlyBird
     }
     
-    // Database Reference
+    /* Database Reference */
     private var ref: DatabaseReference! = Database.database().reference().child("User")
 
     /*
@@ -84,56 +85,27 @@ class User: Codable {
         // Write new User object to Database
         ref.child(self.userID).setValue(encodedData)
     }
-
+    
+    /*
+     * TODO: Function to read user data from
+     * Firebase
+     */
     
     /*
      * Function to update values
-     * to Firebase (should be called
-     * by another function e.g. updateEmail())
+     * to Firebase
      */
-    
+    func updateValues(newValues: [String: Any]) {
+        // Reflect changes to Firebase
+        ref.child(self.userID).updateChildValues(newValues)
+    }
+
     /*
      * Function to delete a user
      */
     func deleteUser() {
-        
-    }
-    
-    /*
-     * Function to update email
-     */
-    func updateEmail(newEmail: String) {
-       
-    }
-    
-    /*
-     * Function to update username
-     */
-    func updateUsername(newUsername: String) {
-        
+        ref.child(self.userID).setValue(nil)
     }
 
-    /*
-     * Function to update password
-     */
-    func updatePassword(newPassword: String) {
-        
-    }
-    
-    /*
-     * Function to change color scheme
-     */
-    func updateColorScheme(newScheme: ColorScheme) {
-    
-    }
-
-    /*
-     * Function to change user photo
-     * (Should maybe handle deleting the old picture
-     *  + updating the new URL)
-     */
-    func updateProfilePicture(newURL: URL) {
-        
-    }
 }
 
