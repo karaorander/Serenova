@@ -21,8 +21,8 @@ class User: Codable {
     public var profileURL: URL?
     public var typicalSleepTime: String = ""
     public var gender: Gender = Gender.Female
-    public var weight: Int = -1
-    public var height: Int = -1
+    public var weight: Float = -1
+    public var height: Float = -1
     public var age: Int = -1
     public var hadInsomnia: Bool = false
     public var hasInsomnia: Bool = false
