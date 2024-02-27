@@ -140,7 +140,7 @@ struct SleepGoalsView: View {
                             
                             Image(systemName: "chart.xyaxis.line")
                                 .resizable()
-                                .frame(width: 30, height: 40)
+                                .frame(width: 30, height: 35)
                                 .foregroundColor(.white)
                             
                         }

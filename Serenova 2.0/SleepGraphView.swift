@@ -32,11 +32,8 @@ struct SleepGraphView: View {
             VStack {
                 ZStack {
                     
-                    LinearGradient(gradient: Gradient(colors: [ .nightfallHarmonyRoyalPurple.opacity(0.8), .dreamyTwilightMidnightBlue.opacity(0.7), .nightfallHarmonyNavyBlue.opacity(0.8)]), startPoint: .top, endPoint: .bottom)
+                    LinearGradient(gradient: Gradient(colors: [ .nightfallHarmonyRoyalPurple.opacity(0.8), .dreamyTwilightMidnightBlue.opacity(0.7), .nightfallHarmonyNavyBlue.opacity(0.9)]), startPoint: .top, endPoint: .bottom)
                         .ignoresSafeArea()
-                    ZStack {
-                        LinearGradient(gradient: Gradient(colors: [ .moonlitSerenitySteelBlue.opacity(0.8), .dreamyTwilightMidnightBlue.opacity(0.7), .nightfallHarmonyNavyBlue.opacity(0.8)]), startPoint: .top, endPoint: .bottom)
-                            .ignoresSafeArea()
                         
                         VStack {
                             Text("Sleep Duration")
@@ -82,7 +79,6 @@ struct SleepGraphView: View {
                                 }
                                 .frame( width: 350, height: 300)
                             }
-                        }
                     }
                 }
             }.overlay(alignment: .bottom, content: {
@@ -92,7 +88,7 @@ struct SleepGraphView: View {
                         
                         Image(systemName: "chart.xyaxis.line")
                             .resizable()
-                            .frame(width: 30, height: 40)
+                            .frame(width: 30, height: 35)
                             .foregroundColor(.white)
                         
                     }
