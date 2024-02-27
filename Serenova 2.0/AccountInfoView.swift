@@ -306,8 +306,10 @@ struct EditProfileView: View {
             ZStack {
                 LinearGradient(gradient: Gradient(colors: [.dreamyTwilightMidnightBlue.opacity(0.2), .nightfallHarmonyNavyBlue.opacity(0.6)]), startPoint: .top, endPoint: .bottom)
                     .ignoresSafeArea()
-                ScrollView(.vertical) {
-                    LazyVStack {
+                
+                //Scrolling
+                ScrollView(showsIndicators: true) {
+                    VStack {
                         Spacer().frame(height: 40)
                         Text("Profile")
                             .font(Font.custom("NovaSquare-Bold", size: 40))
@@ -447,7 +449,9 @@ struct EditProfileView: View {
                             // TODO: Store new info in database
                         })
                         .font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.soothingNightLightGray.opacity(0.6)).foregroundColor(.nightfallHarmonyNavyBlue.opacity(1)).cornerRadius(10)
+                        
                         Spacer().frame(height: 50)
+                        
                         // Submit Bio button
                         Button ("Delete Account", action: {
                             // TODO: Remove all info from database and return to login page
