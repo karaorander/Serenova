@@ -50,17 +50,31 @@ struct SignUp2View: View {
                         
                     }
                     Spacer()
-                    NavigationLink (destination: SignUp3View().navigationBarBackButtonHidden(true)) {
-                            Text("Next").font(.system(size: 20)).fontWeight(.medium).frame(width: 320, height: 50).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(10)
-                        
+                    Button(action:{
+                        updateUserValues()
+                        showSignUp3 = true
+                    }){
+                        Text("Next").font(.system(size: 20)).fontWeight(.medium).frame(width: 320, height: 50).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(10)
                     }
-                    
+                    NavigationLink ("", destination: SignUp3View().navigationBarBackButtonHidden(true), isActive: $showSignUp3)
                 }
             }
         }
     }
+
+    func updateUserValues() {
         
+        /* Update user values asynchronously */
+        if let currUser = currUser {
+            currUser.typicalSleepTime = selectedHours
+            currUser.updateValues(newValues: ["typicalSleepTime" : currUser.typicalSleepTime])
+        } else {
+            print("ERROR! No account found (preview mode?)")
+        }
+
     }
+    
+}
                            
 struct SignUp3View: View{
     private let gridLayout = [GridItem(.adaptive(minimum: 130))]
@@ -69,7 +83,8 @@ struct SignUp3View: View{
     @State private var selectedGender = "Male"
     @State private var weight:Float = 50
     @State private var height:Float = 64
-    @State private var age:Float = 0
+    @State private var age:Int = 0
+    @State private var showSignUp4: Bool = false
     var body: some View {
         NavigationView {
             ZStack {
@@ -123,13 +138,38 @@ struct SignUp3View: View{
                     }
             
                     Spacer()
-                    NavigationLink (destination: SignUp4View().navigationBarBackButtonHidden(true)) {
-                            Text("Next").font(.system(size: 20)).fontWeight(.medium).frame(width: 320, height: 50).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(10)
-                        
+                    Button(action:{
+                        updateUserValues()
+                        showSignUp4 = true
+                    }){
+                        Text("Next").font(.system(size: 20)).fontWeight(.medium).frame(width: 320, height: 50).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(10)
                     }
+                    NavigationLink ("", destination: SignUp4View().navigationBarBackButtonHidden(true), isActive: $showSignUp4)
                 }
             }
         }
+    }
+    
+    func updateUserValues() {
+        
+        /* Update user values asynchronously */
+        if let currUser = currUser {
+            if selectedGender == "Male" {
+                currUser.gender = User.Gender.Male
+            } else {
+                currUser.gender = User.Gender.Female
+            }
+            currUser.weight = weight
+            currUser.height = height
+            currUser.age = age
+            currUser.updateValues(newValues: ["gender" : selectedGender,
+                                              "weight" : currUser.weight,
+                                              "height" : currUser.height,
+                                              "age"    : currUser.age])
+        } else {
+            print("ERROR! No account found (preview mode?)")
+        }
+
     }
 
 }
@@ -144,7 +184,7 @@ struct SignUp4View: View{
     @State private var selection5 = "No"
     @State private var selection6 = "No"
     
-    
+    @State private var showSignUp5: Bool = false
     
     var body: some View {
         NavigationView {
@@ -244,13 +284,38 @@ struct SignUp4View: View{
                     }
                      */
                     Spacer()
-                    NavigationLink (destination: SignUp5View().navigationBarBackButtonHidden(true)) {
-                            Text("Next").font(.system(size: 20)).fontWeight(.medium).frame(width: 320, height: 50).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(10)
+                    Button(action:{
+                        updateUserValues()
+                        showSignUp5 = true
+                    }){
+                        Text("Next").font(.system(size: 20)).fontWeight(.medium).frame(width: 320, height: 50).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(10)
                     }
-                    
+                    NavigationLink ("", destination: SignUp5View().navigationBarBackButtonHidden(true), isActive: $showSignUp5)
                 }
             }
         }
+    }
+    func updateUserValues() {
+        
+        /* Update user values asynchronously */
+        if let currUser = currUser {
+            currUser.hadInsomnia = selection1 == "No" ? false : true
+            currUser.hasInsomnia = selection2 == "No" ? false : true
+            currUser.exercisesRegularly = selection3 == "No" ? false : true
+            currUser.hasMedication =  selection4 == "No" ? false : true
+            currUser.doesSnore = selection5 == "No" ? false: true
+            currUser.hasNightmares = selection6 == "No" ? false: true
+            currUser.updateValues(newValues: ["hadInsomnia"        : currUser.hadInsomnia,
+                                              "hasInsomnia"        : currUser.hasInsomnia,
+                                              "exercisesRegularly" : currUser.exercisesRegularly,
+                                              "hasMedication"      : currUser.hasMedication,
+                                              "doesSnore"          : currUser.doesSnore,
+                                              "hasNightmares"      : currUser.hasNightmares
+                                             ])
+        } else {
+            print("ERROR! No account found (preview mode?)")
+        }
+
     }
 }
 
@@ -264,7 +329,7 @@ struct SignUp5View: View{
     @State private var wakeupSelection = "5am or earlier"
     @State private var sleepSelection = "5pm or earlier"
     
-    
+    @State private var showHomePage: Bool = false
     
     
     var body: some View {
@@ -308,12 +373,32 @@ struct SignUp5View: View{
                     }
                     Spacer()
                     //TODO: change destination to Serenova homepage
-                    NavigationLink (destination: SleepGoalsView().navigationBarBackButtonHidden(true)) {
-                            Text("Next").font(.system(size: 20)).fontWeight(.medium).frame(width: 320, height: 50).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(10)
+                    Button(action:{
+                        updateUserValues()
+                        showHomePage = true
+                    }){
+                        Text("Next").font(.system(size: 20)).fontWeight(.medium).frame(width: 320, height: 50).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(10)
                     }
+                    NavigationLink ("", destination: SleepGoalsView().navigationBarBackButtonHidden(true), isActive: $showHomePage)
                 }
             }
         }
+    }
+    
+    func updateUserValues() {
+        
+        /* Update user values asynchronously */
+        if let currUser = currUser {
+            currUser.typicalWakeUpTime = wakeupSelection
+            currUser.typicalBedTime = sleepSelection
+            
+            currUser.updateValues(newValues: ["typicalWakeUpTime" : currUser.typicalWakeUpTime,
+                                              "typicalBedTime"  : currUser.typicalBedTime
+                                             ])
+        }  else {
+            print("ERROR! No account found (preview mode?)")
+        }
+        
     }
 }
 

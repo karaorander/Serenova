@@ -365,7 +365,6 @@ struct SignUpView: View {
             authErrorMsg = ""
             
             if let error = error as NSError? {
-
                 if (error.code == 17007) {
                     // Check if email already in use
                     authErrorMsg = "Email already taken. Try again."
@@ -374,18 +373,19 @@ struct SignUpView: View {
                     // Handle other error messages
                     authErrorMsg = error.localizedDescription
                 }
-
             }
             
             if let authResult = authResult {
                 print(authResult)
                 Task {
-                    currUser = await User(authResult: authResult, login: false)
+                    do {
+                        currUser = try User(userID: authResult.user.uid, name: name, email: email, phoneNumber: phone)
+                    } catch {
+                        authErrorMsg = error.localizedDescription
+                    }
                 }
             }
-            
             completion(authErrorMsg.isEmpty)
-            
         }
         
     }
