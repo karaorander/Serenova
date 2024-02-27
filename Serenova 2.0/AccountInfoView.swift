@@ -17,6 +17,11 @@ struct AccountInfoView: View {
     @State private var notifications: Bool = false
     @State private var toggleIsOn: Bool = false
 
+    @State private var showImagePicker: Bool = false
+    @State private var selectedPhoto: PhotosPickerItem?
+    @State var userImageData: Data?
+    @State var userImageURL: URL?
+
     init() {
         fetchUsername();
     }
@@ -98,11 +103,28 @@ struct AccountInfoView: View {
                             Spacer().frame(height:30)
                         }
 
-                        Image(.userimageprofile)
+                        Button {
+                            showImagePicker.toggle()
+                        } label : {
+                            Image(.userprofileimage)
                             .resizable()
-                            .frame(width: 90, height: 85)
-                        Spacer().frame(height:25)
+                            .frame(width:90, height, alignment: .center)
 
+                        }.hSpacing(.center)
+                        .vSpacing(.center)
+                        .photosPicker(isPresented: $showImagePicker, selection: $selectedPhoto)
+                        .onChange(of: selectedPhoto) { newValue in
+                            if let newValue {
+                                Task{
+                                    if let rawImageData = try? await newValue.loadTransferable(type: Data.self), let image = UIImage(data: rawImageData), let compressedImageData = image.jpegData(compressionQuality: 0.5) {
+                                        await MainActor.run(body: {
+                                            userImageData = compressedImageData
+                                            selectedPhoto = nil
+                                        })
+                                    }
+                                }
+                            }
+                        }
                         //Shows Full Name
                         Text("\(fullname)")
                             .font(.system(size: 25))
@@ -207,6 +229,76 @@ struct AccountInfoView: View {
 
         }
     }
+
+        func addProfilePicture() {
+            showkeyboard = false
+            isLoading = true
+
+            //var user = get user
+
+            if let userImageData = userImageData {
+                storeImage(userID: user.getUserID()) { success in
+                    // If image upload was successful ...
+                    if success {
+                        // Set imageURL
+                        if let userImageURL = userImageURL {
+                            user.setUserImageURL(imageURL: userImageURL)
+                        }
+                        // error?
+                    } else {
+                        print("Error! Could not upload image!")
+                        return
+                    }
+                }
+            } else {
+                // Create post
+                //newPost.createPost()
+            }
+
+            /*
+            Task {
+                do {
+
+                } catch {
+                    await errorAlerts(error)
+                }
+            }
+            */
+        }
+
+        /*
+         * Function to store image in Firebase Storage
+         */
+        func storeImage(userID: String, completion: @escaping (Bool) -> Void) {
+            //Create reference to user bucket
+            let storageRef = Storage.storage().reference()
+
+            // Create a reference to the file you want to upload
+            let userImageRef = storageRef.child("userImages/\(userID)/\(UUID().uuidString).jpg")
+
+            // Upload image
+            if let userImageData = userImageData {
+                let uploadTask = userImageRef.putData(userImageData, metadata: nil) { (metadata, error) in
+                    guard let metadata = metadata else {
+                        // Error
+                        completion(false)
+                        return
+                    }
+                    // Metadata
+                    let size = metadata.size
+                    // URL
+                    userImageRef.downloadURL { (url, error) in
+                        guard let downloadURL = url else {
+                            // Error
+                            completion(false)
+                            return
+                        }
+                        userImageURL = url
+                        completion(true)
+                    }
+                }
+            }
+        }
 }
 
 struct BioInfoView: View {

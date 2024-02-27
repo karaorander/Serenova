@@ -108,5 +108,12 @@ class User: Codable {
         ref.child(self.userID).setValue(nil)
     }
 
+    /*
+     * Function to set the image URL
+     */
+    func setUserImageURL(imageURL: URL) {
+        self.imageURL = imageURL
+    }
+
 }
 
