@@ -7,24 +7,41 @@
 import Foundation
 import FirebaseDatabase
 
-class Post {
-    private var postID: String = ""
-    private var title: String = ""
-    private var content: String = ""
-    private var timeStamp: String = ""
-    private var imageURL: URL?
-    //private var authorID: String = ""
-    //private var authorUserName: String = ""
-    //private var likeIDs: [String] = []
-    //private var userProfileURL: URL
-    //private var imageReferenceID: String = ""
+class Post: Codable {
+    public var postID: String = ""
+    public var title: String = ""
+    public var content: String = ""
+    public var timeStamp: String = ""
+    public var imageURL: URL?
+    public var authorID: String = ""
+    public var authorUsername: String = ""
+    public var authorProfilePhoto: URL?
+    public var likeIDs: [String] = []
+    
+    enum CodingKeys: CodingKey {
+        case postID, title, content, timeStamp, imageURL,
+             authorID, authorUsername, authorProfilePhoto, likeIDs
+    }
     
     // Create reference to "Post" objects within Database
-    private var ref: DatabaseReference! = Database.database().reference().child("Post")
+    private var ref: DatabaseReference! = Database.database().reference()
     
     /*
      * Constructor for creating new post
-     * (Add other values later)
+     * TODO: Add authorUsername
+     */
+    init(title: String, content: String, authorID: String, authorProfilePhoto: URL? = nil) {
+        self.title = title
+        self.content = content
+        self.authorID = authorID
+        self.authorProfilePhoto = authorProfilePhoto
+        
+        // Generates unique ID for post (HANDLE ERROR LATER)
+        self.postID = self.ref.childByAutoId().key ?? "ERROR"
+    }
+    
+    /*
+     * TEMP CONSTRUCTOR FOR PREVIEW MODE (REMOVE LATER)
      */
     init(title: String, content: String) {
         self.title = title
@@ -35,33 +52,25 @@ class Post {
     }
     
     /*
-     * TODO: Constructor to read posts from Firebase
+     * Regular constructor used for loading existing Post
      */
     init() {}
     
     /*
      * Function to write new post to Firebase
      */
-    func createPost() {        
-        // Set Date to time that the actual Post is posted
+    func createPost() throws {
+        // Set Date to time that the Post is actually posted
         let date = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .full
         dateFormatter.timeStyle = .short
         self.timeStamp = dateFormatter.string(from: date)
         
-        // Create JSON-like object for data storage
-        var newPost: [String: Any] = [  /*"authorID": self.authorID,*/
-                                        "title": self.title,
-                                        "content": self.content,
-                                        "timeStamp": self.timeStamp ]
-        
-        // Add image if possible
-        if let imageURL = self.imageURL {
-            newPost["imageURL"] = imageURL.absoluteString
-        }
-        // Upload Post to Firebase
-        self.ref.child(self.postID).setValue(newPost)
+        // Convert data to JSON-like object for storage
+        let encodedData = try JSONSerialization.jsonObject(with: JSONEncoder().encode(self), options: []) as? [String: Any]
+        // Write new Post object to Database
+        ref.child("Post").child(self.postID).setValue(encodedData)
     }
     
     /*
@@ -77,21 +86,6 @@ class Post {
     func deletePost() {
         self.ref.child(self.postID).removeValue()
     }
-    
-    /*
-     * Function to get generate postID
-     */
-    func getPostID() -> String {
-        return self.postID
-    }
-    
-    /*
-     * Function to set the image URL
-     */
-    func setPostMediaURL(imageURL: URL) {
-        self.imageURL = imageURL
-    }
-    
 }
 
 /// post model example including likes, image urls, etc
