@@ -16,11 +16,16 @@ struct AccountInfoView: View {
     @State private var fullname = "MYNAME"
     @State private var notifications: Bool = false
     @State private var toggleIsOn: Bool = false
-    
+
+    @State private var showImagePicker: Bool = false
+    @State private var selectedPhoto: PhotosPickerItem?
+    @State var userImageData: Data?
+    @State var userImageURL: URL?
+
     init() {
         fetchUsername();
     }
-    
+
     func fetchUsername() {
         if let user = Auth.auth().currentUser {
             let username = user.displayName
@@ -39,7 +44,7 @@ struct AccountInfoView: View {
             print("No user signed in")
         }
     }
-    
+
     var body: some View {
         VStack{
             NavigationView{
@@ -50,11 +55,11 @@ struct AccountInfoView: View {
                     VStack {
                         Text("Account Info")
                             .font(Font.custom("NovaSquare-Bold", size: 40))
-                        
+
                             .frame(height: 2.0, alignment: .leading)
                             .padding()
                         Spacer().frame(height: 20)
-                        
+
                         // Color drop down menu
                         // Color theme stored in $color_theme
                         /*VStack {
@@ -96,31 +101,48 @@ struct AccountInfoView: View {
                                         .frame(height: 30)
                                 }
                             }
-                            
+
                             Spacer().frame(height:30)
-                        }*/
-                        
-                        Image(.userimageprofile)
+                        }
+
+                        Button {
+                            showImagePicker.toggle()
+                        } label : {
+                            Image(.userprofileimage)
                             .resizable()
-                            .frame(width: 90, height: 85)
-                        Spacer().frame(height:25)
-                        
+                            .frame(width:90, height, alignment: .center)
+
+                        }.hSpacing(.center)
+                        .vSpacing(.center)
+                        .photosPicker(isPresented: $showImagePicker, selection: $selectedPhoto)
+                        .onChange(of: selectedPhoto) { newValue in
+                            if let newValue {
+                                Task{
+                                    if let rawImageData = try? await newValue.loadTransferable(type: Data.self), let image = UIImage(data: rawImageData), let compressedImageData = image.jpegData(compressionQuality: 0.5) {
+                                        await MainActor.run(body: {
+                                            userImageData = compressedImageData
+                                            selectedPhoto = nil
+                                        })
+                                    }
+                                }
+                            }
+                        }
                         //Shows Full Name
                         Text("\(fullname)")
                             .font(.system(size: 25))
                             .fontWeight(.medium)
                             .padding()
-                        
+
                         // Username Field
                         Text("Username: \(myusername)")
                             .padding()
                             .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
-                        
+
                         // Email
                         Text("Email: \(myemail)")
                             .padding()
                             .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
-                        
+
                         // Reset Password Button
                         NavigationLink(destination: ResetPasswordView()){
                             HStack{
@@ -133,7 +155,7 @@ struct AccountInfoView: View {
                             }
                             .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
                         }
-                        
+
                         //Notification Toggle
                         Toggle(isOn: $toggleIsOn, label: {Text ("Notifications")})
                             .toggleStyle(SwitchToggleStyle(tint: .moonlitSerenityCharcoalGray))
@@ -141,7 +163,7 @@ struct AccountInfoView: View {
                             .fontWeight(.medium)
                             .background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
                         //TODO: need to enable push notifications
-                        
+
                         // Bio Button
                         NavigationLink(destination: BioInfoView()){
                             HStack{
@@ -154,7 +176,7 @@ struct AccountInfoView: View {
                             }
                             .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
                         }
-                        
+
                         // Rewards Page
                         NavigationLink(destination: ResetPasswordView()){
                             HStack{
@@ -182,12 +204,12 @@ struct AccountInfoView: View {
                         }
                     }
                     Spacer()
-                    
-                    //Menu Bar
+
+                //Menu Bar
                 }.overlay(alignment: .bottom, content: {
-                    
+
                     HStack (spacing: 40){
-                        
+
                         NavigationLink(destination: SleepLogView().navigationBarBackButtonHidden(true)) {
                             
                             Image(systemName: "zzz")
@@ -219,9 +241,79 @@ struct AccountInfoView: View {
                 })
                 
             }.buttonStyle(PlainButtonStyle())
-            
+
         }
     }
+
+        func addProfilePicture() {
+            showkeyboard = false
+            isLoading = true
+
+            //var user = get user
+
+            if let userImageData = userImageData {
+                storeImage(userID: user.getUserID()) { success in
+                    // If image upload was successful ...
+                    if success {
+                        // Set imageURL
+                        if let userImageURL = userImageURL {
+                            user.setUserImageURL(imageURL: userImageURL)
+                        }
+                        // error?
+                    } else {
+                        print("Error! Could not upload image!")
+                        return
+                    }
+                }
+            } else {
+                // Create post
+                //newPost.createPost()
+            }
+
+            /*
+            Task {
+                do {
+
+                } catch {
+                    await errorAlerts(error)
+                }
+            }
+            */
+        }
+
+        /*
+         * Function to store image in Firebase Storage
+         */
+        func storeImage(userID: String, completion: @escaping (Bool) -> Void) {
+            //Create reference to user bucket
+            let storageRef = Storage.storage().reference()
+
+            // Create a reference to the file you want to upload
+            let userImageRef = storageRef.child("userImages/\(userID)/\(UUID().uuidString).jpg")
+
+            // Upload image
+            if let userImageData = userImageData {
+                let uploadTask = userImageRef.putData(userImageData, metadata: nil) { (metadata, error) in
+                    guard let metadata = metadata else {
+                        // Error
+                        completion(false)
+                        return
+                    }
+                    // Metadata
+                    let size = metadata.size
+                    // URL
+                    userImageRef.downloadURL { (url, error) in
+                        guard let downloadURL = url else {
+                            // Error
+                            completion(false)
+                            return
+                        }
+                        userImageURL = url
+                        completion(true)
+                    }
+                }
+            }
+        }
 }
 
 struct BioInfoView: View {
@@ -242,7 +334,7 @@ struct BioInfoView: View {
                     Spacer().frame(height: 25)
                         Text("Add a brief description of yourself!")
                         .font(.system(size: 20))
-                    
+
                     Spacer().frame(height: 25)
                     TextField("\(biotext)",text: $biotext)
                         .padding()
@@ -250,19 +342,19 @@ struct BioInfoView: View {
                         .background(.white.opacity(0.15))
                         .cornerRadius(10)
                     Spacer().frame(height: 40)
-                    
+
                     // Submit Bio button
                     Button ("Submit", action: {
                         // TODO: Store BIO in database
                     })
                     .font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.soothingNightLightGray.opacity(0.6)).foregroundColor(.nightfallHarmonyNavyBlue.opacity(1)).cornerRadius(10)
-                    
+
                     Spacer().frame(height: 60)
                     // Night Owl or Early Bird Question
                     Text("Night Owl or Early Bird?")
                         .font(Font.custom("NovaSquare-Bold", size: 25))
                     Spacer().frame(height: 30)
-                    
+
                     LazyVGrid(columns: preferenceColumns, spacing: 20) {
                         ForEach(data, id: \.self) { option in
                             Button(action: {
@@ -271,14 +363,14 @@ struct BioInfoView: View {
                                 Text(option)
                                     .padding().frame(width: 150, height: 50).foregroundColor(.white)
                             }
-                            
+
                             .background(self.sleepPreference == option ? Color.soothingNightLightGray.opacity(0.5) : Color.nightfallHarmonyRoyalPurple.opacity(0.8))
                             .cornerRadius(10)
                         }
                         // TODO: Store night owl early bird preference
                     }
                 }
-                
+
             }
         }
     }
