@@ -16,15 +16,13 @@ class User: Codable {
     public var name: String = ""
     public var username: String = ""
     public var email: String = ""
-    public var imageURL: UIImage?
     public var phoneNumber: String = ""
-    public var bio: String = ""
     public var colorScheme: ColorScheme = ColorScheme.MoonlitSerenity // TODO: Set default ColorScheme
     public var profileURL: URL?
     public var typicalSleepTime: String = ""
     public var gender: Gender = Gender.Female
-    public var weight: Float = -1
-    public var height: Float = -1
+    public var weight: Int = -1
+    public var height: Int = -1
     public var age: Int = -1
     public var hadInsomnia: Bool = false
     public var hasInsomnia: Bool = false
@@ -53,7 +51,7 @@ class User: Codable {
     
     /* CodingKeys */
     enum CodingKeys: CodingKey {
-        case name, username, email, imageURL, phoneNumber,
+        case name, username, email, phoneNumber,
              colorScheme, profileURL, typicalSleepTime,
              gender, weight, height, age, hadInsomnia,
              hasInsomnia, exercisesRegularly, hasMedication,
@@ -78,12 +76,6 @@ class User: Codable {
     }
     
     /*
-     * Constructor for creating User object
-     * (not for new Users)
-     */
-    init () {}
-    
-    /*
      * Function to add a User
      * Throws error related to encoding the object
      */
@@ -93,6 +85,11 @@ class User: Codable {
         // Write new User object to Database
         ref.child(self.userID).setValue(encodedData)
     }
+    
+    /*
+     * TODO: Function to read user data from
+     * Firebase
+     */
     
     /*
      * Function to update values
@@ -110,12 +107,4 @@ class User: Codable {
         ref.child(self.userID).setValue(nil)
     }
 
-    /*
-     * Function to set the image URL
-     */
-    func setUserImageURL(imageURL: URL) {
-        self.imageURL = imageURL
-    }
-
 }
-
