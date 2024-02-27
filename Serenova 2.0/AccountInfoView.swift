@@ -306,8 +306,8 @@ struct EditProfileView: View {
             ZStack {
                 LinearGradient(gradient: Gradient(colors: [.dreamyTwilightMidnightBlue.opacity(0.2), .nightfallHarmonyNavyBlue.opacity(0.6)]), startPoint: .top, endPoint: .bottom)
                     .ignoresSafeArea()
-                ScrollView {
-                    VStack {
+                ScrollView(.vertical) {
+                    LazyVStack {
                         Spacer().frame(height: 40)
                         Text("Profile")
                             .font(Font.custom("NovaSquare-Bold", size: 40))
