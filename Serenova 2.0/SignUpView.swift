@@ -387,6 +387,7 @@ struct SignUpView: View {
             }
             completion(authErrorMsg.isEmpty)
         }
+        
     }
     
 }

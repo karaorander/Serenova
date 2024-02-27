@@ -1,21 +1,17 @@
-//
-//  SignUpView.swift
+//  ResetPassword.swift
 //  Serenova 2.0
 //
 //  Created by Ishwarya Samavedhi on 2/14/24.
 //
 
 import SwiftUI
+import FirebaseAuth
+
 // Need to implement after adding project to firebase: import Firebase
 struct ResetPasswordView: View {
-    @State private var username: String = ""
-    @State private var newPassword: String = ""
-    @State private var confirmPassword: String = ""
-    @State private var emailConfirmationCode: String = ""
-    
-    @State private var toggleIsOn: Bool = false
-    @State private var showAlert1 = true
-    @State private var showAlert2 = false
+    @State private var email: String = ""
+    @State private var showAlert = false
+    @State private var alertMessage = ""
     
     var body: some View {
         NavigationView{
@@ -37,41 +33,31 @@ struct ResetPasswordView: View {
                             .font(.system(size: 15))
                             .opacity(0.8)
                             .padding()
-                        TextField("Username",text: $username)
+                        TextField("Email",text: $email)
                             .padding()
                             .frame(width: 300, height: 50)
                             .background(.white.opacity(0.15))
                             .cornerRadius(10)
-                        
-                        SecureField("New Password",text: $newPassword)
-                            .textContentType(.newPassword)
-                            .padding()
-                            .frame(width: 300, height: 50)
-                            .background(.white.opacity(0.15))
-                            .cornerRadius(10)
-                        SecureField("Confirm Password",text: $confirmPassword)
-                            .textContentType(.newPassword)
-                            .padding()
-                            .frame(width: 300, height: 50)
-                            .background(.white.opacity(0.15))
-                            .cornerRadius(10)
-                        TextField("Email Confirmation Code",text: $emailConfirmationCode)
-                            .padding()
-                            .frame(width: 300, height: 50)
-                            .background(.white.opacity(0.15))
-                            .cornerRadius(10)
-                        
                     }
                     
                     Spacer()
-                    Button(action:{resetPass()}){
-                        Text("Reset Password").font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(10)
-                    }
+                    Button(action: sendPasswordResetEmail) {
+                                            Text("Send Reset Email")
+                                                .font(.system(size: 20))
+                                                .fontWeight(.medium)
+                                                .frame(width: 300, height: 50)
+                                                .background(Color.tranquilMistAshGray)
+                                                .foregroundColor(.nightfallHarmonyNavyBlue)
+                                                .cornerRadius(10)
+                                        }
                     Spacer().frame(height: 80)
                     NavigationLink(destination: SignUpView().navigationBarBackButtonHidden(true)) {
                         Text("Don't Need to Reset Password?").underline()
                     }
                     
+                }
+                .alert(isPresented: $showAlert) {
+                    Alert(title: Text("Password Reset"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
                 }
             }
             .buttonStyle(PlainButtonStyle())
@@ -79,22 +65,20 @@ struct ResetPasswordView: View {
     }
 
     
-    
-    func resetPass() {
-        if (username != "" && newPassword != "" && confirmPassword != "") {
-            if(newPassword == confirmPassword) {
-                // won't work until firebase set up
+        func sendPasswordResetEmail() {
+            Auth.auth().sendPasswordReset(withEmail: email) { error in
+                if let error = error {
+                    // Handle errors, such as if the email is not found
+                    self.alertMessage = "Error: \(error.localizedDescription)"
+                    self.showAlert = true
+                    return
+                }
 
-
-                //firebase authentication
-                //i.e. Auth.auth.createUser()
-            } else {
-                print("error!")
+                // Success, password reset email sent
+                self.alertMessage = "Password reset email sent. Please check your inbox."
+                self.showAlert = true
             }
-        } else {
-            print("Error!")
         }
-    }
     
 }
 #Preview {
