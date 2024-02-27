@@ -100,7 +100,14 @@ struct SleepLogView: View {
                         
                     
                     HStack (spacing: 40){
-                        
+                        NavigationLink(destination: SleepGraphView().navigationBarBackButtonHidden(true)) {
+                            
+                            Image(systemName: "chart.xyaxis.line")
+                                .resizable()
+                                .frame(width: 30, height: 35)
+                                .foregroundColor(.white)
+                            
+                        }
                         NavigationLink(destination: SleepLogView().navigationBarBackButtonHidden(true)) {
 
                             Image(systemName: "zzz")

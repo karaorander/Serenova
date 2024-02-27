@@ -146,12 +146,12 @@ struct LoginView: View {
         Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
             print("email: " + email)
             print("password: " + password)
-        
+            
             if let error = error {
                 self.failedLogin()
                 print(error)
             }
-
+            
             if let authResult = authResult {
                 isAuthenticated = true
                 Task {

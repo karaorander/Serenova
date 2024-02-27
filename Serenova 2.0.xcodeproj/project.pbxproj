@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		239E081E2B80424A0036AD81 /* AccountInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239E081D2B80424A0036AD81 /* AccountInfoView.swift */; };
+		23B3854B2B8E7F0200F2C614 /* SleepGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B3854A2B8E7F0200F2C614 /* SleepGraphView.swift */; };
+		23B3854D2B8E933900F2C614 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 23B3854C2B8E933900F2C614 /* FirebaseFirestore */; };
+		23B3854F2B8E935E00F2C614 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 23B3854E2B8E935E00F2C614 /* FirebaseFirestore */; };
+		23B385512B8E935E00F2C614 /* FirebaseFirestoreCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 23B385502B8E935E00F2C614 /* FirebaseFirestoreCombine-Community */; };
+		23B385532B8E935E00F2C614 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 23B385522B8E935E00F2C614 /* FirebaseFirestoreSwift */; };
 		23D1E0E32B7A8FDE00539A62 /* Serenova_2_0App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D1E0E22B7A8FDE00539A62 /* Serenova_2_0App.swift */; };
 		23D1E0E52B7A8FDE00539A62 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D1E0E42B7A8FDE00539A62 /* ContentView.swift */; };
 		23D1E0E72B7A8FDF00539A62 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 23D1E0E62B7A8FDF00539A62 /* Assets.xcassets */; };
@@ -88,6 +93,7 @@
 		239E081B2B80125C0036AD81 /* Serenova-2-0-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Serenova-2-0-Info.plist"; sourceTree = SOURCE_ROOT; };
 		239E081C2B803E910036AD81 /* Serenova 2.0.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Serenova 2.0.entitlements"; sourceTree = "<group>"; };
 		239E081D2B80424A0036AD81 /* AccountInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountInfoView.swift; sourceTree = "<group>"; };
+		23B3854A2B8E7F0200F2C614 /* SleepGraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepGraphView.swift; sourceTree = "<group>"; };
 		23D1E0DF2B7A8FDE00539A62 /* Serenova 2.0.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Serenova 2.0.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23D1E0E22B7A8FDE00539A62 /* Serenova_2_0App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serenova_2_0App.swift; sourceTree = "<group>"; };
 		23D1E0E42B7A8FDE00539A62 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -128,10 +134,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23B385512B8E935E00F2C614 /* FirebaseFirestoreCombine-Community in Frameworks */,
 				B1961BF92B81520F00B27781 /* FirebaseDatabaseSwift in Frameworks */,
 				B14607202B82AACB00DDC3F3 /* iPhoneNumberField in Frameworks */,
 				B1961BF72B81520F00B27781 /* FirebaseDatabase in Frameworks */,
 				B1961C032B81520F00B27781 /* FirebasePerformance in Frameworks */,
+				23B3854D2B8E933900F2C614 /* FirebaseFirestore in Frameworks */,
+				23B3854F2B8E935E00F2C614 /* FirebaseFirestore in Frameworks */,
 				B1961C072B81520F00B27781 /* FirebaseRemoteConfigSwift in Frameworks */,
 				B1961BEF2B81520F00B27781 /* FirebaseAnalyticsSwift in Frameworks */,
 				B1961BFD2B81520F00B27781 /* FirebaseFunctions in Frameworks */,
@@ -140,6 +149,7 @@
 				B1961C092B81520F00B27781 /* FirebaseStorage in Frameworks */,
 				B1961BF52B81520F00B27781 /* FirebaseCrashlytics in Frameworks */,
 				B1961C012B81520F00B27781 /* FirebaseMLModelDownloader in Frameworks */,
+				23B385532B8E935E00F2C614 /* FirebaseFirestoreSwift in Frameworks */,
 				B1961BED2B81520F00B27781 /* FirebaseAnalytics in Frameworks */,
 				B1961C052B81520F00B27781 /* FirebaseRemoteConfig in Frameworks */,
 				B1961BF32B81520F00B27781 /* FirebaseAuth in Frameworks */,
@@ -206,6 +216,7 @@
 				E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */,
 				E0EF57522B8A489D00D72221 /* ForumPostView.swift */,
 				E0934EC92B85BA8B00494176 /* CreateUserInfoView.swift */,
+				23B3854A2B8E7F0200F2C614 /* SleepGraphView.swift */,
 				E0D1C15E2B880EED00A7609C /* SleepGoalsView.swift */,
 				E0D1C1672B8815DF00A7609C /* SleepLogView.swift */,
 				F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */,
@@ -303,6 +314,10 @@
 				B1961C062B81520F00B27781 /* FirebaseRemoteConfigSwift */,
 				B1961C082B81520F00B27781 /* FirebaseStorage */,
 				B146071F2B82AACB00DDC3F3 /* iPhoneNumberField */,
+				23B3854C2B8E933900F2C614 /* FirebaseFirestore */,
+				23B3854E2B8E935E00F2C614 /* FirebaseFirestore */,
+				23B385502B8E935E00F2C614 /* FirebaseFirestoreCombine-Community */,
+				23B385522B8E935E00F2C614 /* FirebaseFirestoreSwift */,
 			);
 			productName = "Serenova 2.0";
 			productReference = 23D1E0DF2B7A8FDE00539A62 /* Serenova 2.0.app */;
@@ -462,6 +477,7 @@
 				E0D1C16A2B88244700A7609C /* DateExtensions.swift in Sources */,
 				E0D1C15F2B880EED00A7609C /* SleepGoalsView.swift in Sources */,
 				E0231FFE2B7DB93D009A4E39 /* ColorExtensions.swift in Sources */,
+				23B3854B2B8E7F0200F2C614 /* SleepGraphView.swift in Sources */,
 				B1CB24752B87C5D700AE8685 /* Message.swift in Sources */,
 				E0D1C1662B8810B900A7609C /* ViewExensions.swift in Sources */,
 				F23D7CDF2B7FAF320018F325 /* ResetPasswordView.swift in Sources */,
@@ -892,6 +908,22 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		23B3854C2B8E933900F2C614 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseFirestore;
+		};
+		23B3854E2B8E935E00F2C614 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseFirestore;
+		};
+		23B385502B8E935E00F2C614 /* FirebaseFirestoreCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "FirebaseFirestoreCombine-Community";
+		};
+		23B385522B8E935E00F2C614 /* FirebaseFirestoreSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseFirestoreSwift;
+		};
 		B146071F2B82AACB00DDC3F3 /* iPhoneNumberField */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = B146071E2B82AACB00DDC3F3 /* XCRemoteSwiftPackageReference "iPhoneNumberField" */;
