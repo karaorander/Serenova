@@ -16,6 +16,7 @@ class User: Codable {
     public var name: String = ""
     public var username: String = ""
     public var email: String = ""
+    public var imageURL: UIImage?
     public var phoneNumber: String = ""
     public var colorScheme: ColorScheme = ColorScheme.MoonlitSerenity // TODO: Set default ColorScheme
     public var profileURL: URL?
@@ -51,7 +52,7 @@ class User: Codable {
     
     /* CodingKeys */
     enum CodingKeys: CodingKey {
-        case name, username, email, phoneNumber,
+        case name, username, email, imageURL, phoneNumber,
              colorScheme, profileURL, typicalSleepTime,
              gender, weight, height, age, hadInsomnia,
              hasInsomnia, exercisesRegularly, hasMedication,
