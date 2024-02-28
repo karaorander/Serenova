@@ -9,60 +9,110 @@ import SwiftUI
 import Firebase
 import FirebaseDatabase
 
-// TODO: Add fetched fullname data to account info page
-func fetchUsername() {
-    let db = Database.database().reference()
-    let id = Auth.auth().currentUser!.uid
-    let ur = db.child("User").child(id)
-    ur.observeSingleEvent(of: .value) { snapshot in
-        guard let userData = snapshot.value as? [String: Any] else {
-            print("Error fetching data")
-            return
-        }
+// TODO: STORE CHANGED INFORMATION IN FIREBASE!!!
+// i.e. notification preferences
+// changes in editprofile
+// bio and early bird preferences
 
-        // Extract additional information based on your data structure
-        if let fullname = userData["name"] as? String {
-            print("User's name: \(fullname)")
-        }
+// TODO: GET EARLY BIRD OR NIGHT OWL PREFERENCE
 
-        if let email = userData["email"] as? String {
-            print("User's email: \(email)")
-        }
 
-        if let username = userData["username"] as? String {
-            print("User's username: \(username)")
+class AccountInfoViewModel: ObservableObject {
+    @Published var username = ""
+    @Published var email = ""
+    @Published var fullname = ""
+    @Published var phoneNumber = ""
+    @Published var age = ""
+    @Published var gender = ""
+    @Published var height = ""
+    @Published var weight = ""
+    @Published var notifications: Bool = false
+    @Published var snore : Bool = true
+    @Published var hadinsomnia : Bool = true
+    @Published var hasinsomnia : Bool = true
+    @Published var hasmedication : Bool = true
+    @Published var hasnightmares : Bool = true
+    @Published var isearlybird : Bool = true
+    
+    func fetchUsername() {
+        let db = Database.database().reference()
+        let id = Auth.auth().currentUser!.uid
+        let ur = db.child("User").child(id)
+        ur.observeSingleEvent(of: .value) { snapshot in
+            guard let userData = snapshot.value as? [String: Any] else {
+                print("Error fetching data")
+                return
+            }
+            
+            // Extract additional information based on your data structure
+            if let fullname = userData["name"] as? String {
+                self.fullname = fullname
+            }
+            
+            if let email = userData["email"] as? String {
+                self.email = email
+            }
+            
+            if let username = userData["username"] as? String {
+                self.username = username
+            }
+            
+            if let phoneNumber = userData["phoneNumber"] as? String {
+                self.phoneNumber = phoneNumber
+            }
+            
+            if let age = userData["age"] as? String {
+                self.age = age
+            }
+            
+            if let gender = userData["gender"] as? String {
+                self.gender = gender
+            }
+            
+            if let height = userData["height"] as? String {
+                self.height = height
+            }
+            
+            if let weight = userData["weight"] as? String {
+                self.weight = weight
+            }
+            
+            if let snore = userData["doesSnore"] as? Bool {
+                self.snore = snore
+            }
+            
+            if let notifications = userData["notifications"] as? Bool {
+                self.notifications = notifications
+            }
+            
+            if let hadinsomnia = userData["hadInsomnia"] as? Bool {
+                self.hadinsomnia = hadinsomnia
+            }
+            
+            if let hasinsomnia = userData["hasInsomnia"] as? Bool {
+                self.hasinsomnia = hasinsomnia
+            }
+            
+            if let hasmeds = userData["hasMedication"] as? Bool {
+                self.hasmedication = hasmeds
+            }
+            
+            if let hasnights = userData["hasNightmares"] as? Bool {
+                self.hasnightmares = hasnights
+            }
+            
+            if let earlybird = userData["isEarlyBird"] as? Bool {
+                self.isearlybird = earlybird
+            }
+            
         }
-
-        if let phoneNumber = userData["phoneNumber"] as? String {
-            print("User's phone number: \(phoneNumber)")
-        }
-        
-        if let age = userData["age"] as? String {
-            print("User's age: \(age)")
-        }
-        
-        if let gender = userData["gender"] as? String {
-            print("User's gender: \(gender)")
-        }
-        
-        if let height = userData["height"] as? String {
-            print("User's height: \(height)")
-        }
-        
     }
 }
 
 struct AccountInfoView: View {
     @State private var color_theme = "Dreamy Twilight"
     // TODO: Get username, full name, email, notification preferences from database
-    @State public var myusername = "MYUSERNAME"
-    @State public var myemail = "MYEMAIL"
-    @State private var fullname = "MYFULLNAME"
-    @State private var phoneNumber = ""
-    @State private var age = ""
-    @State private var gender = ""
-    @State private var height = ""
-    @State private var notifications: Bool = false
+    @StateObject private var viewModel = AccountInfoViewModel()
     @State private var toggleIsOn: Bool = false
     
     
@@ -132,18 +182,18 @@ struct AccountInfoView: View {
                         Spacer().frame(height:25)
                         
                         //Shows Full Name
-                        Text("\(fullname)")
+                        Text("\(viewModel.fullname)")
                             .font(.system(size: 25))
                             .fontWeight(.medium)
                             .padding()
                         
                         // Username Field
-                        Text("Username: \(myusername)")
+                        Text("Username: \(viewModel.username)")
                             .padding()
                             .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
                         
                         // Email
-                        Text("Email: \(myemail)")
+                        Text("Email: \(viewModel.email)")
                             .padding()
                             .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
                         
@@ -254,14 +304,19 @@ struct AccountInfoView: View {
             }.buttonStyle(PlainButtonStyle())
             
         }
+        .onAppear {
+            viewModel.fetchUsername()
+        }
     }
 }
 
 struct BioInfoView: View {
+    @StateObject private var viewModel = AccountInfoViewModel()
     @State private var biotext = "Write your bio here!"
     private let data: [String] = ["Early Bird", "Night Owl"]
     private let preferenceColumns = [GridItem(.adaptive(minimum: 130))]
     @State private var sleepPreference = "Early Bird"
+
     var body: some View {
         NavigationView {
             ZStack {
@@ -311,28 +366,15 @@ struct BioInfoView: View {
                         // TODO: Store night owl early bird preference
                     }
                 }
-                
+                .onAppear {
+                    viewModel.fetchUsername()
+                }
             }
         }
     }
 }
 struct EditProfileView: View {
-    // TODO: Get username, full name, email, notification preferences from database
-    @State public var username = "MYUSERNAME"
-    @State public var email = "MYEMAIL"
-    @State private var fullname = "MYNAME"
-    @State private var age = "myage"
-    @State private var gender = "mygender"
-    @State private var height = "myheight"
-    @State private var phoneNumber = "mynumber"
-    @State private var weight = "myweight"
-    
-    @State private var snore : Bool = true
-    @State private var hadinsomnia : Bool = true
-    @State private var hasinsomnia : Bool = true
-    @State private var hasmedication : Bool = true
-    @State private var hasnightmares : Bool = true
-    @State private var isearlybird : Bool = true
+    @StateObject private var viewModel = AccountInfoViewModel()
     
     var body: some View {
         NavigationView {
@@ -353,7 +395,7 @@ struct EditProfileView: View {
                             //Full Name
                             HStack {
                                 Text("Name: ")
-                                TextField("",text: $fullname)
+                                TextField("",text: $viewModel.fullname)
                             }
                             .padding()
                             .frame(width: 300, height: 50)
@@ -364,7 +406,7 @@ struct EditProfileView: View {
                             //Username
                             HStack {
                                 Text("Username: ")
-                                TextField("",text: $username)
+                                TextField("",text: $viewModel.username)
                             }
                             .padding()
                             .frame(width: 300, height: 50)
@@ -375,7 +417,7 @@ struct EditProfileView: View {
                             //Email
                             HStack {
                                 Text("Email: ")
-                                TextField("",text: $email)
+                                TextField("",text: $viewModel.email)
                             }
                             .padding()
                             .frame(width: 300, height: 50)
@@ -385,7 +427,7 @@ struct EditProfileView: View {
                             
                             HStack {
                                 Text("Phone: ")
-                                TextField("",text: $phoneNumber)
+                                TextField("",text: $viewModel.phoneNumber)
                             }
                             .padding()
                             .frame(width: 300, height: 50)
@@ -396,7 +438,7 @@ struct EditProfileView: View {
                             //Age
                             HStack {
                                 Text("Age: ")
-                                TextField("",text: $age)
+                                TextField("",text: $viewModel.age)
                             }
                             .padding()
                             .frame(width: 300, height: 50)
@@ -407,7 +449,7 @@ struct EditProfileView: View {
                             //Gender
                             HStack {
                                 Text("Gender: ")
-                                TextField("",text: $gender)
+                                TextField("",text: $viewModel.gender)
                             }
                             .padding()
                             .frame(width: 300, height: 50)
@@ -418,7 +460,7 @@ struct EditProfileView: View {
                             // Height
                             HStack {
                                 Text("Height: ")
-                                TextField("",text: $height)
+                                TextField("",text: $viewModel.height)
                             }
                             .padding()
                             .frame(width: 300, height: 50)
@@ -429,7 +471,7 @@ struct EditProfileView: View {
                             // TOGGLES
                             
                             //Snore
-                            Toggle(isOn: $snore, label: {Text ("Snore")})
+                            Toggle(isOn: $viewModel.snore, label: {Text ("Snore")})
                                 .toggleStyle(SwitchToggleStyle(tint: .moonlitSerenityCharcoalGray))
                                 .padding().frame(width: 300, height: 50)
                                 .background(.white.opacity(0.15))
@@ -437,7 +479,7 @@ struct EditProfileView: View {
                             Spacer().frame(height: 15)
                             
                             //Had insomnia
-                            Toggle(isOn: $hadinsomnia, label: {Text ("Had Insomnia")})
+                            Toggle(isOn: $viewModel.hadinsomnia, label: {Text ("Had Insomnia")})
                                 .toggleStyle(SwitchToggleStyle(tint: .moonlitSerenityCharcoalGray))
                                 .padding().frame(width: 300, height: 50)
                                 .background(.white.opacity(0.15))
@@ -445,7 +487,7 @@ struct EditProfileView: View {
                             Spacer().frame(height: 15)
                             
                             //Have insomnia
-                            Toggle(isOn: $hasinsomnia, label: {Text ("Have Insomnia")})
+                            Toggle(isOn: $viewModel.hasinsomnia, label: {Text ("Have Insomnia")})
                                 .toggleStyle(SwitchToggleStyle(tint: .moonlitSerenityCharcoalGray))
                                 .padding().frame(width: 300, height: 50)
                                 .background(.white.opacity(0.15))
@@ -453,7 +495,7 @@ struct EditProfileView: View {
                             Spacer().frame(height: 15)
                             
                             //Has mediaction
-                            Toggle(isOn: $hasmedication, label: {Text ("Medication")})
+                            Toggle(isOn: $viewModel.hasmedication, label: {Text ("Medication")})
                                 .toggleStyle(SwitchToggleStyle(tint: .moonlitSerenityCharcoalGray))
                                 .padding().frame(width: 300, height: 50)
                                 .background(.white.opacity(0.15))
@@ -461,7 +503,7 @@ struct EditProfileView: View {
                             Spacer().frame(height: 15)
                             
                             //Nightmares
-                            Toggle(isOn: $hasnightmares, label: {Text ("Nightmares")})
+                            Toggle(isOn: $viewModel.hasnightmares, label: {Text ("Nightmares")})
                                 .toggleStyle(SwitchToggleStyle(tint: .moonlitSerenityCharcoalGray))
                                 .padding().frame(width: 300, height: 50)
                                 .background(.white.opacity(0.15))
@@ -469,7 +511,7 @@ struct EditProfileView: View {
                             Spacer().frame(height: 15)
                             
                             //Early Bird
-                            Toggle(isOn: $isearlybird, label: {Text ("EarlyBird")})
+                            Toggle(isOn: $viewModel.isearlybird, label: {Text ("EarlyBird")})
                                 .toggleStyle(SwitchToggleStyle(tint: .moonlitSerenityCharcoalGray))
                                 .padding().frame(width: 300, height: 50)
                                 .background(.white.opacity(0.15))
@@ -494,6 +536,9 @@ struct EditProfileView: View {
                             //Spacer().frame(height: 60)
                         }
                     }
+                }
+                .onAppear {
+                    viewModel.fetchUsername()
                 }
             }
         }
