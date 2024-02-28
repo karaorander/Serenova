@@ -15,13 +15,40 @@ func fetchUsername() {
     let id = Auth.auth().currentUser!.uid
     let ur = db.child("User").child(id)
     ur.observeSingleEvent(of: .value) { snapshot in
-        guard let userData = snapshot.value as? [String: Any],
-        let fullname = userData["name"] as? String else {
+        guard let userData = snapshot.value as? [String: Any] else {
             print("Error fetching data")
             return
         }
-        //return fullname
-        print("User's name: \(fullname)")
+
+        // Extract additional information based on your data structure
+        if let fullname = userData["name"] as? String {
+            print("User's name: \(fullname)")
+        }
+
+        if let email = userData["email"] as? String {
+            print("User's email: \(email)")
+        }
+
+        if let username = userData["username"] as? String {
+            print("User's username: \(username)")
+        }
+
+        if let phoneNumber = userData["phoneNumber"] as? String {
+            print("User's phone number: \(phoneNumber)")
+        }
+        
+        if let age = userData["age"] as? String {
+            print("User's age: \(age)")
+        }
+        
+        if let gender = userData["gender"] as? String {
+            print("User's gender: \(gender)")
+        }
+        
+        if let height = userData["height"] as? String {
+            print("User's height: \(height)")
+        }
+        
     }
 }
 
@@ -31,9 +58,12 @@ struct AccountInfoView: View {
     @State public var myusername = "MYUSERNAME"
     @State public var myemail = "MYEMAIL"
     @State private var fullname = "MYFULLNAME"
+    @State private var phoneNumber = ""
+    @State private var age = ""
+    @State private var gender = ""
+    @State private var height = ""
     @State private var notifications: Bool = false
     @State private var toggleIsOn: Bool = false
-    
     
     
     var body: some View {
@@ -311,7 +341,7 @@ struct EditProfileView: View {
                     .ignoresSafeArea()
                 VStack {
                     //Scrolling
-                    ScrollView(showsIndicators: true) {
+                    ScrollView(.vertical, showsIndicators: false) {
                         VStack {
                             Spacer().frame(height: 40)
                             Text("Profile")
@@ -472,5 +502,5 @@ struct EditProfileView: View {
 
 
 #Preview {
-    AccountInfoView()
+    EditProfileView()
 }

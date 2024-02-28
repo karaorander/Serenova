@@ -13,7 +13,7 @@ struct ContentView: View {
     // private let database = Database.database().reference()
 
     var body: some View {
-        SleepGoalsView()
+        LoginView()
     }
 
     // *in the form of an object for sake of readability in database
