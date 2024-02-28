@@ -10,6 +10,7 @@ import iPhoneNumberField
 import FirebaseCore
 import FirebaseDatabase
 import FirebaseAuth
+import HealthKit
 
 struct SignUpView: View {
     @State private var name = ""
@@ -243,6 +244,7 @@ struct SignUpView: View {
             }
         }
     }
+    
 
     /*
      * Function to verify that the email is valid

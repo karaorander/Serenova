@@ -7,38 +7,34 @@
 
 import SwiftUI
 import Firebase
+import FirebaseDatabase
+
+// TODO: Add fetched fullname data to account info page
+func fetchUsername() {
+    let db = Database.database().reference()
+    let id = Auth.auth().currentUser!.uid
+    let ur = db.child("User").child(id)
+    ur.observeSingleEvent(of: .value) { snapshot in
+        guard let userData = snapshot.value as? [String: Any],
+        let fullname = userData["name"] as? String else {
+            print("Error fetching data")
+            return
+        }
+        //return fullname
+        print("User's name: \(fullname)")
+    }
+}
 
 struct AccountInfoView: View {
     @State private var color_theme = "Dreamy Twilight"
     // TODO: Get username, full name, email, notification preferences from database
     @State public var myusername = "MYUSERNAME"
     @State public var myemail = "MYEMAIL"
-    @State private var fullname = "MYNAME"
+    @State private var fullname = "MYFULLNAME"
     @State private var notifications: Bool = false
     @State private var toggleIsOn: Bool = false
     
-    init() {
-        fetchUsername();
-    }
     
-    func fetchUsername() {
-        if let user = Auth.auth().currentUser {
-            let username = user.displayName
-            // Do something with the username
-            print("Username: \(username ?? "No username available")")
-            if (username != nil) {
-                myusername = (username ?? "No username found")
-            }
-            if (user.email != nil) {
-                myemail = (user.email ?? "No username found")
-            } else {
-                print("No email")
-            }
-        } else {
-            // No user is signed in
-            print("No user signed in")
-        }
-    }
     
     var body: some View {
         VStack{
@@ -187,7 +183,14 @@ struct AccountInfoView: View {
                 }.overlay(alignment: .bottom, content: {
                     
                     HStack (spacing: 40){
-                        
+                        NavigationLink(destination: SleepGraphView().navigationBarBackButtonHidden(true)) {
+                            
+                            Image(systemName: "chart.xyaxis.line")
+                                .resizable()
+                                .frame(width: 30, height: 35)
+                                .foregroundColor(.white)
+                            
+                        }
                         NavigationLink(destination: SleepLogView().navigationBarBackButtonHidden(true)) {
                             
                             Image(systemName: "zzz")
@@ -306,159 +309,160 @@ struct EditProfileView: View {
             ZStack {
                 LinearGradient(gradient: Gradient(colors: [.dreamyTwilightMidnightBlue.opacity(0.2), .nightfallHarmonyNavyBlue.opacity(0.6)]), startPoint: .top, endPoint: .bottom)
                     .ignoresSafeArea()
-                
-                //Scrolling
-                ScrollView(showsIndicators: true) {
-                    VStack {
-                        Spacer().frame(height: 40)
-                        Text("Profile")
-                            .font(Font.custom("NovaSquare-Bold", size: 40))
-                            .frame(height: 2.0, alignment: .leading)
+                VStack {
+                    //Scrolling
+                    ScrollView(showsIndicators: true) {
+                        VStack {
+                            Spacer().frame(height: 40)
+                            Text("Profile")
+                                .font(Font.custom("NovaSquare-Bold", size: 40))
+                                .frame(height: 2.0, alignment: .leading)
+                                .padding()
+                            Spacer().frame(height: 40)
+                            
+                            //Full Name
+                            HStack {
+                                Text("Name: ")
+                                TextField("",text: $fullname)
+                            }
                             .padding()
-                        Spacer().frame(height: 40)
-                        
-                        //Full Name
-                        HStack {
-                            Text("Name: ")
-                            TextField("",text: $fullname)
-                        }
-                        .padding()
-                        .frame(width: 300, height: 50)
-                        .background(.white.opacity(0.15))
-                        .cornerRadius(10)
-                        Spacer().frame(height: 15)
-                        
-                        //Username
-                        HStack {
-                            Text("Username: ")
-                            TextField("",text: $username)
-                        }
-                        .padding()
-                        .frame(width: 300, height: 50)
-                        .background(.white.opacity(0.15))
-                        .cornerRadius(10)
-                        Spacer().frame(height: 15)
-                        
-                        //Email
-                        HStack {
-                            Text("Email: ")
-                            TextField("",text: $email)
-                        }
-                        .padding()
-                        .frame(width: 300, height: 50)
-                        .background(.white.opacity(0.15))
-                        .cornerRadius(10)
-                        Spacer().frame(height: 15)
-                        
-                        HStack {
-                            Text("Phone: ")
-                            TextField("",text: $phoneNumber)
-                        }
-                        .padding()
-                        .frame(width: 300, height: 50)
-                        .background(.white.opacity(0.15))
-                        .cornerRadius(10)
-                        Spacer().frame(height: 15)
-                        
-                        //Age
-                        HStack {
-                            Text("Age: ")
-                            TextField("",text: $age)
-                        }
-                        .padding()
-                        .frame(width: 300, height: 50)
-                        .background(.white.opacity(0.15))
-                        .cornerRadius(10)
-                        Spacer().frame(height: 15)
-                        
-                        //Gender
-                        HStack {
-                            Text("Gender: ")
-                            TextField("",text: $gender)
-                        }
-                        .padding()
-                        .frame(width: 300, height: 50)
-                        .background(.white.opacity(0.15))
-                        .cornerRadius(10)
-                        Spacer().frame(height: 15)
-                        
-                        // Height
-                        HStack {
-                            Text("Height: ")
-                            TextField("",text: $height)
-                        }
-                        .padding()
-                        .frame(width: 300, height: 50)
-                        .background(.white.opacity(0.15))
-                        .cornerRadius(10)
-                        Spacer().frame(height: 15)
-                        
-                        // TOGGLES
-                        
-                        //Snore
-                        Toggle(isOn: $snore, label: {Text ("Snore")})
-                            .toggleStyle(SwitchToggleStyle(tint: .moonlitSerenityCharcoalGray))
-                            .padding().frame(width: 300, height: 50)
+                            .frame(width: 300, height: 50)
                             .background(.white.opacity(0.15))
                             .cornerRadius(10)
-                        Spacer().frame(height: 15)
-                        
-                        //Had insomnia
-                        Toggle(isOn: $hadinsomnia, label: {Text ("Had Insomnia")})
-                            .toggleStyle(SwitchToggleStyle(tint: .moonlitSerenityCharcoalGray))
-                            .padding().frame(width: 300, height: 50)
+                            Spacer().frame(height: 15)
+                            
+                            //Username
+                            HStack {
+                                Text("Username: ")
+                                TextField("",text: $username)
+                            }
+                            .padding()
+                            .frame(width: 300, height: 50)
                             .background(.white.opacity(0.15))
                             .cornerRadius(10)
-                        Spacer().frame(height: 15)
-                        
-                        //Have insomnia
-                        Toggle(isOn: $hasinsomnia, label: {Text ("Have Insomnia")})
-                            .toggleStyle(SwitchToggleStyle(tint: .moonlitSerenityCharcoalGray))
-                            .padding().frame(width: 300, height: 50)
+                            Spacer().frame(height: 15)
+                            
+                            //Email
+                            HStack {
+                                Text("Email: ")
+                                TextField("",text: $email)
+                            }
+                            .padding()
+                            .frame(width: 300, height: 50)
                             .background(.white.opacity(0.15))
                             .cornerRadius(10)
-                        Spacer().frame(height: 15)
-                        
-                        //Has mediaction
-                        Toggle(isOn: $hasmedication, label: {Text ("Medication")})
-                            .toggleStyle(SwitchToggleStyle(tint: .moonlitSerenityCharcoalGray))
-                            .padding().frame(width: 300, height: 50)
+                            Spacer().frame(height: 15)
+                            
+                            HStack {
+                                Text("Phone: ")
+                                TextField("",text: $phoneNumber)
+                            }
+                            .padding()
+                            .frame(width: 300, height: 50)
                             .background(.white.opacity(0.15))
                             .cornerRadius(10)
-                        Spacer().frame(height: 15)
-                        
-                        //Nightmares
-                        Toggle(isOn: $hasnightmares, label: {Text ("Nightmares")})
-                            .toggleStyle(SwitchToggleStyle(tint: .moonlitSerenityCharcoalGray))
-                            .padding().frame(width: 300, height: 50)
+                            Spacer().frame(height: 15)
+                            
+                            //Age
+                            HStack {
+                                Text("Age: ")
+                                TextField("",text: $age)
+                            }
+                            .padding()
+                            .frame(width: 300, height: 50)
                             .background(.white.opacity(0.15))
                             .cornerRadius(10)
-                        Spacer().frame(height: 15)
-                        
-                        //Early Bird
-                        Toggle(isOn: $isearlybird, label: {Text ("EarlyBird")})
-                            .toggleStyle(SwitchToggleStyle(tint: .moonlitSerenityCharcoalGray))
-                            .padding().frame(width: 300, height: 50)
+                            Spacer().frame(height: 15)
+                            
+                            //Gender
+                            HStack {
+                                Text("Gender: ")
+                                TextField("",text: $gender)
+                            }
+                            .padding()
+                            .frame(width: 300, height: 50)
                             .background(.white.opacity(0.15))
                             .cornerRadius(10)
-                        
-                        Spacer().frame(height: 30)
-                        
-                        // Submit Bio button
-                        Button ("Submit", action: {
-                            // TODO: Store new info in database
-                        })
-                        .font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.soothingNightLightGray.opacity(0.6)).foregroundColor(.nightfallHarmonyNavyBlue.opacity(1)).cornerRadius(10)
-                        
-                        Spacer().frame(height: 50)
-                        
-                        // Submit Bio button
-                        Button ("Delete Account", action: {
-                            // TODO: Remove all info from database and return to login page
-                        })
-                        .font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.soothingNightLightGray.opacity(0.6)).foregroundColor(.nightfallHarmonyNavyBlue.opacity(1)).cornerRadius(10)
-                        
-                        //Spacer().frame(height: 60)
+                            Spacer().frame(height: 15)
+                            
+                            // Height
+                            HStack {
+                                Text("Height: ")
+                                TextField("",text: $height)
+                            }
+                            .padding()
+                            .frame(width: 300, height: 50)
+                            .background(.white.opacity(0.15))
+                            .cornerRadius(10)
+                            Spacer().frame(height: 15)
+                            
+                            // TOGGLES
+                            
+                            //Snore
+                            Toggle(isOn: $snore, label: {Text ("Snore")})
+                                .toggleStyle(SwitchToggleStyle(tint: .moonlitSerenityCharcoalGray))
+                                .padding().frame(width: 300, height: 50)
+                                .background(.white.opacity(0.15))
+                                .cornerRadius(10)
+                            Spacer().frame(height: 15)
+                            
+                            //Had insomnia
+                            Toggle(isOn: $hadinsomnia, label: {Text ("Had Insomnia")})
+                                .toggleStyle(SwitchToggleStyle(tint: .moonlitSerenityCharcoalGray))
+                                .padding().frame(width: 300, height: 50)
+                                .background(.white.opacity(0.15))
+                                .cornerRadius(10)
+                            Spacer().frame(height: 15)
+                            
+                            //Have insomnia
+                            Toggle(isOn: $hasinsomnia, label: {Text ("Have Insomnia")})
+                                .toggleStyle(SwitchToggleStyle(tint: .moonlitSerenityCharcoalGray))
+                                .padding().frame(width: 300, height: 50)
+                                .background(.white.opacity(0.15))
+                                .cornerRadius(10)
+                            Spacer().frame(height: 15)
+                            
+                            //Has mediaction
+                            Toggle(isOn: $hasmedication, label: {Text ("Medication")})
+                                .toggleStyle(SwitchToggleStyle(tint: .moonlitSerenityCharcoalGray))
+                                .padding().frame(width: 300, height: 50)
+                                .background(.white.opacity(0.15))
+                                .cornerRadius(10)
+                            Spacer().frame(height: 15)
+                            
+                            //Nightmares
+                            Toggle(isOn: $hasnightmares, label: {Text ("Nightmares")})
+                                .toggleStyle(SwitchToggleStyle(tint: .moonlitSerenityCharcoalGray))
+                                .padding().frame(width: 300, height: 50)
+                                .background(.white.opacity(0.15))
+                                .cornerRadius(10)
+                            Spacer().frame(height: 15)
+                            
+                            //Early Bird
+                            Toggle(isOn: $isearlybird, label: {Text ("EarlyBird")})
+                                .toggleStyle(SwitchToggleStyle(tint: .moonlitSerenityCharcoalGray))
+                                .padding().frame(width: 300, height: 50)
+                                .background(.white.opacity(0.15))
+                                .cornerRadius(10)
+                            
+                            Spacer().frame(height: 30)
+                            
+                            // Submit Bio button
+                            Button ("Submit", action: {
+                                // TODO: Store new info in database
+                            })
+                            .font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.soothingNightLightGray.opacity(0.6)).foregroundColor(.nightfallHarmonyNavyBlue.opacity(1)).cornerRadius(10)
+                            
+                            Spacer().frame(height: 50)
+                            
+                            // Submit Bio button
+                            Button ("Delete Account", action: {
+                                // TODO: Remove all info from database and return to login page
+                            })
+                            .font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.soothingNightLightGray.opacity(0.6)).foregroundColor(.nightfallHarmonyNavyBlue.opacity(1)).cornerRadius(10)
+                            
+                            //Spacer().frame(height: 60)
+                        }
                     }
                 }
             }
@@ -468,5 +472,5 @@ struct EditProfileView: View {
 
 
 #Preview {
-    EditProfileView()
+    AccountInfoView()
 }

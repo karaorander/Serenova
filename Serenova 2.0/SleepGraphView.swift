@@ -32,43 +32,53 @@ struct SleepGraphView: View {
             VStack {
                 ZStack {
                     
-                    LinearGradient(gradient: Gradient(colors: [ .nightfallHarmonyRoyalPurple.opacity(0.8), .dreamyTwilightMidnightBlue.opacity(0.7), .nightfallHarmonyNavyBlue.opacity(0.8)]), startPoint: .top, endPoint: .bottom)
+                    LinearGradient(gradient: Gradient(colors: [ .nightfallHarmonyRoyalPurple.opacity(0.8), .dreamyTwilightMidnightBlue.opacity(0.7), .nightfallHarmonyNavyBlue.opacity(0.9)]), startPoint: .top, endPoint: .bottom)
                         .ignoresSafeArea()
-                    ZStack {
-                        LinearGradient(gradient: Gradient(colors: [ .moonlitSerenitySteelBlue.opacity(0.8), .dreamyTwilightMidnightBlue.opacity(0.7), .nightfallHarmonyNavyBlue.opacity(0.8)]), startPoint: .top, endPoint: .bottom)
-                            .ignoresSafeArea()
-                        Chart {
-                            //Goal Line
-                            RuleMark(y: .value("Goal", 600))
-                            // TODO: Get Goal from User's Goals
-                                .foregroundStyle(Color.moonlitSerenitySteelBlue.opacity(2))
-                                .lineStyle(StrokeStyle(lineWidth: 1, dash: [5]))
+                        
+                        VStack {
+                            Text("Sleep Duration")
+                                .font(Font.custom("NovaSquare-Bold", size: 40))
+                                .foregroundColor(.white.opacity(0.7))
+                                .lineLimit(1)
+                                
                             
-                            //Sleep Graph
-                            ForEach(viewMonths) { viewMonth in
-                                LineMark(
-                                    x: .value("Month", viewMonth.date, unit: .month),
-                                    y: .value("Minutes", viewMonth.averageSleep)
-                                )
-                                .foregroundStyle(Color.purple.gradient)
-                                .cornerRadius(3)
+                            //Spacer().frame(height: 30)
+                            
+                            VStack(alignment: .leading, spacing:2) {
+                                
+                                Chart {
+                                    //Goal Line
+                                    RuleMark(y: .value("Goal", 600))
+                                    // TODO: Get Goal from User's Goals
+                                        .foregroundStyle(Color.moonlitSerenitySteelBlue.opacity(2))
+                                        .lineStyle(StrokeStyle(lineWidth: 1, dash: [5]))
+                                    
+                                    //Sleep Graph
+                                    ForEach(viewMonths) { viewMonth in
+                                        LineMark(
+                                            x: .value("Month", viewMonth.date, unit: .month),
+                                            y: .value("Minutes", viewMonth.averageSleep)
+                                        )
+                                        .foregroundStyle(Color.purple.gradient)
+                                        .cornerRadius(3)
+                                    }
+                                }
+                                .chartXAxis {AxisMarks(values: .automatic) {
+                                    AxisValueLabel()
+                                        .foregroundStyle(Color.white)
+                                    AxisGridLine()
+                                        .foregroundStyle(Color.white)
+                                }
+                                }
+                                .chartYAxis {AxisMarks(values: .automatic) {
+                                    AxisValueLabel()
+                                        .foregroundStyle(Color.white)
+                                    AxisGridLine()
+                                        .foregroundStyle(Color.white)
+                                }
+                                }
+                                .frame( width: 350, height: 300)
                             }
-                        }
-                        .chartXAxis {AxisMarks(values: .automatic) {
-                            AxisValueLabel()
-                                .foregroundStyle(Color.white)
-                            AxisGridLine()
-                                .foregroundStyle(Color.white)
-                        }
-                        }
-                        .chartYAxis {AxisMarks(values: .automatic) {
-                            AxisValueLabel()
-                                .foregroundStyle(Color.white)
-                            AxisGridLine()
-                                .foregroundStyle(Color.white)
-                        }
-                        }
-                        .frame( width: 350, height: 300)
                     }
                 }
             }.overlay(alignment: .bottom, content: {
@@ -78,7 +88,7 @@ struct SleepGraphView: View {
                         
                         Image(systemName: "chart.xyaxis.line")
                             .resizable()
-                            .frame(width: 30, height: 40)
+                            .frame(width: 30, height: 35)
                             .foregroundColor(.white)
                         
                     }
