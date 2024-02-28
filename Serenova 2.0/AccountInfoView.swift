@@ -9,14 +9,11 @@ import SwiftUI
 import Firebase
 import FirebaseDatabase
 
-// TODO: STORE CHANGED INFORMATION IN FIREBASE!!!
-// i.e. notification preferences
-// changes in editprofile
-// bio and early bird preferences
+// TODO: DELETE ACCOUNT BUTTON
 
-// TODO: GET EARLY BIRD OR NIGHT OWL PREFERENCE
+// TODO: GET AND STORE EARLY BIRD OR NIGHT OWL PREFERENCE
 
-
+//Fetch all data from firebase
 class AccountInfoViewModel: ObservableObject {
     @Published var username = ""
     @Published var email = ""
@@ -105,6 +102,35 @@ class AccountInfoViewModel: ObservableObject {
                 self.isearlybird = earlybird
             }
             
+        }
+    }
+    
+    func storeData() {
+        let db = Database.database().reference()
+        let id = Auth.auth().currentUser!.uid
+        let ur = db.child("User").child(id)
+
+        let user: [String: Any] = ["name": self.fullname,
+                    "username": self.username,
+                    "email": self.email,
+                    "phoneNumber": self.phoneNumber,
+                    "age": self.age,
+                    "gender": self.gender,
+                    "height": self.height,
+                    "doesSnore": self.snore,
+                    "hadInsomnia": self.hadinsomnia,
+                    "hasInsomnia": self.hasinsomnia,
+                    "hasMedication": self.hasmedication,
+                    "hasNightmares": self.hasnightmares,
+                    "isEarlyBird": self.isearlybird
+            ]
+        
+        ur.updateChildValues(user) { (error, reference) in
+            if let error = error {
+                print("Error updating user data")
+            } else {
+                print("updated successfully")
+            }
         }
     }
 }
@@ -245,7 +271,7 @@ struct AccountInfoView: View {
                         }
                         
                         // Edit Profile
-                        NavigationLink(destination: EditProfileView()){
+                        NavigationLink(destination: EditProfileView().navigationBarBackButtonHidden(true)){
                             HStack{
                                 Text("Edit Profile")
                                     .padding()
@@ -521,7 +547,8 @@ struct EditProfileView: View {
                             
                             // Submit Bio button
                             Button ("Submit", action: {
-                                // TODO: Store new info in database
+                                viewModel.storeData()
+                                AccountInfoView()
                             })
                             .font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.soothingNightLightGray.opacity(0.6)).foregroundColor(.nightfallHarmonyNavyBlue.opacity(1)).cornerRadius(10)
                             
@@ -533,6 +560,10 @@ struct EditProfileView: View {
                             })
                             .font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.soothingNightLightGray.opacity(0.6)).foregroundColor(.nightfallHarmonyNavyBlue.opacity(1)).cornerRadius(10)
                             
+                            // Back button
+                            NavigationLink(destination: AccountInfoView().navigationBarBackButtonHidden(true)) {
+                                Text("Back to Account").underline()
+                            }
                             //Spacer().frame(height: 60)
                         }
                     }
