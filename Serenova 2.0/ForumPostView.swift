@@ -155,10 +155,15 @@ struct ForumPostView: View {
                         }
                     }
                     //.alert(errorMess, isPresented: $showImagePicker, actions: {})
+                    .alert(
+                        "Post Creation Failure",
+                        isPresented: $showError
+                    ) {
+                        Button("OK") {}
+                    } message: {
+                        Text(errorMess)
+                    }
                 }
-            //Function to send post content to firebase
-            
-            
         }
     }
     //error handling -> error alerts
@@ -168,46 +173,68 @@ struct ForumPostView: View {
             showError.toggle()
         })
     }
+    
+    //error handling -> error alerts (String version)
+    func errorAlerts(_ error: String)async{
+        await MainActor.run(body: {
+            errorMess = error
+            showError.toggle()
+        })
+    }
+    
     func createPost() {
         showkeyboard = false
         isLoading = true
 
-        var newPost = Post(title: postTitle, content: postText)
-        
-        if let postImageData = postImageData {
-            storeImage(postID: newPost.getPostID()) { success in
-                // If image upload was successful ...
-                if success {
-                    // Set imageURL
-                    if let postImageURL = postImageURL {
-                        newPost.setPostMediaURL(imageURL: postImageURL)
-                    }
-                    newPost.createPost()
-                } else {
-                    print("Error! Could not upload image!")
-                    return
-                }
-            }
-        } else {
-            // Create post
-            newPost.createPost()
-        }
-
-        /*
         Task {
             do {
+                // TESTING IN PREVIEW MODE:
+                // Comment out the guard below and use
+                // the second constructor for Post (uncomment it)
+                
+                guard let currUser = currUser else {
+                    await errorAlerts("ERROR! Not signed in.")
+                    return
+                }
+                
+                // Create new Post Object
+                var newPost = Post(title: postTitle, content: postText,
+                                   /*authorUsername: currUser.username,*/
+                                   authorID: currUser.userID,
+                                   authorProfilePhoto: currUser.profileURL)
+
+                //var newPost = Post(title: postTitle, content: postText)
+                
+                // Store Image & Get DownloadURL
+                if let postImageData = postImageData {
+                    // Completion block for uploading image
+                    try await storeImage(postID: newPost.postID)
+
+                    // Set imageURL of Post
+                    guard let postImageURL = postImageURL else {
+                        await errorAlerts("Failed to upload photo.")
+                        return
+                    }
+                    newPost.imageURL = postImageURL
+                            
+                    // Try to create new post
+                    try newPost.createPost()
+
+                } else {
+                    // Try to create new post (no postMedia case)
+                    try newPost.createPost()
+                }
                 
             } catch {
                 await errorAlerts(error)
             }
         }
-        */
     }
     
     /*
      * Function to store image in Firebase Storage
      */
-    func storeImage(postID: String, completion: @escaping (Bool) -> Void) {
+    func storeImage(postID: String) async throws {
         //Create reference to postMedia bucket
         let storageRef = Storage.storage().reference()
         
@@ -216,25 +243,8 @@ struct ForumPostView: View {
 
         // Upload image
         if let postImageData = postImageData {
-            let uploadTask = postImageRef.putData(postImageData, metadata: nil) { (metadata, error) in
-                guard let metadata = metadata else {
-                    // Error
-                    completion(false)
-                    return
-                }
-                // Metadata
-                let size = metadata.size
-                // URL
-                postImageRef.downloadURL { (url, error) in
-                    guard let downloadURL = url else {
-                        // Error
-                        completion(false)
-                        return
-                    }
-                    postImageURL = url
-                    completion(true)
-                }
-            }
+            try await postImageRef.putDataAsync(postImageData)
+            try await postImageURL = postImageRef.downloadURL()
         }
     }
 }

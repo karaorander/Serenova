@@ -17,13 +17,12 @@ class User: Codable {
     public var username: String = ""
     public var email: String = ""
     public var phoneNumber: String = ""
-    public var bio: String = ""
     public var colorScheme: ColorScheme = ColorScheme.MoonlitSerenity // TODO: Set default ColorScheme
     public var profileURL: URL?
     public var typicalSleepTime: String = ""
     public var gender: Gender = Gender.Female
-    public var weight: Float = -1
-    public var height: Float = -1
+    public var weight: Int = -1
+    public var height: Int = -1
     public var age: Int = -1
     public var hadInsomnia: Bool = false
     public var hasInsomnia: Bool = false
@@ -52,7 +51,7 @@ class User: Codable {
     
     /* CodingKeys */
     enum CodingKeys: CodingKey {
-        case name, username, email, phoneNumber, bio,
+        case name, username, email, phoneNumber,
              colorScheme, profileURL, typicalSleepTime,
              gender, weight, height, age, hadInsomnia,
              hasInsomnia, exercisesRegularly, hasMedication,
@@ -77,12 +76,6 @@ class User: Codable {
     }
     
     /*
-     * Constructor for creating User object
-     * (not for new Users)
-     */
-    init () {}
-    
-    /*
      * Function to add a User
      * Throws error related to encoding the object
      */
@@ -92,6 +85,11 @@ class User: Codable {
         // Write new User object to Database
         ref.child(self.userID).setValue(encodedData)
     }
+    
+    /*
+     * TODO: Function to read user data from
+     * Firebase
+     */
     
     /*
      * Function to update values
@@ -110,4 +108,3 @@ class User: Codable {
     }
 
 }
-

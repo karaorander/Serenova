@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		239E081E2B80424A0036AD81 /* AccountInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239E081D2B80424A0036AD81 /* AccountInfoView.swift */; };
+		23B3854B2B8E7F0200F2C614 /* SleepGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B3854A2B8E7F0200F2C614 /* SleepGraphView.swift */; };
+		23B3854D2B8E933900F2C614 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 23B3854C2B8E933900F2C614 /* FirebaseFirestore */; };
+		23B3854F2B8E935E00F2C614 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 23B3854E2B8E935E00F2C614 /* FirebaseFirestore */; };
+		23B385512B8E935E00F2C614 /* FirebaseFirestoreCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 23B385502B8E935E00F2C614 /* FirebaseFirestoreCombine-Community */; };
+		23B385532B8E935E00F2C614 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 23B385522B8E935E00F2C614 /* FirebaseFirestoreSwift */; };
 		23D1E0E32B7A8FDE00539A62 /* Serenova_2_0App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D1E0E22B7A8FDE00539A62 /* Serenova_2_0App.swift */; };
 		23D1E0E52B7A8FDE00539A62 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D1E0E42B7A8FDE00539A62 /* ContentView.swift */; };
 		23D1E0E72B7A8FDF00539A62 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 23D1E0E62B7A8FDF00539A62 /* Assets.xcassets */; };
@@ -49,16 +54,14 @@
 		E02A2BF72B8E62F000235A39 /* SleepManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E02A2BF62B8E62F000235A39 /* SleepManager.swift */; };
 		E0934ECA2B85BA8B00494176 /* CreateUserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0934EC92B85BA8B00494176 /* CreateUserInfoView.swift */; };
 		E0D1C15F2B880EED00A7609C /* SleepGoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D1C15E2B880EED00A7609C /* SleepGoalsView.swift */; };
-		E0D1C1612B880F7500A7609C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0D1C1602B880F7500A7609C /* GoogleService-Info.plist */; };
-		E0D1C1622B880F7500A7609C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0D1C1602B880F7500A7609C /* GoogleService-Info.plist */; };
-		E0D1C1632B880F7500A7609C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0D1C1602B880F7500A7609C /* GoogleService-Info.plist */; };
-		E0D1C1642B880F7500A7609C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0D1C1602B880F7500A7609C /* GoogleService-Info.plist */; };
 		E0D1C1662B8810B900A7609C /* ViewExensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D1C1652B8810B900A7609C /* ViewExensions.swift */; };
 		E0D1C1682B8815DF00A7609C /* SleepLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D1C1672B8815DF00A7609C /* SleepLogView.swift */; };
 		E0D1C16A2B88244700A7609C /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D1C1692B88244700A7609C /* DateExtensions.swift */; };
 		E0EF57532B8A489D00D72221 /* ForumPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EF57522B8A489D00D72221 /* ForumPostView.swift */; };
 		F23D7CDF2B7FAF320018F325 /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */; };
-		F291C8F12B83CF0E00C2D9ED /* QuestionareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F291C8F02B83CF0E00C2D9ED /* QuestionareView.swift */; };
+		F285B73D2B8C2C4E00C5AC20 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F285B73C2B8C2C4E00C5AC20 /* GoogleService-Info.plist */; };
+		F2D887002B8E8E9200C0A87E /* AlarmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D886FF2B8E8E9200C0A87E /* AlarmView.swift */; };
+		F2D887022B8EA03A00C0A87E /* AlarmListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D887012B8EA03A00C0A87E /* AlarmListView.swift */; };
 		F2E2195E2B82EC6200235824 /* SignUpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E2195D2B82EC6200235824 /* SignUpTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -91,6 +94,7 @@
 		239E081B2B80125C0036AD81 /* Serenova-2-0-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Serenova-2-0-Info.plist"; sourceTree = SOURCE_ROOT; };
 		239E081C2B803E910036AD81 /* Serenova 2.0.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Serenova 2.0.entitlements"; sourceTree = "<group>"; };
 		239E081D2B80424A0036AD81 /* AccountInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountInfoView.swift; sourceTree = "<group>"; };
+		23B3854A2B8E7F0200F2C614 /* SleepGraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepGraphView.swift; sourceTree = "<group>"; };
 		23D1E0DF2B7A8FDE00539A62 /* Serenova 2.0.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Serenova 2.0.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23D1E0E22B7A8FDE00539A62 /* Serenova_2_0App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serenova_2_0App.swift; sourceTree = "<group>"; };
 		23D1E0E42B7A8FDE00539A62 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -116,13 +120,14 @@
 		E02A2BF62B8E62F000235A39 /* SleepManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepManager.swift; sourceTree = "<group>"; };
 		E0934EC92B85BA8B00494176 /* CreateUserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateUserInfoView.swift; sourceTree = "<group>"; };
 		E0D1C15E2B880EED00A7609C /* SleepGoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepGoalsView.swift; sourceTree = "<group>"; };
-		E0D1C1602B880F7500A7609C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E0D1C1652B8810B900A7609C /* ViewExensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExensions.swift; sourceTree = "<group>"; };
 		E0D1C1672B8815DF00A7609C /* SleepLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepLogView.swift; sourceTree = "<group>"; };
 		E0D1C1692B88244700A7609C /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
 		E0EF57522B8A489D00D72221 /* ForumPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForumPostView.swift; sourceTree = "<group>"; };
 		F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
-		F291C8F02B83CF0E00C2D9ED /* QuestionareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionareView.swift; sourceTree = "<group>"; };
+		F285B73C2B8C2C4E00C5AC20 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		F2D886FF2B8E8E9200C0A87E /* AlarmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmView.swift; sourceTree = "<group>"; };
+		F2D887012B8EA03A00C0A87E /* AlarmListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmListView.swift; sourceTree = "<group>"; };
 		F2E219542B82EBEB00235824 /* Serenova 2.0Tests2.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Serenova 2.0Tests2.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2E2195D2B82EC6200235824 /* SignUpTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -132,10 +137,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23B385512B8E935E00F2C614 /* FirebaseFirestoreCombine-Community in Frameworks */,
 				B1961BF92B81520F00B27781 /* FirebaseDatabaseSwift in Frameworks */,
 				B14607202B82AACB00DDC3F3 /* iPhoneNumberField in Frameworks */,
 				B1961BF72B81520F00B27781 /* FirebaseDatabase in Frameworks */,
 				B1961C032B81520F00B27781 /* FirebasePerformance in Frameworks */,
+				23B3854D2B8E933900F2C614 /* FirebaseFirestore in Frameworks */,
+				23B3854F2B8E935E00F2C614 /* FirebaseFirestore in Frameworks */,
 				B1961C072B81520F00B27781 /* FirebaseRemoteConfigSwift in Frameworks */,
 				B1961BEF2B81520F00B27781 /* FirebaseAnalyticsSwift in Frameworks */,
 				B1961BFD2B81520F00B27781 /* FirebaseFunctions in Frameworks */,
@@ -144,6 +152,7 @@
 				B1961C092B81520F00B27781 /* FirebaseStorage in Frameworks */,
 				B1961BF52B81520F00B27781 /* FirebaseCrashlytics in Frameworks */,
 				B1961C012B81520F00B27781 /* FirebaseMLModelDownloader in Frameworks */,
+				23B385532B8E935E00F2C614 /* FirebaseFirestoreSwift in Frameworks */,
 				B1961BED2B81520F00B27781 /* FirebaseAnalytics in Frameworks */,
 				B1961C052B81520F00B27781 /* FirebaseRemoteConfig in Frameworks */,
 				B1961BF32B81520F00B27781 /* FirebaseAuth in Frameworks */,
@@ -203,7 +212,7 @@
 				B1CB24542B866E0500AE8685 /* Nova_Square */,
 				239E081C2B803E910036AD81 /* Serenova 2.0.entitlements */,
 				239E081B2B80125C0036AD81 /* Serenova-2-0-Info.plist */,
-				E0D1C1602B880F7500A7609C /* GoogleService-Info.plist */,
+				F285B73C2B8C2C4E00C5AC20 /* GoogleService-Info.plist */,
 				E0231FFB2B7DB8F8009A4E39 /* Extensions */,
 				23D1E0E22B7A8FDE00539A62 /* Serenova_2_0App.swift */,
 				E02A2BF62B8E62F000235A39 /* SleepManager.swift */,
@@ -211,10 +220,12 @@
 				E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */,
 				E0EF57522B8A489D00D72221 /* ForumPostView.swift */,
 				E0934EC92B85BA8B00494176 /* CreateUserInfoView.swift */,
+				23B3854A2B8E7F0200F2C614 /* SleepGraphView.swift */,
 				E0D1C15E2B880EED00A7609C /* SleepGoalsView.swift */,
 				E0D1C1672B8815DF00A7609C /* SleepLogView.swift */,
-				F291C8F02B83CF0E00C2D9ED /* QuestionareView.swift */,
 				F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */,
+				F2D886FF2B8E8E9200C0A87E /* AlarmView.swift */,
+				F2D887012B8EA03A00C0A87E /* AlarmListView.swift */,
 				239E08192B7FC8990036AD81 /* LoginView.swift */,
 				23D1E0E42B7A8FDE00539A62 /* ContentView.swift */,
 				23D1E0E62B7A8FDF00539A62 /* Assets.xcassets */,
@@ -308,6 +319,10 @@
 				B1961C062B81520F00B27781 /* FirebaseRemoteConfigSwift */,
 				B1961C082B81520F00B27781 /* FirebaseStorage */,
 				B146071F2B82AACB00DDC3F3 /* iPhoneNumberField */,
+				23B3854C2B8E933900F2C614 /* FirebaseFirestore */,
+				23B3854E2B8E935E00F2C614 /* FirebaseFirestore */,
+				23B385502B8E935E00F2C614 /* FirebaseFirestoreCombine-Community */,
+				23B385522B8E935E00F2C614 /* FirebaseFirestoreSwift */,
 			);
 			productName = "Serenova 2.0";
 			productReference = 23D1E0DF2B7A8FDE00539A62 /* Serenova 2.0.app */;
@@ -426,7 +441,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23D1E0EA2B7A8FDF00539A62 /* Preview Assets.xcassets in Resources */,
-				E0D1C1612B880F7500A7609C /* GoogleService-Info.plist in Resources */,
+				F285B73D2B8C2C4E00C5AC20 /* GoogleService-Info.plist in Resources */,
 				23D1E0E72B7A8FDF00539A62 /* Assets.xcassets in Resources */,
 				B1CB24552B866E0500AE8685 /* Nova_Square in Resources */,
 			);
@@ -437,7 +452,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B1CB24562B866E0500AE8685 /* Nova_Square in Resources */,
-				E0D1C1622B880F7500A7609C /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -446,7 +460,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B1CB24572B866E0500AE8685 /* Nova_Square in Resources */,
-				E0D1C1632B880F7500A7609C /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -455,7 +468,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B1CB24582B866E0500AE8685 /* Nova_Square in Resources */,
-				E0D1C1642B880F7500A7609C /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -471,6 +483,7 @@
 				E0D1C16A2B88244700A7609C /* DateExtensions.swift in Sources */,
 				E0D1C15F2B880EED00A7609C /* SleepGoalsView.swift in Sources */,
 				E0231FFE2B7DB93D009A4E39 /* ColorExtensions.swift in Sources */,
+				23B3854B2B8E7F0200F2C614 /* SleepGraphView.swift in Sources */,
 				B1CB24752B87C5D700AE8685 /* Message.swift in Sources */,
 				E0D1C1662B8810B900A7609C /* ViewExensions.swift in Sources */,
 				E02A2BF72B8E62F000235A39 /* SleepManager.swift in Sources */,
@@ -480,12 +493,13 @@
 				B1CB246D2B87C58200AE8685 /* Post.swift in Sources */,
 				B1CB24732B87C5A000AE8685 /* User.swift in Sources */,
 				B1CB24672B87C57100AE8685 /* Conversation.swift in Sources */,
-				F291C8F12B83CF0E00C2D9ED /* QuestionareView.swift in Sources */,
 				E0EF57532B8A489D00D72221 /* ForumPostView.swift in Sources */,
+				F2D887022B8EA03A00C0A87E /* AlarmListView.swift in Sources */,
 				E029E4FB2B7DAC4F00E8220B /* SignUpView.swift in Sources */,
 				E0934ECA2B85BA8B00494176 /* CreateUserInfoView.swift in Sources */,
 				23D1E0E32B7A8FDE00539A62 /* Serenova_2_0App.swift in Sources */,
 				B1CB246F2B87C58700AE8685 /* SleepLog.swift in Sources */,
+				F2D887002B8E8E9200C0A87E /* AlarmView.swift in Sources */,
 				239E081E2B80424A0036AD81 /* AccountInfoView.swift in Sources */,
 				B1CB24692B87C57500AE8685 /* Journal.swift in Sources */,
 				E0D1C1682B8815DF00A7609C /* SleepLogView.swift in Sources */,
@@ -910,6 +924,22 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		23B3854C2B8E933900F2C614 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseFirestore;
+		};
+		23B3854E2B8E935E00F2C614 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseFirestore;
+		};
+		23B385502B8E935E00F2C614 /* FirebaseFirestoreCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "FirebaseFirestoreCombine-Community";
+		};
+		23B385522B8E935E00F2C614 /* FirebaseFirestoreSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseFirestoreSwift;
+		};
 		B146071F2B82AACB00DDC3F3 /* iPhoneNumberField */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = B146071E2B82AACB00DDC3F3 /* XCRemoteSwiftPackageReference "iPhoneNumberField" */;

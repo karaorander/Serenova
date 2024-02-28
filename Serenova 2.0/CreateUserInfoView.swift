@@ -161,8 +161,8 @@ struct SignUp3View: View{
             } else {
                 currUser.gender = User.Gender.Female
             }
-            currUser.weight = weight
-            currUser.height = height
+            //currUser.weight = weight
+            //currUser.height = height
             currUser.age = age
             currUser.updateValues(newValues: ["gender" : selectedGender,
                                               "weight" : currUser.weight,
