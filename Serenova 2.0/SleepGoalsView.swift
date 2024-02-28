@@ -6,12 +6,38 @@
 //
 
 import SwiftUI
+import Firebase
 import FirebaseDatabase
 import FirebaseDatabaseSwift
+
+// Get username
+class GoalViewModel: ObservableObject {
+    @Published var fullname = ""
+
+    
+    func fetchUsername() {
+        let db = Database.database().reference()
+        let id = Auth.auth().currentUser!.uid
+        let ur = db.child("User").child(id)
+        ur.observeSingleEvent(of: .value) { snapshot in
+            guard let userData = snapshot.value as? [String: Any] else {
+                print("Error fetching data")
+                return
+            }
+            
+            // Extract additional information based on your data structure
+            if let fullname = userData["name"] as? String {
+                self.fullname = fullname
+            }
+            
+        }
+    }
+}
+
+
 //potential opening screen
 struct SleepGoalsView: View {
-    
-    @State var username = "" //TODO: get user
+    @StateObject private var viewModel = AccountInfoViewModel()
     
     @State var selected = 0
     var colors = [Color.tranquilMistAccentTurquoise.opacity(0.6), Color.dreamyTwilightMidnightBlue]
@@ -30,7 +56,7 @@ struct SleepGoalsView: View {
                     
                     VStack {
                         
-                        Text("Hello, " + username)
+                        Text("Hello, \(viewModel.fullname)")
                             .font(Font.custom("NovaSquare-Bold", size: 100))
                             .foregroundColor(.white.opacity(0.7))
                             .scaledToFit().minimumScaleFactor(0.01)
@@ -173,8 +199,9 @@ struct SleepGoalsView: View {
                 .background(Color.dreamyTwilightMidnightBlue)
                     
             }
-                
-            
+                .onAppear {
+                    viewModel.fetchUsername()
+                }
         }
     }
         
