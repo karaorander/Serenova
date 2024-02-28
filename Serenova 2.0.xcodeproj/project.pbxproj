@@ -46,6 +46,7 @@
 		B1CB24752B87C5D700AE8685 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CB24742B87C5D700AE8685 /* Message.swift */; };
 		E0231FFE2B7DB93D009A4E39 /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0231FFD2B7DB93D009A4E39 /* ColorExtensions.swift */; };
 		E029E4FB2B7DAC4F00E8220B /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */; };
+		E02A2BF72B8E62F000235A39 /* SleepManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E02A2BF62B8E62F000235A39 /* SleepManager.swift */; };
 		E0934ECA2B85BA8B00494176 /* CreateUserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0934EC92B85BA8B00494176 /* CreateUserInfoView.swift */; };
 		E0D1C15F2B880EED00A7609C /* SleepGoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D1C15E2B880EED00A7609C /* SleepGoalsView.swift */; };
 		E0D1C1612B880F7500A7609C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0D1C1602B880F7500A7609C /* GoogleService-Info.plist */; };
@@ -111,6 +112,8 @@
 		B1CB24742B87C5D700AE8685 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		E0231FFD2B7DB93D009A4E39 /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
 		E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		E02A2BF52B8E62EF00235A39 /* Serenova 2.0Tests2-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Serenova 2.0Tests2-Bridging-Header.h"; sourceTree = "<group>"; };
+		E02A2BF62B8E62F000235A39 /* SleepManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepManager.swift; sourceTree = "<group>"; };
 		E0934EC92B85BA8B00494176 /* CreateUserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateUserInfoView.swift; sourceTree = "<group>"; };
 		E0D1C15E2B880EED00A7609C /* SleepGoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepGoalsView.swift; sourceTree = "<group>"; };
 		E0D1C1602B880F7500A7609C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -203,6 +206,7 @@
 				E0D1C1602B880F7500A7609C /* GoogleService-Info.plist */,
 				E0231FFB2B7DB8F8009A4E39 /* Extensions */,
 				23D1E0E22B7A8FDE00539A62 /* Serenova_2_0App.swift */,
+				E02A2BF62B8E62F000235A39 /* SleepManager.swift */,
 				239E081D2B80424A0036AD81 /* AccountInfoView.swift */,
 				E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */,
 				E0EF57522B8A489D00D72221 /* ForumPostView.swift */,
@@ -215,6 +219,7 @@
 				23D1E0E42B7A8FDE00539A62 /* ContentView.swift */,
 				23D1E0E62B7A8FDF00539A62 /* Assets.xcassets */,
 				23D1E0E82B7A8FDF00539A62 /* Preview Content */,
+				E02A2BF52B8E62EF00235A39 /* Serenova 2.0Tests2-Bridging-Header.h */,
 			);
 			path = "Serenova 2.0";
 			sourceTree = "<group>";
@@ -385,6 +390,7 @@
 					};
 					F2E219532B82EBEB00235824 = {
 						CreatedOnToolsVersion = 15.2;
+						LastSwiftMigration = 1520;
 						TestTargetID = 23D1E0DE2B7A8FDE00539A62;
 					};
 				};
@@ -467,6 +473,7 @@
 				E0231FFE2B7DB93D009A4E39 /* ColorExtensions.swift in Sources */,
 				B1CB24752B87C5D700AE8685 /* Message.swift in Sources */,
 				E0D1C1662B8810B900A7609C /* ViewExensions.swift in Sources */,
+				E02A2BF72B8E62F000235A39 /* SleepManager.swift in Sources */,
 				F23D7CDF2B7FAF320018F325 /* ResetPasswordView.swift in Sources */,
 				B1CB24612B87C18B00AE8685 /* LoginView.swift in Sources */,
 				B1CB24652B87C56F00AE8685 /* Article.swift in Sources */,
@@ -663,6 +670,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Serenova-2-0-Info.plist";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Serenova would like reading permissions to your health data to provide the best sleep analysis experience.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Serenova would like reading permissions to your health data to provide the best sleep analysis experience.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -694,6 +703,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Serenova-2-0-Info.plist";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Serenova would like reading permissions to your health data to provide the best sleep analysis experience.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Serenova would like reading permissions to your health data to provide the best sleep analysis experience.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -792,6 +803,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = W6HJ922WFB;
@@ -800,6 +812,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ishwaryasamavedhi.gpss.Serenova-2-0Tests2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "Serenova 2.0/Serenova 2.0Tests2-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Serenova 2.0.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Serenova 2.0";
@@ -810,6 +824,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = W6HJ922WFB;
@@ -818,6 +833,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ishwaryasamavedhi.gpss.Serenova-2-0Tests2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "Serenova 2.0/Serenova 2.0Tests2-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Serenova 2.0.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Serenova 2.0";

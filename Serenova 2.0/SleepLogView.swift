@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import UIKit
+import HealthKit
 
 struct SleepLogView: View {
     
@@ -48,7 +50,7 @@ struct SleepLogView: View {
                             
                     Spacer()
                     VStack {
-                        Text("[ ] Hrs [ ] Min")
+                        Text("\(currentHrs) Hrs \(currentMin) Min")
                             .font(.system(size: 50, weight:.bold))
                             .foregroundColor(.tranquilMistMauve.opacity(0.7))
                         Spacer()

@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import HealthKit
+import HealthKitUI
 
 struct SignUp2View: View {
     private let data: [String] = ["None", "1-3 Hours", "2-4 Hours", "5-6 Hours", "7-8 Hours", "9-10 Hours", "10-12 Hours", "13-14 Hours", "15-16 Hours", "16+ Hours"]
@@ -385,6 +387,7 @@ struct SignUp5View: View{
         }
     }
     
+   
     func updateUserValues() {
         
         /* Update user values asynchronously */
