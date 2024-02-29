@@ -21,6 +21,7 @@
 		23D1E0FE2B7A8FDF00539A62 /* Serenova_2_0UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D1E0FD2B7A8FDF00539A62 /* Serenova_2_0UITests.swift */; };
 		23D1E1002B7A8FDF00539A62 /* Serenova_2_0UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D1E0FF2B7A8FDF00539A62 /* Serenova_2_0UITestsLaunchTests.swift */; };
 		B14607202B82AACB00DDC3F3 /* iPhoneNumberField in Frameworks */ = {isa = PBXBuildFile; productRef = B146071F2B82AACB00DDC3F3 /* iPhoneNumberField */; };
+		B163D1DC2B8F9ED200DBC5A3 /* ForumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B163D1DB2B8F9ED200DBC5A3 /* ForumView.swift */; };
 		B1961BED2B81520F00B27781 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = B1961BEC2B81520F00B27781 /* FirebaseAnalytics */; };
 		B1961BEF2B81520F00B27781 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B1961BEE2B81520F00B27781 /* FirebaseAnalyticsSwift */; };
 		B1961BF12B81520F00B27781 /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = B1961BF02B81520F00B27781 /* FirebaseAppCheck */; };
@@ -113,6 +114,7 @@
 		23D1E0F92B7A8FDF00539A62 /* Serenova 2.0UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Serenova 2.0UITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23D1E0FD2B7A8FDF00539A62 /* Serenova_2_0UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serenova_2_0UITests.swift; sourceTree = "<group>"; };
 		23D1E0FF2B7A8FDF00539A62 /* Serenova_2_0UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serenova_2_0UITestsLaunchTests.swift; sourceTree = "<group>"; };
+		B163D1DB2B8F9ED200DBC5A3 /* ForumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForumView.swift; sourceTree = "<group>"; };
 		B1CB24542B866E0500AE8685 /* Nova_Square */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Nova_Square; sourceTree = "<group>"; };
 		B1CB24642B87C56F00AE8685 /* Article.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Article.swift; sourceTree = "<group>"; };
 		B1CB24662B87C57100AE8685 /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 		E0EF57522B8A489D00D72221 /* ForumPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForumPostView.swift; sourceTree = "<group>"; };
 		E0FD0BF62B8F7FC8004A96C8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
+		F285B73C2B8C2C4E00C5AC20 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F2D886FF2B8E8E9200C0A87E /* AlarmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmView.swift; sourceTree = "<group>"; };
 		F2D887012B8EA03A00C0A87E /* AlarmListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmListView.swift; sourceTree = "<group>"; };
 		F2E219542B82EBEB00235824 /* Serenova 2.0Tests2.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Serenova 2.0Tests2.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -228,6 +231,7 @@
 				239E081D2B80424A0036AD81 /* AccountInfoView.swift */,
 				E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */,
 				E0EF57522B8A489D00D72221 /* ForumPostView.swift */,
+				B163D1DB2B8F9ED200DBC5A3 /* ForumView.swift */,
 				E0934EC92B85BA8B00494176 /* CreateUserInfoView.swift */,
 				23B3854A2B8E7F0200F2C614 /* SleepGraphView.swift */,
 				E0D1C15E2B880EED00A7609C /* SleepGoalsView.swift */,
@@ -499,6 +503,7 @@
 				E0D1C15F2B880EED00A7609C /* SleepGoalsView.swift in Sources */,
 				E0231FFE2B7DB93D009A4E39 /* ColorExtensions.swift in Sources */,
 				23B3854B2B8E7F0200F2C614 /* SleepGraphView.swift in Sources */,
+				B163D1DC2B8F9ED200DBC5A3 /* ForumView.swift in Sources */,
 				B1CB24752B87C5D700AE8685 /* Message.swift in Sources */,
 				E0D1C1662B8810B900A7609C /* ViewExensions.swift in Sources */,
 				E02A2BF72B8E62F000235A39 /* SleepManager.swift in Sources */,

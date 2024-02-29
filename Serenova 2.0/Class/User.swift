@@ -17,12 +17,13 @@ class User: Codable {
     public var username: String = ""
     public var email: String = ""
     public var phoneNumber: String = ""
+    public var bio: String = ""
     public var colorScheme: ColorScheme = ColorScheme.MoonlitSerenity // TODO: Set default ColorScheme
     public var profileURL: URL?
     public var typicalSleepTime: String = ""
     public var gender: Gender = Gender.Female
-    public var weight: Int = -1
-    public var height: Int = -1
+    public var weight: Float = -1
+    public var height: Float = -1
     public var age: Int = -1
     public var hadInsomnia: Bool = false
     public var hasInsomnia: Bool = false
@@ -51,7 +52,7 @@ class User: Codable {
     
     /* CodingKeys */
     enum CodingKeys: CodingKey {
-        case name, username, email, phoneNumber,
+        case name, username, email, phoneNumber, bio,
              colorScheme, profileURL, typicalSleepTime,
              gender, weight, height, age, hadInsomnia,
              hasInsomnia, exercisesRegularly, hasMedication,

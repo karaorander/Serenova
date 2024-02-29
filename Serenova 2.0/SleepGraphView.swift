@@ -36,10 +36,26 @@ struct SleepGraphView: View {
                         .ignoresSafeArea()
                         
                         VStack {
-                            Text("Sleep Duration")
-                                .font(Font.custom("NovaSquare-Bold", size: 40))
+                            Text("Sleep Trends")
+                                .font(Font.custom("NovaSquare-Bold", size: 50))
                                 .foregroundColor(.white.opacity(0.7))
+                                .scaledToFit().minimumScaleFactor(0.01)
                                 .lineLimit(1)
+                                .overlay(alignment: .topTrailing, content: {
+                                    
+                                        NavigationLink(destination: AccountInfoView().navigationBarBackButtonHidden(true)) {
+
+                                            Image(systemName: "person.crop.circle.fill")
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fill)
+                                                .frame(width: 45, height: 45)
+                                                .clipShape(.circle)
+                                                .foregroundColor(.white)
+                                                .position(x:300, y:0)
+                                        
+                                        }.padding(.bottom)
+                                    
+                                })
                                 
                             
                             //Spacer().frame(height: 30)
