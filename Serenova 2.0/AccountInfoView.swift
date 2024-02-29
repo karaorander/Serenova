@@ -109,6 +109,9 @@ class AccountInfoViewModel: ObservableObject {
         let db = Database.database().reference()
         let id = Auth.auth().currentUser!.uid
         let ur = db.child("User").child(id)
+        
+        //TODO: Add code to make sure username is not already in database
+        //TODO: Make sure new email, phone number etc. are valid like in signup view
 
         let user: [String: Any] = ["name": self.fullname,
                     "username": self.username,
@@ -563,6 +566,7 @@ struct EditProfileView: View {
                             // Back button
                             NavigationLink(destination: AccountInfoView().navigationBarBackButtonHidden(true)) {
                                 Text("Back to Account").underline()
+                                    .foregroundColor(.black)
                             }
                             //Spacer().frame(height: 60)
                         }
