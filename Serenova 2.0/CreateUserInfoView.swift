@@ -8,7 +8,7 @@
 import SwiftUI
 import HealthKit
 import HealthKitUI
-
+var sleepManager = SleepManager()
 struct SignUp2View: View {
     private let data: [String] = ["None", "1-3 Hours", "2-4 Hours", "5-6 Hours", "7-8 Hours", "9-10 Hours", "10-12 Hours", "13-14 Hours", "15-16 Hours", "16+ Hours"]
     private let hoursColumns = [GridItem(.adaptive(minimum: 130))]
@@ -378,6 +378,7 @@ struct SignUp5View: View{
                     Button(action:{
                         updateUserValues()
                         showHomePage = true
+                        sleepManager.requestAuthorization()
                     }){
                         Text("Next").font(.system(size: 20)).fontWeight(.medium).frame(width: 320, height: 50).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(10)
                     }

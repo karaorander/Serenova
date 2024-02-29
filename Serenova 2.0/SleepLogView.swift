@@ -9,14 +9,20 @@ import SwiftUI
 import UIKit
 import HealthKit
 
+
+
 struct SleepLogView: View {
-    
+    let sleepManager = SleepManager()
+    var currentSession = SleepSession()
+    @State private var samples: [HKCategorySample] = []
     //user data
     //TODO: add sleep attribute for date in Date extension for sleep object
     @State private var currentHrs : Int = 0
     @State private var currentMin : Int = 0
 
     //data variables
+    @State private var sessionString: String = "Start Sleep Session"
+    @State private var sessionOn: Bool = false
     @State private var currentDate: Date = .init()
     @State private var weekSlider: [[Date.WeekDay]] = []
     @State private var currentWeekIndex: Int = 1
@@ -24,12 +30,12 @@ struct SleepLogView: View {
     
     @State private var manualLog: Bool = false
     
+   
     @Namespace private var animation
     @State var selected = 0
     var colors = [Color.tranquilMistAccentTurquoise.opacity(0.6), Color.dreamyTwilightMidnightBlue]
     var columns = Array(repeating: GridItem(.flexible(), spacing: 20), count: 2)
     var body: some View {
-        
         
         NavigationView {
             ZStack {
@@ -50,10 +56,15 @@ struct SleepLogView: View {
                             
                     Spacer()
                     VStack {
+                        let currentSession = sleepManager.getsleepData(date: currentDate)
+                        let currentHrs = currentSession.durationHours
+                        let currentMin = currentSession.durationMinutes
                         Text("\(currentHrs) Hrs \(currentMin) Min")
                             .font(.system(size: 50, weight:.bold))
                             .foregroundColor(.tranquilMistMauve.opacity(0.7))
+                        
                         Spacer()
+                        
                         NavigationLink(destination: SleepLogView().navigationBarBackButtonHidden(true)) {
                             HStack {
                                 Text("View Sleep Analysis").font(.system(size: 20, weight:.medium))
@@ -138,11 +149,31 @@ struct SleepLogView: View {
                 .hSpacing(.center)
                 .background(Color.dreamyTwilightMidnightBlue)
                 }
+                // querey data
+                .onAppear() {
+                    sleepManager.querySleepData(for: Date())
+                }
             }
         }
         
+        
             
         }
+    func processSleepData() {
+        for sample in samples {
+                let duration = sample.endDate.timeIntervalSince(sample.startDate)
+                    let hours = Int(duration) / 3600
+                    let minutes = Int(duration) % 3600 / 60
+                    
+                    let source = sample.sourceRevision.source
+                    let deviceName = source.name
+                    
+                    //checking to see if from apple watch for testing
+                    let isFromAppleWatch = deviceName.lowercased().contains("apple watch")
+                    
+                    print("Start: \(sample.startDate), End: \(sample.endDate), Duration: \(hours) hours \(minutes) minutes, Source: \(deviceName), Is From Apple Watch: \(isFromAppleWatch)")
+                }
+    }
     @ViewBuilder
     func HeaderView() -> some View {
         VStack(alignment: .leading, spacing: 15) {
@@ -233,6 +264,8 @@ struct SleepLogView: View {
                     //Updating Current Date
                     withAnimation(.snappy) {
                         currentDate = day.date
+                        _ = sleepManager.getsleepData(date: currentDate)
+                        
                     }
                 }
             }
@@ -252,15 +285,14 @@ struct SleepLogView: View {
             }
         }
     }
+    
     func paginateWeek() {
-       
         if weekSlider.indices.contains(currentWeekIndex) {
             if let firstDate = weekSlider[currentWeekIndex].first?.date, currentWeekIndex == 0 {
                 weekSlider.insert(firstDate.createPreviousWeek(), at: 0)
                 weekSlider.removeLast()
                 currentWeekIndex = 1
             }
-            
             if let lastDate = weekSlider[currentWeekIndex].last?.date, currentWeekIndex == (weekSlider.count - 1) {
                 // Appending New Week at Last Index and Removing First Array Item
                 weekSlider.append(lastDate.createNextWeek())
@@ -268,7 +300,6 @@ struct SleepLogView: View {
                 currentWeekIndex = weekSlider.count - 2
             }
         }
-        
         print(weekSlider.count)
     }
 }

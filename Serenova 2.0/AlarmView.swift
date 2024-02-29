@@ -3,6 +3,8 @@ import SwiftUI
 
 
 struct AlarmClockView: View {
+    let sleepManager = SleepManager()
+
     @State private var alarmTime: Date = Date()
     @State private var selectedSound: String = "Default"
     @State private var isRepeating: Bool = false // State to handle the repeating toggle
@@ -62,7 +64,8 @@ struct AlarmClockView: View {
                     
                     // Set Alarm button
                     Button("Set Alarm") {
-                        // Add functionality to set the alarm here
+                        //sleepManager.alarmTime = alarmTime
+                        //sleepManager.alarmSession()
                     }
                     .font(.custom("NovaSquare-Bold", size: 20))
                     .foregroundColor(.white)
