@@ -138,12 +138,48 @@ class AccountInfoViewModel: ObservableObject {
     }
 }
 
+struct ImagePicker: UIViewControllerRepresentable {
+    @Binding var selectedImage: UIImage?
+    @Environment(\.presentationMode) var presentationMode
+
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.delegate = context.coordinator
+        return picker
+    }
+
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+        let parent: ImagePicker
+
+        init(_ parent: ImagePicker) {
+            self.parent = parent
+        }
+
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+            if let image = info[.originalImage] as? UIImage {
+                parent.selectedImage = image
+            }
+            parent.presentationMode.wrappedValue.dismiss()
+        }
+    }
+}
+
+
 struct AccountInfoView: View {
     @State private var color_theme = "Dreamy Twilight"
-    // TODO: Get username, full name, email, notification preferences from database
     @StateObject private var viewModel = AccountInfoViewModel()
     @State private var toggleIsOn: Bool = false
     
+    // Added state for image picker and profile image
+    @State private var showingImagePicker = false
+    @State private var inputImage: UIImage?
+    @State private var profileImage: Image?
     
     var body: some View {
         VStack{
@@ -155,60 +191,76 @@ struct AccountInfoView: View {
                     VStack {
                         Text("Account Info")
                             .font(Font.custom("NovaSquare-Bold", size: 40))
-                        
                             .frame(height: 2.0, alignment: .leading)
                             .padding()
                         Spacer().frame(height: 20)
                         
+                        // Profile Image with Tap Gesture for Image Picker
+                        if profileImage != nil {
+                            profileImage?
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 90, height: 85)
+                                .clipShape(Circle())
+                                .onTapGesture {
+                                    showingImagePicker = true
+                                }
+                        } else {
+                            Image(systemName: "person.crop.circle.fill") // Placeholder image
+                                .resizable()
+                                .frame(width: 90, height: 85)
+                                .clipShape(Circle())
+                                .onTapGesture {
+                                    showingImagePicker = true
+                                }
+                        }
+                        
+                        Spacer().frame(height:25)
+                        
                         // Color drop down menu
                         // Color theme stored in $color_theme
                         /*VStack {
-                            
-                            HStack {
-                                Button {
-                                    color_theme = "Moonlit Serenity"
-                                } label: {
-                                    Circle()
-                                        .foregroundColor(.moonlitSerenitySteelBlue)
-                                        .frame(height: 30)
-                                }
-                                Button {
-                                    color_theme = "Soothing Night"
-                                } label: {
-                                    Circle()
-                                        .foregroundColor(.soothingNightAccentBlue)
-                                        .frame(height: 30)
-                                }
-                                Button {
-                                    color_theme = "Tranquil Mist"
-                                } label: {
-                                    Circle()
-                                        .foregroundColor(.tranquilMistTealBlue)
-                                        .frame(height: 30)
-                                }
-                                Button {
-                                    color_theme = "Dreamy Twilight"
-                                } label: {
-                                    Circle()
-                                        .foregroundColor(.dreamyTwilightLavenderPurple)
-                                        .frame(height: 30)
-                                }
-                                Button {
-                                    color_theme = "Nightfall Harmony"
-                                } label: {
-                                    Circle()
-                                        .foregroundColor(.nightfallHarmonyRoyalPurple)
-                                        .frame(height: 30)
-                                }
-                            }
-                            
-                            Spacer().frame(height:30)
-                        }*/
-                        
-                        Image(.userimageprofile)
-                            .resizable()
-                            .frame(width: 90, height: 85)
-                        Spacer().frame(height:25)
+                         
+                         HStack {
+                         Button {
+                         color_theme = "Moonlit Serenity"
+                         } label: {
+                         Circle()
+                         .foregroundColor(.moonlitSerenitySteelBlue)
+                         .frame(height: 30)
+                         }
+                         Button {
+                         color_theme = "Soothing Night"
+                         } label: {
+                         Circle()
+                         .foregroundColor(.soothingNightAccentBlue)
+                         .frame(height: 30)
+                         }
+                         Button {
+                         color_theme = "Tranquil Mist"
+                         } label: {
+                         Circle()
+                         .foregroundColor(.tranquilMistTealBlue)
+                         .frame(height: 30)
+                         }
+                         Button {
+                         color_theme = "Dreamy Twilight"
+                         } label: {
+                         Circle()
+                         .foregroundColor(.dreamyTwilightLavenderPurple)
+                         .frame(height: 30)
+                         }
+                         Button {
+                         color_theme = "Nightfall Harmony"
+                         } label: {
+                         Circle()
+                         .foregroundColor(.nightfallHarmonyRoyalPurple)
+                         .frame(height: 30)
+                         }
+                         }
+                         
+                         Spacer().frame(height:30)
+                         }*/
                         
                         //Shows Full Name
                         Text("\(viewModel.fullname)")
@@ -330,12 +382,19 @@ struct AccountInfoView: View {
                     
                 })
                 
-            }.buttonStyle(PlainButtonStyle())
-            
+                
+            }.buttonStyle(PlainButtonStyle()).sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
+                ImagePicker(selectedImage: $inputImage)
+                
+            }
         }
-        .onAppear {
-            viewModel.fetchUsername()
+            .onAppear {
+                viewModel.fetchUsername()
+            }
         }
+    func loadImage() {
+        guard let inputImage = inputImage else { return }
+        profileImage = Image(uiImage: inputImage)
     }
 }
 
