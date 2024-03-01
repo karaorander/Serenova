@@ -9,37 +9,73 @@ import XCTest
 import HealthKit
 @testable import Serenova_2_0
 
+
 class SleepManagerTests: XCTestCase {
-
+    
     var sleepManager: SleepManager!
-    let healthStore = HKHealthStore()
-
-    override func setUpWithError() throws {
-        try super.setUpWithError()
+    
+    override func setUp() {
+        super.setUp()
         sleepManager = SleepManager()
     }
-
-    override func tearDownWithError() throws {
+    
+    override func tearDown() {
         sleepManager = nil
-        try super.tearDownWithError()
+        super.tearDown()
     }
-
-    func testHKQuery() {
-        let expectation = XCTestExpectation(description: "Query sleep data from HealthKit")
+    
+    /**that data is not nil for query of specific date**/
+    func testQuerySleepData() {
+        let expectation = XCTestExpectation(description: "Query Sleep Data")
+        let testDate = Date()
         
-        healthStore.requestAuthorization(toShare: nil, read: [HKObjectType.categoryType(forIdentifier: .sleepAnalysis)!]) { (success, error) in
-            if success {
-                self.sleepManager.querySleepData(for: Date())
-                if  self.sleepManager.sleepSamples.isEmpty{
-                    print("no sleep data")
-                } else {
-                    XCTAssertFalse(self.sleepManager.sleepSamples.isEmpty)
-                }
-                expectation.fulfill()
-            } else {
-                XCTFail("Failed to request authorization for HealthKit")
-            }
-        }
-        wait(for: [expectation], timeout: 10.0)
+        sleepManager.querySleepData(completion: { totalSleepDuration in
+            XCTAssertNotNil(totalSleepDuration, "Total sleep duration should not be nil")
+            
+            expectation.fulfill()
+        }, date: testDate)
     }
+    
+    /**Testing for authorization success  detection**/
+    func testAuthorizationSuccess() {
+            
+            let authorizationExpectation = expectation(description: "Authorization expectation")
+            
+            // Set up a mock health store that always returns success
+            class MockHealthStore: HKHealthStore {
+                override func requestAuthorization(toShare typesToShare: Set<HKSampleType>?, read typesToRead: Set<HKObjectType>?, completion: @escaping (Bool, Error?) -> Void) {
+                    completion(true, nil)
+                }
+            }
+            
+            let healthStore = MockHealthStore()
+            sleepManager.requestAuthorization()
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                
+                XCTAssertTrue(self.sleepManager.authenticated)
+                authorizationExpectation.fulfill()
+            }
+            
+            waitForExpectations(timeout: 2.0, handler: nil)
+        }
+        
+    /**Testing for authorization failure detection**/
+        func testAuthorizationFailure() {
+            let authorizationExpectation = expectation(description: "Authorization expectation")
+            
+            class MockHealthStore: HKHealthStore {
+                override func requestAuthorization(toShare typesToShare: Set<HKSampleType>?, read typesToRead: Set<HKObjectType>?, completion: @escaping (Bool, Error?) -> Void) {
+                    completion(false, NSError(domain: "TestErrorDomain", code: 123, userInfo: nil))
+                }
+            }
+            sleepManager.healthStore = MockHealthStore()
+            
+            sleepManager.requestAuthorization()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                XCTAssertFalse(self.sleepManager.authenticated)
+                authorizationExpectation.fulfill()
+            }
+            waitForExpectations(timeout: 2.0, handler: nil)
+        }
 }

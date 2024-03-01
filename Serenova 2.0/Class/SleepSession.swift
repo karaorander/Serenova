@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import FirebaseDatabase
+//import FirebaseDatabase
 
 class SleepSession {
     var exists:Bool = false
@@ -14,6 +14,14 @@ class SleepSession {
     var durationMinutes:Int = 0
     var date:Date?
     
+    init(){}
     
-    init() {}
-}
+  /*  enum CodingKeys: CodingKey {
+        case exists, durationHours, durationMinutes, date
+    }
+    
+    /* Database Reference */
+   // private var ref: DatabaseReference! = Database.database().reference().child("SleepSession")
+    
+*/
+   }

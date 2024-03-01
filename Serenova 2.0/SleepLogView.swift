@@ -21,7 +21,6 @@ struct SleepLogView: View {
     @State private var currentMin : Int = 0
 
     //data variables
-    @State private var sessionString: String = "Start Sleep Session"
     @State private var sessionOn: Bool = false
     @State private var currentDate: Date = .init()
     @State private var weekSlider: [[Date.WeekDay]] = []
@@ -56,9 +55,7 @@ struct SleepLogView: View {
                             
                     Spacer()
                     VStack {
-                        let currentSession = sleepManager.getsleepData(date: currentDate)
-                        let currentHrs = currentSession.durationHours
-                        let currentMin = currentSession.durationMinutes
+                        
                         Text("\(currentHrs) Hrs \(currentMin) Min")
                             .font(.system(size: 50, weight:.bold))
                             .foregroundColor(.tranquilMistMauve.opacity(0.7))
@@ -151,7 +148,9 @@ struct SleepLogView: View {
                 }
                 // querey data
                 .onAppear() {
-                    sleepManager.querySleepData(for: Date())
+                    sleepManager.querySleepData(completion:{_ in}, date: Date())
+                    currentHrs = sleepManager.sleepSession.durationHours
+                    currentMin = sleepManager.sleepSession.durationMinutes
                 }
             }
         }
@@ -159,21 +158,7 @@ struct SleepLogView: View {
         
             
         }
-    func processSleepData() {
-        for sample in samples {
-                let duration = sample.endDate.timeIntervalSince(sample.startDate)
-                    let hours = Int(duration) / 3600
-                    let minutes = Int(duration) % 3600 / 60
-                    
-                    let source = sample.sourceRevision.source
-                    let deviceName = source.name
-                    
-                    //checking to see if from apple watch for testing
-                    let isFromAppleWatch = deviceName.lowercased().contains("apple watch")
-                    
-                    print("Start: \(sample.startDate), End: \(sample.endDate), Duration: \(hours) hours \(minutes) minutes, Source: \(deviceName), Is From Apple Watch: \(isFromAppleWatch)")
-                }
-    }
+   
     @ViewBuilder
     func HeaderView() -> some View {
         VStack(alignment: .leading, spacing: 15) {
@@ -261,10 +246,13 @@ struct SleepLogView: View {
                 .hSpacing(.center)
                 .contentShape(.rect)
                 .onTapGesture {
+                    sleepManager.querySleepData(completion:{_ in}, date: day.date)
+                    currentHrs = sleepManager.sleepSession.durationHours
+                    currentMin = sleepManager.sleepSession.durationMinutes
                     //Updating Current Date
                     withAnimation(.snappy) {
+                        
                         currentDate = day.date
-                        _ = sleepManager.getsleepData(date: currentDate)
                         
                     }
                 }
