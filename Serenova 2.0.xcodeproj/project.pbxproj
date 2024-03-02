@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		239E081E2B80424A0036AD81 /* AccountInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239E081D2B80424A0036AD81 /* AccountInfoView.swift */; };
+		23B3854B2B8E7F0200F2C614 /* SleepGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B3854A2B8E7F0200F2C614 /* SleepGraphView.swift */; };
+		23B3854D2B8E933900F2C614 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 23B3854C2B8E933900F2C614 /* FirebaseFirestore */; };
+		23B3854F2B8E935E00F2C614 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 23B3854E2B8E935E00F2C614 /* FirebaseFirestore */; };
+		23B385512B8E935E00F2C614 /* FirebaseFirestoreCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 23B385502B8E935E00F2C614 /* FirebaseFirestoreCombine-Community */; };
+		23B385532B8E935E00F2C614 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 23B385522B8E935E00F2C614 /* FirebaseFirestoreSwift */; };
 		23D1E0E32B7A8FDE00539A62 /* Serenova_2_0App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D1E0E22B7A8FDE00539A62 /* Serenova_2_0App.swift */; };
 		23D1E0E52B7A8FDE00539A62 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D1E0E42B7A8FDE00539A62 /* ContentView.swift */; };
 		23D1E0E72B7A8FDF00539A62 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 23D1E0E62B7A8FDF00539A62 /* Assets.xcassets */; };
@@ -16,6 +21,7 @@
 		23D1E0FE2B7A8FDF00539A62 /* Serenova_2_0UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D1E0FD2B7A8FDF00539A62 /* Serenova_2_0UITests.swift */; };
 		23D1E1002B7A8FDF00539A62 /* Serenova_2_0UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D1E0FF2B7A8FDF00539A62 /* Serenova_2_0UITestsLaunchTests.swift */; };
 		B14607202B82AACB00DDC3F3 /* iPhoneNumberField in Frameworks */ = {isa = PBXBuildFile; productRef = B146071F2B82AACB00DDC3F3 /* iPhoneNumberField */; };
+		B163D1DC2B8F9ED200DBC5A3 /* ForumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B163D1DB2B8F9ED200DBC5A3 /* ForumView.swift */; };
 		B1961BED2B81520F00B27781 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = B1961BEC2B81520F00B27781 /* FirebaseAnalytics */; };
 		B1961BEF2B81520F00B27781 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B1961BEE2B81520F00B27781 /* FirebaseAnalyticsSwift */; };
 		B1961BF12B81520F00B27781 /* FirebaseAppCheck in Frameworks */ = {isa = PBXBuildFile; productRef = B1961BF02B81520F00B27781 /* FirebaseAppCheck */; };
@@ -46,18 +52,25 @@
 		B1CB24752B87C5D700AE8685 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CB24742B87C5D700AE8685 /* Message.swift */; };
 		E0231FFE2B7DB93D009A4E39 /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0231FFD2B7DB93D009A4E39 /* ColorExtensions.swift */; };
 		E029E4FB2B7DAC4F00E8220B /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */; };
+		E02A2BF72B8E62F000235A39 /* SleepManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E02A2BF62B8E62F000235A39 /* SleepManager.swift */; };
 		E0934ECA2B85BA8B00494176 /* CreateUserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0934EC92B85BA8B00494176 /* CreateUserInfoView.swift */; };
+		E0C98A2C2B90277E00A3D369 /* SleepManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C98A2B2B90277E00A3D369 /* SleepManagerTests.swift */; };
+		E0C98A2E2B9035AE00A3D369 /* SleepSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C98A2D2B9035AE00A3D369 /* SleepSession.swift */; };
+		E0C98A2F2B9035AE00A3D369 /* SleepSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C98A2D2B9035AE00A3D369 /* SleepSession.swift */; };
+		E0C98A302B9035AE00A3D369 /* SleepSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C98A2D2B9035AE00A3D369 /* SleepSession.swift */; };
+		E0C98A312B9035AE00A3D369 /* SleepSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C98A2D2B9035AE00A3D369 /* SleepSession.swift */; };
 		E0D1C15F2B880EED00A7609C /* SleepGoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D1C15E2B880EED00A7609C /* SleepGoalsView.swift */; };
-		E0D1C1612B880F7500A7609C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0D1C1602B880F7500A7609C /* GoogleService-Info.plist */; };
-		E0D1C1622B880F7500A7609C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0D1C1602B880F7500A7609C /* GoogleService-Info.plist */; };
-		E0D1C1632B880F7500A7609C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0D1C1602B880F7500A7609C /* GoogleService-Info.plist */; };
-		E0D1C1642B880F7500A7609C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0D1C1602B880F7500A7609C /* GoogleService-Info.plist */; };
 		E0D1C1662B8810B900A7609C /* ViewExensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D1C1652B8810B900A7609C /* ViewExensions.swift */; };
 		E0D1C1682B8815DF00A7609C /* SleepLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D1C1672B8815DF00A7609C /* SleepLogView.swift */; };
 		E0D1C16A2B88244700A7609C /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D1C1692B88244700A7609C /* DateExtensions.swift */; };
 		E0EF57532B8A489D00D72221 /* ForumPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EF57522B8A489D00D72221 /* ForumPostView.swift */; };
+		E0FD0BF72B8F7FC8004A96C8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0FD0BF62B8F7FC8004A96C8 /* GoogleService-Info.plist */; };
+		E0FD0BF82B8F7FC8004A96C8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0FD0BF62B8F7FC8004A96C8 /* GoogleService-Info.plist */; };
+		E0FD0BF92B8F7FC8004A96C8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0FD0BF62B8F7FC8004A96C8 /* GoogleService-Info.plist */; };
+		E0FD0BFA2B8F7FC8004A96C8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0FD0BF62B8F7FC8004A96C8 /* GoogleService-Info.plist */; };
 		F23D7CDF2B7FAF320018F325 /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */; };
-		F291C8F12B83CF0E00C2D9ED /* QuestionareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F291C8F02B83CF0E00C2D9ED /* QuestionareView.swift */; };
+		F2D887002B8E8E9200C0A87E /* AlarmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D886FF2B8E8E9200C0A87E /* AlarmView.swift */; };
+		F2D887022B8EA03A00C0A87E /* AlarmListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D887012B8EA03A00C0A87E /* AlarmListView.swift */; };
 		F2E2195E2B82EC6200235824 /* SignUpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E2195D2B82EC6200235824 /* SignUpTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -90,6 +103,7 @@
 		239E081B2B80125C0036AD81 /* Serenova-2-0-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Serenova-2-0-Info.plist"; sourceTree = SOURCE_ROOT; };
 		239E081C2B803E910036AD81 /* Serenova 2.0.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Serenova 2.0.entitlements"; sourceTree = "<group>"; };
 		239E081D2B80424A0036AD81 /* AccountInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountInfoView.swift; sourceTree = "<group>"; };
+		23B3854A2B8E7F0200F2C614 /* SleepGraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepGraphView.swift; sourceTree = "<group>"; };
 		23D1E0DF2B7A8FDE00539A62 /* Serenova 2.0.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Serenova 2.0.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23D1E0E22B7A8FDE00539A62 /* Serenova_2_0App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serenova_2_0App.swift; sourceTree = "<group>"; };
 		23D1E0E42B7A8FDE00539A62 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -100,6 +114,7 @@
 		23D1E0F92B7A8FDF00539A62 /* Serenova 2.0UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Serenova 2.0UITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23D1E0FD2B7A8FDF00539A62 /* Serenova_2_0UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serenova_2_0UITests.swift; sourceTree = "<group>"; };
 		23D1E0FF2B7A8FDF00539A62 /* Serenova_2_0UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serenova_2_0UITestsLaunchTests.swift; sourceTree = "<group>"; };
+		B163D1DB2B8F9ED200DBC5A3 /* ForumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForumView.swift; sourceTree = "<group>"; };
 		B1CB24542B866E0500AE8685 /* Nova_Square */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Nova_Square; sourceTree = "<group>"; };
 		B1CB24642B87C56F00AE8685 /* Article.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Article.swift; sourceTree = "<group>"; };
 		B1CB24662B87C57100AE8685 /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
@@ -111,15 +126,21 @@
 		B1CB24742B87C5D700AE8685 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		E0231FFD2B7DB93D009A4E39 /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
 		E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		E02A2BF52B8E62EF00235A39 /* Serenova 2.0Tests2-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Serenova 2.0Tests2-Bridging-Header.h"; sourceTree = "<group>"; };
+		E02A2BF62B8E62F000235A39 /* SleepManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepManager.swift; sourceTree = "<group>"; };
 		E0934EC92B85BA8B00494176 /* CreateUserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateUserInfoView.swift; sourceTree = "<group>"; };
+		E0C98A2B2B90277E00A3D369 /* SleepManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepManagerTests.swift; sourceTree = "<group>"; };
+		E0C98A2D2B9035AE00A3D369 /* SleepSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSession.swift; sourceTree = "<group>"; };
 		E0D1C15E2B880EED00A7609C /* SleepGoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepGoalsView.swift; sourceTree = "<group>"; };
-		E0D1C1602B880F7500A7609C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E0D1C1652B8810B900A7609C /* ViewExensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExensions.swift; sourceTree = "<group>"; };
 		E0D1C1672B8815DF00A7609C /* SleepLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepLogView.swift; sourceTree = "<group>"; };
 		E0D1C1692B88244700A7609C /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
 		E0EF57522B8A489D00D72221 /* ForumPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForumPostView.swift; sourceTree = "<group>"; };
+		E0FD0BF62B8F7FC8004A96C8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
-		F291C8F02B83CF0E00C2D9ED /* QuestionareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionareView.swift; sourceTree = "<group>"; };
+		F285B73C2B8C2C4E00C5AC20 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		F2D886FF2B8E8E9200C0A87E /* AlarmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmView.swift; sourceTree = "<group>"; };
+		F2D887012B8EA03A00C0A87E /* AlarmListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmListView.swift; sourceTree = "<group>"; };
 		F2E219542B82EBEB00235824 /* Serenova 2.0Tests2.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Serenova 2.0Tests2.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2E2195D2B82EC6200235824 /* SignUpTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -129,10 +150,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23B385512B8E935E00F2C614 /* FirebaseFirestoreCombine-Community in Frameworks */,
 				B1961BF92B81520F00B27781 /* FirebaseDatabaseSwift in Frameworks */,
 				B14607202B82AACB00DDC3F3 /* iPhoneNumberField in Frameworks */,
 				B1961BF72B81520F00B27781 /* FirebaseDatabase in Frameworks */,
 				B1961C032B81520F00B27781 /* FirebasePerformance in Frameworks */,
+				23B3854D2B8E933900F2C614 /* FirebaseFirestore in Frameworks */,
+				23B3854F2B8E935E00F2C614 /* FirebaseFirestore in Frameworks */,
 				B1961C072B81520F00B27781 /* FirebaseRemoteConfigSwift in Frameworks */,
 				B1961BEF2B81520F00B27781 /* FirebaseAnalyticsSwift in Frameworks */,
 				B1961BFD2B81520F00B27781 /* FirebaseFunctions in Frameworks */,
@@ -141,6 +165,7 @@
 				B1961C092B81520F00B27781 /* FirebaseStorage in Frameworks */,
 				B1961BF52B81520F00B27781 /* FirebaseCrashlytics in Frameworks */,
 				B1961C012B81520F00B27781 /* FirebaseMLModelDownloader in Frameworks */,
+				23B385532B8E935E00F2C614 /* FirebaseFirestoreSwift in Frameworks */,
 				B1961BED2B81520F00B27781 /* FirebaseAnalytics in Frameworks */,
 				B1961C052B81520F00B27781 /* FirebaseRemoteConfig in Frameworks */,
 				B1961BF32B81520F00B27781 /* FirebaseAuth in Frameworks */,
@@ -200,21 +225,25 @@
 				B1CB24542B866E0500AE8685 /* Nova_Square */,
 				239E081C2B803E910036AD81 /* Serenova 2.0.entitlements */,
 				239E081B2B80125C0036AD81 /* Serenova-2-0-Info.plist */,
-				E0D1C1602B880F7500A7609C /* GoogleService-Info.plist */,
 				E0231FFB2B7DB8F8009A4E39 /* Extensions */,
 				23D1E0E22B7A8FDE00539A62 /* Serenova_2_0App.swift */,
+				E02A2BF62B8E62F000235A39 /* SleepManager.swift */,
 				239E081D2B80424A0036AD81 /* AccountInfoView.swift */,
 				E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */,
 				E0EF57522B8A489D00D72221 /* ForumPostView.swift */,
+				B163D1DB2B8F9ED200DBC5A3 /* ForumView.swift */,
 				E0934EC92B85BA8B00494176 /* CreateUserInfoView.swift */,
+				23B3854A2B8E7F0200F2C614 /* SleepGraphView.swift */,
 				E0D1C15E2B880EED00A7609C /* SleepGoalsView.swift */,
 				E0D1C1672B8815DF00A7609C /* SleepLogView.swift */,
-				F291C8F02B83CF0E00C2D9ED /* QuestionareView.swift */,
 				F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */,
+				F2D886FF2B8E8E9200C0A87E /* AlarmView.swift */,
+				F2D887012B8EA03A00C0A87E /* AlarmListView.swift */,
 				239E08192B7FC8990036AD81 /* LoginView.swift */,
 				23D1E0E42B7A8FDE00539A62 /* ContentView.swift */,
 				23D1E0E62B7A8FDF00539A62 /* Assets.xcassets */,
 				23D1E0E82B7A8FDF00539A62 /* Preview Content */,
+				E02A2BF52B8E62EF00235A39 /* Serenova 2.0Tests2-Bridging-Header.h */,
 			);
 			path = "Serenova 2.0";
 			sourceTree = "<group>";
@@ -232,6 +261,7 @@
 			children = (
 				23D1E0F32B7A8FDF00539A62 /* Serenova_2_0Tests.swift */,
 				F2E2195D2B82EC6200235824 /* SignUpTests.swift */,
+				E0C98A2B2B90277E00A3D369 /* SleepManagerTests.swift */,
 			);
 			path = "Serenova 2.0Tests";
 			sourceTree = "<group>";
@@ -256,6 +286,8 @@
 				B1CB246E2B87C58700AE8685 /* SleepLog.swift */,
 				B1CB24702B87C58900AE8685 /* SocialData.swift */,
 				B1CB24722B87C5A000AE8685 /* User.swift */,
+				E0C98A2D2B9035AE00A3D369 /* SleepSession.swift */,
+				E0FD0BF62B8F7FC8004A96C8 /* GoogleService-Info.plist */,
 			);
 			path = Class;
 			sourceTree = "<group>";
@@ -303,6 +335,10 @@
 				B1961C062B81520F00B27781 /* FirebaseRemoteConfigSwift */,
 				B1961C082B81520F00B27781 /* FirebaseStorage */,
 				B146071F2B82AACB00DDC3F3 /* iPhoneNumberField */,
+				23B3854C2B8E933900F2C614 /* FirebaseFirestore */,
+				23B3854E2B8E935E00F2C614 /* FirebaseFirestore */,
+				23B385502B8E935E00F2C614 /* FirebaseFirestoreCombine-Community */,
+				23B385522B8E935E00F2C614 /* FirebaseFirestoreSwift */,
 			);
 			productName = "Serenova 2.0";
 			productReference = 23D1E0DF2B7A8FDE00539A62 /* Serenova 2.0.app */;
@@ -385,6 +421,7 @@
 					};
 					F2E219532B82EBEB00235824 = {
 						CreatedOnToolsVersion = 15.2;
+						LastSwiftMigration = 1520;
 						TestTargetID = 23D1E0DE2B7A8FDE00539A62;
 					};
 				};
@@ -420,7 +457,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23D1E0EA2B7A8FDF00539A62 /* Preview Assets.xcassets in Resources */,
-				E0D1C1612B880F7500A7609C /* GoogleService-Info.plist in Resources */,
+				E0FD0BF72B8F7FC8004A96C8 /* GoogleService-Info.plist in Resources */,
 				23D1E0E72B7A8FDF00539A62 /* Assets.xcassets in Resources */,
 				B1CB24552B866E0500AE8685 /* Nova_Square in Resources */,
 			);
@@ -431,7 +468,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B1CB24562B866E0500AE8685 /* Nova_Square in Resources */,
-				E0D1C1622B880F7500A7609C /* GoogleService-Info.plist in Resources */,
+				E0FD0BF82B8F7FC8004A96C8 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -440,7 +477,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B1CB24572B866E0500AE8685 /* Nova_Square in Resources */,
-				E0D1C1632B880F7500A7609C /* GoogleService-Info.plist in Resources */,
+				E0FD0BF92B8F7FC8004A96C8 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -449,7 +486,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B1CB24582B866E0500AE8685 /* Nova_Square in Resources */,
-				E0D1C1642B880F7500A7609C /* GoogleService-Info.plist in Resources */,
+				E0FD0BFA2B8F7FC8004A96C8 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -465,20 +502,25 @@
 				E0D1C16A2B88244700A7609C /* DateExtensions.swift in Sources */,
 				E0D1C15F2B880EED00A7609C /* SleepGoalsView.swift in Sources */,
 				E0231FFE2B7DB93D009A4E39 /* ColorExtensions.swift in Sources */,
+				23B3854B2B8E7F0200F2C614 /* SleepGraphView.swift in Sources */,
+				B163D1DC2B8F9ED200DBC5A3 /* ForumView.swift in Sources */,
 				B1CB24752B87C5D700AE8685 /* Message.swift in Sources */,
 				E0D1C1662B8810B900A7609C /* ViewExensions.swift in Sources */,
+				E02A2BF72B8E62F000235A39 /* SleepManager.swift in Sources */,
 				F23D7CDF2B7FAF320018F325 /* ResetPasswordView.swift in Sources */,
 				B1CB24612B87C18B00AE8685 /* LoginView.swift in Sources */,
 				B1CB24652B87C56F00AE8685 /* Article.swift in Sources */,
 				B1CB246D2B87C58200AE8685 /* Post.swift in Sources */,
 				B1CB24732B87C5A000AE8685 /* User.swift in Sources */,
 				B1CB24672B87C57100AE8685 /* Conversation.swift in Sources */,
-				F291C8F12B83CF0E00C2D9ED /* QuestionareView.swift in Sources */,
 				E0EF57532B8A489D00D72221 /* ForumPostView.swift in Sources */,
+				F2D887022B8EA03A00C0A87E /* AlarmListView.swift in Sources */,
 				E029E4FB2B7DAC4F00E8220B /* SignUpView.swift in Sources */,
 				E0934ECA2B85BA8B00494176 /* CreateUserInfoView.swift in Sources */,
 				23D1E0E32B7A8FDE00539A62 /* Serenova_2_0App.swift in Sources */,
 				B1CB246F2B87C58700AE8685 /* SleepLog.swift in Sources */,
+				E0C98A2E2B9035AE00A3D369 /* SleepSession.swift in Sources */,
+				F2D887002B8E8E9200C0A87E /* AlarmView.swift in Sources */,
 				239E081E2B80424A0036AD81 /* AccountInfoView.swift in Sources */,
 				B1CB24692B87C57500AE8685 /* Journal.swift in Sources */,
 				E0D1C1682B8815DF00A7609C /* SleepLogView.swift in Sources */,
@@ -490,7 +532,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				23D1E0F42B7A8FDF00539A62 /* Serenova_2_0Tests.swift in Sources */,
+				E0C98A2C2B90277E00A3D369 /* SleepManagerTests.swift in Sources */,
 				F2E2195E2B82EC6200235824 /* SignUpTests.swift in Sources */,
+				E0C98A2F2B9035AE00A3D369 /* SleepSession.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -500,6 +544,7 @@
 			files = (
 				23D1E0FE2B7A8FDF00539A62 /* Serenova_2_0UITests.swift in Sources */,
 				23D1E1002B7A8FDF00539A62 /* Serenova_2_0UITestsLaunchTests.swift in Sources */,
+				E0C98A302B9035AE00A3D369 /* SleepSession.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -507,6 +552,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0C98A312B9035AE00A3D369 /* SleepSession.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -663,6 +709,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Serenova-2-0-Info.plist";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Serenova would like reading permissions to your health data to provide the best sleep analysis experience.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Serenova would like reading permissions to your health data to provide the best sleep analysis experience.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -694,6 +742,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Serenova-2-0-Info.plist";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Serenova would like reading permissions to your health data to provide the best sleep analysis experience.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Serenova would like reading permissions to your health data to provide the best sleep analysis experience.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -792,6 +842,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = W6HJ922WFB;
@@ -800,6 +851,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ishwaryasamavedhi.gpss.Serenova-2-0Tests2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "Serenova 2.0/Serenova 2.0Tests2-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Serenova 2.0.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Serenova 2.0";
@@ -810,6 +863,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = W6HJ922WFB;
@@ -818,6 +872,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.ishwaryasamavedhi.gpss.Serenova-2-0Tests2";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "Serenova 2.0/Serenova 2.0Tests2-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Serenova 2.0.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Serenova 2.0";
@@ -894,6 +949,22 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		23B3854C2B8E933900F2C614 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseFirestore;
+		};
+		23B3854E2B8E935E00F2C614 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseFirestore;
+		};
+		23B385502B8E935E00F2C614 /* FirebaseFirestoreCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "FirebaseFirestoreCombine-Community";
+		};
+		23B385522B8E935E00F2C614 /* FirebaseFirestoreSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseFirestoreSwift;
+		};
 		B146071F2B82AACB00DDC3F3 /* iPhoneNumberField */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = B146071E2B82AACB00DDC3F3 /* XCRemoteSwiftPackageReference "iPhoneNumberField" */;

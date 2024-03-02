@@ -8,16 +8,24 @@
 import SwiftUI
 import FirebaseCore
 import FirebaseDatabase
+import HealthKit
+import HealthKitUI
+
+
+//private let logger = Logger(subsystem: "Serenova",category: "iOS App")
 
 
 class AppDelegate: NSObject, UIApplicationDelegate {
-
-  func application(_ application: UIApplication,
+    var sleepManager: SleepManager!
+   func application(_ application: UIApplication,
                    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
     FirebaseApp.configure()
+    sleepManager = SleepManager()
+      
+      // Request HealthKit authorization
+    sleepManager.requestAuthorization()
     return true
   }
-
 }
 
 
@@ -26,10 +34,11 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct Serenova_2_0App: App {
     // Register App Delegate for Firebase Setup
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView().environmentObject(delegate.sleepManager)
+
         }
     }
 }
+extension SleepManager: ObservableObject{}
