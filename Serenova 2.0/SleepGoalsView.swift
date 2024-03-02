@@ -306,7 +306,7 @@ var goal_stats = [
 //func saveGoals(goal: int) {
 //    var ref = Database.database().reference()
 //    // could store as object to hold more info
-//     ref.child("SleepGoals").setValue(goal)
+//     ref.child("SleepGoals").setValue(goal_stats)
 //}
 //
 //// TODO: read from API to get other value for comparison
