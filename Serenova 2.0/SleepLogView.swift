@@ -9,7 +9,7 @@ import SwiftUI
 import UIKit
 import HealthKit
 
-
+//TODO: set up HK with firebase, get data from firebase instead of HKstore
 
 struct SleepLogView: View {
     let sleepManager = SleepManager()
@@ -62,7 +62,7 @@ struct SleepLogView: View {
                         
                         Spacer()
                         
-                        NavigationLink(destination: SleepLogView().navigationBarBackButtonHidden(true)) {
+                        NavigationLink(destination: SleepGraphView().navigationBarBackButtonHidden(true)) {
                             HStack {
                                 Text("View Sleep Analysis").font(.system(size: 20, weight:.medium))
                                     .foregroundColor(.white)
@@ -148,9 +148,12 @@ struct SleepLogView: View {
                 }
                 // querey data
                 .onAppear() {
-                    sleepManager.querySleepData(completion:{_ in}, date: Date())
-                    currentHrs = sleepManager.sleepSession.durationHours
-                    currentMin = sleepManager.sleepSession.durationMinutes
+                    sleepManager.querySleepData(completion: { totalSleepTime in
+                                        // Update UI with sleep data
+                                        // For example:
+                        currentHrs = Int(totalSleepTime ?? 0) / 3600
+                        currentMin = (Int(totalSleepTime ?? 0) % 3600) / 60
+                                    }, date: currentDate)
                 }
             }
         }
@@ -246,14 +249,18 @@ struct SleepLogView: View {
                 .hSpacing(.center)
                 .contentShape(.rect)
                 .onTapGesture {
-                    sleepManager.querySleepData(completion:{_ in}, date: day.date)
-                    currentHrs = sleepManager.sleepSession.durationHours
-                    currentMin = sleepManager.sleepSession.durationMinutes
-                    //Updating Current Date
+                    currentHrs = 0
+                    currentMin = 0
+                    // query sleep data
+                    sleepManager.querySleepData(completion: { totalSleepTime in
+                        DispatchQueue.main.async {
+                            currentHrs = Int(totalSleepTime ?? 0) / 3600
+                            currentMin = (Int(totalSleepTime ?? 0) % 3600) / 60
+                        }
+                    }, date: day.date)
+                    
                     withAnimation(.snappy) {
-                        
                         currentDate = day.date
-                        
                     }
                 }
             }
@@ -326,7 +333,18 @@ struct ManualLogView: View {
                 DatePicker("", selection: $sleepEnd, in: sleepStart...Date(), displayedComponents: [.date, .hourAndMinute])
                             .labelsHidden()
             }
-            Spacer()
+            //TODO: send manual sleep log times to firebase
+            Button(action: {
+            
+                    dismiss()
+            }, label: {
+                    Text("Log Sleep!")
+                    .fontWeight(.semibold)
+                    .foregroundStyle(Color.dreamyTwilightAccentViolet)
+                    .frame(width: 150, height: 60)
+                    .background(Color.nightfallHarmonySilverGray.opacity(0.3), in: .rect).cornerRadius(10)
+                            })
+                            .padding(15)
             
         }.padding()
     }

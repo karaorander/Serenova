@@ -67,7 +67,7 @@ class SleepManager {
     
     
     
-    func querySleepData(completion: @escaping (TimeInterval?)-> Void, date: Date) -> TimeInterval{
+    func querySleepData(completion: @escaping (TimeInterval?)-> Void, date: Date) {
         let totalSleepDuration:TimeInterval = 0
         let calendar = Calendar.current
         let startDate = calendar.startOfDay(for: date)
@@ -118,8 +118,6 @@ class SleepManager {
             completion(totalSleepTime)
         }
         healthStore.execute(query)
-        
-        return totalSleepDuration
     }
     
 }
