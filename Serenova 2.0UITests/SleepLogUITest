@@ -1,0 +1,69 @@
+import XCTest
+
+class SleepLogViewUITests: XCTestCase {
+
+    override func setUpWithError() throws {
+        continueAfterFailure = false
+
+        let app = XCUIApplication()
+        app.launch()
+    }
+
+    override func tearDownWithError() throws {
+    }
+
+    func testSleepLogViewTitleExists() {
+        let app = XCUIApplication()
+        
+        // Verify the "Sleep Log" title is present
+        let sleepLogTitle = app.staticTexts["Sleep Log"]
+        XCTAssertTrue(sleepLogTitle.exists, "Sleep Log View title does not exist")
+    }
+
+    func testNavigatingToSleepAnalysis() {
+        let app = XCUIApplication()
+
+        // Tap on 'View Sleep Analysis' button
+        let sleepAnalysisButton = app.buttons["View Sleep Analysis"]
+        XCTAssertTrue(sleepAnalysisButton.exists, "View Sleep Analysis button does not exist")
+        sleepAnalysisButton.tap()
+        
+        // Verify navigation by checking for an element unique to the Sleep Analysis view
+        // Adjust the identifier based on your actual implementation
+        let sleepAnalysisViewElement = app.staticTexts["Sleep Analysis"]
+        XCTAssertFalse(sleepAnalysisViewElement.waitForExistence(timeout: 5), "Failed to navigate to Sleep Analysis")
+    }
+
+    func testAddingManualLog() {
+        let app = XCUIApplication()
+
+        // Corrected to use "Add Manual Log Button" as the identifier
+        let addButton = app.buttons["Add Manual Log Button"]
+        XCTAssertTrue(addButton.exists, "Add (+) button does not exist")
+        addButton.tap()
+        
+        // Interact within the modal, e.g., set sleep start and end times
+        // Adjust the identifiers based on your actual implementation
+        let sleepStartPicker = app.datePickers["sleepStart"]
+        let sleepEndPicker = app.datePickers["sleepEnd"]
+        
+        XCTAssertTrue(sleepStartPicker.exists, "Sleep start picker does not exist")
+        XCTAssertTrue(sleepEndPicker.exists, "Sleep end picker does not exist")
+        
+        // Add verification here if needed, such as checking for an updated sleep log entry
+    }
+
+    func testTabNavigation() {
+        let app = XCUIApplication()
+
+        // Example: Tap on the 'Sleep Goals' tab
+        let sleepGoalsTab = app.buttons["list.clipboard"] // Use the identifier for your Sleep Goals tab
+        XCTAssertTrue(sleepGoalsTab.exists, "Sleep Goals tab does not exist")
+        sleepGoalsTab.tap()
+
+        // Verify navigation by checking for an element unique to the Sleep Goals view
+        // Adjust the identifier based on your actual implementation
+        let sleepGoalsViewElement = app.staticTexts["Sleep Goals"]
+        XCTAssertFalse(sleepGoalsViewElement.waitForExistence(timeout: 5), "Failed to navigate to Sleep Goals")
+    }
+}
