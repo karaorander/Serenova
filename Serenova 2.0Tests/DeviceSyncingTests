@@ -1,0 +1,54 @@
+
+//
+//  Serenova_2_0Tests.swift
+//  Serenova 2.0Tests
+//
+//  Created by Ishwarya Samavedhi on 2/18/24.
+//
+
+import XCTest
+@testable import Serenova_2_0
+import HealthKit
+
+class MockHealthStore: HealthStoreProtocol {
+    var requestAuthorizationCalled = false
+    var requestAuthorizationSuccess = true
+
+    func requestAuthorization(toShare typesToShare: Set<HKSampleType>?, read typesToRead: Set<HKObjectType>?, completion: @escaping (Bool, Error?) -> Void) {
+        requestAuthorizationCalled = true
+        completion(requestAuthorizationSuccess, nil)
+    }
+
+    func execute(_ query: HKQuery) {
+        // Implement this for testing query functionality
+    }
+}
+
+class DeviceSyncingTests: XCTestCase {
+
+    var sleepManager: SleepManager!
+    var mockHealthStore: MockHealthStore!
+
+    override func setUp() {
+        super.setUp()
+        mockHealthStore = MockHealthStore()
+        sleepManager = SleepManager(healthStore: mockHealthStore)
+    }
+
+    func testRequestAuthorization() {
+        let expectation = self.expectation(description: "Authorization should be requested")
+        
+        sleepManager.requestAuthorization()
+
+        XCTAssertTrue(mockHealthStore.requestAuthorizationCalled, "requestAuthorization should be called on the health store")
+        
+        // This will wait for the expectation to be fulfilled
+        waitForExpectations(timeout: 5, handler: nil)
+    }
+
+    override func tearDown() {
+        sleepManager = nil
+        mockHealthStore = nil
+        super.tearDown()
+    }
+}
