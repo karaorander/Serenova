@@ -9,4 +9,5 @@ class User {
     var colorScheme
     var profilePhoto
     var userId = -1
+    var forumsCreated = []
 }

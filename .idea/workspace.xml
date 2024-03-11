@@ -9,7 +9,12 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3bae5dbe-8b5c-4b30-aaf2-f3eabbf480b0" name="Changes" comment="Added Article Class and Social/Messaging related classes" />
+    <list default="true" id="3bae5dbe-8b5c-4b30-aaf2-f3eabbf480b0" name="Changes" comment="Added Article Class and Social/Messaging related classes">
+      <change afterPath="$PROJECT_DIR$/Serenova 2.0/Forum.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Serenova 2.0/SleepLog.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Serenova 2.0/SleepLog.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Serenova 2.0/User.swift" beforeDir="false" afterPath="$PROJECT_DIR$/Serenova 2.0/User.swift" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -83,6 +88,7 @@
       <workItem from="1708363465187" duration="334000" />
       <workItem from="1708363810012" duration="2128000" />
       <workItem from="1708472130717" duration="308000" />
+      <workItem from="1710089566154" duration="1055000" />
     </task>
     <task id="LOCAL-00001" summary="Article and User classes added">
       <option name="closed" value="true" />
