@@ -105,6 +105,14 @@ class AccountInfoViewModel: ObservableObject {
         }
     }
     
+    func deleteUser() {
+        let db = Database.database().reference()
+        let id = Auth.auth().currentUser!.uid
+        let ur = db.child("User").child(id)
+        
+        db.child("User").child(id).removeValue();
+    }
+    
     func storeData() {
         let db = Database.database().reference()
         let id = Auth.auth().currentUser!.uid
@@ -619,6 +627,8 @@ struct EditProfileView: View {
                             // Submit Bio button
                             Button ("Delete Account", action: {
                                 // TODO: Remove all info from database and return to login page
+                                viewModel.deleteUser()
+                                LoginView()
                             })
                             .font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.soothingNightLightGray.opacity(0.6)).foregroundColor(.nightfallHarmonyNavyBlue.opacity(1)).cornerRadius(10)
                             
@@ -641,5 +651,5 @@ struct EditProfileView: View {
 
 
 #Preview {
-    EditProfileView()
+    AccountInfoView()
 }
