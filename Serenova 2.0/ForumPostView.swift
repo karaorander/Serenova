@@ -30,6 +30,9 @@ struct ForumPostView: View {
     @State private var selectedPhoto: PhotosPickerItem?
     @FocusState private var showkeyboard: Bool
     
+    @State private var isCreatingPost: Bool = false
+    @State private var isPosted: Bool = false
+    
     @Environment(\.dismiss) private var dismiss
     var body: some View {
         NavigationView{
@@ -46,7 +49,11 @@ struct ForumPostView: View {
                         } label: {
                             Text("Cancel").font(.callout).foregroundColor(Color.nightfallHarmonyNavyBlue)
                         }.hSpacing(.leading)
-                        Button(action: createPost) {
+                        NavigationLink ("", destination: ForumView().navigationBarBackButtonHidden(true), isActive: $isPosted)
+                        Button(action: {
+                            createPost()
+                            isCreatingPost = true
+                        }) {
                             Text("Post").font(.callout)
                                 .foregroundColor(.nightfallHarmonyNavyBlue)
                                 .padding(.horizontal,20)
@@ -163,7 +170,16 @@ struct ForumPostView: View {
                     } message: {
                         Text(errorMess)
                     }
+                /*
+                    if isCreatingPost {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle())
+                            .tint(.white)
+                            .scaleEffect(2)
+                    }
+                 */
                 }
+
         }
     }
     //error handling -> error alerts
@@ -198,18 +214,18 @@ struct ForumPostView: View {
                 }
                 
                 // Create new Post Object
-                var newPost = Post(title: postTitle, content: postText,
-                                   /*authorUsername: currUser.username,*/
-                                   authorID: currUser.userID,
-                                   authorProfilePhoto: currUser.profileURL)
-
-                //var newPost = Post(title: postTitle, content: postText)
+                //var newPost = Post(title: postTitle, content: postText
+                                   //authorUsername: currUser.username,
+                                   //authorID: currUser.userID,
+                                   //authorProfilePhoto: currUser.profileURL)
+                
+                var newPost = Post(title: postTitle, content: postText)
                 
                 // Store Image & Get DownloadURL
                 if let postImageData = postImageData {
                     // Completion block for uploading image
-                    try await storeImage(postID: newPost.postID)
-
+                    try await storeImage()
+                    
                     // Set imageURL of Post
                     guard let postImageURL = postImageURL else {
                         await errorAlerts("Failed to upload photo.")
@@ -218,11 +234,12 @@ struct ForumPostView: View {
                     newPost.imageURL = postImageURL
                             
                     // Try to create new post
-                    try newPost.createPost()
-
+                    //try await newPost.createPost()
+                    isPosted = true
                 } else {
                     // Try to create new post (no postMedia case)
-                    try newPost.createPost()
+                    //try await newPost.createPost()
+                    isPosted = true
                 }
                 
             } catch {
@@ -234,12 +251,12 @@ struct ForumPostView: View {
     /*
      * Function to store image in Firebase Storage
      */
-    func storeImage(postID: String) async throws {
+    func storeImage() async throws {
         //Create reference to postMedia bucket
         let storageRef = Storage.storage().reference()
         
         // Create a reference to the file you want to upload
-        let postImageRef = storageRef.child("postMedia/\(postID)/\(UUID().uuidString).jpg")
+        let postImageRef = storageRef.child("postMedia/\(UUID().uuidString).jpg")
 
         // Upload image
         if let postImageData = postImageData {
