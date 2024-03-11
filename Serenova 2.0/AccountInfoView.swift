@@ -321,7 +321,7 @@ struct AccountInfoView: View {
                         }
                         
                         // Rewards Page
-                        NavigationLink(destination: ResetPasswordView()){
+                        NavigationLink(destination: RewardsDashboardView()){
                             HStack{
                                 Text("Rewards Dashboard")
                                     .padding()
