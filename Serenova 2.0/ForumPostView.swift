@@ -208,7 +208,7 @@ struct ForumPostView: View {
                 // Comment out the guard below and use
                 // the second constructor for Post (uncomment it)
                 
-                guard let currUser = currUser else {
+                guard currUser != nil else {
                     await errorAlerts("ERROR! Not signed in.")
                     return
                 }
@@ -219,10 +219,10 @@ struct ForumPostView: View {
                                    //authorID: currUser.userID,
                                    //authorProfilePhoto: currUser.profileURL)
                 
-                var newPost = Post(title: postTitle, content: postText)
+                let newPost = Post(title: postTitle, content: postText)
                 
                 // Store Image & Get DownloadURL
-                if let postImageData = postImageData {
+                if postImageData != nil {
                     // Completion block for uploading image
                     try await storeImage()
                     
@@ -260,7 +260,7 @@ struct ForumPostView: View {
 
         // Upload image
         if let postImageData = postImageData {
-            try await postImageRef.putDataAsync(postImageData)
+            let _ = try await postImageRef.putDataAsync(postImageData)
             try await postImageURL = postImageRef.downloadURL()
         }
     }

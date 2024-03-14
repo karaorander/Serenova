@@ -14,10 +14,8 @@ import FirebaseStorage
 struct ForumView: View {
     
     @State private var forumPosts: [Post] = []
-    @State private var queryNum: Int = 3
-    @State private var lastPostID: String?
-    
-    @State private var isInitialized: Bool = false
+    @State private var queryNum: Int = 5
+    @State private var lastPost: DocumentSnapshot?
     
     var body: some View {
         NavigationView {
@@ -70,8 +68,16 @@ struct ForumView: View {
                         NoPostsView()
                     } else {
                         List {
-                            ForEach(forumPosts.indices.reversed(), id: \.self) { index in
+                            ForEach(forumPosts.indices, id: \.self) { index in
                                 PostListingView(post: forumPosts[index])
+                                    .onAppear {
+                                        if index == forumPosts.count - 1 && lastPost != nil {
+                                            Task {
+                                                await queryPosts(NUM_POSTS: queryNum)
+                                            }
+                                        }
+                                    }
+                                    .padding(5) //MAYBE REMOVE LATER
                             }
                             .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
                             .listRowBackground(Color(red: 33/255, green: 33/255, blue: 55/255))
@@ -81,7 +87,11 @@ struct ForumView: View {
                         .listStyle(PlainListStyle())
                         .scrollIndicators(ScrollIndicatorVisibility.hidden)
                         .refreshable {
-                            //await queryPosts(NUM_POSTS: queryNum)
+                            Task {
+                                forumPosts = []
+                                lastPost = nil
+                                await queryPosts(NUM_POSTS: queryNum)
+                            }
                         }
                     }
 
@@ -132,7 +142,7 @@ struct ForumView: View {
             .onAppear() {
                 UIRefreshControl.appearance().tintColor = .white
                 Task {
-                    //await queryPosts(NUM_POSTS: queryNum)
+                    await queryPosts(NUM_POSTS: queryNum)
                 }
             }
         }
@@ -145,54 +155,30 @@ struct ForumView: View {
         // Database Reference
         let db = Firestore.firestore()
         
-        let initialQuery =  db.collection("Posts")
-            .order(by: "timeStamp")
-            .limit(toLast: NUM_POSTS)
-        
-        initialQuery.addSnapshotListener { (snapshot, error) in
-            guard let snapshot = snapshot else {
-                print("Error retreving posts: \(error.debugDescription)")
-                return
-            }
-
-            guard let lastSnapshot = snapshot.documents.last else {
-                // The collection is empty.
-                return
+        do {
+            // Fetch batch of posts from Firestore
+            var query: Query! = db.collection("Posts")
+                .order(by: "timeStamp", descending: true)
+                .limit(to: NUM_POSTS)
+            
+            if let lastPost = lastPost {
+                query = query.start(afterDocument: lastPost)
             }
             
-            print(forumPosts)
-
-            // Handle changes
-            snapshot.documentChanges.forEach { diff in
-                
-                if (diff.type == .added) {
-                    print("ADDED")
-                    do {
-                        let newPost = try diff.document.data(as: Post.self)
-                        forumPosts.append(newPost)
-                        print(forumPosts)
-                    } catch {
-                        print(error)
-                        return
-                    }
-                    
-                }
-                if (diff.type == .modified) {
-                    print("MODIFIED")
-                    do {
-                        if let index = forumPosts.firstIndex(where: {$0.postID == diff.document.documentID}) {
-                            forumPosts[index] = try diff.document.data(as: Post.self)
-                        }
-                    } catch {
-                        print(error)
-                        return
-                    }
-                }
-                if (diff.type == .removed) {
-                    print("REMOVED")
-                    forumPosts.removeAll { $0.postID == diff.document.documentID }
-                }
+            // Retrieve documents
+            let postBatch = try await query.getDocuments()
+            let newPosts = postBatch.documents.compactMap { post -> Post? in
+                try? post.data(as: Post.self)
             }
+            
+            await MainActor.run(body: {
+                forumPosts += newPosts
+                lastPost = postBatch.documents.last
+                print("FORUM POST COUNT: \(forumPosts.count)")
+            })
+            
+        } catch {
+            print (error.localizedDescription)
         }
         return
     }
@@ -276,7 +262,7 @@ struct PostListingView: View {
                         Image(uiImage: postImage)
                             .resizable()
                             .aspectRatio(contentMode: .fill)
-                            .frame(width: 345, height: 250)
+                            .frame(width: 330, height: 250)
                             .cornerRadius(10)
                             .padding(.horizontal, 0).padding(.bottom, 8)
                             .clipped()
