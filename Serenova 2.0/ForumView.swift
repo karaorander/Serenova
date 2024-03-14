@@ -266,6 +266,13 @@ struct PostListingView: View {
                             .cornerRadius(10)
                             .padding(.horizontal, 0).padding(.bottom, 8)
                             .clipped()
+                    } else {
+                        Image(systemName: "rectangle.fill")
+                            .resizable()
+                            .frame(width: 330, height: 250)
+                            .foregroundColor(Color.white.opacity(0.1))
+                            .cornerRadius(10)
+                            .padding(.horizontal, 0).padding(.bottom, 8)
                     }
                 }
                 
