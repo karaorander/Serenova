@@ -22,12 +22,15 @@ struct ForumView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                LinearGradient(gradient: Gradient(colors: [.nightfallHarmonyNavyBlue.opacity(0.8), .dreamyTwilightMidnightBlue.opacity(0.7),
-                    .dreamyTwilightMidnightBlue.opacity(0.7),
-                    .nightfallHarmonyNavyBlue.opacity(0.8)]),
-                    startPoint: .top, endPoint: .bottom)
-                    .ignoresSafeArea()
-                VStack {
+                LinearGradient(gradient: Gradient(colors: [
+                    .nightfallHarmonyNavyBlue.opacity(0.8),
+                    .dreamyTwilightMidnightBlue.opacity(0.8),
+                    .nightfallHarmonyRoyalPurple.opacity(0.8)
+                ]),
+                startPoint: .top, endPoint: .bottom)
+                .ignoresSafeArea()
+                
+                VStack(spacing: 0) {
                     HStack {
                         // TODO: Make Dropdown Menu with different options (e.g. Home)
                         NavigationLink(destination: SleepGoalsView().navigationBarBackButtonHidden(true)) {
@@ -45,8 +48,7 @@ struct ForumView: View {
                             .font(Font.custom("NovaSquareSlim-Bold", size: 35))
                             .foregroundColor(.white)
                         
-                        Spacer(
-                        )
+                        Spacer()
                         
                         Image(systemName: "magnifyingglass")
                             .resizable()
@@ -67,13 +69,17 @@ struct ForumView: View {
                     if forumPosts.count == 0 {
                         NoPostsView()
                     } else {
-                        ScrollView(.vertical, showsIndicators:false) {
-                            LazyVStack(spacing: 1) {
-                                ForEach(forumPosts.indices.reversed(), id: \.self) { index in
-                                    PostListingView(post: forumPosts[index])
-                                }
+                        List {
+                            ForEach(forumPosts.indices.reversed(), id: \.self) { index in
+                                PostListingView(post: forumPosts[index])
                             }
+                            .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                            .listRowBackground(Color(red: 33/255, green: 33/255, blue: 55/255))
                         }
+                        .padding(8)
+                        .listRowSpacing(5)
+                        .listStyle(PlainListStyle())
+                        .scrollIndicators(ScrollIndicatorVisibility.hidden)
                         .refreshable {
                             //await queryPosts(NUM_POSTS: queryNum)
                         }
@@ -97,7 +103,7 @@ struct ForumView: View {
                             
                             Image(systemName: "plus")
                                 .fontWeight(.semibold)
-                                .foregroundStyle(Color.nightfallHarmonyNavyBlue)
+                                .foregroundStyle(Color.nightfallHarmonyRoyalPurple)
                                 .frame(width: 55, height: 55)
                                 .background(.white.shadow(.drop(color: .black.opacity(0.25), radius: 5, x: 10, y: 10)), in: .circle)
                         }.isDetailLink(false)
@@ -107,7 +113,7 @@ struct ForumView: View {
                         // TODO: Link to direct messages
                         //NavigationLink(destination: ForumPostView().navigationBarBackButtonHidden(true)) {
                         
-                        Image(systemName: "text.bubble")
+                        Image(systemName: "text.bubble.fill")
                             .resizable()
                             .frame(width: 30, height: 30)
                             .foregroundColor(.white)
@@ -126,7 +132,7 @@ struct ForumView: View {
             .onAppear() {
                 UIRefreshControl.appearance().tintColor = .white
                 Task {
-                    await queryPosts(NUM_POSTS: queryNum)
+                    //await queryPosts(NUM_POSTS: queryNum)
                 }
             }
         }
@@ -145,7 +151,7 @@ struct ForumView: View {
         
         initialQuery.addSnapshotListener { (snapshot, error) in
             guard let snapshot = snapshot else {
-                print("Error retreving cities: \(error.debugDescription)")
+                print("Error retreving posts: \(error.debugDescription)")
                 return
             }
 
@@ -174,7 +180,6 @@ struct ForumView: View {
                 if (diff.type == .modified) {
                     print("MODIFIED")
                     do {
-                        let modifiedPost = try diff.document.data(as: Post.self)
                         if let index = forumPosts.firstIndex(where: {$0.postID == diff.document.documentID}) {
                             forumPosts[index] = try diff.document.data(as: Post.self)
                         }
@@ -216,110 +221,94 @@ struct PostListingView: View {
     
     let post: Post
     
-    @State private var hearted: Bool = false
     @State private var postImage: UIImage?
-    
     @State private var isClicked: Bool = false
 
     var body: some View {
         Button (action: {isClicked = true}) {
-            ZStack {
-                Rectangle()
-                    .fill(Color.white)
-                    .ignoresSafeArea()
-                    .padding(.horizontal, 10).padding(.vertical, 2)
-                HStack(alignment: .top) {
-                    // TODO: Include User profile photos
-                    Image(systemName: "person.fill")
+            VStack(alignment: .leading) {
+                HStack {
+                    Image(systemName: "person.crop.circle.fill")
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        .frame(width: 20, height: 20)
+                        .frame(width: 35, height: 35)
                         .foregroundColor(Color.white)
-                        .background(
-                            Circle()
-                                .fill(Color.nightfallHarmonyRoyalPurple.opacity(1))
-                                .ignoresSafeArea()
-                                .frame(width: 40, height: 40)
-                                .cornerRadius(10)
-                        )
-                        .padding(.top, 10).padding(.horizontal, 5)
+                        .foregroundColor(.clear)
+                    
+                    VStack(alignment: .leading){
+                        Text("@username")
+                            .font(.system(size: 13))
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color.white)
+                            .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                        Text("\(post.getRelativeTime())")
+                            .font(.system(size: 13))
+                            .fontWeight(.semibold)
+                            .foregroundColor(.dreamyTwilightSlateGray)
+                            .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                    }
+                }
+                .padding(.vertical, 10)
+            
+            // Post preview content
+                Text(post.title)
+                    .font(.custom("NovaSquareSlim-Bold", size: 20))
+                    .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                    .foregroundColor(Color.white)
+                    .padding(.bottom, 2)
+                // Limit word count of preview to: 50 characters
+                if post.content.count <= 55 {
+                    Text(post.content)
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                        .padding(.bottom, 8)
+                } else {
+                    Text(post.content.prefix(55) + "...")
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                        .padding(.bottom, 8)
+                }
+                
+                if let imageURL = post.imageURL {
+                    let _ = self.loadImage(imageURL: imageURL)
+                    
+                    if let postImage = postImage {
+                        Image(uiImage: postImage)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 345, height: 250)
+                            .cornerRadius(10)
+                            .padding(.horizontal, 0).padding(.bottom, 8)
+                            .clipped()
+                    }
+                }
+                
+                // Upvote & Downvote, Replies, Edit
+                HStack {
+                    HStack {
+                        Image(systemName: "arrow.up.circle.fill")
+                            .fontWeight(.bold)
+                        Text("4.6k")
+                            .font(.system(size: 15))
+                        Image(systemName: "arrow.down.circle.fill")
+                            .fontWeight(.bold)
+                    }
+                    .padding(.trailing, 10)
+                    
+                    Image(systemName: "arrowshape.turn.up.right.fill")
+                    Text("2.3k")
+                        .font(.system(size: 15))
                     
                     Spacer()
                     
-                    // Post preview content
-                    VStack(alignment: .leading) {
-                        
-                        HStack {
-                            Text(post.title)
-                                .font(.custom("NovaSquareSlim-Bold", size: 20))
-                                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-                                .foregroundColor(Color.black)
-                                .frame(width: 250, alignment: .leading)
-                            Button(action:{hearted.toggle()}){
-                                Image(systemName: hearted ? "heart.fill" : "heart")
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 20, height: 20)
-                                    .foregroundColor(hearted ? Color.red : Color.nightfallHarmonyRoyalPurple)
-                            }
-                        }
-                        
-                        HStack(){
-                            Text("@username")
-                                .font(.system(size: 13))
-                                .fontWeight(.semibold)
-                                .foregroundColor(Color.nightfallHarmonyRoyalPurple)
-                                .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
-                            Image(systemName: "circle.fill")
-                                .resizable()
-                                .frame(width: 5, height: 5)
-                                .foregroundColor(Color.nightfallHarmonyRoyalPurple)
-                            Text("\(post.getRelativeTime())")
-                                .font(.system(size: 13))
-                                .fontWeight(.semibold)
-                                .foregroundColor(Color.nightfallHarmonyRoyalPurple)
-                                .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
-                        }
-                        
-                        // Limit word count of preview to: 50 characters
-                        if post.content.count <= 55 {
-                            Text(post.content)
-                                .foregroundColor(.black)
-                                .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
-                        } else {
-                            Text(post.content.prefix(55) + "...")
-                                .foregroundColor(.black)
-                                .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
-                        }
-                        
-                        if let imageURL = post.imageURL {
-                            let _ = self.loadImage(imageURL: imageURL)
-                            
-                            if let postImage = postImage {
-                                Image(uiImage: postImage)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: .infinity)
-                                    .cornerRadius(10)
-                            }
-                        }
-                        
-                    }
-                    .padding(.trailing)
-                    .frame(width: 290)
-                    .fixedSize(horizontal: false, vertical: true)
-                    
-                    //Spacer()
-                    
+                    // TODO: Implement dropdown menu for options
+                    Image(systemName: "ellipsis")
                 }
-                .padding()
-                .padding(.horizontal, 10)
-                
-                //Spacer()
+                .padding(.bottom, 8)
             }
-            .background(Color.clear)
         }
         .buttonStyle(NoStyle())
+        .listRowSeparator(.hidden)
         // TODO: Link to Post page
         //NavigationLink(destination: ForumPostView().navigationBarBackButtonHidden(true))
     }

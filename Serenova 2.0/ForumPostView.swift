@@ -233,12 +233,12 @@ struct ForumPostView: View {
                     }
                     newPost.imageURL = postImageURL
                             
-                    // Try to create new post
-                    //try await newPost.createPost()
+                    // Save post to Firebase (media)
+                    try await newPost.createPost()
                     isPosted = true
                 } else {
-                    // Try to create new post (no postMedia case)
-                    //try await newPost.createPost()
+                    // Save post to Firebase (no media)
+                    try await newPost.createPost()
                     isPosted = true
                 }
                 
