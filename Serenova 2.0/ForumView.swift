@@ -142,6 +142,7 @@ struct ForumView: View {
             .onAppear() {
                 UIRefreshControl.appearance().tintColor = .white
                 Task {
+                    forumPosts = []
                     await queryPosts(NUM_POSTS: queryNum)
                 }
             }
