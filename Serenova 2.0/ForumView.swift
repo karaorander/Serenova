@@ -13,19 +13,22 @@ import FirebaseStorage
 
 struct ForumView: View {
     
-    @State private var forumPosts: [Post] = []
-    @State private var queryNum: Int = 5
+    @State private var forumPosts: [Post] = [/*Post(title: "SLEEP", content: "Zzzzz"),
+                                             Post(title: "SERENOVA", content: "CONTENT"),
+                                             Post(title: "TITLE", content: "CONTENT"),
+                                             Post(title: "TITLE", content: "CONTENT"),
+                                             Post(title: "TITLE", content: "CONTENT")*/]
+    @State private var queryNum: Int = 25
     @State private var lastPost: DocumentSnapshot?
     
     var body: some View {
         NavigationView {
             ZStack {
+                
                 LinearGradient(gradient: Gradient(colors: [
-                    .nightfallHarmonyNavyBlue.opacity(0.8),
-                    .dreamyTwilightMidnightBlue.opacity(0.8),
-                    .nightfallHarmonyRoyalPurple.opacity(0.8)
-                ]),
-                startPoint: .top, endPoint: .bottom)
+                    .nightfallHarmonyRoyalPurple,
+                    Color(red: 50 / 255, green: 40 / 255, blue: 100 / 255)
+                ]), startPoint: .topLeading, endPoint: .bottomLeading)
                 .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
@@ -48,19 +51,21 @@ struct ForumView: View {
                         
                         Spacer()
                         
-                        Image(systemName: "magnifyingglass")
-                            .resizable()
-                            .fontWeight(.semibold)
-                            .frame(width: 25, height: 25)
-                            .foregroundColor(.white)
+                        NavigationLink(destination: SearchForumView().navigationBarBackButtonHidden(true)) {
+                            Image(systemName: "magnifyingglass")
+                                .resizable()
+                                .fontWeight(.semibold)
+                                .frame(width: 25, height: 25)
+                                .foregroundColor(.white)
+                        }
                         
                     }
                     .padding()
                     .padding(.horizontal, 15)
                     .background{
                         Rectangle()
-                        .fill(.white.opacity(0.1))
-                        .ignoresSafeArea()
+                            .fill(Color.clear)
+                            .ignoresSafeArea()
                     
                     }
                         
@@ -77,7 +82,7 @@ struct ForumView: View {
                                             }
                                         }
                                     }
-                                    .padding(5) //MAYBE REMOVE LATER
+                                    .padding(5)
                             }
                             .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
                             .listRowBackground(Color(red: 33/255, green: 33/255, blue: 55/255))
@@ -94,7 +99,6 @@ struct ForumView: View {
                             }
                         }
                     }
-
 
                     HStack(content: {
                         
@@ -113,9 +117,9 @@ struct ForumView: View {
                             
                             Image(systemName: "plus")
                                 .fontWeight(.semibold)
-                                .foregroundStyle(Color.nightfallHarmonyRoyalPurple)
-                                .frame(width: 55, height: 55)
-                                .background(.white.shadow(.drop(color: .black.opacity(0.25), radius: 5, x: 10, y: 10)), in: .circle)
+                                .foregroundStyle(Color(red: 50 / 255, green: 40 / 255, blue: 100 / 255))
+                                .frame(width: 50, height: 50)
+                                .background(.white, in: .circle)
                         }.isDetailLink(false)
                         
                         Spacer()
@@ -134,7 +138,7 @@ struct ForumView: View {
                     .hSpacing(.center)
                     .background{
                         Rectangle()
-                            .fill(.white.opacity(0.1))
+                            .fill(Color.clear)
                             .ignoresSafeArea()
                     }
                 }
@@ -142,8 +146,9 @@ struct ForumView: View {
             .onAppear() {
                 UIRefreshControl.appearance().tintColor = .white
                 Task {
-                    forumPosts = []
-                    await queryPosts(NUM_POSTS: queryNum)
+                    if forumPosts.count == 0 {
+                        await queryPosts(NUM_POSTS: queryNum)
+                    }
                 }
             }
         }
@@ -237,12 +242,14 @@ struct PostListingView: View {
                 }
                 .padding(.vertical, 10)
             
-            // Post preview content
+                // Post preview content
                 Text(post.title)
                     .font(.custom("NovaSquareSlim-Bold", size: 20))
                     .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-                    .foregroundColor(Color.white)
+                    .foregroundColor(Color.nightfallHarmonyRoyalPurple)
                     .padding(.bottom, 2)
+                    .brightness(0.3)
+                    .saturation(1.5)
                 // Limit word count of preview to: 50 characters
                 if post.content.count <= 55 {
                     Text(post.content)

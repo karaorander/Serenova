@@ -10,6 +10,7 @@ import FirebaseCore
 import FirebaseDatabase
 import HealthKit
 import HealthKitUI
+import FirebaseAppCheck
 
 
 //private let logger = Logger(subsystem: "Serenova",category: "iOS App")
@@ -19,6 +20,11 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     var sleepManager: SleepManager!
    func application(_ application: UIApplication,
                    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+    // App Check Simulator Error:
+    let providerFactory = AppCheckDebugProviderFactory()
+    AppCheck.setAppCheckProviderFactory(providerFactory)
+
+       
     FirebaseApp.configure()
     sleepManager = SleepManager()
       
