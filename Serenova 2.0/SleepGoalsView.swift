@@ -298,9 +298,10 @@ struct EditGoalsView: View {
     }
     
     func saveGoals() {
-
+        //print("reaching")
         if let currUser = currUser {
             currUser.totalSleepGoalHours = Float(total_hrs);
+            //print("total_hrs:", total_hrs)
             currUser.totalSleepGoalMins = Float(total_min);
             currUser.deepSleepGoalHours = Float(deep_hrs);
             currUser.deepSleepGoalMins = Float(deep_min);
@@ -310,9 +311,6 @@ struct EditGoalsView: View {
             currUser.updateValues(newValues: ["deepSleepGoalHrs" : currUser.deepSleepGoalHours])
             currUser.updateValues(newValues: ["deepSleepGoalMins" : currUser.deepSleepGoalMins])
         }
-        //var ref = Database.database().reference()
-        // could store as object to hold more info
-        //ref.child("SleepGoals").child("TotalSleep").setValue(goal)
     }
 }
     
@@ -350,12 +348,27 @@ struct EditGoalsView: View {
         var goal: CGFloat
         var color : Color
     }
-    
+
+    func getTotalGoal() -> Float{
+        if let currUser = currUser {
+            return (currUser.totalSleepGoalHours * 60) + currUser.totalSleepGoalMins
+        }
+        return 0
+    }
+
+    func getDeepGoal() -> Float{
+        if let currUser = currUser {
+            return (currUser.deepSleepGoalHours * 60) + currUser.deepSleepGoalMins
+        }
+        return 0
+    }
+
+
     //goals sample data
     //TODO: get sleep data
     var goal_stats = [
-        GoalStats(id: 0, title: "Deep Sleep", currentData: 300, goal: 2100, color: .dreamyTwilightLavenderPurple),
-        GoalStats(id: 1, title: "Total Sleep", currentData: 500, goal: 4000, color: .soothingNightAccentBlue)
+        GoalStats(id: 0, title: "Deep Sleep", currentData: 300, goal: CGFloat(getTotalGoal()), color: .dreamyTwilightLavenderPurple),
+        GoalStats(id: 1, title: "Total Sleep", currentData: 500, goal: CGFloat(getDeepGoal()), color: .soothingNightAccentBlue)
     ]
     
     
