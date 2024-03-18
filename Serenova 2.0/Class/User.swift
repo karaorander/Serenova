@@ -34,6 +34,10 @@ class User: Codable {
     public var typicalWakeUpTime: String = ""
     public var typicalBedTime: String = ""
     public var isEarlyBird: Bool = true
+    public var totalSleepGoalHours: Float = -1
+    public var totalSleepGoalMins: Float = -1
+    public var deepSleepGoalHours: Float = -1
+    public var deepSleepGoalMins: Float = -1
     
     /* Gender */
     enum Gender: String, Codable {

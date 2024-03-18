@@ -232,7 +232,6 @@ struct EditGoalsView: View {
     @State var deep_min: Int = 0
     
     
-    
     var body: some View {
         
         
@@ -281,68 +280,86 @@ struct EditGoalsView: View {
                         .shadow(color: .white.opacity(0.1), radius: 10)
                     NavigationLink (destination: SleepGoalsView().navigationBarBackButtonHidden(true)) {
                         HStack {
-                            Text("Save Goals").font(.system(size: 18)).fontWeight(.medium).foregroundColor(.white).cornerRadius(10)
-                            // saveGoals(goal)
-                        }.frame(width: 320, height: 50).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(10)
+                            Button(action:{
+                                saveGoals()
+                            }){
+                                Text("Save Goals").font(.system(size: 18)).fontWeight(.medium).foregroundColor(.white).cornerRadius(10)
+                                
+                            }.frame(width: 320, height: 50).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(10)
+                        }
+                        
                     }
                     
-                    
                 }
-                
             }
+            
+        }
+        
+    }
+    
+    func saveGoals() {
+
+        if let currUser = currUser {
+            currUser.totalSleepGoalHours = Float(total_hrs);
+            currUser.totalSleepGoalMins = Float(total_min);
+            currUser.deepSleepGoalHours = Float(deep_hrs);
+            currUser.deepSleepGoalMins = Float(deep_min);
+
+            currUser.updateValues(newValues: ["totalSleepGoalHrs" : currUser.totalSleepGoalHours])
+            currUser.updateValues(newValues: ["totalSleepGoalMins" : currUser.totalSleepGoalMins])
+            currUser.updateValues(newValues: ["deepSleepGoalHrs" : currUser.deepSleepGoalHours])
+            currUser.updateValues(newValues: ["deepSleepGoalMins" : currUser.deepSleepGoalMins])
+        }
+        //var ref = Database.database().reference()
+        // could store as object to hold more info
+        //ref.child("SleepGoals").child("TotalSleep").setValue(goal)
+    }
+}
+    
+    
+    //circle shape
+    struct RoundedShape: Shape {
+        func path(in rect: CGRect) -> Path {
+            let path = UIBezierPath(roundedRect: rect, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 5, height: 5))
+            return Path(path.cgPath)
         }
     }
-}
-
-
-//circle shape
-struct RoundedShape: Shape {
-    func path(in rect: CGRect) -> Path {
-        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 5, height: 5))
-        return Path(path.cgPath)
+    //daily Sample data
+    //TODO: get sleep data
+    struct Daily: Hashable {
+        var id : Int
+        var day : String
+        var sleepMinutes : CGFloat
+        var deepSleepMinutes : CGFloat
+        var remMinutes : CGFloat
     }
-}
-//daily Sample data
-//TODO: get sleep data
-struct Daily: Hashable {
-    var id : Int
-    var day : String
-    var sleepMinutes : CGFloat
-    var deepSleepMinutes : CGFloat
-    var remMinutes : CGFloat
-}
-var sleep_data = [
-    Daily(id: 0, day: "Day 1", sleepMinutes: 600, deepSleepMinutes: 300, remMinutes: 300),
-    Daily(id: 1, day: "Day 2", sleepMinutes: 400, deepSleepMinutes: 150, remMinutes: 250),
-    Daily(id: 2, day: "Day 3", sleepMinutes: 500, deepSleepMinutes: 300, remMinutes: 200),
-    Daily(id: 3, day: "Day 4", sleepMinutes: 300, deepSleepMinutes: 220, remMinutes: 80),
-    Daily(id: 4, day: "Day 5", sleepMinutes: 450, deepSleepMinutes: 300, remMinutes: 150),
-    Daily(id: 5, day: "Day 6", sleepMinutes: 600, deepSleepMinutes: 400, remMinutes: 200),
-    Daily(id: 6, day: "Day 7", sleepMinutes: 320, deepSleepMinutes: 300, remMinutes: 20)
-]
+    var sleep_data = [
+        Daily(id: 0, day: "Day 1", sleepMinutes: 600, deepSleepMinutes: 300, remMinutes: 300),
+        Daily(id: 1, day: "Day 2", sleepMinutes: 400, deepSleepMinutes: 150, remMinutes: 250),
+        Daily(id: 2, day: "Day 3", sleepMinutes: 500, deepSleepMinutes: 300, remMinutes: 200),
+        Daily(id: 3, day: "Day 4", sleepMinutes: 300, deepSleepMinutes: 220, remMinutes: 80),
+        Daily(id: 4, day: "Day 5", sleepMinutes: 450, deepSleepMinutes: 300, remMinutes: 150),
+        Daily(id: 5, day: "Day 6", sleepMinutes: 600, deepSleepMinutes: 400, remMinutes: 200),
+        Daily(id: 6, day: "Day 7", sleepMinutes: 320, deepSleepMinutes: 300, remMinutes: 20)
+    ]
+    
+    struct GoalStats: Identifiable {
+        var id: Int
+        var title: String
+        var currentData : CGFloat
+        var goal: CGFloat
+        var color : Color
+    }
+    
+    //goals sample data
+    //TODO: get sleep data
+    var goal_stats = [
+        GoalStats(id: 0, title: "Deep Sleep", currentData: 300, goal: 2100, color: .dreamyTwilightLavenderPurple),
+        GoalStats(id: 1, title: "Total Sleep", currentData: 500, goal: 4000, color: .soothingNightAccentBlue)
+    ]
+    
+    
 
-struct GoalStats: Identifiable {
-    var id: Int
-    var title: String
-    var currentData : CGFloat
-    var goal: CGFloat
-    var color : Color
-}
- 
-//goals sample data
-//TODO: get sleep data
-var goal_stats = [
-    GoalStats(id: 0, title: "Deep Sleep", currentData: 300, goal: 2100, color: .dreamyTwilightLavenderPurple),
-    GoalStats(id: 1, title: "Total Sleep", currentData: 500, goal: 4000, color: .soothingNightAccentBlue)
-]
-
-
-//func saveGoals(goal: int) {
-//    var ref = Database.database().reference()
-//    // could store as object to hold more info
-//     ref.child("SleepGoals").setValue(goal)
-//}
-//
 //// TODO: read from API to get other value for comparison
 //func readValueGoal() {
 //    var ref = Database.database().reference()
