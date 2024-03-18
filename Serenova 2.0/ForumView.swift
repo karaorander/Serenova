@@ -13,11 +13,11 @@ import FirebaseStorage
 
 struct ForumView: View {
     
-    @State private var forumPosts: [Post] = [/*Post(title: "SLEEP", content: "Zzzzz"),
+    @State private var forumPosts: [Post] = [Post(title: "SLEEP", content: "Zzzzz"),
                                              Post(title: "SERENOVA", content: "CONTENT"),
                                              Post(title: "TITLE", content: "CONTENT"),
                                              Post(title: "TITLE", content: "CONTENT"),
-                                             Post(title: "TITLE", content: "CONTENT")*/]
+                                             Post(title: "TITLE", content: "CONTENT")]
     @State private var queryNum: Int = 25
     @State private var lastPost: DocumentSnapshot?
     
@@ -26,10 +26,11 @@ struct ForumView: View {
             ZStack {
                 
                 LinearGradient(gradient: Gradient(colors: [
-                    .nightfallHarmonyRoyalPurple,
-                    Color(red: 50 / 255, green: 40 / 255, blue: 100 / 255)
-                ]), startPoint: .topLeading, endPoint: .bottomLeading)
-                .ignoresSafeArea()
+                    .nightfallHarmonyRoyalPurple.opacity(0.7),
+                    .dreamyTwilightMidnightBlue.opacity(0.7),
+                    .dreamyTwilightOrchid]),
+                     startPoint: .topLeading, endPoint: .bottomLeading)
+                    .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
                     HStack {
@@ -62,12 +63,6 @@ struct ForumView: View {
                     }
                     .padding()
                     .padding(.horizontal, 15)
-                    .background{
-                        Rectangle()
-                            .fill(Color.clear)
-                            .ignoresSafeArea()
-                    
-                    }
                         
                     if forumPosts.count == 0 {
                         NoPostsView()
@@ -85,7 +80,10 @@ struct ForumView: View {
                                     .padding(5)
                             }
                             .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
-                            .listRowBackground(Color(red: 33/255, green: 33/255, blue: 55/255))
+                            .listRowBackground(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(Color.soothingNightDeepIndigo)
+                            )
                         }
                         .padding(8)
                         .listRowSpacing(5)
@@ -101,23 +99,19 @@ struct ForumView: View {
                     }
 
                     HStack(content: {
-                        
-                        //NavigationLink(destination: ForumPostView().navigationBarBackButtonHidden(true)) {
-                        
-                        Image(systemName: "bell.fill")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                            .foregroundColor(.white)
-                        
-                        //}
+                        //NavigationLink(destination: NotificationsView().navigationBarBackButtonHidden(true)) {
+                            Image(systemName: "bell.fill")
+                                .resizable()
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(.white)
+                        //}.isDetailLink(false)
                         
                         Spacer()
                         
                         NavigationLink(destination: ForumPostView().navigationBarBackButtonHidden(true)) {
-                            
                             Image(systemName: "plus")
                                 .fontWeight(.semibold)
-                                .foregroundStyle(Color(red: 50 / 255, green: 40 / 255, blue: 100 / 255))
+                                .foregroundStyle(Color.dreamyTwilightOrchid)
                                 .frame(width: 50, height: 50)
                                 .background(.white, in: .circle)
                         }.isDetailLink(false)
@@ -126,28 +120,22 @@ struct ForumView: View {
                         
                         // TODO: Link to direct messages
                         //NavigationLink(destination: ForumPostView().navigationBarBackButtonHidden(true)) {
-                        
                         Image(systemName: "text.bubble.fill")
                             .resizable()
                             .frame(width: 30, height: 30)
                             .foregroundColor(.white)
-                        //}
+                        //}.isDetailLink(false
                     })
                     .padding()
                     .padding(.horizontal, 15)
                     .hSpacing(.center)
-                    .background{
-                        Rectangle()
-                            .fill(Color.clear)
-                            .ignoresSafeArea()
-                    }
                 }
             }
             .onAppear() {
                 UIRefreshControl.appearance().tintColor = .white
                 Task {
                     if forumPosts.count == 0 {
-                        await queryPosts(NUM_POSTS: queryNum)
+                        //await queryPosts(NUM_POSTS: queryNum)
                     }
                 }
             }
