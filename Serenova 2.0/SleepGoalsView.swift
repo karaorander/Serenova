@@ -298,18 +298,21 @@ struct EditGoalsView: View {
     }
     
     func saveGoals() {
-        //print("reaching")
         if let currUser = currUser {
-            currUser.totalSleepGoalHours = Float(total_hrs);
-            //print("total_hrs:", total_hrs)
-            currUser.totalSleepGoalMins = Float(total_min);
-            currUser.deepSleepGoalHours = Float(deep_hrs);
-            currUser.deepSleepGoalMins = Float(deep_min);
+            print("inside if")
+            currUser.totalSleepGoalHours = Float(total_hrs)
+            print("total_hrs:", currUser.gender)
+            currUser.totalSleepGoalMins = Float(total_min)
+            currUser.deepSleepGoalHours = Float(deep_hrs)
+            currUser.deepSleepGoalMins = Float(deep_min)
 
-            currUser.updateValues(newValues: ["totalSleepGoalHrs" : currUser.totalSleepGoalHours])
-            currUser.updateValues(newValues: ["totalSleepGoalMins" : currUser.totalSleepGoalMins])
-            currUser.updateValues(newValues: ["deepSleepGoalHrs" : currUser.deepSleepGoalHours])
-            currUser.updateValues(newValues: ["deepSleepGoalMins" : currUser.deepSleepGoalMins])
+            currUser.updateValues(newValues: ["totalSleepGoalHrs" : currUser.totalSleepGoalHours,
+                                              "totalSleepGoalMins" : currUser.totalSleepGoalMins,
+                                              "deepSleepGoalHrs" : currUser.deepSleepGoalHours,
+                                              "deepSleepGoalMins" : currUser.deepSleepGoalMins])
+            print("reaching")
+        } else {
+            print("error")
         }
     }
 }
@@ -350,17 +353,17 @@ struct EditGoalsView: View {
     }
 
     func getTotalGoal() -> Float{
-        if let currUser = currUser {
-            return (currUser.totalSleepGoalHours * 60) + currUser.totalSleepGoalMins
-        }
-        return 0
+        //if let currUser = currUser {
+            let viewModel = AccountInfoViewModel()
+            return (viewModel.totalSleepGoalHours * 60) + viewModel.totalSleepGoalMins
+        //}f
     }
 
     func getDeepGoal() -> Float{
-        if let currUser = currUser {
-            return (currUser.deepSleepGoalHours * 60) + currUser.deepSleepGoalMins
-        }
-        return 0
+        let viewModel = AccountInfoViewModel()
+        //if let currUser = currUser {
+            return (viewModel.deepSleepGoalHours * 60) + viewModel.deepSleepGoalMins
+        //}
     }
 
 

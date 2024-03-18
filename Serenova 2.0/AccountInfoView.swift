@@ -30,6 +30,11 @@ class AccountInfoViewModel: ObservableObject {
     @Published var hasmedication : Bool = true
     @Published var hasnightmares : Bool = true
     @Published var isearlybird : Bool = true
+    @Published var totalSleepGoalHours : Float = -1
+    @Published var totalSleepGoalMins : Float = -1
+    @Published var deepSleepGoalHours : Float = -1
+    @Published var deepSleepGoalMins : Float = -1
+
     
     func fetchUsername() {
         let db = Database.database().reference()
@@ -100,6 +105,22 @@ class AccountInfoViewModel: ObservableObject {
             
             if let earlybird = userData["isEarlyBird"] as? Bool {
                 self.isearlybird = earlybird
+            }
+            
+            if let totalSleepGoalHours = userData["totalSleepGoalHours"] as? Float {
+                self.totalSleepGoalHours = totalSleepGoalHours
+            }
+            
+            if let totalSleepGoalMins = userData["totalSleepGoalMins"] as? Float {
+                self.totalSleepGoalMins = totalSleepGoalMins
+            }
+            
+            if let deepSleepGoalHours = userData["deepSleepGoalHours"] as? Float {
+                self.deepSleepGoalHours = deepSleepGoalHours
+            }
+            
+            if let deepSleepGoalMins = userData["deepSleepGoalMins"] as? Float {
+                self.deepSleepGoalMins = deepSleepGoalMins
             }
             
         }
