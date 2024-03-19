@@ -106,23 +106,23 @@ class AccountInfoViewModel: ObservableObject {
             if let earlybird = userData["isEarlyBird"] as? Bool {
                 self.isearlybird = earlybird
             }
-            
-            if let totalSleepGoalHours = userData["totalSleepGoalHours"] as? Float {
-                self.totalSleepGoalHours = totalSleepGoalHours
+                        
+            if let totalHours = userData["totalSleepGoalHours"] as? Float {
+                self.totalSleepGoalHours = totalHours
             }
             
-            if let totalSleepGoalMins = userData["totalSleepGoalMins"] as? Float {
-                self.totalSleepGoalMins = totalSleepGoalMins
+            if let totalMins = userData["totalSleepGoalMins"] as? Float {
+                self.totalSleepGoalMins = totalMins
             }
             
-            if let deepSleepGoalHours = userData["deepSleepGoalHours"] as? Float {
-                self.deepSleepGoalHours = deepSleepGoalHours
+            if let deepHours = userData["deepSleepGoalHours"] as? Float {
+                self.deepSleepGoalHours = deepHours
             }
             
-            if let deepSleepGoalMins = userData["deepSleepGoalMins"] as? Float {
-                self.deepSleepGoalMins = deepSleepGoalMins
+            if let deepMins = userData["deepSleepGoalMins"] as? Float {
+                self.deepSleepGoalMins = deepMins
             }
-            
+                        
         }
     }
     
