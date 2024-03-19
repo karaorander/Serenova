@@ -148,7 +148,7 @@ struct SleepLogView: View {
                 }
                 // querey data
                 .onAppear() {
-                    sleepManager.querySleepData(completion: { totalSleepTime in
+                    sleepManager.querySleepData(completion: { totalSleepTime, deepSleepTime, coreSleepTime, remSleepTime in
                                         // Update UI with sleep data
                                         // For example:
                         currentHrs = Int(totalSleepTime ?? 0) / 3600
@@ -252,7 +252,7 @@ struct SleepLogView: View {
                     currentHrs = 0
                     currentMin = 0
                     // query sleep data
-                    sleepManager.querySleepData(completion: { totalSleepTime in
+                    sleepManager.querySleepData(completion: { totalSleepTime, deepSleepTime, coreSleepTime, remSleepTime in
                         DispatchQueue.main.async {
                             currentHrs = Int(totalSleepTime ?? 0) / 3600
                             currentMin = (Int(totalSleepTime ?? 0) % 3600) / 60

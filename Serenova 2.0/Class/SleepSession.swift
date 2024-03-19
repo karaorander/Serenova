@@ -12,6 +12,12 @@ class SleepSession {
     var exists:Bool = false
     var durationHours:Int = 0
     var durationMinutes:Int = 0
+    var deepHours: Int = 0
+    var deepMinutes: Int = 0
+    var coreHours: Int = 0
+    var coreMinutes: Int = 0
+    var remHours: Int = 0
+    var remMinutes: Int = 0
     var date:Date?
     
     init(){}
