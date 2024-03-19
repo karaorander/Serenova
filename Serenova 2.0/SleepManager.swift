@@ -66,9 +66,12 @@ class SleepManager {
     
     
     
-    
-    func querySleepData(completion: @escaping (TimeInterval?)-> Void, date: Date) {
+    //ALL sleep values
+    func querySleepData(completion: @escaping (TimeInterval?, TimeInterval?, TimeInterval?, TimeInterval?)-> Void, date: Date) {
         let totalSleepDuration:TimeInterval = 0
+        var deepSleepDuration:TimeInterval = 0
+        var coreSleepDuration:TimeInterval = 0
+        var remSleepDuration:TimeInterval = 0
         let calendar = Calendar.current
         let startDate = calendar.startOfDay(for: date)
         let endDate = calendar.date(byAdding: .day, value: 1, to: startDate)
@@ -97,7 +100,7 @@ class SleepManager {
             
             for result in results {
                 if let type = HKCategoryValueSleepAnalysis(rawValue: result.value) {
-                    if HKCategoryValueSleepAnalysis.allAsleepValues.contains(type) {
+                 //   if HKCategoryValueSleepAnalysis.allAsleepValues.contains(type) {
                         let sleepDuration = result.endDate.timeIntervalSince(result.startDate)
                         ///for testing
                         print("""
@@ -107,17 +110,47 @@ class SleepManager {
                             duration: \(sleepDuration) seconds
                             """)
                         totalSleepTime += sleepDuration
+                    switch type {
+                    case .asleepDeep:
+                            deepSleepDuration += sleepDuration
+                    case .asleepREM:
+                        remSleepDuration += sleepDuration
+                    case .asleepCore, .asleepUnspecified:
+                        coreSleepDuration += sleepDuration
+                    case .awake:
+                        // Ignore awake segments
+                        break
+                    case .inBed:
                         
+                        break
+                    @unknown default:
+                        break
                     }
+                        
+                   // }
                 }
             }
             self.sleepSession.durationHours = Int(totalSleepTime) / 3600
             self.sleepSession.durationMinutes = (Int(totalSleepTime) % 3600) / 60
-            print(self.sleepSession.durationHours)
+            self.sleepSession.deepHours = Int(deepSleepDuration) / 3600
+            self.sleepSession.deepMinutes = (Int(deepSleepDuration) % 3600) / 60
+            self.sleepSession.coreHours = Int(coreSleepDuration) / 3600
+            self.sleepSession.coreMinutes = (Int(coreSleepDuration) % 3600) / 60
+            self.sleepSession.remHours = Int(remSleepDuration) / 3600
+            self.sleepSession.remMinutes = (Int(remSleepDuration) % 3600) / 60
+            print("TOTAL %d", self.sleepSession.durationHours)
             print(self.sleepSession.durationMinutes)
-            completion(totalSleepTime)
+            print("DEEP %d", self.sleepSession.deepHours)
+            print(self.sleepSession.deepMinutes)
+            print("CORE %d", self.sleepSession.coreHours)
+            print("CORE %d", self.sleepSession.coreMinutes)
+            print("REM %d", self.sleepSession.remHours)
+            print(" %d", self.sleepSession.remMinutes)
+            completion(totalSleepTime, deepSleepDuration, coreSleepDuration, remSleepDuration)
         }
         healthStore.execute(query)
     }
     
 }
+
+
