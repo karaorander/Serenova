@@ -13,17 +13,19 @@ import FirebaseStorage
 
 struct SearchForumView: View {
     
+    // UI Vars
     @State private var searchText = ""
     @State private var showFilterOptions: Bool = false
-    @State private var filterOptions: [String] = ["None", "Most Recent", "Least Recent", "Most Popular"]
+    @State private var showTagOptions: Bool = false
+    
+    //Filtering Options
+    @State var filterOptions: [String] = ["None", "Most Recent", "Least Recent", "Most Popular"]
+    @State var tagOptions: [String] = ["None", "Questions", "Tips", "Hacks", "Support", "Goals", "Midnight Thoughts"]
     @State private var filterOption: Int = 0
+    @State private var tagOption: Int = 0
     
     // Query Vars
-    @State private var searchPosts: [Post] = [/*Post(title: "SLEEP", content: "Zzzzz"),
-                                              Post(title: "SERENOVA", content: "CONTENT"),
-                                              Post(title: "TITLE", content: "CONTENT"),
-                                              Post(title: "TITLE", content: "CONTENT"),
-                                              Post(title: "TITLE", content: "CONTENT")*/]
+    @State private var searchPosts: [Post] = []
     @State private var queryNum: Int = 25
     @State private var lastPost: DocumentSnapshot?
     @State private var hasTriedSearch: Bool = false
@@ -49,8 +51,10 @@ struct SearchForumView: View {
                             TextField("Search", text: $searchText)
                                 .foregroundColor(.black)
                                 .onSubmit {
-                                    clearSearch()
-                                    hasTriedSearch.toggle()
+                                    Task {
+                                        //await searchPosts(NUM_POSTS: queryNum)
+                                        hasTriedSearch.toggle()
+                                    }
                                 }
                                 .submitLabel(.search)
                             if !searchText.isEmpty {
@@ -63,7 +67,7 @@ struct SearchForumView: View {
                             }
                         }
                         .padding()
-                        .background(Color.white.opacity(0.5))
+                        .background(Color.soothingNightLightGray.opacity(0.8))
                         .cornerRadius(20)
                         
                         // Cancel Button
@@ -79,112 +83,107 @@ struct SearchForumView: View {
                     }
                     .padding()
                     
-                    // Sort Button
-                    HStack {
-                        Button {
-                            showFilterOptions.toggle()
-                        } label: {
-                            Text("Sort")
-                                .foregroundColor(Color.white.opacity(0.7))
-                        }
-                        .padding(.vertical, 12).padding(.horizontal, 22)
-                        .background(Color.dreamyTwilightOrchid)
-                        .cornerRadius(10)
-                        .buttonStyle(NoStyle())
-                        
-                        
-                        if filterOption == 1 || filterOption == 2 || filterOption == 3 {
+                    ScrollViewReader { proxy in
+                        // Sort Button
+                        ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
-                                Text(filterOptions[filterOption])
-                                    .foregroundColor(Color.white.opacity(0.7))
+                                // Sort
                                 Button {
-                                    filterOption = 0
+                                    showFilterOptions.toggle()
                                 } label: {
-                                    Image(systemName: "xmark")
-                                        .resizable()
-                                        .frame(width: 10, height: 10)
-                                        .foregroundColor(Color.white.opacity(0.7))
+                                    Text("Sort")
+                                        .foregroundColor(Color.white.opacity(0.8))
                                 }
-                            }
-                            .padding(.vertical, 12).padding(.horizontal, 22)
-                            .background(Color.dreamyTwilightOrchid)
-                            .cornerRadius(10)
-                            .buttonStyle(NoStyle())
-                        }
-                        
-                        Spacer()
-                    
-                    }
-                    .padding(.horizontal)//.padding(.bottom)
-                    .sheet(isPresented: $showFilterOptions, content: {
-                        VStack(alignment: .leading) {
-                            HStack {
-                                Text("Sort")
-                                    .font(.system(size: 24))
-                                    .foregroundColor(.dreamyTwilightOrchid)
+                                .padding(.vertical, 12).padding(.horizontal, 22)
+                                .background(Color.dreamyTwilightOrchid)
+                                .cornerRadius(10)
+                                .buttonStyle(NoStyle())
+                                
+                                // Tags
+                                Button {
+                                    showTagOptions.toggle()
+                                } label: {
+                                    Text("Tags")
+                                        .foregroundColor(Color.white.opacity(0.8))
+                                }
+                                .padding(.vertical, 12).padding(.horizontal, 22)
+                                .background(Color.dreamyTwilightOrchid)
+                                .cornerRadius(10)
+                                .buttonStyle(NoStyle())
+                                
+                                
+                                if filterOption > 0 && filterOption <= filterOptions.endIndex {
+                                    HStack {
+                                        Text(filterOptions[filterOption])
+                                            .foregroundColor(Color.white.opacity(0.8))
+                                        Button {
+                                            filterOption = 0
+                                        } label: {
+                                            Image(systemName: "xmark")
+                                                .resizable()
+                                                .frame(width: 10, height: 10)
+                                                .foregroundColor(Color.white.opacity(0.8))
+                                        }
+                                    }
+                                    .padding(.vertical, 12).padding(.horizontal, 22)
+                                    .background(Color.dreamyTwilightOrchid)
+                                    .cornerRadius(10)
+                                    .buttonStyle(NoStyle())
+                                }
+                                
+                                if tagOption > 0 && tagOption <= tagOptions.endIndex {
+                                    HStack {
+                                        Text(tagOptions[tagOption])
+                                            .foregroundColor(Color.white.opacity(0.8))
+                                        Button {
+                                            tagOption = 0
+                                        } label: {
+                                            Image(systemName: "xmark")
+                                                .resizable()
+                                                .frame(width: 10, height: 10)
+                                                .foregroundColor(Color.white.opacity(0.8))
+                                        }
+                                    }
+                                    .padding(.vertical, 12).padding(.horizontal, 22)
+                                    .background(Color.dreamyTwilightOrchid)
+                                    .cornerRadius(10)
+                                    .buttonStyle(NoStyle())
+                                }
                                 
                                 Spacer()
+                                    .id("scrollEnd")
                             }
-                            .padding(.bottom, 12)
-                            
-                            Divider()
-                            
-                            //Most Recent
-                            Button {
-                                withAnimation {
-                                    filterOption = 1
-                                }
-                            } label: {
-                                HStack {
-                                    Image(systemName: filterOption == 1 ? "moon.fill":"moon")
-                                        .foregroundColor(.dreamyTwilightOrchid)
-                                        .transition(.scale)
-                                    Text("Most Recent")
-                                        .font(.system(size: 20))
-                                        .foregroundColor(.black)
+                            .onChange(of: tagOption) {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                    withAnimation {
+                                        proxy.scrollTo("scrollEnd", anchor: .bottom)
+                                    }
                                 }
                             }
-                            .padding(.top, 12).padding(.bottom, 10)
-                            .buttonStyle(NoStyle())
-                            // Least Recent
-                            Button {
-                                withAnimation {
-                                    filterOption = 2
-                                }
-                            } label: {
-                                HStack {
-                                    Image(systemName: filterOption == 2 ? "moon.fill":"moon")
-                                        .foregroundColor(.dreamyTwilightOrchid)
-                                        .transition(.scale)
-                                    Text("Least Recent")
-                                        .font(.system(size: 20))
-                                        .foregroundColor(.black)
-                                        .padding(.vertical, 10)
+                            .onChange(of: filterOption) {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                    withAnimation {
+                                        proxy.scrollTo("scrollEnd", anchor: .bottom)
+                                    }
                                 }
                             }
-                            .buttonStyle(NoStyle())
-                            // Most Popular
-                            Button {
-                                withAnimation {
-                                    filterOption = 3
-                                }
-                            } label: {
-                                HStack {
-                                    Image(systemName: filterOption == 3 ? "moon.fill":"moon")
-                                        .foregroundColor(.dreamyTwilightOrchid)
-                                        .transition(.scale)
-                                    Text("Most Popular")
-                                        .font(.system(size: 20))
-                                        .foregroundColor(.black)
-                                        .padding(.vertical, 10)
-                                }
-                            }
-                            .buttonStyle(NoStyle())
                         }
-                        .padding(.horizontal, 25)
-                        .presentationDetents([.fraction(0.35)])
-                    })
+                        .padding(.horizontal)
+                        .sheet(isPresented: $showFilterOptions, content: {
+                            FilterOptionsView(filterOption: $filterOption)
+                                .padding(.horizontal, 25)
+                                .presentationDetents([.fraction(0.35)])
+                        })
+                        .sheet(isPresented: $showTagOptions, content: {
+                            TagOptionsView(tagOption: $tagOption)
+                                .padding(.horizontal, 25)
+                                .presentationDetents([.fraction(0.55)])
+                        })
+                    }
                     
+                    Spacer()
+                    
+                    /*
                     if hasTriedSearch && searchPosts.count == 0{
                         // Display "No Posts Found"
                         NoMatchesFoundView()
@@ -214,7 +213,14 @@ struct SearchForumView: View {
                         .scrollIndicators(ScrollIndicatorVisibility.hidden)
                     }
                     Spacer()
+                   */
                 }
+            }
+        }
+        .onAppear() {
+            Task {
+                //searchPosts.removeAll()
+                //await getAllPosts(NUM_POSTS: queryNum)
             }
         }
     }
@@ -227,12 +233,116 @@ struct SearchForumView: View {
         searchText = ""
         searchPosts.removeAll()
         lastPost = nil
+        filterOption = 0
     }
     
     /*
-     * Function to search for posts from Firestore
-     * based on the filters provided.
+     * Function to get ALL posts from Firestore
      */
+    func getAllPosts(NUM_POSTS: Int) async {
+        // Database Reference
+        let db = Firestore.firestore()
+        
+        do {
+            // Fetch batch of posts from Firestore
+            var query: Query! = db.collection("Posts")
+
+            // Retrieve documents
+            let postBatch = try await query.getDocuments()
+            let newPosts = postBatch.documents.compactMap { post -> Post? in
+                try? post.data(as: Post.self)
+            }
+            
+            await MainActor.run(body: {
+                searchPosts += newPosts
+                lastPost = postBatch.documents.last
+            })
+            
+        } catch {
+            print (error.localizedDescription)
+        }
+        return
+    }
+}
+
+struct FilterOptionsView: View {
+    
+    @Binding var filterOption: Int
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Text("Tags")
+                    .font(.system(size: 24))
+                    .foregroundColor(.dreamyTwilightOrchid)
+                
+                Spacer()
+            }
+            
+            Divider()
+                .padding(.vertical, 12)
+            
+            // Filter Option Buttons
+            ForEach(1...SearchForumView().filterOptions.count - 1, id: \.self) { number in
+                Button {
+                    withAnimation {
+                        filterOption = number
+                    }
+                } label: {
+                    HStack {
+                        Image(systemName: filterOption == number ? "moon.fill":"moon")
+                            .foregroundColor(.dreamyTwilightOrchid)
+                            .transition(.scale)
+                        Text(SearchForumView().filterOptions[number])
+                            .font(.system(size: 20))
+                            .foregroundColor(.black)
+                            .padding(.vertical, 10)
+                    }
+                }
+                .buttonStyle(NoStyle())
+            }
+        }
+    }
+}
+
+struct TagOptionsView: View {
+    
+    @Binding var tagOption: Int
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Text("Sort")
+                    .font(.system(size: 24))
+                    .foregroundColor(.dreamyTwilightOrchid)
+                
+                Spacer()
+            }
+            
+            Divider()
+                .padding(.vertical, 12)
+            
+            // Filter Option Buttons
+            ForEach(1...SearchForumView().tagOptions.count - 1, id: \.self) { number in
+                Button {
+                    withAnimation {
+                        tagOption = number
+                    }
+                } label: {
+                    HStack {
+                        Image(systemName: tagOption == number ? "moon.fill":"moon")
+                            .foregroundColor(.dreamyTwilightOrchid)
+                            .transition(.scale)
+                        Text(SearchForumView().tagOptions[number])
+                            .font(.system(size: 20))
+                            .foregroundColor(.black)
+                            .padding(.vertical, 10)
+                    }
+                }
+                .buttonStyle(NoStyle())
+            }
+        }
+    }
 }
 
 struct NoMatchesFoundView: View {
@@ -244,9 +354,9 @@ struct NoMatchesFoundView: View {
                 .frame(width: 60, height: 60)
                 .foregroundColor(.white)
                 .padding()
-            Text("No Matches Found")
+            Text("No Matches")
                 .foregroundColor(.white)
-                .font(.system(size: 25))
+                .font(.system(size: 30))
                 .fontWeight(.semibold)
                 .multilineTextAlignment(.center)
             Spacer()

@@ -33,12 +33,19 @@ struct ForumPostView: View {
     @State private var isCreatingPost: Bool = false
     @State private var isPosted: Bool = false
     
+    @State var tagOptions: [String] = ["None", "Questions", "Tips", "Hacks", "Support", "Goals", "Midnight Thoughts"]
+    @State private var tagOption: Int = 0
+    @State private var showTagOptions: Bool = false
+    
     @Environment(\.dismiss) private var dismiss
     var body: some View {
         NavigationView{
             ZStack {
-                
-                LinearGradient(gradient: Gradient(colors: [.nightfallHarmonySilverGray.opacity(0.9), .nightfallHarmonyRoyalPurple.opacity(0.5), .dreamyTwilightMidnightBlue.opacity(0.7), .nightfallHarmonyNavyBlue.opacity(0.8)]), startPoint: .top, endPoint: .bottom)
+                LinearGradient(gradient: Gradient(colors: [
+                    .nightfallHarmonyRoyalPurple.opacity(0.7),
+                    .dreamyTwilightMidnightBlue.opacity(0.7),
+                    .dreamyTwilightOrchid]),
+                     startPoint: .topLeading, endPoint: .bottomLeading)
                     .ignoresSafeArea()
                 VStack {
                     HStack {
@@ -47,15 +54,16 @@ struct ForumPostView: View {
                                 dismiss()
                             }
                         } label: {
-                            Text("Cancel").font(.callout).foregroundColor(Color.nightfallHarmonyNavyBlue)
-                        }.hSpacing(.leading)
+                            Text("Cancel").font(.callout).foregroundColor(Color.dreamyTwilightOrchid)
+                        }
                         NavigationLink ("", destination: ForumView().navigationBarBackButtonHidden(true), isActive: $isPosted)
+                        Spacer()
                         Button(action: {
                             createPost()
                             isCreatingPost = true
                         }) {
                             Text("Post").font(.callout)
-                                .foregroundColor(.nightfallHarmonyNavyBlue)
+                                .foregroundColor(.dreamyTwilightOrchid)
                                 .padding(.horizontal,20)
                                 .padding(.vertical, 6)
                                 .background(.white, in: Capsule())
@@ -63,27 +71,57 @@ struct ForumPostView: View {
                         .disabled(postText == "" || postTitle == "")
                         .opacity((postText == "" || postTitle == "") ? 0.4 : 1)
                     }.padding(.horizontal, 15).padding(.vertical, 10)
-                        .background{
-                            Rectangle()
-                                .fill(.white.opacity(0.1))
-                                .ignoresSafeArea()
-                        }
                     ScrollView(.vertical, showsIndicators:false) {
                         VStack(spacing: 15){
                             HStack {
-                                TextField("Title:", text: $postTitle)
+                                TextField("Title", text: $postTitle)
                                     .fontWeight(.bold)
-                                    
                                     .focused($showkeyboard)
                             }.padding()
-                                .background(.gray.opacity(0.15))
+                                .background(Color.white.opacity(0.1))
                                 .cornerRadius(10)
+                            // Tags
+                            HStack {
+                                Button {
+                                    showTagOptions.toggle()
+                                } label: {
+                                    Text("Tags")
+                                        .foregroundColor(Color.nightfallHarmonySilverGray)
+                                }
+                                .padding(.vertical, 12).padding(.horizontal, 22)
+                                .background(Color.dreamyTwilightOrchid)
+                                .cornerRadius(10)
+                                .buttonStyle(NoStyle())
+                                
+                                if tagOption > 0 && tagOption <= tagOptions.endIndex {
+                                    HStack {
+                                        Text(tagOptions[tagOption])
+                                            .foregroundColor(Color.white.opacity(0.8))
+                                        Button {
+                                            tagOption = 0
+                                        } label: {
+                                            Image(systemName: "xmark")
+                                                .resizable()
+                                                .frame(width: 10, height: 10)
+                                                .foregroundColor(Color.white.opacity(0.8))
+                                        }
+                                    }
+                                    .padding(.vertical, 12).padding(.horizontal, 22)
+                                    .background(Color.dreamyTwilightOrchid)
+                                    .cornerRadius(10)
+                                    .buttonStyle(NoStyle())
+                                }
+                                Spacer()
+                            }
                             HStack {
                                 TextField("Share sleep exeriences + tips!", text: $postText, axis: .vertical)
                                     .focused($showkeyboard)
+                                    .frame(minHeight: 150, alignment: .top)
                             }.padding()
-                                .background(.gray.opacity(0.15))
+                                .foregroundColor(.black)
+                                .background(Color.white.opacity(0.1))
                                 .cornerRadius(10)
+                        }.padding(15)
                             if let postImageData, let image = UIImage(data: postImageData) {
                                 GeometryReader{
                                     let size = $0.size
@@ -113,21 +151,20 @@ struct ForumPostView: View {
                                     showImagePicker.toggle()
                                 }label : {
                                     Image(systemName: "photo")
-                                        
                                         .foregroundColor(.soothingNightLightGray)
                                         .font(.system(size: 200))
                                         .background(.white.opacity(0.1))
                                         .cornerRadius(10)
                                         
-                                }.hSpacing(.center)
-                                    .vSpacing(.center)
-                                    
+                                }.hSpacing(.center).vSpacing(.center)
                                 
-                                    
                             }
-                        }.padding(15)
-                        
                     }
+                    .sheet(isPresented: $showTagOptions, content: {
+                        TagOptionsView(tagOption: $tagOption)
+                            .padding(.horizontal, 25)
+                            .presentationDetents([.fraction(0.55)])
+                    })
                     Divider()
                     HStack {
                         Button {
@@ -135,18 +172,12 @@ struct ForumPostView: View {
                         }label : {
                             Image(systemName: "photo.badge.plus")
                                 .font( .title3)
-                                .foregroundColor(.black)
+                                .foregroundColor(.white)
                         }.hSpacing(.leading)
                         Button("Done") {
                             showkeyboard = false
                         }.foregroundColor(.white)
-                    }.padding(.horizontal, 15)
-                        .padding(.vertical, 10)
-                        .background{
-                            Rectangle()
-                                .fill(.white.opacity(0.1))
-                                .ignoresSafeArea()
-                        }
+                    }.padding(.horizontal, 15).padding(.vertical, 10)
                 }.vSpacing(.top)
                     .photosPicker(isPresented: $showImagePicker, selection: $selectedPhoto)
                     .onChange(of: selectedPhoto) { newValue in
@@ -219,7 +250,7 @@ struct ForumPostView: View {
                                    //authorID: currUser.userID,
                                    //authorProfilePhoto: currUser.profileURL)
                 
-                let newPost = Post(title: postTitle, content: postText)
+                let newPost = Post(title: postTitle, content: postText, tag: tagOptions[tagOption])
                 
                 // Store Image & Get DownloadURL
                 if postImageData != nil {

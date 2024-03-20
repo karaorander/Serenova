@@ -13,11 +13,7 @@ import FirebaseStorage
 
 struct ForumView: View {
     
-    @State private var forumPosts: [Post] = [Post(title: "SLEEP", content: "Zzzzz"),
-                                             Post(title: "SERENOVA", content: "CONTENT"),
-                                             Post(title: "TITLE", content: "CONTENT"),
-                                             Post(title: "TITLE", content: "CONTENT"),
-                                             Post(title: "TITLE", content: "CONTENT")]
+    @State private var forumPosts: [Post] = []
     @State private var queryNum: Int = 25
     @State private var lastPost: DocumentSnapshot?
     
@@ -168,7 +164,6 @@ struct ForumView: View {
             await MainActor.run(body: {
                 forumPosts += newPosts
                 lastPost = postBatch.documents.last
-                print("FORUM POST COUNT: \(forumPosts.count)")
             })
             
         } catch {

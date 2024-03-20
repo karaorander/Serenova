@@ -16,28 +16,19 @@ class Post: Codable, Identifiable {
     public var content: String = ""
     @ServerTimestamp public var timeStamp: Timestamp?
     public var imageURL: URL?
+    public var tag: String?
     public var authorID: String = ""
     public var authorUsername: String = ""
     public var authorProfilePhoto: URL?
-    public var likeIDs: [String] = []
 
     /*
-     * Constructor for creating new post
-     * TODO: Add authorUsername
+     * Constructor for Post
+     * TODO: Fill in other details! (i.e authorID, authorUsername, authorProfilePicture)
      */
-    /*
-    init(title: String, content: String, authorID: String) {
+    init(title: String, content: String, tag: String) {
         self.title = title
         self.content = content
-        self.authorID = authorID
-    }
-    */
-    /*
-     * TEMP CONSTRUCTOR FOR PREVIEW MODE (REMOVE LATER)
-     */
-    init(title: String, content: String) {
-        self.title = title
-        self.content = content
+        self.tag = tag
     }
     
     /*

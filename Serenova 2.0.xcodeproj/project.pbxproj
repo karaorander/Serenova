@@ -66,10 +66,6 @@
 		E0D1C1682B8815DF00A7609C /* SleepLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D1C1672B8815DF00A7609C /* SleepLogView.swift */; };
 		E0D1C16A2B88244700A7609C /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D1C1692B88244700A7609C /* DateExtensions.swift */; };
 		E0EF57532B8A489D00D72221 /* ForumPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EF57522B8A489D00D72221 /* ForumPostView.swift */; };
-		E0FD0BF72B8F7FC8004A96C8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0FD0BF62B8F7FC8004A96C8 /* GoogleService-Info.plist */; };
-		E0FD0BF82B8F7FC8004A96C8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0FD0BF62B8F7FC8004A96C8 /* GoogleService-Info.plist */; };
-		E0FD0BF92B8F7FC8004A96C8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0FD0BF62B8F7FC8004A96C8 /* GoogleService-Info.plist */; };
-		E0FD0BFA2B8F7FC8004A96C8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0FD0BF62B8F7FC8004A96C8 /* GoogleService-Info.plist */; };
 		F23D7CDF2B7FAF320018F325 /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */; };
 		F2D887002B8E8E9200C0A87E /* AlarmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D886FF2B8E8E9200C0A87E /* AlarmView.swift */; };
 		F2D887022B8EA03A00C0A87E /* AlarmListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D887012B8EA03A00C0A87E /* AlarmListView.swift */; };
@@ -141,7 +137,6 @@
 		E0D1C1672B8815DF00A7609C /* SleepLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepLogView.swift; sourceTree = "<group>"; };
 		E0D1C1692B88244700A7609C /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
 		E0EF57522B8A489D00D72221 /* ForumPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForumPostView.swift; sourceTree = "<group>"; };
-		E0FD0BF62B8F7FC8004A96C8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
 		F2D886FF2B8E8E9200C0A87E /* AlarmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmView.swift; sourceTree = "<group>"; };
 		F2D887012B8EA03A00C0A87E /* AlarmListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmListView.swift; sourceTree = "<group>"; };
@@ -294,7 +289,6 @@
 				B1CB24702B87C58900AE8685 /* SocialData.swift */,
 				B1CB24722B87C5A000AE8685 /* User.swift */,
 				E0C98A2D2B9035AE00A3D369 /* SleepSession.swift */,
-				E0FD0BF62B8F7FC8004A96C8 /* GoogleService-Info.plist */,
 			);
 			path = Class;
 			sourceTree = "<group>";
@@ -464,7 +458,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				23D1E0EA2B7A8FDF00539A62 /* Preview Assets.xcassets in Resources */,
-				E0FD0BF72B8F7FC8004A96C8 /* GoogleService-Info.plist in Resources */,
 				23D1E0E72B7A8FDF00539A62 /* Assets.xcassets in Resources */,
 				B1CB24552B866E0500AE8685 /* Nova_Square in Resources */,
 			);
@@ -475,7 +468,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B1CB24562B866E0500AE8685 /* Nova_Square in Resources */,
-				E0FD0BF82B8F7FC8004A96C8 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -484,7 +476,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B1CB24572B866E0500AE8685 /* Nova_Square in Resources */,
-				E0FD0BF92B8F7FC8004A96C8 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -493,7 +484,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B1CB24582B866E0500AE8685 /* Nova_Square in Resources */,
-				E0FD0BFA2B8F7FC8004A96C8 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
