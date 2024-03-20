@@ -13,6 +13,10 @@ import FirebaseDatabaseSwift
 // Get username
 class GoalViewModel: ObservableObject {
     @Published var fullname = ""
+    @Published var totalSleepGoalHours : Float = -1
+    @Published var totalSleepGoalMins : Float = -1
+    @Published var deepSleepGoalHours : Float = -1
+    @Published var deepSleepGoalMins : Float = -1
 
     
     func fetchUsername() {
@@ -28,6 +32,22 @@ class GoalViewModel: ObservableObject {
             // Extract additional information based on your data structure
             if let fullname = userData["name"] as? String {
                 self.fullname = fullname
+            }
+            
+            if let totalSleepGoalHours = userData["totalSleepGoalHours"] as? Float {
+                self.totalSleepGoalHours = totalSleepGoalHours
+            }
+            
+            if let totalSleepGoalMins = userData["totalSleepGoalMins"] as? Float {
+                self.totalSleepGoalMins = totalSleepGoalMins
+            }
+            
+            if let deepSleepGoalHours = userData["deepSleepGoalHours"] as? Float {
+                self.deepSleepGoalHours = deepSleepGoalHours
+            }
+            
+            if let deepSleepGoalMins = userData["deepSleepGoalMins"] as? Float {
+                self.deepSleepGoalMins = deepSleepGoalMins
             }
             
         }
@@ -231,6 +251,8 @@ struct EditGoalsView: View {
     @State var deep_hrs: Int = 0
     @State var deep_min: Int = 0
     
+    @StateObject private var viewModel = AccountInfoViewModel()
+    
     
     var body: some View {
         
@@ -299,24 +321,49 @@ struct EditGoalsView: View {
     
     func saveGoals() {
         if let currUser = currUser {
-            print("inside if")
             currUser.totalSleepGoalHours = Float(total_hrs)
-            print("total_hrs:", currUser.gender)
             currUser.totalSleepGoalMins = Float(total_min)
             currUser.deepSleepGoalHours = Float(deep_hrs)
             currUser.deepSleepGoalMins = Float(deep_min)
-
-            currUser.updateValues(newValues: ["totalSleepGoalHrs" : currUser.totalSleepGoalHours,
+            currUser.updateValues(newValues: ["totalSleepGoalHours" : currUser.totalSleepGoalHours,
                                               "totalSleepGoalMins" : currUser.totalSleepGoalMins,
-                                              "deepSleepGoalHrs" : currUser.deepSleepGoalHours,
+                                              "deepSleepGoalHours" : currUser.deepSleepGoalHours,
                                               "deepSleepGoalMins" : currUser.deepSleepGoalMins])
-            print("reaching")
         } else {
             print("error")
         }
     }
-}
     
+    func getTotalGoal() -> Float{
+        if let currUser = currUser {
+            var totalGoal = (currUser.totalSleepGoalHours * 60) + currUser.totalSleepGoalMins
+            print("total Goal", totalGoal)
+            if (totalGoal < 0) {
+                return 0
+            } else {
+                return totalGoal
+            }
+        } else {
+            return 0
+        }
+    }
+
+    func getDeepGoal() -> Float{
+        if let currUser = currUser {
+            var deepGoal = (currUser.deepSleepGoalHours * 60) + currUser.deepSleepGoalMins
+            if (deepGoal < 0) {
+                return 0
+            } else {
+                return deepGoal
+            }
+        } else {
+            return 0
+        }
+    }
+
+}
+
+    private var viewModel = AccountInfoViewModel()
     
     //circle shape
     struct RoundedShape: Shape {
@@ -352,26 +399,11 @@ struct EditGoalsView: View {
         var color : Color
     }
 
-    func getTotalGoal() -> Float{
-        //if let currUser = currUser {
-            let viewModel = AccountInfoViewModel()
-            return (viewModel.totalSleepGoalHours * 60) + viewModel.totalSleepGoalMins
-        //}f
-    }
-
-    func getDeepGoal() -> Float{
-        let viewModel = AccountInfoViewModel()
-        //if let currUser = currUser {
-            return (viewModel.deepSleepGoalHours * 60) + viewModel.deepSleepGoalMins
-        //}
-    }
-
-
     //goals sample data
     //TODO: get sleep data
     var goal_stats = [
-        GoalStats(id: 0, title: "Deep Sleep", currentData: 300, goal: CGFloat(getTotalGoal()), color: .dreamyTwilightLavenderPurple),
-        GoalStats(id: 1, title: "Total Sleep", currentData: 500, goal: CGFloat(getDeepGoal()), color: .soothingNightAccentBlue)
+        GoalStats(id: 0, title: "Deep Sleep", currentData: 300, goal: 270 /*CGFloat(getTotalGoal())*/, color: .dreamyTwilightLavenderPurple),
+        GoalStats(id: 1, title: "Total Sleep", currentData: 500, goal: 400 /*CGFloat(getDeepGoal())*/, color: .soothingNightAccentBlue)
     ]
     
     
