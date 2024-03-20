@@ -39,6 +39,7 @@ class User: Codable {
     public var deepSleepGoalHours: Float = -1
     public var deepSleepGoalMins: Float = -1
     
+    
     /* Gender */
     enum Gender: String, Codable {
         case Male = "Male"
@@ -89,6 +90,18 @@ class User: Codable {
         let encodedData = try JSONSerialization.jsonObject(with: JSONEncoder().encode(self), options: []) as? [String: Any]
         // Write new User object to Database
         ref.child(self.userID).setValue(encodedData)
+    }
+    
+    func addSleepSession(sleepSessionData: [String: Any]) throws {
+        // Write new sleep session under the "sleepSessions" node for the user
+        ref.child(self.userID).child("sleepSessions").childByAutoId().setValue(sleepSessionData)
+        { error, _ in
+                    if let error = error {
+                        print("Failed to log sleep session:", error.localizedDescription)
+                    } else {
+                        print("Sleep session logged successfully")
+                    }
+                }
     }
     
     /*

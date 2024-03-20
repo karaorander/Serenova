@@ -29,7 +29,7 @@ class SleepManagerTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Query Sleep Data")
         let testDate = Date()
         
-        sleepManager.querySleepData(completion: { totalSleepDuration in
+        sleepManager.querySleepData(completion: { totalSleepDuration, deepSleepDuration, coreSleepDuration, remSleepDuration in
             XCTAssertNotNil(totalSleepDuration, "Total sleep duration should not be nil")
             
             expectation.fulfill()

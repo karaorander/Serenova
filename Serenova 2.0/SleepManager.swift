@@ -8,7 +8,26 @@
 import Foundation
 import HealthKit
 import SwiftUI
+import Firebase
 
+/* To Query sleep data:
+ * Healthkit sleep data is being queried directly from Healthkit (not storing in Firebase)
+ * Manual sessions are stored as a collection in firebase and are being queried from there
+ 
+ * calling querySleepData will query all related data (Healthkit and manual) for specific 24hr day (specified in call)
+ 
+ * example of usage :
+ sleepManager.querySleepData(completion: { totalSleepTime, deepSleepTime, coreSleepTime, remSleepTime in
+ DispatchQueue.main.async {
+     currentHrs = Int(totalSleepTime ?? 0) / 3600
+     currentMin = (Int(totalSleepTime ?? 0) % 3600) / 60
+ }
+}, date: day.date)
+ 
+ * Inside the dispatch queue is where to manipulate the queried values (totalSleepTime, deepSleepTime, coreSleepTime, remSleepTime)
+ / assign to local variables if needed
+ 
+ */
 
 
 /// Helper for reading and writing to HealthKit.
@@ -60,9 +79,9 @@ class SleepManager {
      }
      }*/
     
-    func saveSleepData() {
+    /*func saveSleepData() {
         
-    }
+    }*/
     
     
     
@@ -130,6 +149,10 @@ class SleepManager {
                    // }
                 }
             }
+            //calling query to Firebase to add manually logged sessions to total sleep time
+            var manualSleepTime: TimeInterval = self.queryManualSession(date: date)
+            totalSleepTime += manualSleepTime
+            
             self.sleepSession.durationHours = Int(totalSleepTime) / 3600
             self.sleepSession.durationMinutes = (Int(totalSleepTime) % 3600) / 60
             self.sleepSession.deepHours = Int(deepSleepDuration) / 3600
@@ -149,6 +172,48 @@ class SleepManager {
             completion(totalSleepTime, deepSleepDuration, coreSleepDuration, remSleepDuration)
         }
         healthStore.execute(query)
+    }
+    
+    /* NOTE: working but need to fix security rules in firebase
+     -- currently not retrieving any data because of rules (debugging) */
+    
+    func queryManualSession(date: Date) ->TimeInterval {
+        var totalManualSleep: TimeInterval = 0;
+        let sleepSessionsCollection = Firestore.firestore().collection("SleepSessions")
+        
+        // Specifing the date to query for date
+        let targetDate = Calendar.current.startOfDay(for: date)  // Replace this with your target date
+        
+        let targetTimestamp = Timestamp(date: targetDate)
+        
+        // Creating query to filter documents where the "date" field is equal to the target date
+        let query = sleepSessionsCollection.whereField("date", isEqualTo: targetTimestamp)
+        
+        
+        query.getDocuments { (querySnapshot, error) in
+            if let error = error {
+                print("Error getting documents: \(error)")
+            } else {
+                guard let documents = querySnapshot?.documents else {
+                    print("No documents found")
+                    return
+                }
+                
+                for document in documents {
+                    // Access the data of each document
+                    let data = document.data()
+                    
+                    //print("Document data: \(data)")
+                    if let manualInterval = data["manualInterval"] as? TimeInterval {
+                            print("Hours: \(manualInterval)")
+                            totalManualSleep = manualInterval
+                        } else {
+                            print("Timeinterval not found or not an integer")
+                        }
+                }
+            }
+        }
+        return totalManualSleep
     }
     
 }
