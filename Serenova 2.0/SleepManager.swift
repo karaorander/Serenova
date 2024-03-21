@@ -149,36 +149,38 @@ class SleepManager {
                    // }
                 }
             }
+            var totalManualSleep: TimeInterval = 0
             //calling query to Firebase to add manually logged sessions to total sleep time
-            var manualSleepTime: TimeInterval = self.queryManualSession(date: date)
-            totalSleepTime += manualSleepTime
-            
-            self.sleepSession.durationHours = Int(totalSleepTime) / 3600
-            self.sleepSession.durationMinutes = (Int(totalSleepTime) % 3600) / 60
-            self.sleepSession.deepHours = Int(deepSleepDuration) / 3600
-            self.sleepSession.deepMinutes = (Int(deepSleepDuration) % 3600) / 60
-            self.sleepSession.coreHours = Int(coreSleepDuration) / 3600
-            self.sleepSession.coreMinutes = (Int(coreSleepDuration) % 3600) / 60
-            self.sleepSession.remHours = Int(remSleepDuration) / 3600
-            self.sleepSession.remMinutes = (Int(remSleepDuration) % 3600) / 60
-            print("TOTAL %d", self.sleepSession.durationHours)
-            print(self.sleepSession.durationMinutes)
-            print("DEEP %d", self.sleepSession.deepHours)
-            print(self.sleepSession.deepMinutes)
-            print("CORE %d", self.sleepSession.coreHours)
-            print("CORE %d", self.sleepSession.coreMinutes)
-            print("REM %d", self.sleepSession.remHours)
-            print(" %d", self.sleepSession.remMinutes)
-            completion(totalSleepTime, deepSleepDuration, coreSleepDuration, remSleepDuration)
+            self.queryManualSession(date: date, completion: { totalManualSleep in
+                DispatchQueue.main.async {
+                    totalSleepTime += totalManualSleep
+                    self.sleepSession.durationHours = Int(totalSleepTime) / 3600
+                    self.sleepSession.durationMinutes = (Int(totalSleepTime) % 3600) / 60
+                    self.sleepSession.deepHours = Int(deepSleepDuration) / 3600
+                    self.sleepSession.deepMinutes = (Int(deepSleepDuration) % 3600) / 60
+                    self.sleepSession.coreHours = Int(coreSleepDuration) / 3600
+                    self.sleepSession.coreMinutes = (Int(coreSleepDuration) % 3600) / 60
+                    self.sleepSession.remHours = Int(remSleepDuration) / 3600
+                    self.sleepSession.remMinutes = (Int(remSleepDuration) % 3600) / 60
+                    print("TOTAL", self.sleepSession.durationHours)
+                    print(self.sleepSession.durationMinutes)
+                    print("DEEP %d", self.sleepSession.deepHours)
+                    print(self.sleepSession.deepMinutes)
+                    print("CORE %d", self.sleepSession.coreHours)
+                    print("CORE %d", self.sleepSession.coreMinutes)
+                    print("REM %d", self.sleepSession.remHours)
+                    print(" %d", self.sleepSession.remMinutes)
+                    completion(totalSleepTime, deepSleepDuration, coreSleepDuration, remSleepDuration)
+                }
+            })
         }
         healthStore.execute(query)
     }
     
     /* NOTE: working but need to fix security rules in firebase
-     -- currently not retrieving any data because of rules (debugging) */
-    
-    func queryManualSession(date: Date) ->TimeInterval {
-        var totalManualSleep: TimeInterval = 0;
+     UPDATE: working */
+    func queryManualSession(date: Date, completion: @escaping (TimeInterval) -> Void) {
+        var totalManualSleep: TimeInterval = 0
         let sleepSessionsCollection = Firestore.firestore().collection("SleepSessions")
         
         // Specifing the date to query for date
@@ -187,8 +189,18 @@ class SleepManager {
         let targetTimestamp = Timestamp(date: targetDate)
         
         // Creating query to filter documents where the "date" field is equal to the target date
-        let query = sleepSessionsCollection.whereField("date", isEqualTo: targetTimestamp)
+        var userId: String = ""
+        if let user = Auth.auth().currentUser {
+            // User is signed in
+            userId = user.uid
+        } else {
+            // No user is signed in
+            print("No user signed in")
+            return
+        }
         
+        let query = sleepSessionsCollection.whereField("date", isEqualTo: targetTimestamp)
+                                           .whereField("userId", isEqualTo: userId)
         
         query.getDocuments { (querySnapshot, error) in
             if let error = error {
@@ -203,17 +215,16 @@ class SleepManager {
                     // Access the data of each document
                     let data = document.data()
                     
-                    //print("Document data: \(data)")
                     if let manualInterval = data["manualInterval"] as? TimeInterval {
-                            print("Hours: \(manualInterval)")
-                            totalManualSleep = manualInterval
-                        } else {
-                            print("Timeinterval not found or not an integer")
-                        }
+                        print("Hours: \(manualInterval)")
+                        totalManualSleep += manualInterval
+                    } else {
+                        print("TimeInterval not found or not an integer")
+                    }
                 }
+                completion(totalManualSleep) // Pass the totalManualSleep to the completion handler
             }
         }
-        return totalManualSleep
     }
     
 }
