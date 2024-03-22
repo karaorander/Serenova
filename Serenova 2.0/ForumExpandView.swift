@@ -44,7 +44,7 @@ struct ForumPostView: View {
                         Menu {
                           
                         } label: {
-                            NavigationLink(destination: ForumExpandView().navigationBarBackButtonHidden(true)) {
+                            NavigationLink(destination: ForumView().navigationBarBackButtonHidden(true)) {
                                 Text("Back").font(.callout).foregroundColor(Color.nightfallHarmonyNavyBlue)
                             }
                         }.hSpacing(.leading)
@@ -118,11 +118,6 @@ struct ForumPostView: View {
                     }
                     Divider()
                     HStack {
-                        Button {
-                            showImagePicker.toggle()
-                        }label : {
-                            
-                        }.hSpacing(.leading)
                         NavigationLink(destination: ForumView().navigationBarBackButtonHidden(true)) {
                             Button("Done") {
                             }.foregroundColor(.white)
@@ -135,28 +130,7 @@ struct ForumPostView: View {
                                 .ignoresSafeArea()
                         }
                 }.vSpacing(.top)
-                    .photosPicker(isPresented: $showImagePicker, selection: $selectedPhoto)
-                    .onChange(of: selectedPhoto) { newValue in
-                        if let newValue {
-                            Task{
-                                if let rawImageData = try? await newValue.loadTransferable(type: Data.self), let image = UIImage(data: rawImageData), let compressedImageData = image.jpegData(compressionQuality: 0.5) {
-                                    await MainActor.run(body: {
-                                        postImageData = compressedImageData
-                                        selectedPhoto = nil
-                                    })
-                                }
-                            }
-                        }
-                    }
-                    //.alert(errorMess, isPresented: $showImagePicker, actions: {})
-                    .alert(
-                        "Post Creation Failure",
-                        isPresented: $showError
-                    ) {
-                        Button("OK") {}
-                    } message: {
-                        Text(errorMess)
-                    }
+                    
                 }
         }
     }
@@ -176,53 +150,6 @@ struct ForumPostView: View {
         })
     }
     
-    func createPost() {
-        showkeyboard = false
-        isLoading = true
-
-        Task {
-            do {
-                // TESTING IN PREVIEW MODE:
-                // Comment out the guard below and use
-                // the second constructor for Post (uncomment it)
-                
-                guard let currUser = currUser else {
-                    await errorAlerts("ERROR! Not signed in.")
-                    return
-                }
-                
-                // Create new Post Object
-                var newPost = Post(title: postTitle, content: postText,
-                                   /*authorUsername: currUser.username,*/
-                                   authorID: currUser.userID,
-                                   authorProfilePhoto: currUser.profileURL)
-
-                //var newPost = Post(title: postTitle, content: postText)
-                
-                // Store Image & Get DownloadURL
-                if let postImageData = postImageData {
-                    // Completion block for uploading image
-                    try await storeImage(postID: newPost.postID)
-
-                    // Set imageURL of Post
-                    guard let postImageURL = postImageURL else {
-                        await errorAlerts("Failed to upload photo.")
-                        return
-                    }
-                    newPost.imageURL = postImageURL
-                            
-                    // Try to create new post
-                    try newPost.createPost()
-
-                } else {
-                    // Try to create new post (no postMedia case)
-                    try newPost.createPost()
-                }
-                
-            } catch {
-                await errorAlerts(error)
-            }
-        }
     }
     
     /*
