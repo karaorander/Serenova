@@ -67,7 +67,7 @@ struct SearchForumView: View {
                             }
                         }
                         .padding()
-                        .background(Color.soothingNightLightGray.opacity(0.8))
+                        .background(Color.white)
                         .cornerRadius(20)
                         
                         // Cancel Button

@@ -39,6 +39,7 @@
 		B1961C072B81520F00B27781 /* FirebaseRemoteConfigSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B1961C062B81520F00B27781 /* FirebaseRemoteConfigSwift */; };
 		B1961C092B81520F00B27781 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = B1961C082B81520F00B27781 /* FirebaseStorage */; };
 		B1A7C3972BA7CDB800BCE27F /* ForumPostDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1A7C3962BA7CDB800BCE27F /* ForumPostDetailView.swift */; };
+		B1A7C39B2BACA9EF00BCE27F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B1A7C39A2BACA9EF00BCE27F /* GoogleService-Info.plist */; };
 		B1CB24552B866E0500AE8685 /* Nova_Square in Resources */ = {isa = PBXBuildFile; fileRef = B1CB24542B866E0500AE8685 /* Nova_Square */; };
 		B1CB24562B866E0500AE8685 /* Nova_Square in Resources */ = {isa = PBXBuildFile; fileRef = B1CB24542B866E0500AE8685 /* Nova_Square */; };
 		B1CB24572B866E0500AE8685 /* Nova_Square in Resources */ = {isa = PBXBuildFile; fileRef = B1CB24542B866E0500AE8685 /* Nova_Square */; };
@@ -114,8 +115,8 @@
 		23D1E0FF2B7A8FDF00539A62 /* Serenova_2_0UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serenova_2_0UITestsLaunchTests.swift; sourceTree = "<group>"; };
 		B1379ECC2BA3E70B00697317 /* SearchForumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchForumView.swift; sourceTree = "<group>"; };
 		B163D1DB2B8F9ED200DBC5A3 /* ForumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForumView.swift; sourceTree = "<group>"; };
-		B18049792BA38B23000A0935 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B1A7C3962BA7CDB800BCE27F /* ForumPostDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForumPostDetailView.swift; sourceTree = "<group>"; };
+		B1A7C39A2BACA9EF00BCE27F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B1CB24542B866E0500AE8685 /* Nova_Square */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Nova_Square; sourceTree = "<group>"; };
 		B1CB24642B87C56F00AE8685 /* Article.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Article.swift; sourceTree = "<group>"; };
 		B1CB24662B87C57100AE8685 /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
@@ -224,7 +225,7 @@
 				B1CB24542B866E0500AE8685 /* Nova_Square */,
 				239E081C2B803E910036AD81 /* Serenova 2.0.entitlements */,
 				239E081B2B80125C0036AD81 /* Serenova-2-0-Info.plist */,
-				B18049792BA38B23000A0935 /* GoogleService-Info.plist */,
+				B1A7C39A2BACA9EF00BCE27F /* GoogleService-Info.plist */,
 				E0231FFB2B7DB8F8009A4E39 /* Extensions */,
 				23D1E0E22B7A8FDE00539A62 /* Serenova_2_0App.swift */,
 				E02A2BF62B8E62F000235A39 /* SleepManager.swift */,
@@ -458,6 +459,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				23D1E0EA2B7A8FDF00539A62 /* Preview Assets.xcassets in Resources */,
+				B1A7C39B2BACA9EF00BCE27F /* GoogleService-Info.plist in Resources */,
 				23D1E0E72B7A8FDF00539A62 /* Assets.xcassets in Resources */,
 				B1CB24552B866E0500AE8685 /* Nova_Square in Resources */,
 			);

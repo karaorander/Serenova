@@ -13,10 +13,14 @@ import FirebaseDatabase
 class Post: Codable, Identifiable {
     @DocumentID var postID: String?
     public var title: String = ""
+    public var titleAsArray: [String] = []
     public var content: String = ""
-    @ServerTimestamp public var timeStamp: Timestamp?
+    public var timeStamp: Double = Date().timeIntervalSince1970
     public var imageURL: URL?
     public var tag: String?
+    public var numReplies: Int = 0
+    public var likedIDs: [String] = []
+    public var dislikedIDs: [String] = []
     public var authorID: String = ""
     public var authorUsername: String = ""
     public var authorProfilePhoto: URL?
@@ -25,10 +29,13 @@ class Post: Codable, Identifiable {
      * Constructor for Post
      * TODO: Fill in other details! (i.e authorID, authorUsername, authorProfilePicture)
      */
-    init(title: String, content: String, tag: String) {
+    init(title: String, content: String, tag: String? = nil) {
         self.title = title
+        self.titleAsArray = title.lowercased().split(separator: " ").map { String($0) }
         self.content = content
-        self.tag = tag
+        if tag != nil {
+            self.tag = tag
+        }
     }
     
     /*
@@ -44,25 +51,18 @@ class Post: Codable, Identifiable {
     /*
      * Function to get relative date
      */
+    
     func getRelativeTime() -> String {
-        guard let timeStamp = self.timeStamp else {
-            return "0 seconds ago"
-        }
-        
         let dateFormatter = RelativeDateTimeFormatter()
-        return dateFormatter.localizedString(for: Date(timeIntervalSince1970: TimeInterval(timeStamp.seconds)), relativeTo: Date())
+        return dateFormatter.localizedString(for: Date(timeIntervalSince1970: TimeInterval(timeStamp)), relativeTo: Date())
     }
     
     /*
      * Function to get date
      */
     func getRealTime() -> String {
-        guard let timeStamp = self.timeStamp else {
-            return ""
-        }
-        
         let dateFormatter = DateFormatter()
-        return dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(timeStamp.seconds)))
+        return dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(timeStamp)))
     }
 }
 
