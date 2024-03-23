@@ -38,6 +38,7 @@ class User: Codable {
     public var totalSleepGoalMins: Float = -1
     public var deepSleepGoalHours: Float = -1
     public var deepSleepGoalMins: Float = -1
+    public var rewards: Array = [[String]]()
     
     
     /* Gender */

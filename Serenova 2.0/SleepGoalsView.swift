@@ -325,7 +325,8 @@ struct EditGoalsView: View {
             currUser.totalSleepGoalMins = Float(total_min)
             currUser.deepSleepGoalHours = Float(deep_hrs)
             currUser.deepSleepGoalMins = Float(deep_min)
-            currUser.updateValues(newValues: ["totalSleepGoalHours" : currUser.totalSleepGoalHours,
+            currUser.updateValues(newValues: ["totalSleepGoalHours" :
+                                                currUser.totalSleepGoalHours,
                                               "totalSleepGoalMins" : currUser.totalSleepGoalMins,
                                               "deepSleepGoalHours" : currUser.deepSleepGoalHours,
                                               "deepSleepGoalMins" : currUser.deepSleepGoalMins])
@@ -337,7 +338,6 @@ struct EditGoalsView: View {
     func getTotalGoal() -> Float{
         if let currUser = currUser {
             var totalGoal = (currUser.totalSleepGoalHours * 60) + currUser.totalSleepGoalMins
-            print("total Goal", totalGoal)
             if (totalGoal < 0) {
                 return 0
             } else {
