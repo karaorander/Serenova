@@ -199,9 +199,7 @@ struct PostListingView: View {
     @State private var postImage: UIImage?
     @State private var isClicked: Bool = false
     @State private var likesListener: ListenerRegistration?
-    
-    @State private var isLiked: Bool = false
-    @State private var isDisliked: Bool = false
+    @State private var hasChanged: Bool = false  // Change to activate change in vie
 
     var body: some View {
         //Button (action: {isClicked = true}) {
@@ -295,7 +293,7 @@ struct PostListingView: View {
                         } label: {
                             Image(systemName: "arrow.up.circle.fill")
                                 .fontWeight(.bold)
-                                .foregroundColor(isLiked ? .nightfallHarmonyRoyalPurple : .white)
+                                .foregroundColor(post.likedIDs.contains(currUser!.userID)  ? .nightfallHarmonyRoyalPurple : .white)
                                 .brightness(0.3)
                                 .saturation(1.5)
                         }
@@ -308,7 +306,7 @@ struct PostListingView: View {
                             }
                         } label: {
                             Image(systemName: "arrow.down.circle.fill")
-                                .foregroundColor(isDisliked ? .nightfallHarmonyRoyalPurple : .white)
+                                .foregroundColor(post.dislikedIDs.contains(currUser!.userID)  ? .nightfallHarmonyRoyalPurple : .white)
                                 .brightness(0.3)
                                 .saturation(1.5)
                                 .fontWeight(.bold)
@@ -352,7 +350,7 @@ struct PostListingView: View {
                         if let dislikes = data["dislikedIDs"] as? [String] {
                             post.dislikedIDs = dislikes
                         }
-                        checkLikeStatus()
+                        hasChanged.toggle()
                     }
                 }
             }
@@ -387,26 +385,7 @@ struct PostListingView: View {
             }
         }
     }
-    
-    /*
-     * Function to handle UI interactions
-     */
-    func checkLikeStatus() {
-        guard post.postID != nil else { return }
-        guard currUser != nil else { return }
-        
-        if post.likedIDs.contains(currUser!.userID) {
-            isLiked = true
-        } else {
-            isLiked = false
-        }
-        if post.dislikedIDs.contains(currUser!.userID) {
-            isDisliked = true
-        } else {
-            isDisliked = false
-        }
-    }
-    
+
     /*
      * Handle logic for likes
      */
@@ -424,7 +403,6 @@ struct PostListingView: View {
                 "dislikedIDs": FieldValue.arrayRemove([currUser!.userID])
             ])
         }
-        checkLikeStatus()
     }
     
     /*
@@ -444,7 +422,6 @@ struct PostListingView: View {
                 "likedIDs": FieldValue.arrayRemove([currUser!.userID])
             ])
         }
-        checkLikeStatus()
     }
 }
 /*
