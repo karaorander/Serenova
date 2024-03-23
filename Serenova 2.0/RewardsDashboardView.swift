@@ -13,7 +13,8 @@ struct RewardsDashboardView: View {
     }
     
     
-    
+    // Get rewards (2D Array) from Firebase
+    // Format: [ ["rewardName1", "rewardDescription1"], ["rewardName2", "rewardDescription2"] ]
     func getRewards() -> [[String]] {
         if let currUser = currUser {
             return currUser.rewards
@@ -22,6 +23,7 @@ struct RewardsDashboardView: View {
         }
     }
     
+    // Checks if the user has achieved any rewards
     func rewardsIsEmpty() -> Int {
         let currUser = currUser
         if (currUser?.rewards.count ?? 0) <= 0 {
@@ -31,22 +33,7 @@ struct RewardsDashboardView: View {
         }
     }
     
-    func updateRewards(rewardName : String, rewardDescription : String) {
-        let rewardsObj = [
-            rewardName, rewardDescription
-        ]
-        
-        if let currUser = currUser {
-            var rewards = currUser.rewards
-            rewards.append(rewardsObj)
-            currUser.rewards = rewards
-            
-            currUser.updateValues(newValues: ["rewards" : rewards])
-            
-        } else {
-            print("error")
-        }
-    }
+    
 }
 
 #Preview {

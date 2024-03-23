@@ -360,6 +360,22 @@ struct EditGoalsView: View {
             return 0
         }
     }
+    
+    // description and name format can be changed
+    func metTotalGoal() {
+        var currentData = goal_stats[1].currentData
+        if (getTotalGoal() >= Float(currentData)) {
+            currUser?.updateRewards(rewardName: "Total Sleep Goal", rewardDescription: String(getTotalGoal()))
+        }
+    }
+    
+    // description and name format can be changed
+    func metDeepGoal() {
+        var currentData = goal_stats[0].currentData
+        if (getDeepGoal() >= Float(currentData)) {
+            currUser?.updateRewards(rewardName: "Total Deep Goal", rewardDescription: String(getDeepGoal()))
+        }
+    }
 
 }
 

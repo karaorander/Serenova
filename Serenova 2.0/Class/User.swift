@@ -110,6 +110,28 @@ class User: Codable {
      * Firebase
      */
     
+    
+    /*
+     * Function to update rewards
+     * to Firebase
+     */
+    func updateRewards(rewardName : String, rewardDescription : String) {
+        let rewardsObj = [
+            rewardName, rewardDescription
+        ]
+        
+        if let currUser = currUser {
+            var rewards = currUser.rewards
+            rewards.append(rewardsObj)
+            currUser.rewards = rewards
+            
+            currUser.updateValues(newValues: ["rewards" : rewards])
+            
+        } else {
+            print("error")
+        }
+    }
+    
     /*
      * Function to update values
      * to Firebase
