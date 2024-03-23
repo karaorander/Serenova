@@ -34,6 +34,17 @@ struct RewardsDashboardView: View {
     }
     
     
+    /*
+     * TODO: Function that checks if a User is a friend
+     */
+
+    func displayFriendRewards() {
+        if let currUser = currUser {
+            for friend in currUser.friends {
+                var friendRewards = currUser.getFriendData(friendID: friend, data: "rewards")
+            }
+        }
+    }
 }
 
 #Preview {
