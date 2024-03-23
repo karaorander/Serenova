@@ -12,7 +12,7 @@ import Firebase
 import FirebaseStorage
 
 //Create New Post View
-struct JournalPostView: View {
+struct createJournalView: View {
     /// callback
     //var onPos: (Post)->()
     
@@ -67,27 +67,35 @@ struct JournalPostView: View {
                                 .padding(.vertical, 6)
                                 .background(.white, in: Capsule())
                         }
-                        .disabled(journalText == "" || journalTitle == "")
-                        .opacity((journalText == "" || journalTitle == "") ? 0.4 : 1)
+                        .disabled(journalText == "")
+                        .opacity((journalText == "") ? 0.4 : 1)
                     }.padding(.horizontal, 15).padding(.vertical, 10)
+                    HStack {
+                        Text("New Entry")
+                            .font(Font.custom("NovaSquareSlim-Bold", size: 35))
+                            .foregroundColor(.dreamyTwilightMidnightBlue)
+                        Image(systemName: "moon.dust").font(.system(size: 35)).foregroundColor(.dreamyTwilightMidnightBlue)
+                    }
                     ScrollView(.vertical, showsIndicators:false) {
                         VStack(spacing: 15){
                             HStack {
                                 TextField("Title", text: $journalTitle)
                                     .fontWeight(.bold)
+                                    .foregroundColor(.white)
                                     .focused($showkeyboard)
                             }.padding()
-                                .background(Color.white.opacity(0.1))
+                                .background(Color.dreamyTwilightMidnightBlue.opacity(0.3))
                                 .cornerRadius(10)
                             // Tags
                             
                             HStack {
                                 TextField("What's on your mind?", text: $journalText, axis: .vertical)
+                                    .foregroundColor(.white)
                                     .focused($showkeyboard)
                                     .frame(minHeight: 150, alignment: .top)
+                                    
                             }.padding()
-                                .foregroundColor(.black)
-                                .background(Color.white.opacity(0.1))
+                                .background(Color.dreamyTwilightMidnightBlue.opacity(0.3))
                                 .cornerRadius(10)
                         }.padding(15)
                            
@@ -175,6 +183,5 @@ struct JournalPostView: View {
 
 
 #Preview {
-    ForumPostView()
+    createJournalView()
 }
-

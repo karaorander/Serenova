@@ -78,9 +78,11 @@ struct JournalView: View {
                             .scrollIndicators(ScrollIndicatorVisibility.hidden)
                             .listRowBackground(
                                 RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color.soothingNightDeepIndigo)
+                                    .fill(Color.dreamyTwilightMidnightBlue).padding()
                             )
-                        }
+                            
+                            
+                        }.background(Color.dreamyTwilightMidnightBlue)
                         .refreshable {
                             Task {
                                 journalEntries = []
@@ -88,35 +90,60 @@ struct JournalView: View {
                                 await queryJournal(NUM_ENTRIES: queryNum)
                             }
                         }
-                        .background(Color.dreamyTwilightMidnightBlue)
-                    }
-
-                    HStack(content: {
-                        
-                        
-                        Spacer()
-                        
-                        NavigationLink(destination: JournalPostView().navigationBarBackButtonHidden(true)) {
+                        .overlay(alignment: .bottom, content:  {NavigationLink(destination: createJournalView().navigationBarBackButtonHidden(true)) {
                             Image(systemName: "plus")
                                 .fontWeight(.semibold)
-                                .foregroundStyle(Color.dreamyTwilightOrchid)
+                                .foregroundStyle(Color.dreamyTwilightMidnightBlue)
                                 .frame(width: 50, height: 50)
                                 .background(.white, in: .circle)
-                        }.isDetailLink(false)
+                                .padding()
+                        }.isDetailLink(false)})
+                    }
+                    
+                    HStack (spacing: 40){
+                        NavigationLink(destination: SleepGraphView().navigationBarBackButtonHidden(true)) {
+                            
+                            Image(systemName: "chart.xyaxis.line")
+                                .resizable()
+                                .frame(width: 30, height: 35)
+                                .foregroundColor(.white)
+                            
+                        }
+                    NavigationLink(destination: SleepLogView().navigationBarBackButtonHidden(true)) {
+
+                            Image(systemName: "zzz")
+                                .resizable()
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(.white)
                         
-                        Spacer()
+                    }
+                        NavigationLink(destination: SleepGoalsView().navigationBarBackButtonHidden(true)) {
+
+                            Image(systemName: "list.clipboard")
+                                .resizable()
+                                .frame(width: 30, height: 40)
+                                .foregroundColor(.white)
                         
-                        // TODO: Link to direct messages
-                        //NavigationLink(destination: ForumPostView().navigationBarBackButtonHidden(true)) {
-                        Image(systemName: "text.bubble.fill")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                            .foregroundColor(.white)
-                        //}.isDetailLink(false
-                    })
-                    .padding()
-                    .padding(.horizontal, 15)
-                    .hSpacing(.center)
+                    }
+                        NavigationLink(destination: ForumPostView().navigationBarBackButtonHidden(true)) {
+
+                                Image(systemName: "person.2")
+                                    .resizable()
+                                    .frame(width: 45, height: 30)
+                                    .foregroundColor(.white)
+                            
+                        }
+                        NavigationLink(destination: JournalView().navigationBarBackButtonHidden(true)) {
+
+                            Image(systemName: "book.closed")
+                                .resizable()
+                                .frame(width: 30, height: 40)
+                                .foregroundColor(.white)
+                        
+                    }
+                }.padding()
+                .hSpacing(.center)
+                .background(Color.dreamyTwilightMidnightBlue)
                 }
             }
             .onAppear() {
@@ -191,6 +218,7 @@ struct NoEntriesView1: View {
                 .font(.system(size: 25))
                 .fontWeight(.semibold)
             Spacer()
+            
         }
     }
 }
@@ -217,6 +245,8 @@ struct JournalListingView: View {
                             .foregroundColor(Color.white)
                             .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
                     }
+                    
+                    
                 }
                 .padding(.vertical, 10)
             
@@ -250,8 +280,8 @@ struct JournalListingView: View {
         .listRowSeparator(.hidden)
         .sheet(isPresented: $isClicked, content: {
             JournalDetailsView(journal: journal)
-                //.interactiveDismissDisabled()
-                .presentationCornerRadius(30)
+                .interactiveDismissDisabled()
+                
                 
         })
         // TODO: Link to Post page
@@ -262,66 +292,116 @@ struct JournalListingView: View {
 }
 struct JournalDetailsView: View {
     let journal: Journal
-        @State private var editedContent: String = ""
+    @State private var editedContent: String = ""
     @State private var editedTitle: String = ""
-        @State private var isEditing: Bool = false
+    @State private var isEditing: Bool = false
+    @Environment(\.dismiss) private var dismiss
+    
 
     var body: some View {
         ZStack {
             
             LinearGradient(gradient: Gradient(colors: [
-                .moonlitSerenitySteelBlue.opacity(0.7),
-                .dreamyTwilightMidnightBlue.opacity(0.7),
+                .dreamyTwilightMidnightBlue,
                 .dreamyTwilightMidnightBlue]),
                            startPoint: .topLeading, endPoint: .bottomLeading)
             .ignoresSafeArea()
             VStack {
-                
-                Spacer()
-                Text("Journal Details")
-                    .font(Font.custom("NovaSquareSlim-Bold", size: 35))
-                    .foregroundColor(.white)
-                
-                TextField(journal.journalTitle, text: $editedTitle)
-                    .font(.system(size: 20)).fontWeight(.bold).foregroundColor(.black)
-                    .padding()
-                    .disabled(!isEditing)
-                
-                TextField(journal.journalContent, text: $editedContent)
-                    .font(.system(size: 18)).fontWeight(.medium).foregroundColor(.black)
-                    .disabled(!isEditing)
-                    .padding()
-                
-                // Edit button to enable editing mode
-                Button("Edit") {
-                    editedContent = journal.journalContent
-                    editedTitle = journal.journalTitle
-                    isEditing = true
+                HStack {
+                    Button{ dismiss()
+                    } label: {
+                        Image(systemName:
+                                "chevron.left").hSpacing(.leading).foregroundColor(.white)
+                    }.padding()
+                    if !isEditing {
+                        Button("Edit") {
+                            editedContent = journal.journalContent
+                            editedTitle = journal.journalTitle
+                            isEditing = true
+                        }
+                        .padding()
+                        .foregroundColor(.white)
+                        Menu {
+                            Button("Delete", role: .destructive) {
+                                journal.deleteJournal()
+                                dismiss()
+                            }
+                        } label: {
+                            Text("Delete Entry").font(.callout).foregroundColor(Color.red)
+                        }.padding()
+                        
+                    } else {
+                        Button("Cancel") {
+                            isEditing = false
+                        }
+                        .padding().foregroundColor(.white)
+                    }
                 }
-                .padding()
+                Spacer()
+                ScrollView(.vertical, showsIndicators: false) {
+                    Text("Journal Details")
+                        .font(Font.custom("NovaSquareSlim-Bold", size: 35))
+                        .foregroundColor(.white)
+                    if !isEditing {
+                        TextField(journal.journalTitle, text: $editedTitle)
+                            .font(.system(size: 20)).fontWeight(.bold).foregroundColor(.white)
+                            .padding()
+                            .disabled(!isEditing)
+                            .padding(.horizontal, 30)
+                        TextField(journal.journalContent, text: $editedContent, axis: .vertical)
+                            .padding()
+                            .font(.system(size: 18)).fontWeight(.medium).foregroundColor(.white)
+                            .disabled(!isEditing)
+                            .padding(.horizontal, 30)
+                    } else {
+                        
+                            TextField(journal.journalTitle, text: $editedTitle)
+                                .font(.system(size: 25)).fontWeight(.bold).foregroundColor(.white)
+                                .padding()
+                                .disabled(!isEditing)
+                                .padding(.horizontal, 30)
+                                .background(.white.opacity(0.15)).cornerRadius(10).padding()
+                       
+                        TextField(journal.journalContent, text: $editedContent, axis: .vertical)
+                            .font(.system(size: 18)).fontWeight(.medium).foregroundColor(.white)
+                            .padding()
+                            .disabled(!isEditing)
+                            .padding(.horizontal, 30)
+                            .background(.white.opacity(0.15)).cornerRadius(10).padding()
+                    }
+                        
+                }
+                
+               Spacer()
                 
                 // Display editable text field only when editing mode is enabled
                 if isEditing {
                     
-                    
-                    // Save button to update the journal content
-                    Button("Save") {
-                        // Update the journal content in Firestore
-                        // Here you can implement the code to update the journal content in Firestore
-                        // firestore.updateJournalContent(journalId: journal.id, newContent: editedContent)
-                        // After saving, exit editing mode
-                        isEditing = false
-                    }
-                    .padding()
-                    
-                    // Cancel button to exit editing mode without saving changes
-                    Button("Cancel") {
-                        isEditing = false
-                    }
-                    .padding()
+                        // Save button to update the journal content
+                        Button("Save") {
+                            journal.updateValues(newValues: ["journalTitle" : editedTitle,
+                                                             "journalContent" : editedContent])
+                            isEditing = false
+                        }
+                        .padding().foregroundColor(.white)
+                        .buttonStyle(NoStyle1())
+                        
+                       
                    
+                } else {
+                        // Save button to update the journal content
+                        Button("") {
+                            
+                        }
+                        .padding()
+                        
+                        
+                    
                 }
                 Spacer()
+            }.onAppear {
+                editedContent = journal.journalContent
+                editedTitle = journal.journalTitle
             }
         }
     }

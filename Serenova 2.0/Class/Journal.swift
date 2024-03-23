@@ -71,4 +71,21 @@ class Journal: Codable, Identifiable {
             dateFormatter.dateFormat = "yyyy-MM-dd hh:mm a"
             return dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(timeStamp.seconds)))
         }
+    
+    func updateValues(newValues: [String: Any]) {
+        let db = Firestore.firestore()
+        let ref = db.collection("Journal").document(self.journalId ?? "")
+        ref.updateData(newValues)
+    }
+    
+    func deleteJournal() {
+        let db = Firestore.firestore()
+        do {
+            try db.collection("Journal").document(self.journalId ?? "").delete()
+          print("Document successfully removed!")
+        } catch {
+          print("Error removing document: \(error)")
+        }
+
+    }
 }
