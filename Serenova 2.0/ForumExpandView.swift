@@ -1,9 +1,11 @@
 //
-//  ForumPostView.swift
+//  ForumExpandView.swift
 //  Serenova 2.0
 //
-//  Created by Ava Schrandt on 2/24/24.
-//
+//  Created by Wilson, Caitlin Vail on 3/21/24.
+// Shows a post in fullscreen when a user clicks on a post
+
+import Foundation
 
 import SwiftUI
 import PhotosUI
@@ -40,19 +42,13 @@ struct ForumPostView: View {
                 VStack {
                     HStack {
                         Menu {
-                            Button("Delete Post", role: .destructive) {
-                                dismiss()
-                            }
+                          
                         } label: {
-                            Text("Cancel").font(.callout).foregroundColor(Color.nightfallHarmonyNavyBlue)
+                            NavigationLink(destination: ForumView().navigationBarBackButtonHidden(true)) {
+                                Text("Back").font(.callout).foregroundColor(Color.nightfallHarmonyNavyBlue)
+                            }
                         }.hSpacing(.leading)
-                        Button(action: createPost) {
-                            Text("Post").font(.callout)
-                                .foregroundColor(.nightfallHarmonyNavyBlue)
-                                .padding(.horizontal,20)
-                                .padding(.vertical, 6)
-                                .background(.white, in: Capsule())
-                        }
+                        
                         .disabled(postText == "" || postTitle == "")
                         .opacity((postText == "" || postTitle == "") ? 0.4 : 1)
                     }.padding(.horizontal, 15).padding(.vertical, 10)
@@ -64,16 +60,15 @@ struct ForumPostView: View {
                     ScrollView(.vertical, showsIndicators:false) {
                         VStack(spacing: 15){
                             HStack {
-                                TextField("Title:", text: $postTitle)
+                                TextField(postTitle)
                                     .fontWeight(.bold)
+                    
                                     
-                                    .focused($showkeyboard)
                             }.padding()
                                 .background(.gray.opacity(0.15))
                                 .cornerRadius(10)
                             HStack {
-                                TextField("Share sleep exeriences + tips!", text: $postText, axis: .vertical)
-                                    .focused($showkeyboard)
+                                TextField(postText)
                             }.padding()
                                 .background(.gray.opacity(0.15))
                                 .cornerRadius(10)
@@ -123,16 +118,10 @@ struct ForumPostView: View {
                     }
                     Divider()
                     HStack {
-                        Button {
-                            showImagePicker.toggle()
-                        }label : {
-                            Image(systemName: "photo.badge.plus")
-                                .font( .title3)
-                                .foregroundColor(.black)
-                        }.hSpacing(.leading)
-                        Button("Done") {
-                            showkeyboard = false
-                        }.foregroundColor(.white)
+                        NavigationLink(destination: ForumView().navigationBarBackButtonHidden(true)) {
+                            Button("Done") {
+                            }.foregroundColor(.white)
+                        }
                     }.padding(.horizontal, 15)
                         .padding(.vertical, 10)
                         .background{
@@ -141,28 +130,7 @@ struct ForumPostView: View {
                                 .ignoresSafeArea()
                         }
                 }.vSpacing(.top)
-                    .photosPicker(isPresented: $showImagePicker, selection: $selectedPhoto)
-                    .onChange(of: selectedPhoto) { newValue in
-                        if let newValue {
-                            Task{
-                                if let rawImageData = try? await newValue.loadTransferable(type: Data.self), let image = UIImage(data: rawImageData), let compressedImageData = image.jpegData(compressionQuality: 0.5) {
-                                    await MainActor.run(body: {
-                                        postImageData = compressedImageData
-                                        selectedPhoto = nil
-                                    })
-                                }
-                            }
-                        }
-                    }
-                    //.alert(errorMess, isPresented: $showImagePicker, actions: {})
-                    .alert(
-                        "Post Creation Failure",
-                        isPresented: $showError
-                    ) {
-                        Button("OK") {}
-                    } message: {
-                        Text(errorMess)
-                    }
+                    
                 }
         }
     }
@@ -182,53 +150,6 @@ struct ForumPostView: View {
         })
     }
     
-    func createPost() {
-        showkeyboard = false
-        isLoading = true
-
-        Task {
-            do {
-                // TESTING IN PREVIEW MODE:
-                // Comment out the guard below and use
-                // the second constructor for Post (uncomment it)
-                
-                guard let currUser = currUser else {
-                    await errorAlerts("ERROR! Not signed in.")
-                    return
-                }
-                
-                // Create new Post Object
-                var newPost = Post(title: postTitle, content: postText,
-                                   /*authorUsername: currUser.username,*/
-                                   authorID: currUser.userID,
-                                   authorProfilePhoto: currUser.profileURL)
-
-                //var newPost = Post(title: postTitle, content: postText)
-                
-                // Store Image & Get DownloadURL
-                if let postImageData = postImageData {
-                    // Completion block for uploading image
-                    try await storeImage(postID: newPost.postID)
-
-                    // Set imageURL of Post
-                    guard let postImageURL = postImageURL else {
-                        await errorAlerts("Failed to upload photo.")
-                        return
-                    }
-                    newPost.imageURL = postImageURL
-                            
-                    // Try to create new post
-                    try newPost.createPost()
-
-                } else {
-                    // Try to create new post (no postMedia case)
-                    try newPost.createPost()
-                }
-                
-            } catch {
-                await errorAlerts(error)
-            }
-        }
     }
     
     /*
@@ -247,10 +168,11 @@ struct ForumPostView: View {
             try await postImageURL = postImageRef.downloadURL()
         }
     }
-    
 }
 
 
 #Preview {
     ForumPostView()
 }
+
+//TODO: Add comments section for other users

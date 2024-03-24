@@ -38,6 +38,8 @@ class User: Codable {
     public var totalSleepGoalMins: Float = -1
     public var deepSleepGoalHours: Float = -1
     public var deepSleepGoalMins: Float = -1
+    public var rewards: [[String]] = [[]]
+    public var friends: [String] = []
     
     
     /* Gender */
@@ -109,6 +111,28 @@ class User: Codable {
      * Firebase
      */
     
+    
+    /*
+     * Function to update rewards
+     * to Firebase
+     */
+    func updateRewards(rewardName : String, rewardDescription : String) {
+        let rewardsObj = [
+            rewardName, rewardDescription
+        ]
+        
+        if let currUser = currUser {
+            var rewards = currUser.rewards
+            rewards.append(rewardsObj)
+            currUser.rewards = rewards
+            
+            currUser.updateValues(newValues: ["rewards" : rewards])
+            
+        } else {
+            print("error")
+        }
+    }
+    
     /*
      * Function to update values
      * to Firebase
@@ -116,6 +140,27 @@ class User: Codable {
     func updateValues(newValues: [String: Any]) {
         // Reflect changes to Firebase
         ref.child(self.userID).updateChildValues(newValues)
+    }
+    
+    /*
+     * Function to get Friend data
+     * from Firebase
+     */
+    func getFriendData(friendID: String, data: String) -> String {
+        let db = Database.database().reference()
+        let ur = db.child("User").child(friendID)
+        var dataValue = ""
+        
+        ur.observeSingleEvent(of: .value, with: { snapshot in
+            guard let userData = snapshot.value as? [String: Any] else {
+                print("Error fetching data")
+                return
+            }
+            
+            dataValue = userData[data] as! String
+        })
+        
+        return dataValue
     }
 
     /*
