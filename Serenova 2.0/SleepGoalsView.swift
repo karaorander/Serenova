@@ -54,6 +54,58 @@ class GoalViewModel: ObservableObject {
     }
 }
 
+let articles = [
+    Article(articleTitle: "The Importance of Deep Sleep", articleLink: "https://www.medicalnewstoday.com/articles/325363", articlePreview: "Deep sleep plays a crucial role in your overall health...", articleTags: ["Health", "Sleep"], articleId: "1"),
+    Article(articleTitle: "5 Tips for Better Sleep Hygiene", articleLink: "https://www.medicalnewstoday.com/articles/325363", articlePreview: "Improving your sleep hygiene can lead to better sleep quality...", articleTags: ["Tips", "Hygiene"], articleId: "2"),
+    // Add more articles as needed
+]
+
+struct ArticleRow: View {
+    var article: Article
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 5) {
+            Text(article.articleTitle)
+                .font(.headline)
+                .foregroundColor(.primary)
+            Text(article.articlePreview)
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+        }
+        .padding()
+    }
+}
+
+struct ArticleCard: View {
+    var article: Article
+
+    var body: some View {
+        VStack {
+            // Placeholder for an article image
+            Rectangle()
+                .fill(LinearGradient(gradient: Gradient(colors: [.blue, .purple]), startPoint: .topLeading, endPoint: .bottomTrailing))
+                .frame(height: 120)
+                .cornerRadius(12)
+                .overlay(
+                    Text(article.articleTitle) // Consider adding a Text Overlay for the title or use a separate Text view below
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding(),
+                    alignment: .bottomLeading
+                )
+
+            Text(article.articlePreview)
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .padding([.horizontal, .bottom])
+                .frame(width: 250, alignment: .leading) // Fixed width for alignment in horizontal scroll
+        }
+        .background(Color.white) // Card background
+        .cornerRadius(12)
+        .shadow(radius: 5) // Shadow for depth
+        .padding(.vertical, 5) // Slight vertical padding
+    }
+}
 
 //potential opening screen
 struct SleepGoalsView: View {
@@ -180,7 +232,46 @@ struct SleepGoalsView: View {
                                 .cornerRadius(10)
                         }
                     }.padding()
+                    
+                    VStack {
+                        Text("Related Articles")
+                            .font(.system(size:24, weight: .bold))
+                            .fontWeight(.bold)
+                            .foregroundColor(.nightfallHarmonyNavyBlue.opacity(0.8)) // Adjust text color as needed
+                            .padding(.top)
+                            .frame(maxWidth: .infinity) // Use maxWidth to allow the text to center
+                            .multilineTextAlignment(.center) // Center alignment for the text
+
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 15) { // Maintain spacing between article boxes
+                                ForEach(articles, id: \.articleId) { article in
+                                    Link(destination: URL(string: article.articleLink)!) {
+                                        VStack(alignment: .leading, spacing: 5) {
+                                            Text(article.articleTitle)
+                                                .font(.headline)
+                                                .fontWeight(.semibold)
+                                                .foregroundColor(.white) // Adjust text color as needed
+                                                .lineLimit(2) // Limit title to 2 lines
+
+                                            Text(article.articlePreview)
+                                                .font(.subheadline)
+                                                .foregroundColor(.white.opacity(0.7)) // Adjust text color as needed
+                                                .lineLimit(3) // Limit preview text to 3 lines
+                                        }
+                                        .padding()
+                                        .background(Color.moonlitSerenityLilac.opacity(0.1)) // Set background color
+                                        .cornerRadius(10)
+                                        .shadow(radius: 2)
+                                    }
+                                }
+                            }
+                            .padding(.horizontal)
+                        }
+                    }
+                    .padding(.bottom)
                 }
+      
+                    
                     HStack (spacing: 40){
                         NavigationLink(destination: SleepGraphView().navigationBarBackButtonHidden(true)) {
                             
