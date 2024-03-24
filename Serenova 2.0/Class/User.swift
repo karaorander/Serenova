@@ -38,6 +38,7 @@ class User: Codable {
     public var totalSleepGoalMins: Float = -1
     public var deepSleepGoalHours: Float = -1
     public var deepSleepGoalMins: Float = -1
+    public var moonCount: Int = -1
     public var rewards: [[String]] = [[]]
     public var friends: [String] = []
     
@@ -64,7 +65,7 @@ class User: Codable {
              gender, weight, height, age, hadInsomnia,
              hasInsomnia, exercisesRegularly, hasMedication,
              doesSnore, hasNightmares, typicalWakeUpTime,
-             typicalBedTime, isEarlyBird
+             typicalBedTime, isEarlyBird, moonCount
     }
     
     /* Database Reference */
@@ -128,6 +129,24 @@ class User: Codable {
             
             currUser.updateValues(newValues: ["rewards" : rewards])
             
+        } else {
+            print("error")
+        }
+    }
+    
+    func updateMoons(rewardCount : Int) {
+        let db = Database.database().reference()
+        let id = Auth.auth().currentUser!.uid
+        let ur = db.child("User").child(id)
+        
+        //TODO: Add code to make sure username is not already in database
+        //TODO: Make sure new email, phone number etc. are valid like in signup view
+
+        if let currUser = currUser {
+            var moon = currUser.moonCount
+            moon = moon + rewardCount
+            currUser.moonCount = moon
+            currUser.updateValues(newValues: ["moonCount" : moon])
         } else {
             print("error")
         }

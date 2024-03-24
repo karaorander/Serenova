@@ -417,6 +417,11 @@ struct ManualLogView: View {
                 }
                 print("in Task ", sleepStart, sleepEnd)
                 
+                if let user = currUser {
+                    print("hereeeeee")
+                   user.updateMoons(rewardCount: 1)
+               }
+               
                 // new session object
                 var newSession = SleepSession(sleepStart: sleepStart, sleepEnd:sleepEnd, date: date , manualInterval: duration)
                 

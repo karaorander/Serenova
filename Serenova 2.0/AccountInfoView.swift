@@ -215,6 +215,7 @@ struct AccountInfoView: View {
     @State private var inputImage: UIImage?
     @State private var profileImage: Image?
     
+    
     var body: some View {
         VStack{
             NavigationView{

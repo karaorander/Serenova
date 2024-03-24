@@ -6,19 +6,41 @@
 //
 
 import SwiftUI
+import FirebaseDatabase
+import FirebaseAuth
 
+class MoonProgressViewModel: ObservableObject {
+    @Published var moonCount : Int = -1
+    
+    func fetchMoons() {
+        let db = Database.database().reference()
+        let id = Auth.auth().currentUser!.uid
+        let ur = db.child("User").child(id)
+        ur.observeSingleEvent(of: .value) { snapshot in
+            guard let userData = snapshot.value as? [String: Any] else {
+                print("Error fetching data")
+                return
+            }
+            
+            if let moonCount = userData["moonCount"] as? Int {
+                self.moonCount = moonCount
+            }
+        }
+    }
+}
 
 
 struct MoonProgressView: View {
-    var moons: Int
+    //var moons: Int
     static let moonThresholds: [Int] = [25, 50, 100, 300, 500]
+    @StateObject private var viewModel = MoonProgressViewModel()
 
     var body: some View {
         HStack {
             ForEach(Self.moonThresholds, id: \.self) { threshold in
                 ZStack {
                     // Draw the moon or checkmark
-                    if moons >= threshold {
+                    if viewModel.moonCount >= threshold {
                         Image(systemName: "checkmark")
                             .foregroundColor(.green)
                     } else {
@@ -36,7 +58,7 @@ struct MoonProgressView: View {
                 // Draw the line between moons
                 if threshold != Self.moonThresholds.last {
                     Rectangle()
-                        .fill(moons >= threshold ? Color.green : Color.gray)
+                        .fill(viewModel.moonCount >= threshold ? Color.green : Color.gray)
                         .frame(height: 2)
                         .flexibleHorizontalPadding()
                 }
@@ -52,8 +74,12 @@ extension View {
     }
 }
 
+
+    
+
 struct RewardsDashboardView: View {
-    @State private var moonBalance: Int = 75 // Replace with actual data binding
+    //@State private var moonBalance: Int = 75
+    @StateObject private var viewModel = MoonProgressViewModel()
     var body: some View {
         VStack {
             NavigationView {
@@ -68,11 +94,11 @@ struct RewardsDashboardView: View {
                             .fontWeight(.bold)
                             .padding()
                         
-                        MoonProgressView(moons: moonBalance)
+                        MoonProgressView()
                             .padding()
                         // Moon balance
                         HStack {
-                            Text("\(moonBalance)")
+                            Text("\(viewModel.moonCount)")
                                 .font(.system(size: 50))
                                 .fontWeight(.heavy)
                             Image(systemName: "moon.fill")
