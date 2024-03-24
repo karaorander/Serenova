@@ -247,7 +247,6 @@ struct ForumPostView: View {
             try await postImageURL = postImageRef.downloadURL()
         }
     }
-    
 }
 
 

@@ -61,7 +61,7 @@ struct ForumView: View {
                         VStack(spacing: 1) {
                             // TODO: Loop through posts that are queried
                             ForEach(0...15, id: \.self) { _ in
-                                NavigationLink(destination: ForumView().navigationBarBackButtonHidden(true)) {
+                                NavigationLink(destination: ForumPostView().navigationBarBackButtonHidden(true)) {
                                     ZStack {
                                         Rectangle()
                                             .fill(.white.opacity(0.7))

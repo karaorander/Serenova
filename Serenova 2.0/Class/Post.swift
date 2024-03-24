@@ -17,7 +17,6 @@ class Post: Codable {
     public var authorUsername: String = ""
     public var authorProfilePhoto: URL?
     public var likeIDs: [String] = []
-    public var notifyUsers: [String] = []
     
     enum CodingKeys: CodingKey {
         case postID, title, content, timeStamp, imageURL,
