@@ -464,7 +464,7 @@ struct EditGoalsView: View {
     func metTotalGoal() {
         var currentData = goal_stats[1].currentData
         if (getTotalGoal() >= Float(currentData)) {
-            currUser?.updateRewards(rewardName: "Total Sleep Goal", rewardDescription: String(getTotalGoal()))
+            currUser?.updateMoons(rewardCount: 50)
         }
     }
     
@@ -472,7 +472,7 @@ struct EditGoalsView: View {
     func metDeepGoal() {
         var currentData = goal_stats[0].currentData
         if (getDeepGoal() >= Float(currentData)) {
-            currUser?.updateRewards(rewardName: "Total Deep Goal", rewardDescription: String(getDeepGoal()))
+            currUser?.updateMoons(rewardCount: 50)
         }
     }
 

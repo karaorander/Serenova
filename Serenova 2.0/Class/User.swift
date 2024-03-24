@@ -39,7 +39,6 @@ class User: Codable {
     public var deepSleepGoalHours: Float = -1
     public var deepSleepGoalMins: Float = -1
     public var moonCount: Int = -1
-    public var rewards: [[String]] = [[]]
     public var friends: [String] = []
     
     
@@ -117,23 +116,6 @@ class User: Codable {
      * Function to update rewards
      * to Firebase
      */
-    func updateRewards(rewardName : String, rewardDescription : String) {
-        let rewardsObj = [
-            rewardName, rewardDescription
-        ]
-        
-        if let currUser = currUser {
-            var rewards = currUser.rewards
-            rewards.append(rewardsObj)
-            currUser.rewards = rewards
-            
-            currUser.updateValues(newValues: ["rewards" : rewards])
-            
-        } else {
-            print("error")
-        }
-    }
-    
     func updateMoons(rewardCount : Int) {
         let db = Database.database().reference()
         let id = Auth.auth().currentUser!.uid
