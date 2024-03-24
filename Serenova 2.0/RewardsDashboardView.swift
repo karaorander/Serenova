@@ -136,7 +136,6 @@ struct RewardsDashboardView: View {
     
 
     }
-
     
     // Checks if the user has achieved any rewards
     func rewardsIsEmpty() -> Int {
@@ -149,12 +148,15 @@ struct RewardsDashboardView: View {
     }
     
 
-    func displayFriendRewards() {
+    // Gets all MoonCounts for every UserID in the list of Friends
+    func getFriendsRewardCount() -> [Int] {
+        var friendsRewards = [Int]()
         if let currUser = currUser {
             for friend in currUser.friends {
-                var friendRewards = currUser.getFriendData(friendID: friend, data: "moonCount")
+                friendsRewards.append(Int(currUser.getFriendData(friendID: friend, data: "moonCount")) ?? 0)
             }
         }
+        return friendsRewards
     }
     
 }
