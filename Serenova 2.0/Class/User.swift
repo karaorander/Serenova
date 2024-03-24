@@ -119,7 +119,6 @@ class User: Codable {
     func updateMoons(rewardCount : Int) {
         let db = Database.database().reference()
         let id = Auth.auth().currentUser!.uid
-        let ur = db.child("User").child(id)
         
         //TODO: Add code to make sure username is not already in database
         //TODO: Make sure new email, phone number etc. are valid like in signup view

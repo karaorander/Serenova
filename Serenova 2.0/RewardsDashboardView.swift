@@ -111,7 +111,7 @@ struct RewardsDashboardView: View {
                         // Redeem Options and Current Tasks
                         VStack(spacing: 20) {
                             // Redeem Options Button
-                            NavigationLink(destination: RedeemOptionsView()) {
+                            NavigationLink(destination: RedeemRewardsView()) {
                                 Text("Redeem Options")
                                     .frame(minWidth: 0, maxWidth: .infinity)
                                     .padding()
@@ -133,8 +133,9 @@ struct RewardsDashboardView: View {
                 .navigationBarHidden(true)
             }
         }
-    
-
+        .onAppear {
+            viewModel.fetchMoons()
+        }
     }
     
     // Checks if the user has achieved any rewards
@@ -182,12 +183,6 @@ struct TaskView: View {
     }
 }
 
-struct RedeemOptionsView: View {
-    var body: some View {
-        Text("Redeem your moons here!")
-        // Implementation of your redeem options view
-    }
-}
 
 // Preview provider for Xcode
 struct RewardsDashboardView_Previews: PreviewProvider {
