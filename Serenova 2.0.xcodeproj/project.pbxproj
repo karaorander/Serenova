@@ -55,7 +55,6 @@
 		E029E4FB2B7DAC4F00E8220B /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */; };
 		E02A2BF72B8E62F000235A39 /* SleepManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E02A2BF62B8E62F000235A39 /* SleepManager.swift */; };
 		E043EA8F2BAC923D0031ABDF /* JournalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E043EA8E2BAC923D0031ABDF /* JournalView.swift */; };
-		E043EA912BAC94DF0031ABDF /* JournalPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E043EA902BAC94DF0031ABDF /* JournalPostView.swift */; };
 		E0934ECA2B85BA8B00494176 /* CreateUserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0934EC92B85BA8B00494176 /* CreateUserInfoView.swift */; };
 		E0C98A2C2B90277E00A3D369 /* SleepManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C98A2B2B90277E00A3D369 /* SleepManagerTests.swift */; };
 		E0C98A2E2B9035AE00A3D369 /* SleepSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C98A2D2B9035AE00A3D369 /* SleepSession.swift */; };
@@ -73,6 +72,8 @@
 		E0FD0BFA2B8F7FC8004A96C8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0FD0BF62B8F7FC8004A96C8 /* GoogleService-Info.plist */; };
 		F21405152BB015A700F507E7 /* RedeemRewardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21405142BB015A700F507E7 /* RedeemRewardsView.swift */; };
 		F23D7CDF2B7FAF320018F325 /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */; };
+		F299FAF82BB025CD00845FE4 /* JournalPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F299FAF72BB025CD00845FE4 /* JournalPostView.swift */; };
+		F299FAFA2BB0265400845FE4 /* createJournalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F299FAF92BB0265400845FE4 /* createJournalView.swift */; };
 		F2D887002B8E8E9200C0A87E /* AlarmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D886FF2B8E8E9200C0A87E /* AlarmView.swift */; };
 		F2D887022B8EA03A00C0A87E /* AlarmListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D887012B8EA03A00C0A87E /* AlarmListView.swift */; };
 		F2E2195E2B82EC6200235824 /* SignUpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E2195D2B82EC6200235824 /* SignUpTests.swift */; };
@@ -134,7 +135,6 @@
 		E02A2BF52B8E62EF00235A39 /* Serenova 2.0Tests2-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Serenova 2.0Tests2-Bridging-Header.h"; sourceTree = "<group>"; };
 		E02A2BF62B8E62F000235A39 /* SleepManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepManager.swift; sourceTree = "<group>"; };
 		E043EA8E2BAC923D0031ABDF /* JournalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalView.swift; sourceTree = "<group>"; };
-		E043EA902BAC94DF0031ABDF /* JournalPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalPostView.swift; sourceTree = "<group>"; };
 		E0934EC92B85BA8B00494176 /* CreateUserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateUserInfoView.swift; sourceTree = "<group>"; };
 		E0C98A2B2B90277E00A3D369 /* SleepManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepManagerTests.swift; sourceTree = "<group>"; };
 		E0C98A2D2B9035AE00A3D369 /* SleepSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSession.swift; sourceTree = "<group>"; };
@@ -146,6 +146,8 @@
 		E0FD0BF62B8F7FC8004A96C8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F21405142BB015A700F507E7 /* RedeemRewardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedeemRewardsView.swift; sourceTree = "<group>"; };
 		F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
+		F299FAF72BB025CD00845FE4 /* JournalPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalPostView.swift; sourceTree = "<group>"; };
+		F299FAF92BB0265400845FE4 /* createJournalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = createJournalView.swift; sourceTree = "<group>"; };
 		F2D886FF2B8E8E9200C0A87E /* AlarmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmView.swift; sourceTree = "<group>"; };
 		F2D887012B8EA03A00C0A87E /* AlarmListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmListView.swift; sourceTree = "<group>"; };
 		F2E219542B82EBEB00235824 /* Serenova 2.0Tests2.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Serenova 2.0Tests2.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -237,12 +239,13 @@
 				E02A2BF62B8E62F000235A39 /* SleepManager.swift */,
 				239E081D2B80424A0036AD81 /* AccountInfoView.swift */,
 				E043EA8E2BAC923D0031ABDF /* JournalView.swift */,
+				F299FAF92BB0265400845FE4 /* createJournalView.swift */,
 				E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */,
 				E0EF57522B8A489D00D72221 /* ForumPostView.swift */,
-				E043EA902BAC94DF0031ABDF /* JournalPostView.swift */,
 				B163D1DB2B8F9ED200DBC5A3 /* ForumView.swift */,
 				E0934EC92B85BA8B00494176 /* CreateUserInfoView.swift */,
 				23B3854A2B8E7F0200F2C614 /* SleepGraphView.swift */,
+				F299FAF72BB025CD00845FE4 /* JournalPostView.swift */,
 				E0D1C15E2B880EED00A7609C /* SleepGoalsView.swift */,
 				E0D1C1672B8815DF00A7609C /* SleepLogView.swift */,
 				F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */,
@@ -528,14 +531,15 @@
 				B1CB24672B87C57100AE8685 /* Conversation.swift in Sources */,
 				E0EF57532B8A489D00D72221 /* ForumPostView.swift in Sources */,
 				F2D887022B8EA03A00C0A87E /* AlarmListView.swift in Sources */,
+				F299FAF82BB025CD00845FE4 /* JournalPostView.swift in Sources */,
 				E029E4FB2B7DAC4F00E8220B /* SignUpView.swift in Sources */,
 				E0934ECA2B85BA8B00494176 /* CreateUserInfoView.swift in Sources */,
 				23D1E0E32B7A8FDE00539A62 /* Serenova_2_0App.swift in Sources */,
-				E043EA912BAC94DF0031ABDF /* JournalPostView.swift in Sources */,
 				B1CB246F2B87C58700AE8685 /* SleepLog.swift in Sources */,
 				E0C98A2E2B9035AE00A3D369 /* SleepSession.swift in Sources */,
 				E043EA8F2BAC923D0031ABDF /* JournalView.swift in Sources */,
 				F2D887002B8E8E9200C0A87E /* AlarmView.swift in Sources */,
+				F299FAFA2BB0265400845FE4 /* createJournalView.swift in Sources */,
 				239E081E2B80424A0036AD81 /* AccountInfoView.swift in Sources */,
 				B1CB24692B87C57500AE8685 /* Journal.swift in Sources */,
 				E0D1C1682B8815DF00A7609C /* SleepLogView.swift in Sources */,
