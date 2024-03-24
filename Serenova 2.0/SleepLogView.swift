@@ -18,10 +18,53 @@ import FirebaseStorage
 class sleepLogModel {
     
 }
+class sleepLoggerModel: ObservableObject {
+    @Published var fullname = ""
+    @Published var totalSleepGoalHours : Float = -1
+    @Published var totalSleepGoalMins : Float = -1
+    @Published var deepSleepGoalHours : Float = -1
+    @Published var deepSleepGoalMins : Float = -1
+
+    
+    func fetchUsername() {
+        let db = Database.database().reference()
+        let id = Auth.auth().currentUser!.uid
+        let ur = db.child("User").child(id)
+        ur.observeSingleEvent(of: .value) { snapshot in
+            guard let userData = snapshot.value as? [String: Any] else {
+                print("Error fetching data")
+                return
+            }
+            
+            // Extract additional information based on your data structure
+            if let fullname = userData["name"] as? String {
+                self.fullname = fullname
+            }
+            
+            if let totalSleepGoalHours = userData["totalSleepGoalHours"] as? Float {
+                self.totalSleepGoalHours = totalSleepGoalHours
+            }
+            
+            if let totalSleepGoalMins = userData["totalSleepGoalMins"] as? Float {
+                self.totalSleepGoalMins = totalSleepGoalMins
+            }
+            
+            if let deepSleepGoalHours = userData["deepSleepGoalHours"] as? Float {
+                self.deepSleepGoalHours = deepSleepGoalHours
+            }
+            
+            if let deepSleepGoalMins = userData["deepSleepGoalMins"] as? Float {
+                self.deepSleepGoalMins = deepSleepGoalMins
+            }
+            
+        }
+    }
+}
+
+
 
 struct SleepLogView: View {
     let sleepManager = SleepManager()
-    var currentSession = SleepSession()
     @State private var samples: [HKCategorySample] = []
     //user data
     //TODO: add sleep attribute for date in Date extension for sleep object
@@ -68,6 +111,20 @@ struct SleepLogView: View {
                         Text("\(currentHrs) Hrs \(currentMin) Min")
                             .font(.system(size: 50, weight:.bold))
                             .foregroundColor(.tranquilMistMauve.opacity(0.7))
+
+                        
+                      /*  if (currentHrs > Int(viewModel.totalSleepGoalHours)) {
+                            if let user = currUser {
+                                //print("updating")
+                               //user.updateMoons(rewardCount: 20)
+                           }
+                        }
+                        else if (currentHrs == Int(viewModel.totalSleepGoalHours) && currentMin > Int(viewModel.totalSleepGoalMins)) {
+                            if let user = currUser {
+                                //print("updating")
+                               user.updateMoons(rewardCount: 20)
+                           }
+                        }*/
                         
                         Spacer()
                         
@@ -151,14 +208,6 @@ struct SleepLogView: View {
                                     .foregroundColor(.white)
                             
                         }
-                        NavigationLink(destination: JournalView().navigationBarBackButtonHidden(true)) {
-
-                            Image(systemName: "book.closed")
-                                .resizable()
-                                .frame(width: 30, height: 40)
-                                .foregroundColor(.white)
-                        
-                    }
                 }.padding()
                 .hSpacing(.center)
                 .background(Color.dreamyTwilightMidnightBlue)
@@ -323,12 +372,20 @@ struct ManualLogView: View {
     @State private var sleepStart = Date()
     @State private var sleepEnd = Date()
     @State private var totalDuration: TimeInterval = 0
+    @StateObject private var viewModel = sleepLoggerModel()
     
     @State private var currentDate = Date()
     
     @State private var showError:Bool = false
     @State private var showCamera:Bool = false
     @State private var errorMess: String = ""
+    @State private var sleepStartHours = 0
+    @State private var sleepStartMins = 0
+    @State private var sleepEndHours = 0
+    @State private var sleepEndMins = 0
+    @State private var durationHours = 0
+    @State private var durationMinutes = 0
+    
     
     
     //dismiss currentenvironment
@@ -388,8 +445,22 @@ struct ManualLogView: View {
     
                     }
                 
+                let components = calendar.dateComponents([.hour, .minute], from: sleepStart)
+                let sleepStartHours = components.hour ?? 0
+                let sleepStartMins = components.minute ?? 0
+                let endComponents = calendar.dateComponents([.hour, .minute], from: sleepEnd)
+                let sleepEndHours = endComponents.hour ?? 0
+                let sleepEndMins = endComponents.minute ?? 0
+                let totalDurationInSeconds = sleepEnd.timeIntervalSince(sleepStart)
+                let durationHours = Int(totalDurationInSeconds) / 3600
+                let durationMinutes = (Int(totalDurationInSeconds) % 3600) / 60
+                print("dur: \(durationHours)")
+                print("min: \(durationMinutes)")
+                print("dur2: \(viewModel.totalSleepGoalHours)")
+                print("min2: \(viewModel.totalSleepGoalMins)")
                 dismiss()
-            }, label: {
+            }
+                   , label: {
                     Text("Log Sleep!")
                     .fontWeight(.semibold)
                     .foregroundStyle(Color.dreamyTwilightAccentViolet)
@@ -397,8 +468,25 @@ struct ManualLogView: View {
                     .background(Color.nightfallHarmonySilverGray.opacity(0.3), in: .rect).cornerRadius(10)
                             })
                             .padding(15)
+                            .onAppear {
+                                    if (durationHours == Int(viewModel.totalSleepGoalHours) && durationMinutes > Int(viewModel.totalSleepGoalMins)) {
+                                        if let user = currUser {
+                                            print("helo")
+                                            user.updateMoons(rewardCount: 20)
+                                        }
+                                    }
+                                else if (Int(viewModel.totalSleepGoalHours) > durationHours) {
+                                    if let user = currUser {
+                                        print("helllooo")
+                                        user.updateMoons(rewardCount: 20)
+                                    }
+                                }
+                                }
             
         }.padding()
+            .onAppear {
+                viewModel.fetchUsername()
+            }
     }
     func errorAlerts(_ error: Error)async{
         await MainActor.run(body: {
@@ -425,6 +513,11 @@ struct ManualLogView: View {
                 }
                 print("in Task ", sleepStart, sleepEnd)
                 
+                if let user = currUser {
+                    print("hereeeeee")
+                   user.updateMoons(rewardCount: 1)
+               }
+               
                 // new session object
                 var newSession = SleepSession(sleepStart: sleepStart, sleepEnd:sleepEnd, date: date , manualInterval: duration)
                 
