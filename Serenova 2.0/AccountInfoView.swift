@@ -34,6 +34,7 @@ class AccountInfoViewModel: ObservableObject {
     @Published var totalSleepGoalMins : Float = -1
     @Published var deepSleepGoalHours : Float = -1
     @Published var deepSleepGoalMins : Float = -1
+    @Published var moonCount : Int = -1
 
     
     func fetchUsername() {
@@ -121,6 +122,10 @@ class AccountInfoViewModel: ObservableObject {
             
             if let deepMins = userData["deepSleepGoalMins"] as? Float {
                 self.deepSleepGoalMins = deepMins
+            }
+            
+            if let moonCount = userData["moonCount"] as? Int {
+                self.moonCount = moonCount
             }
                         
         }
@@ -366,6 +371,10 @@ struct AccountInfoView: View {
                             }
                             .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
                         }
+                        
+                        Text("Moon Rewards Count: \(viewModel.moonCount)")
+                            .padding()
+                            .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
                     }
                     Spacer()
                     
