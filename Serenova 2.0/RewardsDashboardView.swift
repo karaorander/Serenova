@@ -122,9 +122,9 @@ struct RewardsDashboardView: View {
                             
                             // Current Tasks Section
                             VStack {
-                                TaskView(taskName: "Sleep Streak", moonReward: 100, iconName: "moon.zzz")
-                                TaskView(taskName: "Wellness Warrior", moonReward: 50, iconName: "link")
-                                TaskView(taskName: "Wellness Warrior", moonReward: 25, iconName: "speaker.wave.2")
+                                TaskView(taskName: "Sleep Streak", moonReward: 100, iconName: "moon.zzz", description: "Maintain a 7-day sleep streak to earn 100 moons.")
+                                TaskView(taskName: "Wellness Warrior", moonReward: 50, iconName: "link", description: "Complete 5 wellness activities this week to earn 50 moons.")
+                                TaskView(taskName: "Mindfulness Master", moonReward: 25, iconName: "speaker.wave.2", description: "Participate in a 10-minute mindfulness session to earn 25 moons.")
                             }
                         }
                     }
@@ -162,10 +162,42 @@ struct RewardsDashboardView: View {
     
 }
 
+struct PopoverContentView: View {
+    var taskName: String
+    var description: String
+    var iconName: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack {
+                Image(systemName: iconName)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 60, height: 60)
+                    .foregroundColor(.blue)
+                Text(taskName)
+                    .font(.title2)
+                    .fontWeight(.bold)
+            }
+            Divider()
+            Text(description)
+                .font(.body)
+            Spacer()
+        }
+        .frame(width: 300, height: 200) // Adjust the size of the popover content as needed
+        .padding()
+        .background(Color.blue.opacity(0.2)) // Change the background color here
+        .cornerRadius(12) // Add rounded corners to the background
+        .padding() // Add some padding around the popover content to avoid edge-to-edge coloring
+    }
+}
+
 struct TaskView: View {
     var taskName: String
     var moonReward: Int
     var iconName: String
+    var description: String
+    @State private var showPopover = false
 
     var body: some View {
         HStack {
@@ -180,6 +212,13 @@ struct TaskView: View {
         .padding()
         .background(Color.white.opacity(0.1))
         .cornerRadius(10)
+        .onTapGesture {
+            self.showPopover = true
+        }
+        .popover(isPresented: $showPopover) {
+            PopoverContentView(taskName: taskName, description: description, iconName: iconName)
+                .padding()
+        }
     }
 }
 
