@@ -15,6 +15,8 @@ struct ForumPostView: View {
     /// callback
     //var onPos: (Post)->()
     
+
+        
     @State var postText: String = ""
     @State var postTitle: String = ""
     @State var postImageData: Data?
@@ -244,6 +246,7 @@ struct ForumPostView: View {
                     return
                 }
                 
+
                 // Create new Post Object
                 //var newPost = Post(title: postTitle, content: postText
                                    //authorUsername: currUser.username,
@@ -295,6 +298,7 @@ struct ForumPostView: View {
             try await postImageURL = postImageRef.downloadURL()
         }
     }
+    
 }
 
 

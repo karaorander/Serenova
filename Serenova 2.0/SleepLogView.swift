@@ -8,8 +8,16 @@
 import SwiftUI
 import UIKit
 import HealthKit
+import Firebase
+import FirebaseAuth
+import FirebaseDatabase
+import FirebaseDatabaseSwift
+import FirebaseStorage
 
 //TODO: set up HK with firebase, get data from firebase instead of HKstore
+class sleepLogModel {
+    
+}
 
 struct SleepLogView: View {
     let sleepManager = SleepManager()
@@ -28,10 +36,11 @@ struct SleepLogView: View {
     @State private var createWeek: Bool = false
     
     @State private var manualLog: Bool = false
-    
-   
     @Namespace private var animation
     @State var selected = 0
+    
+   
+    
     var colors = [Color.tranquilMistAccentTurquoise.opacity(0.6), Color.dreamyTwilightMidnightBlue]
     var columns = Array(repeating: GridItem(.flexible(), spacing: 20), count: 2)
     var body: some View {
@@ -148,7 +157,7 @@ struct SleepLogView: View {
                 }
                 // querey data
                 .onAppear() {
-                    sleepManager.querySleepData(completion: { totalSleepTime in
+                    sleepManager.querySleepData(completion: { totalSleepTime, deepSleepTime, coreSleepTime, remSleepTime in
                                         // Update UI with sleep data
                                         // For example:
                         currentHrs = Int(totalSleepTime ?? 0) / 3600
@@ -252,7 +261,7 @@ struct SleepLogView: View {
                     currentHrs = 0
                     currentMin = 0
                     // query sleep data
-                    sleepManager.querySleepData(completion: { totalSleepTime in
+                    sleepManager.querySleepData(completion: { totalSleepTime, deepSleepTime, coreSleepTime, remSleepTime in
                         DispatchQueue.main.async {
                             currentHrs = Int(totalSleepTime ?? 0) / 3600
                             currentMin = (Int(totalSleepTime ?? 0) % 3600) / 60
@@ -297,6 +306,7 @@ struct SleepLogView: View {
         }
         print(weekSlider.count)
     }
+    
 }
 
 struct ManualLogView: View {
@@ -304,8 +314,14 @@ struct ManualLogView: View {
     //TODO: add sleep attribute for date in Date extension for sleep object
     @State private var sleepStart = Date()
     @State private var sleepEnd = Date()
+    @State private var totalDuration: TimeInterval = 0
     
     @State private var currentDate = Date()
+    
+    @State private var showError:Bool = false
+    @State private var showCamera:Bool = false
+    @State private var errorMess: String = ""
+    
     
     //dismiss currentenvironment
     @Environment(\.dismiss) private var dismiss
@@ -335,8 +351,36 @@ struct ManualLogView: View {
             }
             //TODO: send manual sleep log times to firebase
             Button(action: {
-            
-                    dismiss()
+                
+                let calendar = Calendar.current
+                    
+                    // Start of the day for the sleep start and end dates
+                    let startOfSleepStartDay = calendar.startOfDay(for: sleepStart)
+                    let startOfSleepEndDay = calendar.startOfDay(for: sleepEnd)
+                    
+                    // If sleep session spans multiple days
+                    if startOfSleepStartDay != startOfSleepEndDay {
+                        // Calculate the duration for the first day
+                        totalDuration = calendar.date(byAdding: .day, value: 1, to: startOfSleepStartDay)?.timeIntervalSince(sleepStart) ?? 0
+                      
+                        creatManualSession(sleepStart: sleepStart, sleepEnd: calendar.date(byAdding: .day, value: 1, to: startOfSleepStartDay) ?? sleepEnd, date: startOfSleepStartDay, duration: totalDuration)
+                        print("Duration first day: \(totalDuration)")
+                        // Calculate the duration for the last day
+                        totalDuration = sleepEnd.timeIntervalSince(startOfSleepEndDay)
+                        
+                        print("Duration last day: \(totalDuration)")
+                        creatManualSession(sleepStart: startOfSleepEndDay,  sleepEnd: sleepEnd, date: startOfSleepEndDay, duration: totalDuration)
+                        
+                    } else {
+                        // Sleep session is within a single day
+                        totalDuration = sleepEnd.timeIntervalSince(sleepStart)
+                        
+                        print("Total duration: \(totalDuration)")
+                        creatManualSession(sleepStart: sleepStart, sleepEnd: sleepEnd, date: startOfSleepStartDay, duration: totalDuration)
+    
+                    }
+                
+                dismiss()
             }, label: {
                     Text("Log Sleep!")
                     .fontWeight(.semibold)
@@ -348,8 +392,54 @@ struct ManualLogView: View {
             
         }.padding()
     }
+    func errorAlerts(_ error: Error)async{
+        await MainActor.run(body: {
+            errorMess = error.localizedDescription
+            showError.toggle()
+        })
+    }
+    
+    //error handling -> error alerts (String version)
+    func errorAlerts(_ error: String)async{
+        await MainActor.run(body: {
+            errorMess = error
+            showError.toggle()
+        })
+    }
+    
+    func creatManualSession(sleepStart:Date, sleepEnd:Date, date:Date, duration:TimeInterval) {
+        
+        Task {
+            do {
+                guard currUser != nil else {
+                    await errorAlerts("ERROR! Not signed in.")
+                    return
+                }
+                print("in Task ", sleepStart, sleepEnd)
+                
+                if let user = currUser {
+                    print("hereeeeee")
+                   user.updateMoons(rewardCount: 1)
+               }
+               
+                // new session object
+                var newSession = SleepSession(sleepStart: sleepStart, sleepEnd:sleepEnd, date: date , manualInterval: duration)
+                
+                // Store sleep session
+                try await newSession.addSleepSession()
+                
+            } catch {
+                await errorAlerts(error)
+            }
+        }
+    }
+    
     
 }
+
+
+
+
 struct OffsetKey: PreferenceKey {
     static var defaultValue: CGFloat = 0
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {

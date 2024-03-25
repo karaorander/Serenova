@@ -34,6 +34,13 @@ class User: Codable {
     public var typicalWakeUpTime: String = ""
     public var typicalBedTime: String = ""
     public var isEarlyBird: Bool = true
+    public var totalSleepGoalHours: Float = -1
+    public var totalSleepGoalMins: Float = -1
+    public var deepSleepGoalHours: Float = -1
+    public var deepSleepGoalMins: Float = -1
+    public var moonCount: Int = -1
+    public var friends: [String] = []
+    
     
     /* Gender */
     enum Gender: String, Codable {
@@ -57,7 +64,7 @@ class User: Codable {
              gender, weight, height, age, hadInsomnia,
              hasInsomnia, exercisesRegularly, hasMedication,
              doesSnore, hasNightmares, typicalWakeUpTime,
-             typicalBedTime, isEarlyBird
+             typicalBedTime, isEarlyBird, moonCount
     }
     
     /* Database Reference */
@@ -87,10 +94,44 @@ class User: Codable {
         ref.child(self.userID).setValue(encodedData)
     }
     
+    func addSleepSession(sleepSessionData: [String: Any]) throws {
+        // Write new sleep session under the "sleepSessions" node for the user
+        ref.child(self.userID).child("sleepSessions").childByAutoId().setValue(sleepSessionData)
+        { error, _ in
+                    if let error = error {
+                        print("Failed to log sleep session:", error.localizedDescription)
+                    } else {
+                        print("Sleep session logged successfully")
+                    }
+                }
+    }
+    
     /*
      * TODO: Function to read user data from
      * Firebase
      */
+    
+    
+    /*
+     * Function to update rewards
+     * to Firebase
+     */
+    func updateMoons(rewardCount : Int) {
+        let db = Database.database().reference()
+        let id = Auth.auth().currentUser!.uid
+        
+        //TODO: Add code to make sure username is not already in database
+        //TODO: Make sure new email, phone number etc. are valid like in signup view
+
+        if let currUser = currUser {
+            var moon = currUser.moonCount
+            moon = moon + rewardCount
+            currUser.moonCount = moon
+            currUser.updateValues(newValues: ["moonCount" : moon])
+        } else {
+            print("error")
+        }
+    }
     
     /*
      * Function to update values
@@ -99,6 +140,27 @@ class User: Codable {
     func updateValues(newValues: [String: Any]) {
         // Reflect changes to Firebase
         ref.child(self.userID).updateChildValues(newValues)
+    }
+    
+    /*
+     * Function to get Friend data
+     * from Firebase
+     */
+    func getFriendData(friendID: String, data: String) -> String {
+        let db = Database.database().reference()
+        let ur = db.child("User").child(friendID)
+        var dataValue = ""
+        
+        ur.observeSingleEvent(of: .value, with: { snapshot in
+            guard let userData = snapshot.value as? [String: Any] else {
+                print("Error fetching data")
+                return
+            }
+            
+            dataValue = userData[data] as! String
+        })
+        
+        return dataValue
     }
 
     /*

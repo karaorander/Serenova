@@ -167,7 +167,7 @@ struct LoginView: View {
                         // you created your account before User class was updated.
                         // Delete your account and sign up again.
                         currUser = try snapshot.data(as: User.self)
-                        currUser!.userID = authResult.user.uid
+                        currUser?.userID = authResult.user.uid
                     } catch {
                         print(error)
                     }

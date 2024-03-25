@@ -13,6 +13,10 @@ import FirebaseDatabaseSwift
 // Get username
 class GoalViewModel: ObservableObject {
     @Published var fullname = ""
+    @Published var totalSleepGoalHours : Float = -1
+    @Published var totalSleepGoalMins : Float = -1
+    @Published var deepSleepGoalHours : Float = -1
+    @Published var deepSleepGoalMins : Float = -1
 
     
     func fetchUsername() {
@@ -30,10 +34,78 @@ class GoalViewModel: ObservableObject {
                 self.fullname = fullname
             }
             
+            if let totalSleepGoalHours = userData["totalSleepGoalHours"] as? Float {
+                self.totalSleepGoalHours = totalSleepGoalHours
+            }
+            
+            if let totalSleepGoalMins = userData["totalSleepGoalMins"] as? Float {
+                self.totalSleepGoalMins = totalSleepGoalMins
+            }
+            
+            if let deepSleepGoalHours = userData["deepSleepGoalHours"] as? Float {
+                self.deepSleepGoalHours = deepSleepGoalHours
+            }
+            
+            if let deepSleepGoalMins = userData["deepSleepGoalMins"] as? Float {
+                self.deepSleepGoalMins = deepSleepGoalMins
+            }
+            
         }
     }
 }
 
+let articles = [
+    Article(articleTitle: "The Importance of Deep Sleep", articleLink: "https://www.medicalnewstoday.com/articles/325363", articlePreview: "Deep sleep plays a crucial role in your overall health...", articleTags: ["Health", "Sleep"], articleId: "1"),
+    Article(articleTitle: "5 Tips for Better Sleep Hygiene", articleLink: "https://www.medicalnewstoday.com/articles/325363", articlePreview: "Improving your sleep hygiene can lead to better sleep quality...", articleTags: ["Tips", "Hygiene"], articleId: "2"),
+    // Add more articles as needed
+]
+
+struct ArticleRow: View {
+    var article: Article
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 5) {
+            Text(article.articleTitle)
+                .font(.headline)
+                .foregroundColor(.primary)
+            Text(article.articlePreview)
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+        }
+        .padding()
+    }
+}
+
+struct ArticleCard: View {
+    var article: Article
+
+    var body: some View {
+        VStack {
+            // Placeholder for an article image
+            Rectangle()
+                .fill(LinearGradient(gradient: Gradient(colors: [.blue, .purple]), startPoint: .topLeading, endPoint: .bottomTrailing))
+                .frame(height: 120)
+                .cornerRadius(12)
+                .overlay(
+                    Text(article.articleTitle) // Consider adding a Text Overlay for the title or use a separate Text view below
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding(),
+                    alignment: .bottomLeading
+                )
+
+            Text(article.articlePreview)
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .padding([.horizontal, .bottom])
+                .frame(width: 250, alignment: .leading) // Fixed width for alignment in horizontal scroll
+        }
+        .background(Color.white) // Card background
+        .cornerRadius(12)
+        .shadow(radius: 5) // Shadow for depth
+        .padding(.vertical, 5) // Slight vertical padding
+    }
+}
 
 //potential opening screen
 struct SleepGoalsView: View {
@@ -160,7 +232,46 @@ struct SleepGoalsView: View {
                                 .cornerRadius(10)
                         }
                     }.padding()
+                    
+                    VStack {
+                        Text("Related Articles")
+                            .font(.system(size:24, weight: .bold))
+                            .fontWeight(.bold)
+                            .foregroundColor(.nightfallHarmonyNavyBlue.opacity(0.8)) // Adjust text color as needed
+                            .padding(.top)
+                            .frame(maxWidth: .infinity) // Use maxWidth to allow the text to center
+                            .multilineTextAlignment(.center) // Center alignment for the text
+
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 15) { // Maintain spacing between article boxes
+                                ForEach(articles, id: \.articleId) { article in
+                                    Link(destination: URL(string: article.articleLink)!) {
+                                        VStack(alignment: .leading, spacing: 5) {
+                                            Text(article.articleTitle)
+                                                .font(.headline)
+                                                .fontWeight(.semibold)
+                                                .foregroundColor(.white) // Adjust text color as needed
+                                                .lineLimit(2) // Limit title to 2 lines
+
+                                            Text(article.articlePreview)
+                                                .font(.subheadline)
+                                                .foregroundColor(.white.opacity(0.7)) // Adjust text color as needed
+                                                .lineLimit(3) // Limit preview text to 3 lines
+                                        }
+                                        .padding()
+                                        .background(Color.moonlitSerenityLilac.opacity(0.1)) // Set background color
+                                        .cornerRadius(10)
+                                        .shadow(radius: 2)
+                                    }
+                                }
+                            }
+                            .padding(.horizontal)
+                        }
+                    }
+                    .padding(.bottom)
                 }
+      
+                    
                     HStack (spacing: 40){
                         NavigationLink(destination: SleepGraphView().navigationBarBackButtonHidden(true)) {
                             
@@ -194,6 +305,14 @@ struct SleepGoalsView: View {
                                     .foregroundColor(.white)
                             
                         }
+                        NavigationLink(destination: JournalView().navigationBarBackButtonHidden(true)) {
+
+                            Image(systemName: "book.closed")
+                                .resizable()
+                                .frame(width: 30, height: 40)
+                                .foregroundColor(.white)
+                        
+                    }
                 }.padding()
                 .hSpacing(.center)
                 .background(Color.dreamyTwilightMidnightBlue)
@@ -231,6 +350,7 @@ struct EditGoalsView: View {
     @State var deep_hrs: Int = 0
     @State var deep_min: Int = 0
     
+    @StateObject private var viewModel = AccountInfoViewModel()
     
     
     var body: some View {
@@ -281,68 +401,128 @@ struct EditGoalsView: View {
                         .shadow(color: .white.opacity(0.1), radius: 10)
                     NavigationLink (destination: SleepGoalsView().navigationBarBackButtonHidden(true)) {
                         HStack {
-                            Text("Save Goals").font(.system(size: 18)).fontWeight(.medium).foregroundColor(.white).cornerRadius(10)
-                            // saveGoals(goal)
-                        }.frame(width: 320, height: 50).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(10)
+                            Button(action:{
+                                saveGoals()
+                            }){
+                                Text("Save Goals").font(.system(size: 18)).fontWeight(.medium).foregroundColor(.white).cornerRadius(10)
+                                
+                            }.frame(width: 320, height: 50).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(10)
+                        }
+                        
                     }
                     
-                    
                 }
-                
             }
+            
+        }
+        
+    }
+    
+    func saveGoals() {
+        if let currUser = currUser {
+            currUser.totalSleepGoalHours = Float(total_hrs)
+            currUser.totalSleepGoalMins = Float(total_min)
+            currUser.deepSleepGoalHours = Float(deep_hrs)
+            currUser.deepSleepGoalMins = Float(deep_min)
+            currUser.updateValues(newValues: ["totalSleepGoalHours" :
+                                                currUser.totalSleepGoalHours,
+                                              "totalSleepGoalMins" : currUser.totalSleepGoalMins,
+                                              "deepSleepGoalHours" : currUser.deepSleepGoalHours,
+                                              "deepSleepGoalMins" : currUser.deepSleepGoalMins])
+        } else {
+            print("error")
         }
     }
-}
-
-
-//circle shape
-struct RoundedShape: Shape {
-    func path(in rect: CGRect) -> Path {
-        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 5, height: 5))
-        return Path(path.cgPath)
+    
+    func getTotalGoal() -> Float{
+        if let currUser = currUser {
+            var totalGoal = (currUser.totalSleepGoalHours * 60) + currUser.totalSleepGoalMins
+            if (totalGoal < 0) {
+                return 0
+            } else {
+                return totalGoal
+            }
+        } else {
+            return 0
+        }
     }
-}
-//daily Sample data
-//TODO: get sleep data
-struct Daily: Hashable {
-    var id : Int
-    var day : String
-    var sleepMinutes : CGFloat
-    var deepSleepMinutes : CGFloat
-    var remMinutes : CGFloat
-}
-var sleep_data = [
-    Daily(id: 0, day: "Day 1", sleepMinutes: 600, deepSleepMinutes: 300, remMinutes: 300),
-    Daily(id: 1, day: "Day 2", sleepMinutes: 400, deepSleepMinutes: 150, remMinutes: 250),
-    Daily(id: 2, day: "Day 3", sleepMinutes: 500, deepSleepMinutes: 300, remMinutes: 200),
-    Daily(id: 3, day: "Day 4", sleepMinutes: 300, deepSleepMinutes: 220, remMinutes: 80),
-    Daily(id: 4, day: "Day 5", sleepMinutes: 450, deepSleepMinutes: 300, remMinutes: 150),
-    Daily(id: 5, day: "Day 6", sleepMinutes: 600, deepSleepMinutes: 400, remMinutes: 200),
-    Daily(id: 6, day: "Day 7", sleepMinutes: 320, deepSleepMinutes: 300, remMinutes: 20)
-]
 
-struct GoalStats: Identifiable {
-    var id: Int
-    var title: String
-    var currentData : CGFloat
-    var goal: CGFloat
-    var color : Color
+    func getDeepGoal() -> Float{
+        if let currUser = currUser {
+            var deepGoal = (currUser.deepSleepGoalHours * 60) + currUser.deepSleepGoalMins
+            if (deepGoal < 0) {
+                return 0
+            } else {
+                return deepGoal
+            }
+        } else {
+            return 0
+        }
+    }
+    
+    // description and name format can be changed
+    func metTotalGoal() {
+        var currentData = goal_stats[1].currentData
+        if (getTotalGoal() >= Float(currentData)) {
+            currUser?.updateMoons(rewardCount: 50)
+        }
+    }
+    
+    // description and name format can be changed
+    func metDeepGoal() {
+        var currentData = goal_stats[0].currentData
+        if (getDeepGoal() >= Float(currentData)) {
+            currUser?.updateMoons(rewardCount: 50)
+        }
+    }
+
 }
- 
-//goals sample data
-//TODO: get sleep data
-var goal_stats = [
-    GoalStats(id: 0, title: "Deep Sleep", currentData: 300, goal: 2100, color: .dreamyTwilightLavenderPurple),
-    GoalStats(id: 1, title: "Total Sleep", currentData: 500, goal: 4000, color: .soothingNightAccentBlue)
-]
 
+    private var viewModel = AccountInfoViewModel()
+    
+    //circle shape
+    struct RoundedShape: Shape {
+        func path(in rect: CGRect) -> Path {
+            let path = UIBezierPath(roundedRect: rect, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 5, height: 5))
+            return Path(path.cgPath)
+        }
+    }
+    //daily Sample data
+    //TODO: get sleep data
+    struct Daily: Hashable {
+        var id : Int
+        var day : String
+        var sleepMinutes : CGFloat
+        var deepSleepMinutes : CGFloat
+        var remMinutes : CGFloat
+    }
+    var sleep_data = [
+        Daily(id: 0, day: "Day 1", sleepMinutes: 600, deepSleepMinutes: 300, remMinutes: 300),
+        Daily(id: 1, day: "Day 2", sleepMinutes: 400, deepSleepMinutes: 150, remMinutes: 250),
+        Daily(id: 2, day: "Day 3", sleepMinutes: 500, deepSleepMinutes: 300, remMinutes: 200),
+        Daily(id: 3, day: "Day 4", sleepMinutes: 300, deepSleepMinutes: 220, remMinutes: 80),
+        Daily(id: 4, day: "Day 5", sleepMinutes: 450, deepSleepMinutes: 300, remMinutes: 150),
+        Daily(id: 5, day: "Day 6", sleepMinutes: 600, deepSleepMinutes: 400, remMinutes: 200),
+        Daily(id: 6, day: "Day 7", sleepMinutes: 320, deepSleepMinutes: 300, remMinutes: 20)
+    ]
+    
+    struct GoalStats: Identifiable {
+        var id: Int
+        var title: String
+        var currentData : CGFloat
+        var goal: CGFloat
+        var color : Color
+    }
 
-//func saveGoals(goal: int) {
-//    var ref = Database.database().reference()
-//    // could store as object to hold more info
-//     ref.child("SleepGoals").setValue(goal)
-//}
-//
+    //goals sample data
+    //TODO: get sleep data
+    var goal_stats = [
+        GoalStats(id: 0, title: "Deep Sleep", currentData: 300, goal: 270 /*CGFloat(getTotalGoal())*/, color: .dreamyTwilightLavenderPurple),
+        GoalStats(id: 1, title: "Total Sleep", currentData: 500, goal: 400 /*CGFloat(getDeepGoal())*/, color: .soothingNightAccentBlue)
+    ]
+    
+    
+
 //// TODO: read from API to get other value for comparison
 //func readValueGoal() {
 //    var ref = Database.database().reference()

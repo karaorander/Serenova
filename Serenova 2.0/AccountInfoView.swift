@@ -9,10 +9,6 @@ import SwiftUI
 import Firebase
 import FirebaseDatabase
 
-// TODO: DELETE ACCOUNT BUTTON
-
-// TODO: GET AND STORE EARLY BIRD OR NIGHT OWL PREFERENCE
-
 //Fetch all data from firebase
 class AccountInfoViewModel: ObservableObject {
     @Published var username = ""
@@ -23,6 +19,7 @@ class AccountInfoViewModel: ObservableObject {
     @Published var gender = ""
     @Published var height = ""
     @Published var weight = ""
+    @Published var bio = ""
     @Published var notifications: Bool = false
     @Published var snore : Bool = true
     @Published var hadinsomnia : Bool = true
@@ -30,79 +27,126 @@ class AccountInfoViewModel: ObservableObject {
     @Published var hasmedication : Bool = true
     @Published var hasnightmares : Bool = true
     @Published var isearlybird : Bool = true
+    @Published var totalSleepGoalHours : Float = -1
+    @Published var totalSleepGoalMins : Float = -1
+    @Published var deepSleepGoalHours : Float = -1
+    @Published var deepSleepGoalMins : Float = -1
+    @Published var moonCount : Int = -1
     
     func fetchUsername() {
+        if let currentUser = Auth.auth().currentUser {
+            let db = Database.database().reference()
+            let id = Auth.auth().currentUser!.uid
+            let ur = db.child("User").child(id)
+            // Now you can use userRef safely
+        
+            ur.observeSingleEvent(of: .value) { snapshot in
+                guard let userData = snapshot.value as? [String: Any] else {
+                    print("Error fetching data")
+                    return
+                }
+                
+                // Extract additional information based on your data structure
+                if let fullname = userData["name"] as? String {
+                    self.fullname = fullname
+                }
+                
+                if let email = userData["email"] as? String {
+                    self.email = email
+                }
+                
+                if let username = userData["username"] as? String {
+                    self.username = username
+                }
+                
+                if let phoneNumber = userData["phoneNumber"] as? String {
+                    self.phoneNumber = phoneNumber
+                }
+                
+                if let age = userData["age"] as? String {
+                    self.age = age
+                }
+                
+                if let gender = userData["gender"] as? String {
+                    self.gender = gender
+                }
+                
+                if let height = userData["height"] as? String {
+                    self.height = height
+                }
+                
+                if let weight = userData["weight"] as? String {
+                    self.weight = weight
+                }
+                
+                if let snore = userData["doesSnore"] as? Bool {
+                    self.snore = snore
+                }
+                
+                if let notifications = userData["notifications"] as? Bool {
+                    self.notifications = notifications
+                }
+                
+                if let hadinsomnia = userData["hadInsomnia"] as? Bool {
+                    self.hadinsomnia = hadinsomnia
+                }
+                
+                if let hasinsomnia = userData["hasInsomnia"] as? Bool {
+                    self.hasinsomnia = hasinsomnia
+                }
+                
+                if let hasmeds = userData["hasMedication"] as? Bool {
+                    self.hasmedication = hasmeds
+                }
+                
+                if let hasnights = userData["hasNightmares"] as? Bool {
+                    self.hasnightmares = hasnights
+                }
+                
+                if let earlybird = userData["isEarlyBird"] as? Bool {
+                    self.isearlybird = earlybird
+                }
+                
+                if let totalHours = userData["totalSleepGoalHours"] as? Float {
+                    self.totalSleepGoalHours = totalHours
+                }
+                
+                if let totalMins = userData["totalSleepGoalMins"] as? Float {
+                    self.totalSleepGoalMins = totalMins
+                }
+                
+                if let deepHours = userData["deepSleepGoalHours"] as? Float {
+                    self.deepSleepGoalHours = deepHours
+                }
+                
+                if let deepMins = userData["deepSleepGoalMins"] as? Float {
+                    self.deepSleepGoalMins = deepMins
+                }
+                
+                if let moonCount = userData["moonCount"] as? Int {
+                    self.moonCount = moonCount
+                }
+                
+                if let bio = userData["bio"] as? String {
+                    self.bio = bio
+                    if (self.bio == "") {
+                        self.bio = "Write your bio here!"
+                    }
+                }
+            }
+        } else {
+            // Handle the case where there's no authenticated user
+            print("No authenticated user")
+        }
+                        
+    }
+    
+    func deleteUser() {
         let db = Database.database().reference()
         let id = Auth.auth().currentUser!.uid
         let ur = db.child("User").child(id)
-        ur.observeSingleEvent(of: .value) { snapshot in
-            guard let userData = snapshot.value as? [String: Any] else {
-                print("Error fetching data")
-                return
-            }
-            
-            // Extract additional information based on your data structure
-            if let fullname = userData["name"] as? String {
-                self.fullname = fullname
-            }
-            
-            if let email = userData["email"] as? String {
-                self.email = email
-            }
-            
-            if let username = userData["username"] as? String {
-                self.username = username
-            }
-            
-            if let phoneNumber = userData["phoneNumber"] as? String {
-                self.phoneNumber = phoneNumber
-            }
-            
-            if let age = userData["age"] as? String {
-                self.age = age
-            }
-            
-            if let gender = userData["gender"] as? String {
-                self.gender = gender
-            }
-            
-            if let height = userData["height"] as? String {
-                self.height = height
-            }
-            
-            if let weight = userData["weight"] as? String {
-                self.weight = weight
-            }
-            
-            if let snore = userData["doesSnore"] as? Bool {
-                self.snore = snore
-            }
-            
-            if let notifications = userData["notifications"] as? Bool {
-                self.notifications = notifications
-            }
-            
-            if let hadinsomnia = userData["hadInsomnia"] as? Bool {
-                self.hadinsomnia = hadinsomnia
-            }
-            
-            if let hasinsomnia = userData["hasInsomnia"] as? Bool {
-                self.hasinsomnia = hasinsomnia
-            }
-            
-            if let hasmeds = userData["hasMedication"] as? Bool {
-                self.hasmedication = hasmeds
-            }
-            
-            if let hasnights = userData["hasNightmares"] as? Bool {
-                self.hasnightmares = hasnights
-            }
-            
-            if let earlybird = userData["isEarlyBird"] as? Bool {
-                self.isearlybird = earlybird
-            }
-            
-        }
+        
+        db.child("User").child(id).removeValue();
     }
     
     func storeData() {
@@ -136,13 +180,67 @@ class AccountInfoViewModel: ObservableObject {
             }
         }
     }
+    
+    func storeBio() {
+        let db = Database.database().reference()
+        let id = Auth.auth().currentUser!.uid
+        let ur = db.child("User").child(id)
+        
+        let user: [String: Any] = ["bio": self.bio
+            ]
+        
+        ur.updateChildValues(user) { (error, reference) in
+            if let error = error {
+                print("Error updating user bio")
+            } else {
+                print("bio updated successfully")
+            }
+        }
+    }
 }
+
+struct ImagePicker: UIViewControllerRepresentable {
+    @Binding var selectedImage: UIImage?
+    @Environment(\.presentationMode) var presentationMode
+
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.delegate = context.coordinator
+        return picker
+    }
+
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+        let parent: ImagePicker
+
+        init(_ parent: ImagePicker) {
+            self.parent = parent
+        }
+
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+            if let image = info[.originalImage] as? UIImage {
+                parent.selectedImage = image
+            }
+            parent.presentationMode.wrappedValue.dismiss()
+        }
+    }
+}
+
 
 struct AccountInfoView: View {
     @State private var color_theme = "Dreamy Twilight"
-    // TODO: Get username, full name, email, notification preferences from database
     @StateObject private var viewModel = AccountInfoViewModel()
     @State private var toggleIsOn: Bool = false
+    
+    // Added state for image picker and profile image
+    @State private var showingImagePicker = false
+    @State private var inputImage: UIImage?
+    @State private var profileImage: Image?
     
     
     var body: some View {
@@ -155,59 +253,30 @@ struct AccountInfoView: View {
                     VStack {
                         Text("Account Info")
                             .font(Font.custom("NovaSquare-Bold", size: 40))
-                        
                             .frame(height: 2.0, alignment: .leading)
                             .padding()
                         Spacer().frame(height: 20)
                         
-                        // Color drop down menu
-                        // Color theme stored in $color_theme
-                        /*VStack {
-                            
-                            HStack {
-                                Button {
-                                    color_theme = "Moonlit Serenity"
-                                } label: {
-                                    Circle()
-                                        .foregroundColor(.moonlitSerenitySteelBlue)
-                                        .frame(height: 30)
+                        // Profile Image with Tap Gesture for Image Picker
+                        if profileImage != nil {
+                            profileImage?
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 90, height: 85)
+                                .clipShape(Circle())
+                                .onTapGesture {
+                                    showingImagePicker = true
                                 }
-                                Button {
-                                    color_theme = "Soothing Night"
-                                } label: {
-                                    Circle()
-                                        .foregroundColor(.soothingNightAccentBlue)
-                                        .frame(height: 30)
+                        } else {
+                            Image(systemName: "person.crop.circle.fill") // Placeholder image
+                                .resizable()
+                                .frame(width: 90, height: 85)
+                                .clipShape(Circle())
+                                .onTapGesture {
+                                    showingImagePicker = true
                                 }
-                                Button {
-                                    color_theme = "Tranquil Mist"
-                                } label: {
-                                    Circle()
-                                        .foregroundColor(.tranquilMistTealBlue)
-                                        .frame(height: 30)
-                                }
-                                Button {
-                                    color_theme = "Dreamy Twilight"
-                                } label: {
-                                    Circle()
-                                        .foregroundColor(.dreamyTwilightLavenderPurple)
-                                        .frame(height: 30)
-                                }
-                                Button {
-                                    color_theme = "Nightfall Harmony"
-                                } label: {
-                                    Circle()
-                                        .foregroundColor(.nightfallHarmonyRoyalPurple)
-                                        .frame(height: 30)
-                                }
-                            }
-                            
-                            Spacer().frame(height:30)
-                        }*/
+                        }
                         
-                        Image(.userimageprofile)
-                            .resizable()
-                            .frame(width: 90, height: 85)
                         Spacer().frame(height:25)
                         
                         //Shows Full Name
@@ -261,7 +330,7 @@ struct AccountInfoView: View {
                         }
                         
                         // Rewards Page
-                        NavigationLink(destination: ResetPasswordView()){
+                        NavigationLink(destination: RewardsDashboardView()){
                             HStack{
                                 Text("Rewards Dashboard")
                                     .padding()
@@ -285,6 +354,10 @@ struct AccountInfoView: View {
                             }
                             .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
                         }
+                        
+                        Text("Moon Rewards Count: \(viewModel.moonCount)")
+                            .padding()
+                            .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
                     }
                     Spacer()
                     
@@ -330,18 +403,24 @@ struct AccountInfoView: View {
                     
                 })
                 
-            }.buttonStyle(PlainButtonStyle())
-            
+                
+            }.buttonStyle(PlainButtonStyle()).sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
+                ImagePicker(selectedImage: $inputImage)
+                
+            }
         }
-        .onAppear {
-            viewModel.fetchUsername()
+            .onAppear {
+                viewModel.fetchUsername()
+            }
         }
+    func loadImage() {
+        guard let inputImage = inputImage else { return }
+        profileImage = Image(uiImage: inputImage)
     }
 }
 
 struct BioInfoView: View {
     @StateObject private var viewModel = AccountInfoViewModel()
-    @State private var biotext = "Write your bio here!"
     private let data: [String] = ["Early Bird", "Night Owl"]
     private let preferenceColumns = [GridItem(.adaptive(minimum: 130))]
     @State private var sleepPreference = "Early Bird"
@@ -361,7 +440,7 @@ struct BioInfoView: View {
                         .font(.system(size: 20))
                     
                     Spacer().frame(height: 25)
-                    TextField("\(biotext)",text: $biotext)
+                    TextField("\($viewModel.bio)",text: $viewModel.bio)
                         .padding()
                         .frame(width: 330, height: 200, alignment: .topLeading)
                         .background(.white.opacity(0.15))
@@ -371,6 +450,7 @@ struct BioInfoView: View {
                     // Submit Bio button
                     Button ("Submit", action: {
                         // TODO: Store BIO in database
+                        viewModel.storeBio()
                     })
                     .font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.soothingNightLightGray.opacity(0.6)).foregroundColor(.nightfallHarmonyNavyBlue.opacity(1)).cornerRadius(10)
                     
@@ -560,6 +640,8 @@ struct EditProfileView: View {
                             // Submit Bio button
                             Button ("Delete Account", action: {
                                 // TODO: Remove all info from database and return to login page
+                                viewModel.deleteUser()
+                                LoginView()
                             })
                             .font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.soothingNightLightGray.opacity(0.6)).foregroundColor(.nightfallHarmonyNavyBlue.opacity(1)).cornerRadius(10)
                             
@@ -580,7 +662,6 @@ struct EditProfileView: View {
     }
 }
 
-
 #Preview {
-    EditProfileView()
+    AccountInfoView()
 }
