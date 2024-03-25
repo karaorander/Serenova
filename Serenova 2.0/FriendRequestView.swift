@@ -9,7 +9,13 @@ import SwiftUI
 
 struct FriendRequestView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationView {
+            ZStack {
+                // Color gradient
+                LinearGradient(gradient: Gradient(colors: [.nightfallHarmonySilverGray.opacity(0.7), .nightfallHarmonyRoyalPurple.opacity(0.3), .dreamyTwilightMidnightBlue.opacity(0.5), .nightfallHarmonyNavyBlue.opacity(0.6)]), startPoint: .top, endPoint: .bottom)
+                    .ignoresSafeArea()
+            }
+        }
     }
 }
 
