@@ -18,10 +18,8 @@
 		23D1E0E72B7A8FDF00539A62 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 23D1E0E62B7A8FDF00539A62 /* Assets.xcassets */; };
 		23D1E0EA2B7A8FDF00539A62 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 23D1E0E92B7A8FDF00539A62 /* Preview Assets.xcassets */; };
 		23D1E0F42B7A8FDF00539A62 /* Serenova_2_0Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D1E0F32B7A8FDF00539A62 /* Serenova_2_0Tests.swift */; };
-		23D1E0FE2B7A8FDF00539A62 /* Serenova_2_0UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D1E0FD2B7A8FDF00539A62 /* Serenova_2_0UITests.swift */; };
-		23D1E1002B7A8FDF00539A62 /* Serenova_2_0UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D1E0FF2B7A8FDF00539A62 /* Serenova_2_0UITestsLaunchTests.swift */; };
-		B1379ECD2BA3E70B00697317 /* SearchForumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1379ECC2BA3E70B00697317 /* SearchForumView.swift */; };
 		8F638A0B2BA8A5B50030C14F /* RewardsDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F638A0A2BA8A5B50030C14F /* RewardsDashboardView.swift */; };
+		B1379ECD2BA3E70B00697317 /* SearchForumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1379ECC2BA3E70B00697317 /* SearchForumView.swift */; };
 		B14607202B82AACB00DDC3F3 /* iPhoneNumberField in Frameworks */ = {isa = PBXBuildFile; productRef = B146071F2B82AACB00DDC3F3 /* iPhoneNumberField */; };
 		B163D1DC2B8F9ED200DBC5A3 /* ForumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B163D1DB2B8F9ED200DBC5A3 /* ForumView.swift */; };
 		B1961BED2B81520F00B27781 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = B1961BEC2B81520F00B27781 /* FirebaseAnalytics */; };
@@ -43,7 +41,6 @@
 		B1A7C39B2BACA9EF00BCE27F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B1A7C39A2BACA9EF00BCE27F /* GoogleService-Info.plist */; };
 		B1CB24552B866E0500AE8685 /* Nova_Square in Resources */ = {isa = PBXBuildFile; fileRef = B1CB24542B866E0500AE8685 /* Nova_Square */; };
 		B1CB24562B866E0500AE8685 /* Nova_Square in Resources */ = {isa = PBXBuildFile; fileRef = B1CB24542B866E0500AE8685 /* Nova_Square */; };
-		B1CB24572B866E0500AE8685 /* Nova_Square in Resources */ = {isa = PBXBuildFile; fileRef = B1CB24542B866E0500AE8685 /* Nova_Square */; };
 		B1CB24582B866E0500AE8685 /* Nova_Square in Resources */ = {isa = PBXBuildFile; fileRef = B1CB24542B866E0500AE8685 /* Nova_Square */; };
 		B1CB24612B87C18B00AE8685 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239E08192B7FC8990036AD81 /* LoginView.swift */; };
 		B1CB24652B87C56F00AE8685 /* Article.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CB24642B87C56F00AE8685 /* Article.swift */; };
@@ -54,6 +51,8 @@
 		B1CB24712B87C58900AE8685 /* SocialData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CB24702B87C58900AE8685 /* SocialData.swift */; };
 		B1CB24732B87C5A000AE8685 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CB24722B87C5A000AE8685 /* User.swift */; };
 		B1CB24752B87C5D700AE8685 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1CB24742B87C5D700AE8685 /* Message.swift */; };
+		B1FC3C9D2BB20F8E00DED169 /* Serenova_2_0UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1FC3C9C2BB20F8E00DED169 /* Serenova_2_0UITests.swift */; };
+		B1FC3C9F2BB20F8E00DED169 /* Serenova_2_0UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1FC3C9E2BB20F8E00DED169 /* Serenova_2_0UITestsLaunchTests.swift */; };
 		E0231FFE2B7DB93D009A4E39 /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0231FFD2B7DB93D009A4E39 /* ColorExtensions.swift */; };
 		E029E4FB2B7DAC4F00E8220B /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */; };
 		E02A2BF72B8E62F000235A39 /* SleepManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E02A2BF62B8E62F000235A39 /* SleepManager.swift */; };
@@ -62,17 +61,12 @@
 		E0C98A2C2B90277E00A3D369 /* SleepManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C98A2B2B90277E00A3D369 /* SleepManagerTests.swift */; };
 		E0C98A2E2B9035AE00A3D369 /* SleepSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C98A2D2B9035AE00A3D369 /* SleepSession.swift */; };
 		E0C98A2F2B9035AE00A3D369 /* SleepSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C98A2D2B9035AE00A3D369 /* SleepSession.swift */; };
-		E0C98A302B9035AE00A3D369 /* SleepSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C98A2D2B9035AE00A3D369 /* SleepSession.swift */; };
 		E0C98A312B9035AE00A3D369 /* SleepSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C98A2D2B9035AE00A3D369 /* SleepSession.swift */; };
 		E0D1C15F2B880EED00A7609C /* SleepGoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D1C15E2B880EED00A7609C /* SleepGoalsView.swift */; };
 		E0D1C1662B8810B900A7609C /* ViewExensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D1C1652B8810B900A7609C /* ViewExensions.swift */; };
 		E0D1C1682B8815DF00A7609C /* SleepLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D1C1672B8815DF00A7609C /* SleepLogView.swift */; };
 		E0D1C16A2B88244700A7609C /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D1C1692B88244700A7609C /* DateExtensions.swift */; };
 		E0EF57532B8A489D00D72221 /* ForumPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EF57522B8A489D00D72221 /* ForumPostView.swift */; };
-		E0FD0BF72B8F7FC8004A96C8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0FD0BF62B8F7FC8004A96C8 /* GoogleService-Info.plist */; };
-		E0FD0BF82B8F7FC8004A96C8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0FD0BF62B8F7FC8004A96C8 /* GoogleService-Info.plist */; };
-		E0FD0BF92B8F7FC8004A96C8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0FD0BF62B8F7FC8004A96C8 /* GoogleService-Info.plist */; };
-		E0FD0BFA2B8F7FC8004A96C8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E0FD0BF62B8F7FC8004A96C8 /* GoogleService-Info.plist */; };
 		F21405152BB015A700F507E7 /* RedeemRewardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21405142BB015A700F507E7 /* RedeemRewardsView.swift */; };
 		F23D7CDF2B7FAF320018F325 /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */; };
 		F299FAF82BB025CD00845FE4 /* JournalPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F299FAF72BB025CD00845FE4 /* JournalPostView.swift */; };
@@ -90,7 +84,7 @@
 			remoteGlobalIDString = 23D1E0DE2B7A8FDE00539A62;
 			remoteInfo = "Serenova 2.0";
 		};
-		23D1E0FA2B7A8FDF00539A62 /* PBXContainerItemProxy */ = {
+		B1FC3CA02BB20F8E00DED169 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 23D1E0D72B7A8FDE00539A62 /* Project object */;
 			proxyType = 1;
@@ -119,11 +113,10 @@
 		23D1E0E92B7A8FDF00539A62 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		23D1E0EF2B7A8FDF00539A62 /* Serenova 2.0Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Serenova 2.0Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23D1E0F32B7A8FDF00539A62 /* Serenova_2_0Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serenova_2_0Tests.swift; sourceTree = "<group>"; };
-		23D1E0F92B7A8FDF00539A62 /* Serenova 2.0UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Serenova 2.0UITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23D1E0FD2B7A8FDF00539A62 /* Serenova_2_0UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serenova_2_0UITests.swift; sourceTree = "<group>"; };
 		23D1E0FF2B7A8FDF00539A62 /* Serenova_2_0UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serenova_2_0UITestsLaunchTests.swift; sourceTree = "<group>"; };
-		B1379ECC2BA3E70B00697317 /* SearchForumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchForumView.swift; sourceTree = "<group>"; };
 		8F638A0A2BA8A5B50030C14F /* RewardsDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardsDashboardView.swift; sourceTree = "<group>"; };
+		B1379ECC2BA3E70B00697317 /* SearchForumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchForumView.swift; sourceTree = "<group>"; };
 		B163D1DB2B8F9ED200DBC5A3 /* ForumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForumView.swift; sourceTree = "<group>"; };
 		B1A7C3962BA7CDB800BCE27F /* ForumPostDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForumPostDetailView.swift; sourceTree = "<group>"; };
 		B1A7C39A2BACA9EF00BCE27F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -136,6 +129,9 @@
 		B1CB24702B87C58900AE8685 /* SocialData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialData.swift; sourceTree = "<group>"; };
 		B1CB24722B87C5A000AE8685 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		B1CB24742B87C5D700AE8685 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
+		B1FC3C9A2BB20F8E00DED169 /* Serenova 2.0UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Serenova 2.0UITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B1FC3C9C2BB20F8E00DED169 /* Serenova_2_0UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serenova_2_0UITests.swift; sourceTree = "<group>"; };
+		B1FC3C9E2BB20F8E00DED169 /* Serenova_2_0UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serenova_2_0UITestsLaunchTests.swift; sourceTree = "<group>"; };
 		E0231FFD2B7DB93D009A4E39 /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
 		E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		E02A2BF52B8E62EF00235A39 /* Serenova 2.0Tests2-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Serenova 2.0Tests2-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -149,7 +145,6 @@
 		E0D1C1672B8815DF00A7609C /* SleepLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepLogView.swift; sourceTree = "<group>"; };
 		E0D1C1692B88244700A7609C /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
 		E0EF57522B8A489D00D72221 /* ForumPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForumPostView.swift; sourceTree = "<group>"; };
-		E0FD0BF62B8F7FC8004A96C8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F21405142BB015A700F507E7 /* RedeemRewardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedeemRewardsView.swift; sourceTree = "<group>"; };
 		F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
 		F299FAF72BB025CD00845FE4 /* JournalPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalPostView.swift; sourceTree = "<group>"; };
@@ -195,7 +190,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		23D1E0F62B7A8FDF00539A62 /* Frameworks */ = {
+		B1FC3C972BB20F8E00DED169 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -218,6 +213,7 @@
 				23D1E0E12B7A8FDE00539A62 /* Serenova 2.0 */,
 				23D1E0F22B7A8FDF00539A62 /* Serenova 2.0Tests */,
 				23D1E0FC2B7A8FDF00539A62 /* Serenova 2.0UITests */,
+				B1FC3C9B2BB20F8E00DED169 /* Serenova 2.0UITests */,
 				23D1E0E02B7A8FDE00539A62 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -227,8 +223,8 @@
 			children = (
 				23D1E0DF2B7A8FDE00539A62 /* Serenova 2.0.app */,
 				23D1E0EF2B7A8FDF00539A62 /* Serenova 2.0Tests.xctest */,
-				23D1E0F92B7A8FDF00539A62 /* Serenova 2.0UITests.xctest */,
 				F2E219542B82EBEB00235824 /* Serenova 2.0Tests2.xctest */,
+				B1FC3C9A2BB20F8E00DED169 /* Serenova 2.0UITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -314,6 +310,15 @@
 			path = Class;
 			sourceTree = "<group>";
 		};
+		B1FC3C9B2BB20F8E00DED169 /* Serenova 2.0UITests */ = {
+			isa = PBXGroup;
+			children = (
+				B1FC3C9C2BB20F8E00DED169 /* Serenova_2_0UITests.swift */,
+				B1FC3C9E2BB20F8E00DED169 /* Serenova_2_0UITestsLaunchTests.swift */,
+			);
+			path = "Serenova 2.0UITests";
+			sourceTree = "<group>";
+		};
 		E0231FFB2B7DB8F8009A4E39 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -384,22 +389,22 @@
 			productReference = 23D1E0EF2B7A8FDF00539A62 /* Serenova 2.0Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		23D1E0F82B7A8FDF00539A62 /* Serenova 2.0UITests */ = {
+		B1FC3C992BB20F8E00DED169 /* Serenova 2.0UITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 23D1E1092B7A8FDF00539A62 /* Build configuration list for PBXNativeTarget "Serenova 2.0UITests" */;
+			buildConfigurationList = B1FC3CA22BB20F8E00DED169 /* Build configuration list for PBXNativeTarget "Serenova 2.0UITests" */;
 			buildPhases = (
-				23D1E0F52B7A8FDF00539A62 /* Sources */,
-				23D1E0F62B7A8FDF00539A62 /* Frameworks */,
-				23D1E0F72B7A8FDF00539A62 /* Resources */,
+				B1FC3C962BB20F8E00DED169 /* Sources */,
+				B1FC3C972BB20F8E00DED169 /* Frameworks */,
+				B1FC3C982BB20F8E00DED169 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				23D1E0FB2B7A8FDF00539A62 /* PBXTargetDependency */,
+				B1FC3CA12BB20F8E00DED169 /* PBXTargetDependency */,
 			);
 			name = "Serenova 2.0UITests";
 			productName = "Serenova 2.0UITests";
-			productReference = 23D1E0F92B7A8FDF00539A62 /* Serenova 2.0UITests.xctest */;
+			productReference = B1FC3C9A2BB20F8E00DED169 /* Serenova 2.0UITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 		F2E219532B82EBEB00235824 /* Serenova 2.0Tests2 */ = {
@@ -427,7 +432,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1520;
+				LastSwiftUpdateCheck = 1530;
 				LastUpgradeCheck = 1520;
 				TargetAttributes = {
 					23D1E0DE2B7A8FDE00539A62 = {
@@ -437,8 +442,8 @@
 						CreatedOnToolsVersion = 15.2;
 						TestTargetID = 23D1E0DE2B7A8FDE00539A62;
 					};
-					23D1E0F82B7A8FDF00539A62 = {
-						CreatedOnToolsVersion = 15.2;
+					B1FC3C992BB20F8E00DED169 = {
+						CreatedOnToolsVersion = 15.3;
 						TestTargetID = 23D1E0DE2B7A8FDE00539A62;
 					};
 					F2E219532B82EBEB00235824 = {
@@ -467,8 +472,8 @@
 			targets = (
 				23D1E0DE2B7A8FDE00539A62 /* Serenova 2.0 */,
 				23D1E0EE2B7A8FDF00539A62 /* Serenova 2.0Tests */,
-				23D1E0F82B7A8FDF00539A62 /* Serenova 2.0UITests */,
 				F2E219532B82EBEB00235824 /* Serenova 2.0Tests2 */,
+				B1FC3C992BB20F8E00DED169 /* Serenova 2.0UITests */,
 			);
 		};
 /* End PBXProject section */
@@ -493,11 +498,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		23D1E0F72B7A8FDF00539A62 /* Resources */ = {
+		B1FC3C982BB20F8E00DED169 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B1CB24572B866E0500AE8685 /* Nova_Square in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -564,13 +568,12 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		23D1E0F52B7A8FDF00539A62 /* Sources */ = {
+		B1FC3C962BB20F8E00DED169 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23D1E0FE2B7A8FDF00539A62 /* Serenova_2_0UITests.swift in Sources */,
-				23D1E1002B7A8FDF00539A62 /* Serenova_2_0UITestsLaunchTests.swift in Sources */,
-				E0C98A302B9035AE00A3D369 /* SleepSession.swift in Sources */,
+				B1FC3C9D2BB20F8E00DED169 /* Serenova_2_0UITests.swift in Sources */,
+				B1FC3C9F2BB20F8E00DED169 /* Serenova_2_0UITestsLaunchTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -590,10 +593,10 @@
 			target = 23D1E0DE2B7A8FDE00539A62 /* Serenova 2.0 */;
 			targetProxy = 23D1E0F02B7A8FDF00539A62 /* PBXContainerItemProxy */;
 		};
-		23D1E0FB2B7A8FDF00539A62 /* PBXTargetDependency */ = {
+		B1FC3CA12BB20F8E00DED169 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 23D1E0DE2B7A8FDE00539A62 /* Serenova 2.0 */;
-			targetProxy = 23D1E0FA2B7A8FDF00539A62 /* PBXContainerItemProxy */;
+			targetProxy = B1FC3CA02BB20F8E00DED169 /* PBXContainerItemProxy */;
 		};
 		F2E219592B82EBEB00235824 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -828,16 +831,16 @@
 			};
 			name = Release;
 		};
-		23D1E10A2B7A8FDF00539A62 /* Debug */ = {
+		B1FC3CA32BB20F8E00DED169 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9298P5Q8AB;
+				DEVELOPMENT_TEAM = QGVWYYCSG8;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "here.Serenova-2-0UITests";
+				PRODUCT_BUNDLE_IDENTIFIER = "NA.Serenova-2-0UITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -846,16 +849,16 @@
 			};
 			name = Debug;
 		};
-		23D1E10B2B7A8FDF00539A62 /* Release */ = {
+		B1FC3CA42BB20F8E00DED169 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 9298P5Q8AB;
+				DEVELOPMENT_TEAM = QGVWYYCSG8;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "here.Serenova-2-0UITests";
+				PRODUCT_BUNDLE_IDENTIFIER = "NA.Serenova-2-0UITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
@@ -935,11 +938,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		23D1E1092B7A8FDF00539A62 /* Build configuration list for PBXNativeTarget "Serenova 2.0UITests" */ = {
+		B1FC3CA22BB20F8E00DED169 /* Build configuration list for PBXNativeTarget "Serenova 2.0UITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				23D1E10A2B7A8FDF00539A62 /* Debug */,
-				23D1E10B2B7A8FDF00539A62 /* Release */,
+				B1FC3CA32BB20F8E00DED169 /* Debug */,
+				B1FC3CA42BB20F8E00DED169 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
