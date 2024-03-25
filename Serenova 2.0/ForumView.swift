@@ -130,7 +130,9 @@ struct ForumView: View {
             .onAppear() {
                 UIRefreshControl.appearance().tintColor = .white
                 Task {
-                    if forumPosts.count == 0 {
+                    // Prevents crash but data will not be loaded
+                    // Need to run in simulator
+                    if forumPosts.count == 0 && currUser != nil {
                         await queryPosts(NUM_POSTS: queryNum)
                     }
                 }
