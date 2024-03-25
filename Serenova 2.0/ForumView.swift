@@ -173,8 +173,7 @@ struct ForumView: View {
     }
 }
 
-struct NoPostsView: View {
-    
+struct NoPostsView: View {    
     var body: some View {
         VStack (alignment: .center){
             Spacer()
@@ -199,7 +198,7 @@ struct PostListingView: View {
     @State private var postImage: UIImage?
     @State private var isClicked: Bool = false
     @State private var likesListener: ListenerRegistration?
-    @State private var hasChanged: Bool = false  // Change to activate change in vie
+    @State private var hasChanged: Bool = false  // Change to activate change in view
 
     var body: some View {
         //Button (action: {isClicked = true}) {
@@ -368,10 +367,6 @@ struct PostListingView: View {
      */
     func loadImage(imageURL: URL) {
         let storageRef = Storage.storage().reference(forURL: imageURL.absoluteString)
-        
-        // Create a reference to the file you want to upload
-        //let postImageRef = storageRef.child(forURL: imageURL.absoluteString)
-
         // Fetch image
         storageRef.getData(maxSize: Int64(5 * 1024 * 1024)) { data, error in
             if let error = error {
@@ -424,83 +419,7 @@ struct PostListingView: View {
         }
     }
 }
-/*
-struct LikeDislikeSystem: View {
-    
-    @Binding var post: Post
 
-    var body: some View {
-        HStack {
-            Button {
-                withAnimation {
-                    handleLikes()
-                }
-            } label: {
-                Image(systemName: "arrow.up.circle.fill")
-                    .fontWeight(.bold)
-                    .foregroundColor(post.likedIDs.contains(currUser!.userID) ? .nightfallHarmonyRoyalPurple : .white)
-                    .brightness(0.3)
-                    .saturation(1.5)
-            }
-            Text("\(post.likedIDs.count - post.dislikedIDs.count)")
-                .font(.system(size: 15))
-                .foregroundColor(.white)
-            Button {
-                withAnimation {
-                    handleDislikes()
-                }
-            } label: {
-                Image(systemName: "arrow.down.circle.fill")
-                    .foregroundColor(post.dislikedIDs.contains(currUser!.userID) ? .nightfallHarmonyRoyalPurple : .white)
-                    .brightness(0.3)
-                    .saturation(1.5)
-                    .fontWeight(.bold)
-            }
-        }
-        .padding(.trailing, 10)
-    }
-    
-    /*
-     * Handle logic for likes
-     */
-    func handleLikes() {
-        guard post.postID != nil else { return }
-        guard currUser != nil else { return }
-        
-        if post.likedIDs.contains(currUser!.userID) {
-            Firestore.firestore().collection("Posts").document(post.postID!).updateData([
-                "likedIDs": FieldValue.arrayRemove([currUser!.userID])
-            ])
-            post.likedIDs.removeAll(where: {$0 == currUser!.userID})
-        } else {
-            Firestore.firestore().collection("Posts").document(post.postID!).updateData([
-                "likedIDs": FieldValue.arrayUnion([currUser!.userID]),
-                "dislikedIDs": FieldValue.arrayRemove([currUser!.userID])
-            ])
-        }
-    }
-    
-    /*
-     * Handle logic for dislikes
-     */
-    func handleDislikes() {
-        guard post.postID != nil else { print("no ID"); return }
-        guard currUser != nil else { return }
-        
-        if post.dislikedIDs.contains(currUser!.userID) {
-            Firestore.firestore().collection("Posts").document(post.postID!).updateData([
-                "dislikedIDs": FieldValue.arrayRemove([currUser!.userID])
-            ])
-            post.dislikedIDs.removeAll(where: {$0 == currUser!.userID})
-        } else {
-            Firestore.firestore().collection("Posts").document(post.postID!).updateData([
-                "dislikedIDs": FieldValue.arrayUnion([currUser!.userID]),
-                "likedIDs": FieldValue.arrayRemove([currUser!.userID])
-            ])
-        }
-    }
-}
-*/
 struct NoStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
