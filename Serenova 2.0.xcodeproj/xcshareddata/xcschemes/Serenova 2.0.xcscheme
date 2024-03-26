@@ -45,7 +45,7 @@
             parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B1FC3C992BB20F8E00DED169"
+               BlueprintIdentifier = "23D1E0F82B7A8FDF00539A62"
                BuildableName = "Serenova 2.0UITests.xctest"
                BlueprintName = "Serenova 2.0UITests"
                ReferencedContainer = "container:Serenova 2.0.xcodeproj">

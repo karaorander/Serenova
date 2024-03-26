@@ -8,7 +8,6 @@
 import SwiftUI
 import Firebase
 import FirebaseDatabase
-import FirebaseAuth
 
 //Fetch all data from firebase
 class AccountInfoViewModel: ObservableObject {
@@ -40,7 +39,7 @@ class AccountInfoViewModel: ObservableObject {
             let id = Auth.auth().currentUser!.uid
             let ur = db.child("User").child(id)
             // Now you can use userRef safely
-            
+        
             ur.observeSingleEvent(of: .value) { snapshot in
                 guard let userData = snapshot.value as? [String: Any] else {
                     print("Error fetching data")
@@ -139,23 +138,15 @@ class AccountInfoViewModel: ObservableObject {
             // Handle the case where there's no authenticated user
             print("No authenticated user")
         }
-        
+                        
     }
     
     func deleteUser() {
         let db = Database.database().reference()
         let id = Auth.auth().currentUser!.uid
-        let ur = Auth.auth().currentUser
+        let ur = db.child("User").child(id)
         
         db.child("User").child(id).removeValue();
-        
-        ur?.delete { error in
-            if let error = error {
-                print("Error removing user from authentication")
-            } else {
-                print("User removed")
-            }
-        }
     }
     
     func storeData() {
@@ -258,158 +249,160 @@ struct AccountInfoView: View {
                 ZStack{
                     LinearGradient(gradient: Gradient(colors: [.dreamyTwilightMidnightBlue.opacity(0.2), .nightfallHarmonyNavyBlue.opacity(0.6)]), startPoint: .top, endPoint: .bottom)
                         .ignoresSafeArea()
-                    ScrollView(.vertical, showsIndicators: false) {
-                        VStack {
-                            Spacer().frame(height: 50)
-                            Text("Account Info")
-                                .font(Font.custom("NovaSquare-Bold", size: 40))
-                                .frame(height: 2.0, alignment: .leading)
-                                .padding()
-                            Spacer().frame(height: 20)
-                            
-                            // Profile Image with Tap Gesture for Image Picker
-                            if profileImage != nil {
-                                profileImage?
-                                    .resizable()
-                                    .frame(width: 90, height: 85)
-                                    .clipShape(Circle())
-                                    .onTapGesture {
-                                        showingImagePicker = true
-                                    }
-                            } else {
-                                Image(systemName: "person.crop.circle.fill") // Placeholder image
-                                    .resizable()
-                                    .frame(width: 90, height: 85)
-                                    .clipShape(Circle())
-                                    .onTapGesture {
-                                        showingImagePicker = true
-                                    }
-                            }
-                            
-                            //Shows Full Name
-                            Text("\(viewModel.fullname)")
-                                .font(.system(size: 25))
-                                .fontWeight(.medium)
-                                .padding()
-                            
-                            // Username Field
-                            Text("Username: \(viewModel.username)")
-                                .padding()
-                                .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
-                            
-                            // Email
-                            Text("Email: \(viewModel.email)")
-                                .padding()
-                                .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
-                            
-                            // Reset Password Button
-                            NavigationLink(destination: ResetPasswordView()){
-                                HStack{
-                                    Text("Reset Password")
-                                        .padding()
-                                    Spacer()
-                                    Image(systemName:
-                                            "arrow.right")
-                                    .padding()
+                    
+                    VStack {
+                        Text("Account Info")
+                            .font(Font.custom("NovaSquare-Bold", size: 40))
+                            .frame(height: 2.0, alignment: .leading)
+                            .padding()
+                        Spacer().frame(height: 20)
+                        
+                        // Profile Image with Tap Gesture for Image Picker
+                        if profileImage != nil {
+                            profileImage?
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 90, height: 85)
+                                .clipShape(Circle())
+                                .onTapGesture {
+                                    showingImagePicker = true
                                 }
-                                .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
-                            }
-                            
-                            //Notification Toggle
-                            Toggle(isOn: $toggleIsOn, label: {Text ("Notifications")})
-                                .toggleStyle(SwitchToggleStyle(tint: .moonlitSerenityCharcoalGray))
-                                .padding().frame(width:300, height: 40)
-                                .fontWeight(.medium)
-                                .background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
-                            //TODO: need to enable push notifications
-                            
-                            // Bio Button
-                            NavigationLink(destination: BioInfoView()){
-                                HStack{
-                                    Text("Bio")
-                                        .padding()
-                                    Spacer()
-                                    Image(systemName:
-                                            "arrow.right")
-                                    .padding()
+                        } else {
+                            Image(systemName: "person.crop.circle.fill") // Placeholder image
+                                .resizable()
+                                .frame(width: 90, height: 85)
+                                .clipShape(Circle())
+                                .onTapGesture {
+                                    showingImagePicker = true
                                 }
-                                .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
-                            }
-                            
-                            // Rewards Page
-                            NavigationLink(destination: RewardsDashboardView()){
-                                HStack{
-                                    Text("Rewards Dashboard")
-                                        .padding()
-                                    Spacer()
-                                    Image(systemName:
-                                            "arrow.right")
-                                    .padding()
-                                }
-                                .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
-                            }
-                            
-                            // Edit Profile
-                            NavigationLink(destination: EditProfileView().navigationBarBackButtonHidden(true)){
-                                HStack{
-                                    Text("Edit Profile")
-                                        .padding()
-                                    Spacer()
-                                    Image(systemName:
-                                            "arrow.right")
-                                    .padding()
-                                }
-                                .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
-                            }
-                            
-                            Text("Moon Rewards Count: \(viewModel.moonCount)")
-                                .padding()
-                                .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
                         }
+                        
+                        Spacer().frame(height:25)
+                        
+                        //Shows Full Name
+                        Text("\(viewModel.fullname)")
+                            .font(.system(size: 25))
+                            .fontWeight(.medium)
+                            .padding()
+                        
+                        // Username Field
+                        Text("Username: \(viewModel.username)")
+                            .padding()
+                            .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
+                        
+                        // Email
+                        Text("Email: \(viewModel.email)")
+                            .padding()
+                            .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
+                        
+                        // Reset Password Button
+                        NavigationLink(destination: ResetPasswordView()){
+                            HStack{
+                                Text("Reset Password")
+                                    .padding()
+                                Spacer()
+                                Image(systemName:
+                                        "arrow.right")
+                                .padding()
+                            }
+                            .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
+                        }
+                        
+                        //Notification Toggle
+                        Toggle(isOn: $toggleIsOn, label: {Text ("Notifications")})
+                            .toggleStyle(SwitchToggleStyle(tint: .moonlitSerenityCharcoalGray))
+                            .padding().frame(width:300, height: 40)
+                            .fontWeight(.medium)
+                            .background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
+                        //TODO: need to enable push notifications
+                        
+                        // Bio Button
+                        NavigationLink(destination: BioInfoView()){
+                            HStack{
+                                Text("Bio")
+                                    .padding()
+                                Spacer()
+                                Image(systemName:
+                                        "arrow.right")
+                                .padding()
+                            }
+                            .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
+                        }
+                        
+                        // Rewards Page
+                        NavigationLink(destination: RewardsDashboardView()){
+                            HStack{
+                                Text("Rewards Dashboard")
+                                    .padding()
+                                Spacer()
+                                Image(systemName:
+                                        "arrow.right")
+                                .padding()
+                            }
+                            .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
+                        }
+                        
+                        // Edit Profile
+                        NavigationLink(destination: EditProfileView().navigationBarBackButtonHidden(true)){
+                            HStack{
+                                Text("Edit Profile")
+                                    .padding()
+                                Spacer()
+                                Image(systemName:
+                                        "arrow.right")
+                                .padding()
+                            }
+                            .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
+                        }
+                        
+                        Text("Moon Rewards Count: \(viewModel.moonCount)")
+                            .padding()
+                            .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
                     }
-                        Spacer()
-                        
-                        //Menu Bar
-                    }.overlay(alignment: .bottom, content: {
-                        
-                        HStack (spacing: 40){
-                            NavigationLink(destination: SleepGraphView().navigationBarBackButtonHidden(true)) {
-                                
-                                Image(systemName: "chart.xyaxis.line")
-                                    .resizable()
-                                    .frame(width: 30, height: 35)
-                                    .foregroundColor(.white)
-                                
-                            }
-                            NavigationLink(destination: SleepLogView().navigationBarBackButtonHidden(true)) {
-                                
-                                Image(systemName: "zzz")
-                                    .resizable()
-                                    .frame(width: 30, height: 30)
-                                    .foregroundColor(.white)
-                                
-                            }
-                            NavigationLink(destination: SleepGoalsView().navigationBarBackButtonHidden(true)) {
-                                
-                                Image(systemName: "list.clipboard")
-                                    .resizable()
-                                    .frame(width: 30, height: 40)
-                                    .foregroundColor(.white)
-                                
-                            }
-                            NavigationLink(destination: ForumView().navigationBarBackButtonHidden(true)) {
-                                
-                                Image(systemName: "person.2")
-                                    .resizable()
-                                    .frame(width: 45, height: 30)
-                                    .foregroundColor(.white)
-                                
-                            }
-                        }.padding()
-                            .hSpacing(.center)
-                            .background(Color.dreamyTwilightMidnightBlue)
-                        
-                    })
+                    Spacer()
+                    
+                    //Menu Bar
+                }.overlay(alignment: .bottom, content: {
+                    
+                    HStack (spacing: 40){
+                        NavigationLink(destination: SleepGraphView().navigationBarBackButtonHidden(true)) {
+                            
+                            Image(systemName: "chart.xyaxis.line")
+                                .resizable()
+                                .frame(width: 30, height: 35)
+                                .foregroundColor(.white)
+                            
+                        }
+                        NavigationLink(destination: SleepLogView().navigationBarBackButtonHidden(true)) {
+                            
+                            Image(systemName: "zzz")
+                                .resizable()
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(.white)
+                            
+                        }
+                        NavigationLink(destination: SleepGoalsView().navigationBarBackButtonHidden(true)) {
+                            
+                            Image(systemName: "list.clipboard")
+                                .resizable()
+                                .frame(width: 30, height: 40)
+                                .foregroundColor(.white)
+                            
+                        }
+                        NavigationLink(destination: ForumView().navigationBarBackButtonHidden(true)) {
+                            
+                            Image(systemName: "person.2")
+                                .resizable()
+                                .frame(width: 45, height: 30)
+                                .foregroundColor(.white)
+                            
+                        }
+                    }.padding()
+                        .hSpacing(.center)
+                        .background(Color.dreamyTwilightMidnightBlue)
+                    
+                })
+                
                 
             }.buttonStyle(PlainButtonStyle()).sheet(isPresented: $showingImagePicker, onDismiss: loadImage) {
                 ImagePicker(selectedImage: $inputImage)
@@ -491,7 +484,7 @@ struct BioInfoView: View {
 }
 struct EditProfileView: View {
     @StateObject private var viewModel = AccountInfoViewModel()
-    @State var gologin = false;
+    
     var body: some View {
         NavigationView {
             ZStack {
@@ -638,21 +631,19 @@ struct EditProfileView: View {
                             // Submit Bio button
                             Button ("Submit", action: {
                                 viewModel.storeData()
+                                AccountInfoView()
                             })
                             .font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.soothingNightLightGray.opacity(0.6)).foregroundColor(.nightfallHarmonyNavyBlue.opacity(1)).cornerRadius(10)
                             
                             Spacer().frame(height: 50)
                             
                             // Submit Bio button
-                                Button (action: {
-                                    // TODO: Remove all info from database and return to login page
-                                    viewModel.deleteUser()
-                                    gologin = true;
-                                }) {
-                                    Text("Delete Account")
-                                        .font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.soothingNightLightGray.opacity(0.6)).foregroundColor(.nightfallHarmonyNavyBlue.opacity(1)).cornerRadius(10)
-                                }
-                            
+                            Button ("Delete Account", action: {
+                                // TODO: Remove all info from database and return to login page
+                                viewModel.deleteUser()
+                                LoginView()
+                            })
+                            .font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.soothingNightLightGray.opacity(0.6)).foregroundColor(.nightfallHarmonyNavyBlue.opacity(1)).cornerRadius(10)
                             
                             // Back button
                             NavigationLink(destination: AccountInfoView().navigationBarBackButtonHidden(true)) {
@@ -666,12 +657,6 @@ struct EditProfileView: View {
                 .onAppear {
                     viewModel.fetchUsername()
                 }
-                .background(
-                    NavigationLink(destination: LoginView(), isActive: $gologin) {
-                        LoginView()
-                    }
-                        .hidden()
-                )
             }
         }
     }
