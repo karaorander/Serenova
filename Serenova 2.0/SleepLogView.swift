@@ -24,6 +24,7 @@ class sleepLoggerModel: ObservableObject {
     @Published var totalSleepGoalMins : Float = -1
     @Published var deepSleepGoalHours : Float = -1
     @Published var deepSleepGoalMins : Float = -1
+    @Published var sleepGoalReached = false
 
     
     func fetchUsername() {
@@ -43,6 +44,10 @@ class sleepLoggerModel: ObservableObject {
             
             if let totalSleepGoalHours = userData["totalSleepGoalHours"] as? Float {
                 self.totalSleepGoalHours = totalSleepGoalHours
+            }
+            
+            if let sleepGoalReached = userData["sleepGoalReached"] as? Bool {
+                self.sleepGoalReached = sleepGoalReached
             }
             
             if let totalSleepGoalMins = userData["totalSleepGoalMins"] as? Float {
@@ -385,7 +390,7 @@ struct ManualLogView: View {
     @State private var sleepEndMins = 0
     @State private var durationHours = 0
     @State private var durationMinutes = 0
-    
+
     
     
     //dismiss currentenvironment
@@ -458,6 +463,19 @@ struct ManualLogView: View {
                 print("min: \(durationMinutes)")
                 print("dur2: \(viewModel.totalSleepGoalHours)")
                 print("min2: \(viewModel.totalSleepGoalMins)")
+                if (abs(durationHours - Int(viewModel.totalSleepGoalHours)) < 5) {
+                    if let user = currUser {
+                        print("helllooo")
+                        user.updateMoons(rewardCount: 20)
+                        user.sleepGoalReached = true
+                    }
+                    else {
+                        print("error2")
+                    }
+                }
+                else {
+                    print("hello.")
+                }
                 dismiss()
             }
                    , label: {
@@ -468,20 +486,7 @@ struct ManualLogView: View {
                     .background(Color.nightfallHarmonySilverGray.opacity(0.3), in: .rect).cornerRadius(10)
                             })
                             .padding(15)
-                            .onAppear {
-                                    if (durationHours == Int(viewModel.totalSleepGoalHours) && durationMinutes > Int(viewModel.totalSleepGoalMins)) {
-                                        if let user = currUser {
-                                            print("helo")
-                                            user.updateMoons(rewardCount: 20)
-                                        }
-                                    }
-                                else if (Int(viewModel.totalSleepGoalHours) > durationHours) {
-                                    if let user = currUser {
-                                        print("helllooo")
-                                        user.updateMoons(rewardCount: 20)
-                                    }
-                                }
-                                }
+                                
             
         }.padding()
             .onAppear {
