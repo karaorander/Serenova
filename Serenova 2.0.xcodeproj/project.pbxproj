@@ -424,17 +424,6 @@
 				B1FC3CA12BB20F8E00DED169 /* PBXTargetDependency */,
 			);
 			name = "Serenova 2.0UITests";
-			packageProductDependencies = (
-				23BD28E82BB114E800914FD5 /* FirebaseAnalytics */,
-				23BD28EA2BB114E800914FD5 /* FirebaseAuth */,
-				23BD28EC2BB114E800914FD5 /* FirebaseCrashlytics */,
-				23BD28EE2BB114E800914FD5 /* FirebaseDatabase */,
-				23BD28F02BB114E800914FD5 /* FirebaseDatabaseSwift */,
-				23BD28F22BB114E800914FD5 /* FirebaseFirestore */,
-				23BD28F42BB114E800914FD5 /* FirebaseFirestoreCombine-Community */,
-				23BD28F62BB114E800914FD5 /* FirebaseFirestoreSwift */,
-				23BD28F82BB114E800914FD5 /* FirebaseStorage */,
-			);
 			productName = "Serenova 2.0UITests";
 			productReference = B1FC3C9A2BB20F8E00DED169 /* Serenova 2.0UITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
@@ -577,7 +566,6 @@
 				F299FAF82BB025CD00845FE4 /* JournalPostView.swift in Sources */,
 				E029E4FB2B7DAC4F00E8220B /* SignUpView.swift in Sources */,
 				E0934ECA2B85BA8B00494176 /* CreateUserInfoView.swift in Sources */,
-				23BD28E72BB1147600914FD5 /* FriendRequestView.swift in Sources */,
 				23D1E0E32B7A8FDE00539A62 /* Serenova_2_0App.swift in Sources */,
 				B1CB246F2B87C58700AE8685 /* SleepLog.swift in Sources */,
 				E0C98A2E2B9035AE00A3D369 /* SleepSession.swift in Sources */,
@@ -1026,42 +1014,6 @@
 		23B385522B8E935E00F2C614 /* FirebaseFirestoreSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = FirebaseFirestoreSwift;
-		};
-		23BD28E82BB114E800914FD5 /* FirebaseAnalytics */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = FirebaseAnalytics;
-		};
-		23BD28EA2BB114E800914FD5 /* FirebaseAuth */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = FirebaseAuth;
-		};
-		23BD28EC2BB114E800914FD5 /* FirebaseCrashlytics */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = FirebaseCrashlytics;
-		};
-		23BD28EE2BB114E800914FD5 /* FirebaseDatabase */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = FirebaseDatabase;
-		};
-		23BD28F02BB114E800914FD5 /* FirebaseDatabaseSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = FirebaseDatabaseSwift;
-		};
-		23BD28F22BB114E800914FD5 /* FirebaseFirestore */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = FirebaseFirestore;
-		};
-		23BD28F42BB114E800914FD5 /* FirebaseFirestoreCombine-Community */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = "FirebaseFirestoreCombine-Community";
-		};
-		23BD28F62BB114E800914FD5 /* FirebaseFirestoreSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = FirebaseFirestoreSwift;
-		};
-		23BD28F82BB114E800914FD5 /* FirebaseStorage */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = FirebaseStorage;
 		};
 		B146071F2B82AACB00DDC3F3 /* iPhoneNumberField */ = {
 			isa = XCSwiftPackageProductDependency;
