@@ -440,7 +440,7 @@ struct BioInfoView: View {
                         .font(.system(size: 20))
                     
                     Spacer().frame(height: 25)
-                    TextField("\($viewModel.bio)",text: $viewModel.bio)
+                    TextField("",text: $viewModel.bio)
                         .padding()
                         .frame(width: 330, height: 200, alignment: .topLeading)
                         .background(.white.opacity(0.15))

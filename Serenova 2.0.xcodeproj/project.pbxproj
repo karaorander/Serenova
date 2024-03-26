@@ -13,16 +13,15 @@
 		23B3854F2B8E935E00F2C614 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 23B3854E2B8E935E00F2C614 /* FirebaseFirestore */; };
 		23B385512B8E935E00F2C614 /* FirebaseFirestoreCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 23B385502B8E935E00F2C614 /* FirebaseFirestoreCombine-Community */; };
 		23B385532B8E935E00F2C614 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 23B385522B8E935E00F2C614 /* FirebaseFirestoreSwift */; };
-		23BD28E72BB1147600914FD5 /* FriendRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23BD28E62BB1147600914FD5 /* FriendRequestView.swift */; };
-		23BD28E92BB114E800914FD5 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 23BD28E82BB114E800914FD5 /* FirebaseAnalytics */; };
-		23BD28EB2BB114E800914FD5 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 23BD28EA2BB114E800914FD5 /* FirebaseAuth */; };
-		23BD28ED2BB114E800914FD5 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 23BD28EC2BB114E800914FD5 /* FirebaseCrashlytics */; };
-		23BD28EF2BB114E800914FD5 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 23BD28EE2BB114E800914FD5 /* FirebaseDatabase */; };
-		23BD28F12BB114E800914FD5 /* FirebaseDatabaseSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 23BD28F02BB114E800914FD5 /* FirebaseDatabaseSwift */; };
-		23BD28F32BB114E800914FD5 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 23BD28F22BB114E800914FD5 /* FirebaseFirestore */; };
-		23BD28F52BB114E800914FD5 /* FirebaseFirestoreCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 23BD28F42BB114E800914FD5 /* FirebaseFirestoreCombine-Community */; };
-		23BD28F72BB114E800914FD5 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 23BD28F62BB114E800914FD5 /* FirebaseFirestoreSwift */; };
-		23BD28F92BB114E800914FD5 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 23BD28F82BB114E800914FD5 /* FirebaseStorage */; };
+		23BD28E92BB114E800914FD5 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		23BD28EB2BB114E800914FD5 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		23BD28ED2BB114E800914FD5 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		23BD28EF2BB114E800914FD5 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		23BD28F12BB114E800914FD5 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		23BD28F32BB114E800914FD5 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		23BD28F52BB114E800914FD5 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		23BD28F72BB114E800914FD5 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		23BD28F92BB114E800914FD5 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		23D1E0E32B7A8FDE00539A62 /* Serenova_2_0App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D1E0E22B7A8FDE00539A62 /* Serenova_2_0App.swift */; };
 		23D1E0E52B7A8FDE00539A62 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D1E0E42B7A8FDE00539A62 /* ContentView.swift */; };
 		23D1E0E72B7A8FDF00539A62 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 23D1E0E62B7A8FDF00539A62 /* Assets.xcassets */; };
@@ -205,15 +204,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				23BD28F12BB114E800914FD5 /* FirebaseDatabaseSwift in Frameworks */,
-				23BD28ED2BB114E800914FD5 /* FirebaseCrashlytics in Frameworks */,
-				23BD28F92BB114E800914FD5 /* FirebaseStorage in Frameworks */,
-				23BD28E92BB114E800914FD5 /* FirebaseAnalytics in Frameworks */,
-				23BD28EF2BB114E800914FD5 /* FirebaseDatabase in Frameworks */,
-				23BD28EB2BB114E800914FD5 /* FirebaseAuth in Frameworks */,
-				23BD28F32BB114E800914FD5 /* FirebaseFirestore in Frameworks */,
-				23BD28F52BB114E800914FD5 /* FirebaseFirestoreCombine-Community in Frameworks */,
-				23BD28F72BB114E800914FD5 /* FirebaseFirestoreSwift in Frameworks */,
+				23BD28F12BB114E800914FD5 /* (null) in Frameworks */,
+				23BD28ED2BB114E800914FD5 /* (null) in Frameworks */,
+				23BD28F92BB114E800914FD5 /* (null) in Frameworks */,
+				23BD28E92BB114E800914FD5 /* (null) in Frameworks */,
+				23BD28EF2BB114E800914FD5 /* (null) in Frameworks */,
+				23BD28EB2BB114E800914FD5 /* (null) in Frameworks */,
+				23BD28F32BB114E800914FD5 /* (null) in Frameworks */,
+				23BD28F52BB114E800914FD5 /* (null) in Frameworks */,
+				23BD28F72BB114E800914FD5 /* (null) in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
