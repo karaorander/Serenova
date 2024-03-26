@@ -86,6 +86,7 @@ class Journal: Codable, Identifiable {
         } catch {
           print("Error removing document: \(error)")
         }
+        self.journalId = nil
 
     }
 }
