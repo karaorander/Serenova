@@ -8,6 +8,7 @@
 import SwiftUI
 import Firebase
 import FirebaseDatabase
+import FirebaseAuth
 
 //Fetch all data from firebase
 class AccountInfoViewModel: ObservableObject {
@@ -39,7 +40,7 @@ class AccountInfoViewModel: ObservableObject {
             let id = Auth.auth().currentUser!.uid
             let ur = db.child("User").child(id)
             // Now you can use userRef safely
-        
+            
             ur.observeSingleEvent(of: .value) { snapshot in
                 guard let userData = snapshot.value as? [String: Any] else {
                     print("Error fetching data")
@@ -138,15 +139,23 @@ class AccountInfoViewModel: ObservableObject {
             // Handle the case where there's no authenticated user
             print("No authenticated user")
         }
-                        
+        
     }
     
     func deleteUser() {
         let db = Database.database().reference()
         let id = Auth.auth().currentUser!.uid
-        let ur = db.child("User").child(id)
+        let ur = Auth.auth().currentUser
         
         db.child("User").child(id).removeValue();
+        
+        ur?.delete { error in
+            if let error = error {
+                print("Error removing user from authentication")
+            } else {
+                print("User removed")
+            }
+        }
     }
     
     func storeData() {
@@ -484,7 +493,7 @@ struct BioInfoView: View {
 }
 struct EditProfileView: View {
     @StateObject private var viewModel = AccountInfoViewModel()
-    
+    @State var gologin = false;
     var body: some View {
         NavigationView {
             ZStack {
@@ -631,19 +640,21 @@ struct EditProfileView: View {
                             // Submit Bio button
                             Button ("Submit", action: {
                                 viewModel.storeData()
-                                AccountInfoView()
                             })
                             .font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.soothingNightLightGray.opacity(0.6)).foregroundColor(.nightfallHarmonyNavyBlue.opacity(1)).cornerRadius(10)
                             
                             Spacer().frame(height: 50)
                             
                             // Submit Bio button
-                            Button ("Delete Account", action: {
-                                // TODO: Remove all info from database and return to login page
-                                viewModel.deleteUser()
-                                LoginView()
-                            })
-                            .font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.soothingNightLightGray.opacity(0.6)).foregroundColor(.nightfallHarmonyNavyBlue.opacity(1)).cornerRadius(10)
+                                Button (action: {
+                                    // TODO: Remove all info from database and return to login page
+                                    viewModel.deleteUser()
+                                    gologin = true;
+                                }) {
+                                    Text("Delete Account")
+                                        .font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.soothingNightLightGray.opacity(0.6)).foregroundColor(.nightfallHarmonyNavyBlue.opacity(1)).cornerRadius(10)
+                                }
+                            
                             
                             // Back button
                             NavigationLink(destination: AccountInfoView().navigationBarBackButtonHidden(true)) {
@@ -657,6 +668,12 @@ struct EditProfileView: View {
                 .onAppear {
                     viewModel.fetchUsername()
                 }
+                .background(
+                    NavigationLink(destination: LoginView(), isActive: $gologin) {
+                        LoginView()
+                    }
+                        .hidden()
+                )
             }
         }
     }
