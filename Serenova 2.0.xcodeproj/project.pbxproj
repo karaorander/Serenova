@@ -29,6 +29,7 @@
 		23D1E0F42B7A8FDF00539A62 /* Serenova_2_0Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D1E0F32B7A8FDF00539A62 /* Serenova_2_0Tests.swift */; };
 		7F60D4A02BB39EC5004D66FB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7F60D49F2BB39EC5004D66FB /* GoogleService-Info.plist */; };
 		7F60D4A22BB3A4CF004D66FB /* RewardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F60D4A12BB3A4CF004D66FB /* RewardTests.swift */; };
+		7F60D4A42BB3AFDC004D66FB /* ForumRepliesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F60D4A32BB3AFDC004D66FB /* ForumRepliesTests.swift */; };
 		8F638A0B2BA8A5B50030C14F /* RewardsDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F638A0A2BA8A5B50030C14F /* RewardsDashboardView.swift */; };
 		B1379ECD2BA3E70B00697317 /* SearchForumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1379ECC2BA3E70B00697317 /* SearchForumView.swift */; };
 		B14607202B82AACB00DDC3F3 /* iPhoneNumberField in Frameworks */ = {isa = PBXBuildFile; productRef = B146071F2B82AACB00DDC3F3 /* iPhoneNumberField */; };
@@ -128,6 +129,7 @@
 		23D1E0FF2B7A8FDF00539A62 /* Serenova_2_0UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serenova_2_0UITestsLaunchTests.swift; sourceTree = "<group>"; };
 		7F60D49F2BB39EC5004D66FB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7F60D4A12BB3A4CF004D66FB /* RewardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardTests.swift; sourceTree = "<group>"; };
+		7F60D4A32BB3AFDC004D66FB /* ForumRepliesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForumRepliesTests.swift; sourceTree = "<group>"; };
 		8F638A0A2BA8A5B50030C14F /* RewardsDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardsDashboardView.swift; sourceTree = "<group>"; };
 		B1379ECC2BA3E70B00697317 /* SearchForumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchForumView.swift; sourceTree = "<group>"; };
 		B163D1DB2B8F9ED200DBC5A3 /* ForumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForumView.swift; sourceTree = "<group>"; };
@@ -304,6 +306,7 @@
 				F2E2195D2B82EC6200235824 /* SignUpTests.swift */,
 				E0C98A2B2B90277E00A3D369 /* SleepManagerTests.swift */,
 				7F60D4A12BB3A4CF004D66FB /* RewardTests.swift */,
+				7F60D4A32BB3AFDC004D66FB /* ForumRepliesTests.swift */,
 			);
 			path = "Serenova 2.0Tests";
 			sourceTree = "<group>";
@@ -584,6 +587,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7F60D4A42BB3AFDC004D66FB /* ForumRepliesTests.swift in Sources */,
 				23D1E0F42B7A8FDF00539A62 /* Serenova_2_0Tests.swift in Sources */,
 				E0C98A2C2B90277E00A3D369 /* SleepManagerTests.swift in Sources */,
 				F2E2195E2B82EC6200235824 /* SignUpTests.swift in Sources */,

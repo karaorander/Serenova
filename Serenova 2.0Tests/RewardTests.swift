@@ -9,11 +9,12 @@ import XCTest
 
 import XCTest
 @testable import Serenova_2_0
+var viewModel2: MoonProgressViewModel!
 
 class ManualLogViewTests: XCTestCase {
     
     var manualLogView: ManualLogView!
-    
+
     override func setUp() {
         super.setUp()
         manualLogView = ManualLogView()
@@ -68,14 +69,16 @@ class RewardsDashboardViewTests: XCTestCase {
     }
     
     func testFetchMoons() {
-        // Before fetching moons
-        XCTAssertEqual(viewModel.moonCount, -1, "Initial moon count should be -1")
-        
-        // Fetch moons
+
         viewModel.fetchMoons()
-        
-        // After fetching moons (verify if the fetch operation was successful)
-        XCTAssertEqual(viewModel.moonCount, -1, "Moon count should be updated after fetching")
+        var updateVal: Int = -1
+        if let user = currUser {
+            updateVal = user.moonCount
+            user.moonCount = -1; // reset
+        }
+        XCTAssertEqual(viewModel.moonCount, -1, "Initial moon count should be -1")
+        viewModel.fetchMoons()
+        XCTAssertEqual(viewModel.moonCount, updateVal, "Moon count should be updated after fetching")
     }
     
     func testRewardsIsEmpty() {
@@ -94,16 +97,10 @@ class RewardsDashboardViewTests: XCTestCase {
         
         do {
             var user = try User(userID: "Tester", name: "Tester", email: "Tester@example.com", phoneNumber: "1234567890")
-            // Initial moon count
+
             let initialMoonCount = user.moonCount
-            
-            // Define the reward count
             let rewardCount = 50
-            
-            // Call the updateMoons method to simulate earning rewards
             user.updateMoons(rewardCount: rewardCount)
-            
-            // Expected moon count after earning rewards
             let moons = initialMoonCount + rewardCount
             
             XCTAssertNotEqual(user.moonCount, moons)
