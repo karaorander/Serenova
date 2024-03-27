@@ -42,6 +42,7 @@ class User: Codable {
     public var deepSleepGoalMins: Float = -1
     public var moonCount: Int = -1
     public var friends: [String] = []
+    public var notifications: [String] = []
     
     
     /* Gender */
@@ -66,7 +67,7 @@ class User: Codable {
              gender, weight, height, age, hadInsomnia,
              hasInsomnia, exercisesRegularly, hasMedication,
              doesSnore, hasNightmares, typicalWakeUpTime,
-             typicalBedTime, isEarlyBird, moonCount
+             typicalBedTime, isEarlyBird, moonCount, friends, notifications
     }
     
     /* Database Reference */
@@ -98,6 +99,15 @@ class User: Codable {
     
     func addFriend(_ friendID: String) {
         friends.append(friendID)
+    }
+    
+    func addNotification(_ noti: String) {
+        if let currUser = currUser {
+            currUser.notifications.append(noti)
+            currUser.updateValues(newValues: ["notifications" : notifications])
+        } else {
+            print("error")
+        }
     }
     
     func addSleepSession(sleepSessionData: [String: Any]) throws {

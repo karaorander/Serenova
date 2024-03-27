@@ -101,12 +101,12 @@ struct ForumView: View {
                     }
 
                     HStack(content: {
-                        //NavigationLink(destination: NotificationsView().navigationBarBackButtonHidden(true)) {
+                        NavigationLink(destination: NotificationsView().navigationBarBackButtonHidden(true)) {
                             Image(systemName: "bell.fill")
                                 .resizable()
                                 .frame(width: 30, height: 30)
                                 .foregroundColor(.white)
-                        //}.isDetailLink(false)
+                        }.isDetailLink(false)
                         
                         Spacer()
                         
@@ -212,13 +212,18 @@ struct PostListingView: View {
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                Image(systemName: "person.crop.circle.fill")
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .frame(width: 35, height: 35)
-                    .foregroundColor(Color.white)
-                    .foregroundColor(.clear)
-                
+                NavigationLink(destination: OtherAccountView(userID: "XiqKkQP79Z4dZcW8j0A6").navigationBarBackButtonHidden(true)) {
+
+                     Image(systemName: "person.crop.circle.fill")
+                         .resizable()
+                         .aspectRatio(contentMode: .fill)
+                         .frame(width: 35, height: 35)
+                         .foregroundColor(Color.white)
+                         .foregroundColor(.clear)
+                    
+                 
+                 }.padding(.bottom)
+            
                 VStack(alignment: .leading){
                     Text("@username")
                         .font(.system(size: 13))
@@ -337,7 +342,15 @@ struct PostListingView: View {
         .listRowSeparator(.hidden)
         .onAppear {
             if likesListener == nil {
-                guard let postID = post.postID else { return }
+                guard let postID = post.postID else { 
+                    return
+                }
+                
+                guard currUser != nil else { return }
+                print("postID:\(post.postID)")
+                if let user = currUser {
+                    print("userID:\(currUser!.userID)")
+                }
                 let postRef = Firestore.firestore().collection("Posts")
                 likesListener = postRef.document(postID).addSnapshotListener { documentSnapshot, error in
                     print("UPDATE!")

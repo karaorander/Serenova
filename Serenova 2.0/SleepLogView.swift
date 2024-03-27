@@ -478,6 +478,7 @@ struct ManualLogView: View {
                     if let user = currUser {
                         print("helllooo")
                         user.updateMoons(rewardCount: 20)
+                        user.addNotification("20 Moons Added!")
                         //user.sleepGoalReached = true
                     }
                     else {

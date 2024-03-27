@@ -4,32 +4,42 @@
 //
 //  Created by Ishwarya Samavedhi on 3/27/24.
 //
-
+/*
 import XCTest
+@testable import Serenova_2_0
 
 final class ForumDeleteTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    
+    var sut: ForumView!
+    
+    override func setUp() {
+        super.setUp()
+        sut = ForumView()
     }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    
+    override func tearDown() {
+        sut = nil
+        super.tearDown()
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    
+    func testDeletingPost() {
+        // Given
+        let initialPostCount = sut.forumPosts.count
+        let postToAddAndDelete = Post()
+        sut.forumPosts.append(postToAddAndDelete) // Simulate adding a post
+        guard let postIDToDelete = postToAddAndDelete.postID else {
+            XCTFail("Post ID should be available.")
+            return
         }
+        
+        // When
+        if let index = sut.forumPosts.firstIndex(where: { $0.postID == postIDToDelete }) {
+            sut.forumPosts.remove(at: index) // Simulate deleting the post
+        }
+        
+        // Then
+        XCTAssertEqual(sut.forumPosts.count, initialPostCount, "Post should be deleted from the forumPosts array")
+        XCTAssertFalse(sut.forumPosts.contains(where: { $0.postID == postIDToDelete }), "Deleted post should not exist in forumPosts array")
     }
-
 }
+*/
