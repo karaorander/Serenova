@@ -9,6 +9,7 @@ import SwiftUI
 import Firebase
 import FirebaseDatabase
 import FirebaseAuth
+import FirebaseFirestore
 
 //Fetch all data from firebase
 class AccountInfoViewModel: ObservableObject {
@@ -156,6 +157,21 @@ class AccountInfoViewModel: ObservableObject {
                 print("User removed")
             }
         }
+        
+        let ref = Firestore.firestore()
+        let currentUserID = Auth.auth().currentUser!.uid
+           
+           // Reference to the user's "friends" collection
+        let friendsCollectionRef = ref.collection("FriendRequests").document(currentUserID)
+           
+           // Delete the friend document
+           friendsCollectionRef.delete { error in
+               if let error = error {
+                   print("Error removing user from Firestore: \(error)")
+               } else {
+                   print("User removed successfully from Firestore")
+               }
+           }
     }
     
     func storeData() {
@@ -681,7 +697,7 @@ struct EditProfileView: View {
                     viewModel.fetchUsername()
                 }
                 .background(
-                    NavigationLink(destination: LoginView(), isActive: $gologin) {
+                    NavigationLink(destination: LoginView().navigationBarBackButtonHidden(), isActive: $gologin) {
                         LoginView()
                     }
                         .hidden()

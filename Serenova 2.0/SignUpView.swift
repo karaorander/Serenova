@@ -415,17 +415,17 @@ func addtoFriends() {
                 }
             }
             
-            // Add "friendRequests" collection
-            db.collection("FriendRequests").document(currentUserID).collection("friendRequests").addDocument(data: ["friendid" : "", "requesterName": "", "status1" : ""]) { error in
+            /* Add "friendRequests" collection
+            db.collection("FriendRequests").document(currentUserID).collection("friendRequests").addDocument(data: [:]) { error in
                 if let error = error {
                     print("Error adding 'friendRequests' collection: \(error)")
                 } else {
                     print("'friendRequests' collection added successfully")
                 }
-            }
+            }*/
             
             // Add "ownRequests" collection
-            db.collection("FriendRequests").document(currentUserID).collection("ownRequests").addDocument(data: ["requestedName": "", "status1" : ""]) { error in
+            db.collection("FriendRequests").document(currentUserID).collection("ownRequests").addDocument(data: [:]) { error in
                 if let error = error {
                     print("Error adding 'ownRequests' collection: \(error)")
                 } else {
