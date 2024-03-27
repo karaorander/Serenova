@@ -87,7 +87,7 @@ class SleepManager {
     
     //ALL sleep values
     func querySleepData(completion: @escaping (TimeInterval?, TimeInterval?, TimeInterval?, TimeInterval?)-> Void, date: Date) {
-        let totalSleepDuration:TimeInterval = 0
+        var totalSleepDuration:TimeInterval = 0
         var deepSleepDuration:TimeInterval = 0
         var coreSleepDuration:TimeInterval = 0
         var remSleepDuration:TimeInterval = 0

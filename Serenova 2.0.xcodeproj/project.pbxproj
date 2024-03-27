@@ -32,6 +32,7 @@
 		7F60D4A22BB3A4CF004D66FB /* RewardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F60D4A12BB3A4CF004D66FB /* RewardTests.swift */; };
 		7F60D4A42BB3AFDC004D66FB /* ForumRepliesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F60D4A32BB3AFDC004D66FB /* ForumRepliesTests.swift */; };
 		8F638A0B2BA8A5B50030C14F /* RewardsDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F638A0A2BA8A5B50030C14F /* RewardsDashboardView.swift */; };
+		8FE41FBD2BB4CB940067CEB9 /* SleepScoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FE41FBC2BB4CB930067CEB9 /* SleepScoreView.swift */; };
 		B1379ECD2BA3E70B00697317 /* SearchForumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1379ECC2BA3E70B00697317 /* SearchForumView.swift */; };
 		B14607202B82AACB00DDC3F3 /* iPhoneNumberField in Frameworks */ = {isa = PBXBuildFile; productRef = B146071F2B82AACB00DDC3F3 /* iPhoneNumberField */; };
 		B163D1DC2B8F9ED200DBC5A3 /* ForumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B163D1DB2B8F9ED200DBC5A3 /* ForumView.swift */; };
@@ -132,6 +133,7 @@
 		7F60D4A12BB3A4CF004D66FB /* RewardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardTests.swift; sourceTree = "<group>"; };
 		7F60D4A32BB3AFDC004D66FB /* ForumRepliesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForumRepliesTests.swift; sourceTree = "<group>"; };
 		8F638A0A2BA8A5B50030C14F /* RewardsDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardsDashboardView.swift; sourceTree = "<group>"; };
+		8FE41FBC2BB4CB930067CEB9 /* SleepScoreView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SleepScoreView.swift; sourceTree = "<group>"; };
 		B1379ECC2BA3E70B00697317 /* SearchForumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchForumView.swift; sourceTree = "<group>"; };
 		B163D1DB2B8F9ED200DBC5A3 /* ForumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForumView.swift; sourceTree = "<group>"; };
 		B1A7C3962BA7CDB800BCE27F /* ForumPostDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForumPostDetailView.swift; sourceTree = "<group>"; };
@@ -274,6 +276,7 @@
 				E0EF57522B8A489D00D72221 /* ForumPostView.swift */,
 				B1379ECC2BA3E70B00697317 /* SearchForumView.swift */,
 				E0934EC92B85BA8B00494176 /* CreateUserInfoView.swift */,
+				8FE41FBC2BB4CB930067CEB9 /* SleepScoreView.swift */,
 				23B3854A2B8E7F0200F2C614 /* SleepGraphView.swift */,
 				F299FAF72BB025CD00845FE4 /* JournalPostView.swift */,
 				E0D1C15E2B880EED00A7609C /* SleepGoalsView.swift */,
@@ -562,6 +565,7 @@
 				E02A2BF72B8E62F000235A39 /* SleepManager.swift in Sources */,
 				B1379ECD2BA3E70B00697317 /* SearchForumView.swift in Sources */,
 				F23D7CDF2B7FAF320018F325 /* ResetPasswordView.swift in Sources */,
+				8FE41FBD2BB4CB940067CEB9 /* SleepScoreView.swift in Sources */,
 				B1CB24612B87C18B00AE8685 /* LoginView.swift in Sources */,
 				B1CB24652B87C56F00AE8685 /* Article.swift in Sources */,
 				B1CB246D2B87C58200AE8685 /* Post.swift in Sources */,
