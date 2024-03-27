@@ -657,7 +657,7 @@ struct EditProfileView: View {
                             
                             Spacer().frame(height: 50)
                             
-                            // Submit Bio button
+                            // Delete User button
                                 Button (action: {
                                     // TODO: Remove all info from database and return to login page
                                     viewModel.deleteUser()

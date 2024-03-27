@@ -297,11 +297,13 @@ struct PostListingView: View {
                             handleLikes()
                         }
                     } label: {
-                        Image(systemName: "arrow.up.circle.fill")
-                            .fontWeight(.bold)
-                            .foregroundColor(post.likedIDs.contains(currUser!.userID)  ? .nightfallHarmonyRoyalPurple : .white)
-                            .brightness(0.3)
-                            .saturation(1.5)
+                        if ((Auth.auth().currentUser) != nil) {
+                            Image(systemName: "arrow.up.circle.fill")
+                                .fontWeight(.bold)
+                                .foregroundColor(post.likedIDs.contains(currUser!.userID)  ? .nightfallHarmonyRoyalPurple : .white)
+                                .brightness(0.3)
+                                .saturation(1.5)
+                        }
                     }
                     Text("\(post.likedIDs.count - post.dislikedIDs.count)")
                         .font(.system(size: 15))

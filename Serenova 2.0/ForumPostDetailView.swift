@@ -19,6 +19,8 @@ struct ForumPostDetailView: View {
     @State private var errorMess: String = ""
     @State private var queryNum: Int = 25
     @State private var lastReply: DocumentSnapshot?
+    @State private var permission: Bool = false
+    @State var deletedPost = false;
     
     @Environment(\.dismiss) private var dismiss
     var body: some View {
@@ -46,6 +48,20 @@ struct ForumPostDetailView: View {
                             .foregroundColor(.white)
                             .padding(.trailing)
                         Spacer()
+                        
+                        
+                        if checkPermissions() {
+                            Button {
+                                //Delete post and dismiss
+                                deletePost(post : post)
+                                deletedPost = true;
+                            } label: {
+                                Image(systemName: "trash")
+                                    .resizable()
+                                    .frame(width: 20, height: 25)
+                                    .foregroundColor(.white)
+                            }
+                        }
                     }
                     .padding()
                     .padding(.horizontal, 15)
@@ -106,6 +122,12 @@ struct ForumPostDetailView: View {
                 }
             }
         }
+        .background(
+            NavigationLink(destination: ForumView().navigationBarBackButtonHidden(), isActive: $deletedPost) {
+                ForumView()
+            }
+                .hidden()
+        )
     }
     
     //error handling -> error alerts
@@ -122,6 +144,19 @@ struct ForumPostDetailView: View {
             errorMess = error
             showError.toggle()
         })
+    }
+    
+    func checkPermissions() -> Bool {
+        var userID: String = ""
+        if ((Auth.auth().currentUser) != nil) {
+            userID = Auth.auth().currentUser!.uid
+        }
+        
+        if (userID == post.authorID) {
+            return true
+        } else {
+            return false
+        }
     }
 
     @ViewBuilder
@@ -208,6 +243,22 @@ struct ForumPostDetailView: View {
             print (error.localizedDescription)
         }
         return
+    }
+    
+    func deletePost(post: Post) {
+        let db = Firestore.firestore()
+           
+           // Reference to the user's "friends" collection
+        let postCollectionRef = db.collection("Posts").document(post.postID!)
+           
+           // Delete the friend document
+           postCollectionRef.delete { error in
+               if let error = error {
+                   print("Error removing post from Firestore: \(error)")
+               } else {
+                   print("Post removed successfully from Firestore")
+               }
+           }
     }
 }
 

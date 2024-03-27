@@ -42,6 +42,9 @@ class Post: Codable, Identifiable {
      * Function to write new post to Firebase
      */
     func createPost() async throws{
+        if ((Auth.auth().currentUser) != nil) {
+            self.authorID = Auth.auth().currentUser!.uid
+        }
         // Create Firestore document ref
         let ref = Firestore.firestore().collection("Posts")
         // Write new Post object to Database

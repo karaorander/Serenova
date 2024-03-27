@@ -60,7 +60,7 @@ class RequestViewModel: ObservableObject {
         
         // Add friend to Firestore "friends" collection
         friendsCollectionRef.document(friend.friendID).setData([
-            "name": friend.requesterName
+            "name": friend.requesterName,
             "friendid" : friend.friendID
         ]) { error in
             if let error = error {
