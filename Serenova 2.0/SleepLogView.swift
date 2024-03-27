@@ -205,7 +205,7 @@ struct SleepLogView: View {
                                 .foregroundColor(.white)
                         
                     }
-                        NavigationLink(destination: ForumPostView().navigationBarBackButtonHidden(true)) {
+                        NavigationLink(destination: ForumView().navigationBarBackButtonHidden(true)) {
 
                                 Image(systemName: "person.2")
                                     .resizable()
@@ -213,6 +213,14 @@ struct SleepLogView: View {
                                     .foregroundColor(.white)
                             
                         }
+                        NavigationLink(destination: JournalView().navigationBarBackButtonHidden(true)) {
+
+                            Image(systemName: "book.closed")
+                                .resizable()
+                                .frame(width: 30, height: 40)
+                                .foregroundColor(.white)
+                        
+                    }
                 }.padding()
                 .hSpacing(.center)
                 .background(Color.dreamyTwilightMidnightBlue)
@@ -382,6 +390,7 @@ struct ManualLogView: View {
     @State private var currentDate = Date()
     
     @State private var showError:Bool = false
+    @State private var sleepLogged:Bool = false
     @State private var showCamera:Bool = false
     @State private var errorMess: String = ""
     @State private var sleepStartHours = 0
@@ -449,6 +458,8 @@ struct ManualLogView: View {
                         creatManualSession(sleepStart: sleepStart, sleepEnd: sleepEnd, date: startOfSleepStartDay, duration: totalDuration)
     
                     }
+                sleepLogged.toggle()
+                
                 
                 let components = calendar.dateComponents([.hour, .minute], from: sleepStart)
                 let sleepStartHours = components.hour ?? 0
@@ -476,7 +487,7 @@ struct ManualLogView: View {
                 else {
                     print("hello.")
                 }
-                dismiss()
+                
             }
                    , label: {
                     Text("Log Sleep!")
@@ -486,12 +497,28 @@ struct ManualLogView: View {
                     .background(Color.nightfallHarmonySilverGray.opacity(0.3), in: .rect).cornerRadius(10)
                             })
                             .padding(15)
+            
                                 
             
         }.padding()
             .onAppear {
                 viewModel.fetchUsername()
             }
+            .alert(
+                "Success!",
+                isPresented: $sleepLogged
+            ) {
+                Button("OK") {
+                    dismiss()
+                }
+            } message: {
+                HStack {
+                    Text("Thank you for logging your sleep!")
+                    Image(systemName: "zzz").foregroundColor(.white)
+                }
+                
+            }
+            
     }
     func errorAlerts(_ error: Error)async{
         await MainActor.run(body: {
@@ -528,6 +555,8 @@ struct ManualLogView: View {
                 
                 // Store sleep session
                 try await newSession.addSleepSession()
+                
+                
                 
             } catch {
                 await errorAlerts(error)
