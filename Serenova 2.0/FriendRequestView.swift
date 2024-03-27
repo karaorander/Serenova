@@ -31,17 +31,15 @@ class RequestViewModel: ObservableObject {
                        
                        // Iterate through each document in the "friendRequests" subcollection
                        for document in querySnapshot!.documents {
-                           if let data = document as? [String: Any] {
-                               let friendID = data["friendid"] as? String ?? ""
-                               let requesterName = data["requestername"] as? String ?? ""
-                               let status = data["status1"] as? String ?? ""
-                               
-                               // Create a Friend object
-                               let friend = Friend(friendID: friendID, requesterName: requesterName)
-                               
-                               // Append to the temporary array
-                               tempArray.append(friend)
-                           }
+                           let data = document.data()
+                           let friendID = data["friendid"] as? String ?? ""
+                           let requesterName = data["requesterName"] as? String ?? ""
+                           
+                           // Create a Friend object
+                           let friend = Friend(friendID: friendID, requesterName: requesterName)
+                           
+                           // Append to the temporary array
+                           tempArray.append(friend)
                        }
                        
                        // Update the published property on the main queue
@@ -97,7 +95,7 @@ struct FriendRequestView: View {
                                     .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
                                     .listRowBackground(
                                         RoundedRectangle(cornerRadius: 10)
-                                            .fill(Color.soothingNightDeepIndigo)
+                                            .fill(Color.soothingNightDeepIndigo.opacity(0.5))
                                     )
                                 }
                                 .padding(8)
@@ -164,17 +162,23 @@ struct requestView: View {
                     .brightness(0.5)
                     //.saturation(0.3)
                 
-                Spacer().frame(width: 30)
+                Spacer()
                 HStack {
                     Button ("Approve", action: {
                         
                     })
-                    .font(.system(size: 15)).fontWeight(.medium).frame(width: 90, height: 30).background(Color.soothingNightLightGray.opacity(0.6)).foregroundColor(.nightfallHarmonyNavyBlue.opacity(1)).cornerRadius(10)
+                    .font(.system(size: 15)).fontWeight(.medium).frame(width: 90, height: 30)
+                    .background(Color.soothingNightLightGray.opacity(0.4).brightness(0.5))
+                    .foregroundColor(.nightfallHarmonyRoyalPurple.opacity(1))
+                    .cornerRadius(10)
                     
                     Button ("Deny", action: {
                         
                     })
-                    .font(.system(size: 15)).fontWeight(.medium).frame(width: 90, height: 30).background(Color.soothingNightLightGray.opacity(0.6)).foregroundColor(.nightfallHarmonyNavyBlue.opacity(1)).cornerRadius(10)
+                    .font(.system(size: 15)).fontWeight(.medium).frame(width: 90, height: 30)
+                    .background(Color.soothingNightLightGray.opacity(0.4).brightness(0.5))
+                    .foregroundColor(.nightfallHarmonyRoyalPurple.opacity(1))
+                    .cornerRadius(10)
                 }
             }
         }
