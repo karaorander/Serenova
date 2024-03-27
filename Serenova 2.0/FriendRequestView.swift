@@ -52,6 +52,7 @@ class RequestViewModel: ObservableObject {
        }
     
     func addFriend(friend: Friend) {
+
         // Add friendID to the users "Friend" Array in User class as well
         if let friendID = friend.friendID as? String {
             currUser?.addFriend(friendID)
@@ -64,6 +65,8 @@ class RequestViewModel: ObservableObject {
         
         // Reference to the user's "friends" collection
         let friendsCollectionRef = db.collection("FriendRequests").document(currentUserID).collection("Friends")
+        
+        let senderCollectionRef = db.collection("FriendRequests").document(friend.friendID).collection("Friends")
         
         // Add friend to Firestore "friends" collection
         friendsCollectionRef.document(friend.friendID).setData([
@@ -89,6 +92,18 @@ class RequestViewModel: ObservableObject {
                                     }
                                 }
                             }
+            }
+        }
+        
+        // Add friend to Firestore "friends" collection
+        senderCollectionRef.document(currentUserID).setData([
+            "name": currUser?.username,
+            "friendid" : currUser?.userID
+        ]) { error in
+            if let error = error {
+                print("Error adding friend: \(error)")
+            } else {
+                print("Friend added successfully to Firestore")
             }
         }
     }
