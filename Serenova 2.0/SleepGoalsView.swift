@@ -23,6 +23,8 @@ class GoalViewModel: ObservableObject {
     @Published var deepSleepGoalHours : Float = -1
     @Published var deepSleepGoalMins : Float = -1
     @Published var moonCount : Int = -1
+    
+    
 
     
     func fetchUsername(completion: @escaping () -> Void) {
@@ -141,6 +143,9 @@ struct SleepGoalsView: View {
     @State private var total_query_sleep: Int = 0
     @State private var total_query_deep: Int = 0
     let sleepManager = SleepManager()
+    
+    
+    @State private var viewSleepScore:Bool = false
     
     var body: some View {
 
@@ -266,7 +271,21 @@ struct SleepGoalsView: View {
                                 .foregroundColor(.nightfallHarmonyNavyBlue)
                                 .cornerRadius(10)
                         }
+                        NavigationLink (destination: SleepScoreView().navigationBarBackButtonHidden(true)) {
+                            HStack {
+                                Text("View Today's Sleep Score").font(.system(size: 18)).fontWeight(.medium)
+                                    .foregroundColor(.nightfallHarmonyNavyBlue)
+                                    .cornerRadius(10)
+                                Image(systemName: "arrow.right").foregroundColor(.white)
+                            }.frame(width: 320, height: 50)
+                                .background(Color.tranquilMistAshGray)
+                                .foregroundColor(.nightfallHarmonyNavyBlue)
+                                .cornerRadius(10)
+                        }
+                        
+                        
                     }.padding()
+                    
                     
                     HStack {
                         VStack {
@@ -375,7 +394,9 @@ struct SleepGoalsView: View {
                 print("GOAL: \(getTotalGoal())")
                 print("SLEEP: \(total_query_sleep)")
             }
+            
         }
+        
         
     }
     //calc percent

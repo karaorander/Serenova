@@ -59,47 +59,49 @@ struct JournalView: View {
                     if journalEntries.count == 0 {
                         NoEntriesView1()
                     } else {
-                        List {
-                            ForEach(journalEntries, id: \.id) { entry in
-                                JournalListingView(journal: entry)
-                                    .onAppear {
-                                        if lastEntry != nil {
-                                            Task {
-                                                await queryJournal(NUM_ENTRIES: queryNum)
+                        ZStack {
+                            Color.tranquilMistAshGray
+                            List {
+                                ForEach(journalEntries, id: \.id) { entry in
+                                    JournalListingView(journal: entry)
+                                        .onAppear {
+                                            if lastEntry != nil {
+                                                Task {
+                                                    await queryJournal(NUM_ENTRIES: queryNum)
+                                                }
                                             }
                                         }
+                                        .padding(5)
+                                }
+                                .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                                .padding(8)
+                                .listRowSpacing(10)
+                                .listStyle(PlainListStyle())
+                                .scrollIndicators(ScrollIndicatorVisibility.hidden)
+                                .listRowBackground(
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(Color.dreamyTwilightMidnightBlue).padding()
+                                )
+                                
+                                
+                            }.background(Color.dreamyTwilightMidnightBlue)
+                                .refreshable {
+                                    Task {
+                                        journalEntries = []
+                                        lastEntry = nil
+                                        await queryJournal(NUM_ENTRIES: queryNum)
                                     }
-                                    .padding(5)
-                            }
-                            .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
-                            .padding(8)
-                            .listRowSpacing(10)
-                            .listStyle(PlainListStyle())
-                            .scrollIndicators(ScrollIndicatorVisibility.hidden)
-                            .listRowBackground(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color.dreamyTwilightMidnightBlue).padding()
-                            )
-                            
-                            
-                        }.background(Color.dreamyTwilightMidnightBlue)
-                        .refreshable {
-                            Task {
-                                journalEntries = []
-                                lastEntry = nil
-                                await queryJournal(NUM_ENTRIES: queryNum)
-                            }
+                                }
+                                .overlay(alignment: .bottom, content:  {NavigationLink(destination: createJournalView().navigationBarBackButtonHidden(true)) {
+                                    Image(systemName: "plus")
+                                        .fontWeight(.semibold)
+                                        .foregroundStyle(Color.dreamyTwilightMidnightBlue)
+                                        .frame(width: 50, height: 50)
+                                        .background(.white, in: .circle)
+                                        .padding()
+                                }.isDetailLink(false)})
                         }
-                        .overlay(alignment: .bottom, content:  {NavigationLink(destination: createJournalView().navigationBarBackButtonHidden(true)) {
-                            Image(systemName: "plus")
-                                .fontWeight(.semibold)
-                                .foregroundStyle(Color.dreamyTwilightMidnightBlue)
-                                .frame(width: 50, height: 50)
-                                .background(.white, in: .circle)
-                                .padding()
-                        }.isDetailLink(false)})
                     }
-                    
                     HStack (spacing: 40){
                         NavigationLink(destination: SleepGraphView().navigationBarBackButtonHidden(true)) {
                             
