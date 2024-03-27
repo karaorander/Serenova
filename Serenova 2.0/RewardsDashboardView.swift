@@ -13,6 +13,7 @@ class MoonProgressViewModel: ObservableObject {
     @Published var moonCount : Int = -1
     
     func fetchMoons() {
+        if let currentUser = Auth.auth().currentUser {
         let db = Database.database().reference()
         let id = Auth.auth().currentUser!.uid
         let ur = db.child("User").child(id)
@@ -25,6 +26,10 @@ class MoonProgressViewModel: ObservableObject {
             if let moonCount = userData["moonCount"] as? Int {
                 self.moonCount = moonCount
             }
+        }
+        } else {
+            // Handle the case where there's no authenticated user
+            print("No authenticated user")
         }
     }
 }

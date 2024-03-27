@@ -11,18 +11,25 @@ import FirebaseDatabase
 import FirebaseDatabaseSwift
 
 // Get username
+var goal_stats = [
+    GoalStats(id: 0, title: "Deep Sleep", currentData: 0, goal: 1 /*CGFloat(getTotalGoal())*/, color: .dreamyTwilightLavenderPurple),
+    GoalStats(id: 1, title: "Total Sleep", currentData: 0, goal: 1 /*CGFloat(getDeepGoal())*/, color: .soothingNightAccentBlue)
+]
+
 class GoalViewModel: ObservableObject {
     @Published var fullname = ""
     @Published var totalSleepGoalHours : Float = -1
     @Published var totalSleepGoalMins : Float = -1
     @Published var deepSleepGoalHours : Float = -1
     @Published var deepSleepGoalMins : Float = -1
+    @Published var moonCount : Int = -1
 
     
-    func fetchUsername() {
+    func fetchUsername(completion: @escaping () -> Void) {
         let db = Database.database().reference()
         let id = Auth.auth().currentUser!.uid
         let ur = db.child("User").child(id)
+        
         ur.observeSingleEvent(of: .value) { snapshot in
             guard let userData = snapshot.value as? [String: Any] else {
                 print("Error fetching data")
@@ -36,19 +43,35 @@ class GoalViewModel: ObservableObject {
             
             if let totalSleepGoalHours = userData["totalSleepGoalHours"] as? Float {
                 self.totalSleepGoalHours = totalSleepGoalHours
+                //currUser?.totalSleepGoalHours = totalSleepGoalHours
+                
             }
-            
+            print("TOTAL SLEEP GOAL RETRIEVED: \(self.totalSleepGoalHours)")
             if let totalSleepGoalMins = userData["totalSleepGoalMins"] as? Float {
                 self.totalSleepGoalMins = totalSleepGoalMins
+                //currUser?.totalSleepGoalMins = totalSleepGoalMins
             }
             
             if let deepSleepGoalHours = userData["deepSleepGoalHours"] as? Float {
                 self.deepSleepGoalHours = deepSleepGoalHours
+                //currUser?.deepSleepGoalHours = deepSleepGoalHours
             }
+            print("TOTAL SLEEP GOAL RETRIEVED: \(self.deepSleepGoalHours)")
+            
             
             if let deepSleepGoalMins = userData["deepSleepGoalMins"] as? Float {
                 self.deepSleepGoalMins = deepSleepGoalMins
+                //currUser?.deepSleepGoalMins = deepSleepGoalMins
             }
+            
+            if let moonCount = userData["moonCount"]
+                as? Int {
+                self.moonCount = moonCount
+            }
+            self.objectWillChange.send()
+                            
+                            // Call the completion closure to indicate that data fetching is completed
+                            completion()
             
         }
     }
@@ -109,11 +132,16 @@ struct ArticleCard: View {
 
 //potential opening screen
 struct SleepGoalsView: View {
-    @StateObject private var viewModel = AccountInfoViewModel()
+    @StateObject private var viewModel = GoalViewModel()
     
     @State var selected = 0
     var colors = [Color.tranquilMistAccentTurquoise.opacity(0.6), Color.dreamyTwilightMidnightBlue]
     var columns = Array(repeating: GridItem(.flexible(), spacing: 20), count: 2)
+    
+    @State private var total_query_sleep: Int = 0
+    @State private var total_query_deep: Int = 0
+    let sleepManager = SleepManager()
+    
     var body: some View {
 
         
@@ -191,17 +219,19 @@ struct SleepGoalsView: View {
                         //sleep goals circle grid
                         LazyVGrid(columns: columns, spacing: 30) {
                             ForEach(goal_stats) {goal in
+                                
                                 VStack(spacing: 22) {
                                     HStack {
                                         Text(goal.title).font(.system(size: 22)).fontWeight(.bold).foregroundColor(.white.opacity(0.8))
                                     }
                                     ZStack {
+                                        
                                         Circle()
                                             .trim(from: 0, to: 1)
                                             .stroke(goal.color.opacity(0.3), lineWidth: 15)
                                             .frame(width: (UIScreen.main.bounds.width - 150)/2, height: (UIScreen.main.bounds.width - 150)/2)
                                         Circle()
-                                            .trim(from: 0, to: (goal.currentData/goal.goal))
+                                            .trim(from: 0, to: min(1, goal.goal > 0 ? (goal.currentData / goal.goal) : 0))
                                             .stroke(goal.color, style: StrokeStyle(lineWidth: 15, lineCap: .round))
                                             .frame(width: (UIScreen.main.bounds.width - 150)/2, height: (UIScreen.main.bounds.width - 150)/2)
                                         Text("\(getPercent(current: goal.currentData, Goal: goal.goal))%")
@@ -213,6 +243,9 @@ struct SleepGoalsView: View {
                                     Text(getHrs(value:goal.currentData) + " Hrs")
                                         .font(.system(size:22, weight: .bold))
                                         .foregroundColor(goal.color)
+                                    Text("Goal: \(getHrs(value:goal.goal)) Hrs")
+                                        .font(.system(size:15, weight: .bold))
+                                        .foregroundColor(goal.color)
                                 }.padding()
                                     .background(.white.opacity(0.06))
                                     .cornerRadius(15)
@@ -220,6 +253,8 @@ struct SleepGoalsView: View {
                             }
                         }
                         .padding()
+                        
+                        
                         NavigationLink (destination: EditGoalsView().navigationBarBackButtonHidden(true)) {
                             HStack {
                                 Text("Edit Sleep Goals").font(.system(size: 18)).fontWeight(.medium)
@@ -232,6 +267,19 @@ struct SleepGoalsView: View {
                                 .cornerRadius(10)
                         }
                     }.padding()
+                    
+                    HStack {
+                        VStack {
+                            Text("Your Moon Count: \(viewModel.moonCount)").font(.system(size: 18)).fontWeight(.medium)
+                                .foregroundColor(.white)
+                                .cornerRadius(10)
+                            Image(systemName: "star").foregroundColor(.white)
+                            
+                        }
+                    }.frame(width: 320, height: 200)
+                        .background(Color.dreamyTwilightMidnightBlue)
+                        .foregroundColor(.nightfallHarmonyNavyBlue)
+                        .cornerRadius(10)
                     
                     VStack {
                         Text("Related Articles")
@@ -318,16 +366,29 @@ struct SleepGoalsView: View {
                 .background(Color.dreamyTwilightMidnightBlue)
                     
             }
-                .onAppear {
-                    viewModel.fetchUsername()
-                }
+                
         }
-    }
+        }.onAppear {
+            viewModel.fetchUsername{
+                getTotalSleep()
+                
+                print("GOAL: \(getTotalGoal())")
+                print("SLEEP: \(total_query_sleep)")
+            }
+        }
         
     }
     //calc percent
     func getPercent(current: CGFloat, Goal: CGFloat) ->String{
-        let per = (current / Goal) * 100
+         if Goal == 0 {
+             return String(format: "No Goals!")
+        }
+        var per = (current / Goal) * 100
+        if per < 0 {
+            per = 0
+        } else if per > 100 {
+            per = 100
+        }
         return String(format: "%.1f", per)
     }
     func getheight(value: CGFloat)->CGFloat{
@@ -339,18 +400,100 @@ struct SleepGoalsView: View {
         let hrs = value / 60
         return String(format: "%.1f", hrs)
     }
+    
+    func getTotalSleep() {
+        let calendar = Calendar.current
+        let today = Date()
+        let weekday = calendar.component(.weekday, from: today)
+        let startOfWeek = calendar.date(byAdding: .day, value: -weekday + 1, to: today)!
+        let endOfWeek = calendar.date(byAdding: .day, value: 7 - weekday, to: today)!
+        
+        var currentDate = startOfWeek
+        
+        let group = DispatchGroup()
+        
+        while currentDate <= endOfWeek {
+            group.enter()
+            
+            sleepManager.querySleepData(completion: { totalSleepTime, deepSleepTime, coreSleepTime, remSleepTime in
+                total_query_sleep += Int(totalSleepTime ?? 0) / 60
+                total_query_deep += Int(deepSleepTime ?? 0) / 60
+                
+                group.leave() // Leave the dispatch group when the query completes
+            }, date: currentDate)
+            
+            currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate)!
+        }
+        
+        group.notify(queue: .main) {
+            
+            print("TOTAL QUERY SLEEP: \(total_query_sleep)")
+            print("TOTAL QUERY DEEP: \(total_query_deep)")
+            goal_stats[0].currentData = CGFloat(total_query_deep)
+            goal_stats[1].currentData = CGFloat(total_query_sleep)
+            
+
+            updateGoalStats()
+            /*if (getDeepGoal() <= Float(total_query_deep)) {
+                currUser?.updateMoons(rewardCount: 50)
+            }
+            if (getDeepGoal() <= Float(total_query_deep)) {
+                currUser?.updateMoons(rewardCount: 50)
+            }*/
+        }
+    }
+    
+    func updateGoalStats() {
+        goal_stats = [
+            GoalStats(id: 0, title: "Deep Sleep", currentData: CGFloat(total_query_deep), goal: CGFloat(getDeepGoal()), color: .dreamyTwilightLavenderPurple),
+            GoalStats(id: 1, title: "Total Sleep", currentData: CGFloat(total_query_sleep), goal: CGFloat(getTotalGoal()), color: .soothingNightAccentBlue)
+        ]
+        
+    }
+    
+    
+    func getTotalGoal() -> Float{
+        if let currUser = currUser {
+            var totalGoal = (viewModel.totalSleepGoalHours * 60) + viewModel.totalSleepGoalMins
+            goal_stats[1].goal = CGFloat(totalGoal)
+            if (totalGoal < 0) {
+                return 0
+            } else {
+                return totalGoal
+            }
+        } else {
+            return 0
+        }
+    }
+
+    func getDeepGoal() -> Float{
+        if let currUser = currUser {
+            var deepGoal = (viewModel.deepSleepGoalHours * 60) + viewModel.deepSleepGoalMins
+            goal_stats[0].goal = CGFloat(deepGoal)
+            if (deepGoal < 0) {
+                return 0
+            } else {
+                return deepGoal
+            }
+        } else {
+            return 0
+        }
+    }
+    
+    
 }
 
 
 //New view
 struct EditGoalsView: View {
+    @StateObject private var viewModel = GoalViewModel()
     @State var selectedDate = Date()
     @State var total_hrs: Int = 0
     @State var total_min: Int = 0
     @State var deep_hrs: Int = 0
     @State var deep_min: Int = 0
     
-    @StateObject private var viewModel = AccountInfoViewModel()
+    
     
     
     var body: some View {
@@ -387,6 +530,7 @@ struct EditGoalsView: View {
                             
                         }
                         VStack(alignment: .leading, spacing: 15){
+                            
                             Text("Total Deep Sleep: \(deep_hrs)hrs \(deep_min) min").font(.system(size: 20, weight: .bold)).foregroundColor(.white)
                             HStack {
                                 Text("Hrs:").font(.system(size: 20, weight: .bold)).foregroundColor(.moonlitSerenityLilac)
@@ -402,7 +546,11 @@ struct EditGoalsView: View {
                     NavigationLink (destination: SleepGoalsView().navigationBarBackButtonHidden(true)) {
                         HStack {
                             Button(action:{
-                                saveGoals()
+                                //save goals
+                                //fetch new data
+                                saveGoals{
+                                    viewModel.fetchUsername{}
+                                }
                             }){
                                 Text("Save Goals").font(.system(size: 18)).fontWeight(.medium).foregroundColor(.white).cornerRadius(10)
                                 
@@ -418,7 +566,8 @@ struct EditGoalsView: View {
         
     }
     
-    func saveGoals() {
+    
+    func saveGoals(completion: @escaping () -> Void) {
         if let currUser = currUser {
             currUser.totalSleepGoalHours = Float(total_hrs)
             currUser.totalSleepGoalMins = Float(total_min)
@@ -432,11 +581,12 @@ struct EditGoalsView: View {
         } else {
             print("error")
         }
+        completion()
     }
     
     func getTotalGoal() -> Float{
         if let currUser = currUser {
-            var totalGoal = (currUser.totalSleepGoalHours * 60) + currUser.totalSleepGoalMins
+            var totalGoal = (viewModel.totalSleepGoalHours * 60) + viewModel.totalSleepGoalMins
             if (totalGoal < 0) {
                 return 0
             } else {
@@ -449,7 +599,7 @@ struct EditGoalsView: View {
 
     func getDeepGoal() -> Float{
         if let currUser = currUser {
-            var deepGoal = (currUser.deepSleepGoalHours * 60) + currUser.deepSleepGoalMins
+            var deepGoal = (viewModel.deepSleepGoalHours * 60) + viewModel.deepSleepGoalMins
             if (deepGoal < 0) {
                 return 0
             } else {
@@ -516,10 +666,6 @@ struct EditGoalsView: View {
 
     //goals sample data
     //TODO: get sleep data
-    var goal_stats = [
-        GoalStats(id: 0, title: "Deep Sleep", currentData: 300, goal: 270 /*CGFloat(getTotalGoal())*/, color: .dreamyTwilightLavenderPurple),
-        GoalStats(id: 1, title: "Total Sleep", currentData: 500, goal: 400 /*CGFloat(getDeepGoal())*/, color: .soothingNightAccentBlue)
-    ]
     
     
 

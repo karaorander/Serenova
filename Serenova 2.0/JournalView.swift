@@ -219,7 +219,14 @@ struct NoEntriesView1: View {
                 .fontWeight(.semibold)
             Spacer()
             
-        }
+        }.overlay(alignment: .bottom, content:  {NavigationLink(destination: createJournalView().navigationBarBackButtonHidden(true)) {
+            Image(systemName: "plus")
+                .fontWeight(.semibold)
+                .foregroundStyle(Color.dreamyTwilightMidnightBlue)
+                .frame(width: 50, height: 50)
+                .background(.white, in: .circle)
+                .padding()
+        }.isDetailLink(false)})
     }
 }
 
