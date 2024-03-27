@@ -5,6 +5,8 @@
 //  Created by Caitlin Wilson on 2/19/24.
 //
 import Foundation
+import Firebase
+import FirebaseFirestore
 import FirebaseAuth
 import FirebaseDatabase
 
@@ -105,11 +107,6 @@ class User: Codable {
                     }
                 }
     }
-    
-    /*
-     * TODO: Function to read user data from
-     * Firebase
-     */
     
     
     /*
