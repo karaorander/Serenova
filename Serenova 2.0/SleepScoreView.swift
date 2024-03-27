@@ -201,7 +201,7 @@ struct SleepScoreView: View {
                     totalSleepMin = (Int(totalSleepTime ?? 0)) / 60
                     deepSleepMin = (Int(deepSleepTime ?? 0)) / 60
                     coreSleepMin = (Int(coreSleepTime ?? 0)) / 60
-                    remSleepMin = (Int(totalSleepTime ?? 0)) / 60
+                    remSleepMin = (Int(remSleepTime ?? 0)) / 60
                     otherSleepMin = totalSleepMin-(deepSleepMin + coreSleepMin + remSleepMin)
                     if totalSleepMin == 0 {
                         sleepScore = 0
@@ -237,7 +237,7 @@ struct SleepScoreView: View {
         let remSleepWeight = 0.1
 
         // Normalize sleep minutes
-        let totalMinutes = deepSleepMinutes + otherSleepMinutes + coreSleepMinutes + remSleepMinutes
+        let totalMinutes = totalSleepMinutes
         let deepSleepNormalized = Double(deepSleepMinutes) / Double(totalMinutes)
         let lightSleepNormalized = Double(otherSleepMinutes) / Double(totalMinutes)
         let coreSleepNormalized = Double(coreSleepMinutes) / Double(totalMinutes)
