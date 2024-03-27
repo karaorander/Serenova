@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		23215AE32BB3B2A300132C8E /* FriendRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23215AE22BB3B2A300132C8E /* FriendRequestView.swift */; };
 		239E081E2B80424A0036AD81 /* AccountInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 239E081D2B80424A0036AD81 /* AccountInfoView.swift */; };
 		23B3854B2B8E7F0200F2C614 /* SleepGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23B3854A2B8E7F0200F2C614 /* SleepGraphView.swift */; };
 		23B3854D2B8E933900F2C614 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 23B3854C2B8E933900F2C614 /* FirebaseFirestore */; };
@@ -111,12 +112,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		23215AE22BB3B2A300132C8E /* FriendRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRequestView.swift; sourceTree = "<group>"; };
 		239E08192B7FC8990036AD81 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; tabWidth = 4; };
 		239E081B2B80125C0036AD81 /* Serenova-2-0-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Serenova-2-0-Info.plist"; sourceTree = SOURCE_ROOT; };
 		239E081C2B803E910036AD81 /* Serenova 2.0.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Serenova 2.0.entitlements"; sourceTree = "<group>"; };
 		239E081D2B80424A0036AD81 /* AccountInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountInfoView.swift; sourceTree = "<group>"; };
 		23B3854A2B8E7F0200F2C614 /* SleepGraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepGraphView.swift; sourceTree = "<group>"; };
-		23BD28E62BB1147600914FD5 /* FriendRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRequestView.swift; sourceTree = "<group>"; };
 		23D1E0DF2B7A8FDE00539A62 /* Serenova 2.0.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Serenova 2.0.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		23D1E0E22B7A8FDE00539A62 /* Serenova_2_0App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serenova_2_0App.swift; sourceTree = "<group>"; };
 		23D1E0E42B7A8FDE00539A62 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -260,11 +261,11 @@
 				7F60D49F2BB39EC5004D66FB /* GoogleService-Info.plist */,
 				E0231FFB2B7DB8F8009A4E39 /* Extensions */,
 				23D1E0E22B7A8FDE00539A62 /* Serenova_2_0App.swift */,
-				23BD28E62BB1147600914FD5 /* FriendRequestView.swift */,
 				E02A2BF62B8E62F000235A39 /* SleepManager.swift */,
 				239E081D2B80424A0036AD81 /* AccountInfoView.swift */,
 				E043EA8E2BAC923D0031ABDF /* JournalView.swift */,
 				F299FAF92BB0265400845FE4 /* createJournalView.swift */,
+				23215AE22BB3B2A300132C8E /* FriendRequestView.swift */,
 				E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */,
 				B163D1DB2B8F9ED200DBC5A3 /* ForumView.swift */,
 				B1A7C3962BA7CDB800BCE27F /* ForumPostDetailView.swift */,
@@ -574,6 +575,7 @@
 				E043EA8F2BAC923D0031ABDF /* JournalView.swift in Sources */,
 				F2D887002B8E8E9200C0A87E /* AlarmView.swift in Sources */,
 				F299FAFA2BB0265400845FE4 /* createJournalView.swift in Sources */,
+				23215AE32BB3B2A300132C8E /* FriendRequestView.swift in Sources */,
 				239E081E2B80424A0036AD81 /* AccountInfoView.swift in Sources */,
 				B1CB24692B87C57500AE8685 /* Journal.swift in Sources */,
 				E0D1C1682B8815DF00A7609C /* SleepLogView.swift in Sources */,

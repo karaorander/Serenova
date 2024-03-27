@@ -323,6 +323,23 @@ struct AccountInfoView: View {
                                 .background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
                             //TODO: need to enable push notifications
                             
+                            Text("Moon Rewards Count: \(viewModel.moonCount)")
+                                .padding()
+                                .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
+                            
+                            // Friend Request Button
+                            NavigationLink(destination: FriendRequestView()){
+                                HStack{
+                                    Text("Friend Requests")
+                                        .padding()
+                                    Spacer()
+                                    Image(systemName:
+                                            "arrow.right")
+                                    .padding()
+                                }
+                                .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
+                            }
+                            
                             // Bio Button
                             NavigationLink(destination: BioInfoView()){
                                 HStack{
@@ -362,9 +379,6 @@ struct AccountInfoView: View {
                                 .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
                             }
                             
-                            Text("Moon Rewards Count: \(viewModel.moonCount)")
-                                .padding()
-                                .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
                         }
                     }
                         Spacer()
@@ -674,6 +688,41 @@ struct EditProfileView: View {
                 )
             }
         }
+    }
+}
+
+struct myView: View {
+    var friendname = "JACKSIN"
+    
+    var body: some View {
+        /*ZStack {
+            LinearGradient(gradient: Gradient(colors: [.nightfallHarmonyNavyBlue.opacity(0.8),.dreamyTwilightMidnightBlue.opacity(0.6), .nightfallHarmonyRoyalPurple.opacity(0.7),.nightfallHarmonySilverGray.opacity(0.8)]), startPoint: .top, endPoint: .bottom)
+                .ignoresSafeArea()*/
+            
+            VStack(alignment: .leading){
+                HStack {
+                    Text(friendname)
+                        .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                        .foregroundColor(Color.nightfallHarmonyRoyalPurple.opacity(0.9))
+                        .padding(.bottom, 2)
+                        .brightness(0.5)
+                        //.saturation(0.3)
+                    
+                    Spacer().frame(width: 30)
+                    HStack {
+                        Button ("Approve", action: {
+                            
+                        })
+                        .font(.system(size: 15)).fontWeight(.medium).frame(width: 90, height: 30).background(Color.soothingNightLightGray.opacity(0.6)).foregroundColor(.nightfallHarmonyNavyBlue.opacity(1)).cornerRadius(10)
+                        
+                        Button ("Deny", action: {
+                            
+                        })
+                        .font(.system(size: 15)).fontWeight(.medium).frame(width: 90, height: 30).background(Color.soothingNightLightGray.opacity(0.6)).foregroundColor(.nightfallHarmonyNavyBlue.opacity(1)).cornerRadius(10)
+                    }
+                }
+            }
+        //}
     }
 }
 
