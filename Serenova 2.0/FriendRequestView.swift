@@ -50,6 +50,66 @@ class RequestViewModel: ObservableObject {
                }
            }
        }
+    
+    func addFriend(friend: Friend) {
+        let db = Firestore.firestore()
+        let currentUserID = Auth.auth().currentUser!.uid
+        
+        // Reference to the user's "friends" collection
+        let friendsCollectionRef = db.collection("FriendRequests").document(currentUserID).collection("Friends")
+        
+        // Add friend to Firestore "friends" collection
+        friendsCollectionRef.document(friend.friendID).setData([
+            "name": friend.requesterName
+            "friendid" : friend.friendID
+        ]) { error in
+            if let error = error {
+                print("Error adding friend: \(error)")
+            } else {
+                print("Friend added successfully to Firestore")
+                
+                // Remove friend from Firestore "friendRequests" collection
+                            let friendRequestsCollectionRef = db.collection("FriendRequests").document(currentUserID).collection("friendRequests")
+                            friendRequestsCollectionRef.document(friend.friendID).delete { error in
+                                if let error = error {
+                                    print("Error removing friend request from Firestore: \(error)")
+                                } else {
+                                    print("Friend request removed successfully from Firestore")
+                                    
+                                    // Remove friend from friendRequestsArray
+                                    if let index = self.friendRequestsArray.firstIndex(of: friend) {
+                                        self.friendRequestsArray.remove(at: index)
+                                    }
+                                }
+                            }
+            }
+        }
+    }
+    
+    func deleteRequest(friend: Friend) {
+        let db = Firestore.firestore()
+        let currentUserID = Auth.auth().currentUser!.uid
+           
+           // Reference to the user's "friends" collection
+        let friendsCollectionRef = db.collection("FriendRequests").document(currentUserID).collection("friendRequests")
+           
+           // Reference to the specific friend document
+        let friendDocumentRef = friendsCollectionRef.document(friend.friendID)
+           
+           // Delete the friend document
+           friendDocumentRef.delete { error in
+               if let error = error {
+                   print("Error removing friend from Firestore: \(error)")
+               } else {
+                   print("Friend removed successfully from Firestore")
+               }
+           }
+        
+        // Remove friend from friendRequestsArray
+        if let index = self.friendRequestsArray.firstIndex(of: friend) {
+            self.friendRequestsArray.remove(at: index)
+        }
+    }
 }
 
 struct FriendRequestView: View {
@@ -104,10 +164,10 @@ struct FriendRequestView: View {
                                 .scrollIndicators(ScrollIndicatorVisibility.hidden)
                             }
                         }
-                        .onAppear {
-                            viewModel.getRequests()
-                        }
             }
+        }
+        .onAppear {
+            viewModel.getRequests()
         }
     }
 }
@@ -140,7 +200,7 @@ struct NoRequestsView: View {
                 .frame(width: 60, height: 60)
                 .foregroundColor(.white)
                 .padding()
-            Text("No Posts Yet")
+            Text("No Requests")
                 .foregroundColor(.white)
                 .font(.system(size: 30))
                 .fontWeight(.semibold)
@@ -150,6 +210,7 @@ struct NoRequestsView: View {
 }
 
 struct requestView: View {
+    @StateObject private var viewModel = RequestViewModel()
     var friendRequest: Friend
     
     var body: some View {
@@ -165,7 +226,7 @@ struct requestView: View {
                 Spacer()
                 HStack {
                     Button ("Approve", action: {
-                        
+                        viewModel.addFriend(friend: friendRequest)
                     })
                     .font(.system(size: 15)).fontWeight(.medium).frame(width: 90, height: 30)
                     .background(Color.soothingNightLightGray.opacity(0.4).brightness(0.5))
@@ -173,7 +234,7 @@ struct requestView: View {
                     .cornerRadius(10)
                     
                     Button ("Deny", action: {
-                        
+                        viewModel.deleteRequest(friend: friendRequest)
                     })
                     .font(.system(size: 15)).fontWeight(.medium).frame(width: 90, height: 30)
                     .background(Color.soothingNightLightGray.opacity(0.4).brightness(0.5))
