@@ -128,14 +128,19 @@ class SleepManager {
                             value: \(result.value),
                             duration: \(sleepDuration) seconds
                             """)
-                        totalSleepTime += sleepDuration
+                        
                     switch type {
                     case .asleepDeep:
                             deepSleepDuration += sleepDuration
+                        totalSleepDuration += sleepDuration
                     case .asleepREM:
                         remSleepDuration += sleepDuration
+                        totalSleepDuration += sleepDuration
                     case .asleepCore, .asleepUnspecified:
                         coreSleepDuration += sleepDuration
+                        totalSleepDuration += sleepDuration
+                    case .asleepUnspecified:
+                        totalSleepDuration += sleepDuration
                     case .awake:
                         // Ignore awake segments
                         break

@@ -198,15 +198,18 @@ struct SleepScoreView: View {
         }.onAppear() {
             sleepManager.querySleepData(completion: { totalSleepTime, deepSleepTime, coreSleepTime, remSleepTime in
                 DispatchQueue.main.async {
+                   
                     totalSleepMin = (Int(totalSleepTime ?? 0)) / 60
+                    print(totalSleepMin)
                     deepSleepMin = (Int(deepSleepTime ?? 0)) / 60
                     coreSleepMin = (Int(coreSleepTime ?? 0)) / 60
                     remSleepMin = (Int(remSleepTime ?? 0)) / 60
-                    otherSleepMin = totalSleepMin-(deepSleepMin + coreSleepMin + remSleepMin)
+                    otherSleepMin = (Int(totalSleepTime ?? 0)) / 60-(((Int(deepSleepTime ?? 0)) / 60) +
+                                                                     ((Int(coreSleepTime ?? 0)) / 60) + ((Int(remSleepTime ?? 0)) / 60))
                     if totalSleepMin == 0 {
                         sleepScore = 0
                     } else {
-                        sleepScore = calculateSleepScore(deepSleepMinutes: deepSleepMin, otherSleepMinutes: otherSleepMin, coreSleepMinutes: coreSleepMin, remSleepMinutes: remSleepMin, totalSleepMinutes: totalSleepMin)
+                        sleepScore = calculateSleepScore(deepSleepMinutes: (Int(deepSleepTime ?? 0)) / 60, coreSleepMinutes: (Int(coreSleepTime ?? 0)) / 60, remSleepMinutes: (Int(remSleepTime ?? 0)) / 60, totalSleepMinutes: (Int(totalSleepTime ?? 0)) / 60)
                     }
                 }
             }, date: Date())
@@ -229,31 +232,34 @@ struct SleepScoreView: View {
         })
     }
     
-    func calculateSleepScore(deepSleepMinutes: Int, otherSleepMinutes: Int, coreSleepMinutes: Int, remSleepMinutes: Int, totalSleepMinutes: Int) -> Int {
+    func calculateSleepScore(deepSleepMinutes: Int, coreSleepMinutes: Int, remSleepMinutes: Int, totalSleepMinutes: Int) -> Int {
         // Define weights for each sleep stage
         let deepSleepWeight = 0.4
-        let lightSleepWeight = 0.3
+        let otherSleepWeight = 0.3
         let coreSleepWeight = 0.2
         let remSleepWeight = 0.1
 
-        // Normalize sleep minutes
-        let totalMinutes = totalSleepMinutes
-        let deepSleepNormalized = Double(deepSleepMinutes) / Double(totalMinutes)
-        let lightSleepNormalized = Double(otherSleepMinutes) / Double(totalMinutes)
-        let coreSleepNormalized = Double(coreSleepMinutes) / Double(totalMinutes)
-        let remSleepNormalized = Double(remSleepMinutes) / Double(totalMinutes)
+        // Define ideal sleep duration in minutes
+        let idealSleepDuration = 8 * 60 // 8 hours converted to minutes
+
+        // Calculate deviation from ideal sleep duration
+        let deviation = abs(totalSleepMinutes - idealSleepDuration)
+
+        // Normalize other sleep minutes based on ideal sleep duration
+        let otherSleepMinutes = totalSleepMinutes - (deepSleepMinutes + coreSleepMinutes + remSleepMinutes) - deviation
 
         // Calculate stage scores
-        deepSleepScore = Int(deepSleepNormalized * deepSleepWeight)
-        otherSleepScore = Int(lightSleepNormalized * lightSleepWeight)
-        coreSleepScore = Int(coreSleepNormalized * coreSleepWeight)
-        remSleepScore = Int(remSleepNormalized * remSleepWeight)
+        otherSleepScore = Int(Double(otherSleepMinutes) / Double(idealSleepDuration) * otherSleepWeight * 100)
+        deepSleepScore = Int(Double(deepSleepMinutes) / Double(idealSleepDuration) * deepSleepWeight * 100)
+        coreSleepScore = Int(Double(coreSleepMinutes) / Double(idealSleepDuration) * coreSleepWeight * 100)
+        remSleepScore = Int(Double(remSleepMinutes) / Double(idealSleepDuration) * remSleepWeight * 100)
 
         // Combine stage scores
-        sleepScore = Int((deepSleepScore + otherSleepScore + coreSleepScore + remSleepScore) * 100)
+        let combinedScore = otherSleepScore + deepSleepScore + coreSleepScore + remSleepScore
 
-        return sleepScore
+        return combinedScore
     }
+
 
     
 }
