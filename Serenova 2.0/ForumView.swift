@@ -65,15 +65,21 @@ struct ForumView: View {
                     } else {
                         List {
                             ForEach(forumPosts.indices, id: \.self) { index in
-                                PostListingView(post: $forumPosts[index])
-                                    .onAppear {
-                                        if index == forumPosts.count - 1 && lastPost != nil {
-                                            Task {
-                                                await queryPosts(NUM_POSTS: queryNum)
+                                ZStack {
+                                    NavigationLink(destination: ForumPostDetailView(post: $forumPosts[index]).navigationBarBackButtonHidden(true)) {
+                                        EmptyView()
+                                    }
+                                    .opacity(0)
+                                    PostListingView(isFullView: false, post: $forumPosts[index])
+                                        .onAppear {
+                                            if index == forumPosts.count - 1 && lastPost != nil {
+                                                Task {
+                                                    await queryPosts(NUM_POSTS: queryNum)
+                                                }
                                             }
                                         }
-                                    }
-                                    .padding(5)
+                                        .padding(5)
+                                }
                             }
                             .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
                             .listRowBackground(
@@ -195,6 +201,7 @@ struct NoPostsView: View {
 
 struct PostListingView: View {
     
+    var isFullView: Bool
     @Binding var post: Post
          
     @State private var postImage: UIImage?
@@ -203,165 +210,164 @@ struct PostListingView: View {
     @State private var hasChanged: Bool = false  // Change to activate change in view
 
     var body: some View {
-        //Button (action: {isClicked = true}) {
-            VStack(alignment: .leading) {
+        VStack(alignment: .leading) {
+            HStack {
+                Image(systemName: "person.crop.circle.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 35, height: 35)
+                    .foregroundColor(Color.white)
+                    .foregroundColor(.clear)
+                
+                VStack(alignment: .leading){
+                    Text("@username")
+                        .font(.system(size: 13))
+                        .fontWeight(.semibold)
+                        .foregroundColor(Color.white)
+                        .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                    Text("\(post.getRelativeTime())")
+                        .font(.system(size: 13))
+                        .fontWeight(.semibold)
+                        .foregroundColor(.dreamyTwilightSlateGray)
+                        .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                }
+            }
+            .padding(.vertical, 10)
+        
+            // Post preview content
+            Text(post.title)
+                .font(.custom("NovaSquareSlim-Bold", size: 20))
+                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                .foregroundColor(Color.nightfallHarmonyRoyalPurple)
+                .padding(.bottom, 2)
+                .brightness(0.3)
+                .saturation(1.5)
+            
+            // Tag
+            if post.tag != nil && post.tag != "None" {
                 HStack {
-                    Image(systemName: "person.crop.circle.fill")
+                    Text(post.tag!)
+                        .foregroundColor(Color.white)
+                        .font(.system(size: 15))
+                }
+                .padding(.vertical, 12).padding(.horizontal, 22)
+                .background(Color.dreamyTwilightOrchid)
+                .cornerRadius(10)
+                Spacer()
+            }
+            
+            // Limit word count of preview to: 50 characters
+            if isFullView || post.content.count <= 55 {
+                Text(post.content)
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                    .padding(.bottom, 8)
+            } else {
+                Text(post.content.prefix(55) + "...")
+                    .foregroundColor(.white)
+                    .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                    .padding(.bottom, 8)
+            }
+            
+            if let imageURL = post.imageURL {
+                let _ = self.loadImage(imageURL: imageURL)
+                if let postImage = postImage {
+                    Image(uiImage: postImage)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
-                        .frame(width: 35, height: 35)
-                        .foregroundColor(Color.white)
-                        .foregroundColor(.clear)
-                    
-                    VStack(alignment: .leading){
-                        Text("@username")
-                            .font(.system(size: 13))
-                            .fontWeight(.semibold)
-                            .foregroundColor(Color.white)
-                            .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
-                        Text("\(post.getRelativeTime())")
-                            .font(.system(size: 13))
-                            .fontWeight(.semibold)
-                            .foregroundColor(.dreamyTwilightSlateGray)
-                            .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
-                    }
-                }
-                .padding(.vertical, 10)
-            
-                // Post preview content
-                Text(post.title)
-                    .font(.custom("NovaSquareSlim-Bold", size: 20))
-                    .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-                    .foregroundColor(Color.nightfallHarmonyRoyalPurple)
-                    .padding(.bottom, 2)
-                    .brightness(0.3)
-                    .saturation(1.5)
-                
-                // Tag
-                if post.tag != nil && post.tag != "None" {
-                    HStack {
-                        Text(post.tag!)
-                            .foregroundColor(Color.white)
-                            .font(.system(size: 15))
-                    }
-                    .padding(.vertical, 12).padding(.horizontal, 22)
-                    .background(Color.dreamyTwilightOrchid)
-                    .cornerRadius(10)
-                    Spacer()
-                }
-                
-                // Limit word count of preview to: 50 characters
-                if post.content.count <= 55 {
-                    Text(post.content)
-                        .foregroundColor(.white)
-                        .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
-                        .padding(.bottom, 8)
+                        .frame(width: 330, height: 250)
+                        .cornerRadius(10)
+                        .padding(.horizontal, 0).padding(.bottom, 8)
+                        .clipped()
                 } else {
-                    Text(post.content.prefix(55) + "...")
-                        .foregroundColor(.white)
-                        .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
-                        .padding(.bottom, 8)
+                    Image(systemName: "rectangle.fill")
+                        .resizable()
+                        .frame(width: 330, height: 250)
+                        .foregroundColor(Color.white.opacity(0.1))
+                        .cornerRadius(10)
+                        .padding(.horizontal, 0).padding(.bottom, 8)
                 }
-                
-                if let imageURL = post.imageURL {
-                    let _ = self.loadImage(imageURL: imageURL)
-                    
-                    if let postImage = postImage {
-                        Image(uiImage: postImage)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 330, height: 250)
-                            .cornerRadius(10)
-                            .padding(.horizontal, 0).padding(.bottom, 8)
-                            .clipped()
-                    } else {
-                        Image(systemName: "rectangle.fill")
-                            .resizable()
-                            .frame(width: 330, height: 250)
-                            .foregroundColor(Color.white.opacity(0.1))
-                            .cornerRadius(10)
-                            .padding(.horizontal, 0).padding(.bottom, 8)
-                    }
-                }
-                // Upvote & Downvote, Replies, Edit
+            }
+            // Upvote & Downvote, Replies, Edit
+            HStack {
+                // Like Dislikes System
                 HStack {
-                    // Like Dislikes System
-                    HStack {
-                        Button {
-                            withAnimation {
-                                handleLikes()
-                            }
-                        } label: {
-                            Image(systemName: "arrow.up.circle.fill")
-                                .fontWeight(.bold)
-                                .foregroundColor(post.likedIDs.contains(currUser!.userID)  ? .nightfallHarmonyRoyalPurple : .white)
-                                .brightness(0.3)
-                                .saturation(1.5)
+                    Button {
+                        withAnimation {
+                            handleLikes()
                         }
-                        Text("\(post.likedIDs.count - post.dislikedIDs.count)")
-                            .font(.system(size: 15))
-                            .foregroundColor(.white)
-                        Button {
-                            withAnimation {
-                                handleDislikes()
-                            }
-                        } label: {
-                            Image(systemName: "arrow.down.circle.fill")
-                                .foregroundColor(post.dislikedIDs.contains(currUser!.userID)  ? .nightfallHarmonyRoyalPurple : .white)
-                                .brightness(0.3)
-                                .saturation(1.5)
-                                .fontWeight(.bold)
-                        }
+                    } label: {
+                        Image(systemName: "arrow.up.circle.fill")
+                            .fontWeight(.bold)
+                            .foregroundColor(post.likedIDs.contains(currUser!.userID)  ? .nightfallHarmonyRoyalPurple : .white)
+                            .brightness(0.3)
+                            .saturation(1.5)
                     }
-                    .padding(.trailing, 10)
-                    Image(systemName: "arrowshape.turn.up.right.fill")
-                        .foregroundColor(.white)
-                    Text("\(post.numReplies)")
+                    Text("\(post.likedIDs.count - post.dislikedIDs.count)")
                         .font(.system(size: 15))
                         .foregroundColor(.white)
-                    Spacer()
-                    // TODO: Implement dropdown menu for options (delete and edit)
-                    Image(systemName: "ellipsis")
-                        .foregroundColor(.white)
-                }
-                .padding(.bottom, 8)
-            }
-            .listRowSeparator(.hidden)
-            .onAppear {
-                if likesListener == nil {
-                    guard let postID = post.postID else { return }
-                    let postRef = Firestore.firestore().collection("Posts")
-                    likesListener = postRef.document(postID).addSnapshotListener { documentSnapshot, error in
-                        print("UPDATE!")
-                        if let error = error {
-                            print("Error retreiving collection: \(error)")
+                    Button {
+                        withAnimation {
+                            handleDislikes()
                         }
-                        guard let document = documentSnapshot else {
-                            print("Error fetching document: \(error!)")
-                            return
-                        }
-                        guard let data = document.data() else {
-                            print("Document data was empty.")
-                            return
-                        }
-                        // Update likes and dislikes
-                        if let likes = data["likedIDs"] as? [String] {
-                            post.likedIDs = likes
-                        }
-                        if let dislikes = data["dislikedIDs"] as? [String] {
-                            post.dislikedIDs = dislikes
-                        }
-                        hasChanged.toggle()
+                    } label: {
+                        Image(systemName: "arrow.down.circle.fill")
+                            .foregroundColor(post.dislikedIDs.contains(currUser!.userID)  ? .nightfallHarmonyRoyalPurple : .white)
+                            .brightness(0.3)
+                            .saturation(1.5)
+                            .fontWeight(.bold)
                     }
                 }
+                .padding(.trailing, 10)
+                Image(systemName: "arrowshape.turn.up.right.fill")
+                    .foregroundColor(.white)
+                Text("\(post.numReplies)")
+                    .font(.system(size: 15))
+                    .foregroundColor(.white)
+                Spacer()
+                // TODO: Implement dropdown menu for options (delete and edit)
+                Image(systemName: "ellipsis")
+                    .foregroundColor(.white)
             }
-            .onDisappear {
-                likesListener?.remove()
-                likesListener = nil
+            .padding(.bottom, 8)
+            
+        }
+        .listRowSeparator(.hidden)
+        .onAppear {
+            if likesListener == nil {
+                guard let postID = post.postID else { return }
+                let postRef = Firestore.firestore().collection("Posts")
+                likesListener = postRef.document(postID).addSnapshotListener { documentSnapshot, error in
+                    print("UPDATE!")
+                    if let error = error {
+                        print("Error retreiving collection: \(error)")
+                    }
+                    guard let document = documentSnapshot else {
+                        print("Error fetching document: \(error!)")
+                        return
+                    }
+                    guard let data = document.data() else {
+                        print("Document data was empty.")
+                        return
+                    }
+                    // Update likes and dislikes
+                    if let likes = data["likedIDs"] as? [String] {
+                        post.likedIDs = likes
+                    }
+                    if let dislikes = data["dislikedIDs"] as? [String] {
+                        post.dislikedIDs = dislikes
+                    }
+                    if let numReplies = data["numReplies"] as? Int {
+                        post.numReplies = numReplies
+                    }                    
+                    hasChanged.toggle()
+                }
             }
-        //}
-        // TODO: Link to Post page
-        //NavigationLink(destination: ForumPostView().navigationBarBackButtonHidden(true))
+        }
+        .onDisappear {
+            likesListener?.remove()
+            likesListener = nil
+        }
     }
     
     /*
