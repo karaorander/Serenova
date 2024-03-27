@@ -52,6 +52,13 @@ class RequestViewModel: ObservableObject {
        }
     
     func addFriend(friend: Friend) {
+        // Add friendID to the users "Friend" Array in User class as well
+        if let friendID = friend.friendID as? String {
+            currUser?.addFriend(friendID)
+        } else {
+            print("Error: friendID is not a string")
+        }
+        
         let db = Firestore.firestore()
         let currentUserID = Auth.auth().currentUser!.uid
         

@@ -96,6 +96,10 @@ class User: Codable {
         ref.child(self.userID).setValue(encodedData)
     }
     
+    func addFriend(_ friendID: String) {
+        friends.append(friendID)
+    }
+    
     func addSleepSession(sleepSessionData: [String: Any]) throws {
         // Write new sleep session under the "sleepSessions" node for the user
         ref.child(self.userID).child("sleepSessions").childByAutoId().setValue(sleepSessionData)
