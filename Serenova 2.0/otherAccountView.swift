@@ -15,6 +15,7 @@ import FirebaseFirestoreSwift
 import FirebaseStorage
 
 class OtherAccountViewModel: ObservableObject {
+    @Published var userID: String = ""
     @Published var username: String = ""
     @Published var fullName: String = ""
     @Published var moonCount: Int = 0
@@ -38,6 +39,7 @@ class OtherAccountViewModel: ObservableObject {
 
     private func parseUserData(userData: [String: Any]) {
         DispatchQueue.main.async {
+            self.userID = userData["userData"] as? String ?? ""
             self.username = userData["username"] as? String ?? ""
             self.fullName = userData["name"] as? String ?? ""
             self.moonCount = userData["moonCount"] as? Int ?? 0
@@ -97,7 +99,7 @@ struct OtherAccountView: View {
 
             // Add Friend Button
             Button(action: {
-                // Implement the action to add a friend here
+                sendRequest(userID: viewModel.userID)
                 print("Add Friend tapped for userID: \(userID)")
             }) {
                 Text("Add Friend")
@@ -133,13 +135,13 @@ struct OtherAccountView: View {
     
     
     // Store new FriendRequest in FireStore for 'Friend'
-    // STATUS: 0 (unanswered), 1 (Yes), 2 (No)
-    func sendRequest(friend: Friend) {
+    // STATUS: 0 (Unanswered), 1 (Yes), 2 (No)
+    func sendRequest(userID: String) {
         let db = Firestore.firestore()
         
-        let recipientCollectionRef = db.collection("FriendRequests").document(friend.friendID).collection("Friends")
+        let recipientCollectionRef = db.collection("FriendRequests").document(userID).collection("Friends")
         
-        recipientCollectionRef.document(friend.friendID).setData([
+        recipientCollectionRef.document(userID).setData([
             "friendid" : currUser?.userID,
             "requesterName": currUser?.username,
             "status" : 0
