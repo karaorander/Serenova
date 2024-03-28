@@ -19,16 +19,19 @@ struct SearchForumView: View {
     @State private var showTagOptions: Bool = false
     
     //Filtering Options
-    @State var filterOptions: [String] = ["None", "Most Recent", "Least Recent", "Most Popular"]
+    @State var filterOptions: [String] = ["None", "Most Recent", "Least Recent", "Most Replies"]
     @State var tagOptions: [String] = ["None", "Questions", "Tips", "Hacks", "Support", "Goals", "Midnight Thoughts"]
     @State private var filterOption: Int = 0
     @State private var tagOption: Int = 0
     
     // Query Vars
-    @State private var searchPosts: [Post] = []
+    @State private var posts: [Post] = []
+    @State private var displayedPosts: [Post] = []
     @State private var queryNum: Int = 25
     @State private var lastPost: DocumentSnapshot?
     @State private var hasTriedSearch: Bool = false
+    @State private var hasTriedTag: Bool = false
+    @State private var hasTriedFilter: Bool = false
     
     @Environment(\.dismiss) private var dismiss
     
@@ -48,13 +51,25 @@ struct SearchForumView: View {
                             Image(systemName: "magnifyingglass")
                                 .fontWeight(.semibold)
                                 .foregroundColor(.dreamyTwilightOrchid)
-                            TextField("Search", text: $searchText)
+                            TextField("Search by single keyword", text: $searchText)
                                 .foregroundColor(.black)
-                                .onSubmit {
-                                    Task {
-                                        //await searchPosts(NUM_POSTS: queryNum)
-                                        hasTriedSearch.toggle()
+                                .onChange(of: searchText) {
+                                    if searchText.contains(" ") {
+                                        searchText = searchText.replacingOccurrences(of: " ", with: "")
                                     }
+                                }
+                                .onSubmit {
+                                    /*
+                                    Task {
+                                        posts.removeAll()
+                                        if !searchText.isEmpty {
+                                            await searchPosts(NUM_POSTS: queryNum)
+                                            hasTriedSearch = true
+                                        }
+                                    }
+                                    */
+                                    hasTriedSearch = true
+                                    searchPosts()
                                 }
                                 .submitLabel(.search)
                             if !searchText.isEmpty {
@@ -67,7 +82,7 @@ struct SearchForumView: View {
                             }
                         }
                         .padding()
-                        .background(Color.white)
+                        .background(Color.white.opacity(0.8))
                         .cornerRadius(20)
                         
                         // Cancel Button
@@ -82,7 +97,6 @@ struct SearchForumView: View {
                         .buttonStyle(PlainButtonStyle())
                     }
                     .padding()
-                    
                     ScrollViewReader { proxy in
                         // Sort Button
                         ScrollView(.horizontal, showsIndicators: false) {
@@ -98,6 +112,27 @@ struct SearchForumView: View {
                                 .background(Color.dreamyTwilightOrchid)
                                 .cornerRadius(10)
                                 .buttonStyle(NoStyle())
+                                .onChange(of: filterOption) {
+                                    Task {
+                                        //posts.removeAll()
+                                        /*
+                                        if filterOption != 0 {
+                                            print("UPDATING FILTER BOOL")
+                                            hasTriedFilter = true
+                                        } else {
+                                            hasTriedFilter = false
+                                        }
+                                        */
+                                        //print("FILTER OPTION")
+                                        //print(filterOption)
+                                        /*
+                                        if hasTriedFilter || hasTriedSearch || tagOption != 0 {
+                                            //await searchPosts(NUM_POSTS: queryNum)
+                                        }
+                                        */
+                                        searchPosts()
+                                    }
+                                }
                                 
                                 // Tags
                                 Button {
@@ -110,6 +145,23 @@ struct SearchForumView: View {
                                 .background(Color.dreamyTwilightOrchid)
                                 .cornerRadius(10)
                                 .buttonStyle(NoStyle())
+                                .onChange(of: tagOption) {
+                                    Task {/*
+                                        //posts.removeAll()
+                                        if tagOption != 0 {
+                                            hasTriedTag = true
+                                        } else {
+                                            hasTriedTag = false
+                                        }*/
+                                        /*
+                                        if hasTriedTag || hasTriedSearch || filterOption != 0 {
+                                            //await searchPosts(NUM_POSTS: queryNum)
+                                            searchPosts()
+                                        }
+                                        */
+                                        searchPosts()
+                                    }
+                                }
                                 
                                 
                                 if filterOption > 0 && filterOption <= filterOptions.endIndex {
@@ -117,7 +169,9 @@ struct SearchForumView: View {
                                         Text(filterOptions[filterOption])
                                             .foregroundColor(Color.white.opacity(0.8))
                                         Button {
-                                            filterOption = 0
+                                            Task {
+                                                filterOption = 0
+                                            }
                                         } label: {
                                             Image(systemName: "xmark")
                                                 .resizable()
@@ -136,7 +190,9 @@ struct SearchForumView: View {
                                         Text(tagOptions[tagOption])
                                             .foregroundColor(Color.white.opacity(0.8))
                                         Button {
-                                            tagOption = 0
+                                            Task {
+                                                tagOption = 0
+                                            }
                                         } label: {
                                             Image(systemName: "xmark")
                                                 .resizable()
@@ -182,24 +238,30 @@ struct SearchForumView: View {
                     }
                     
                     Spacer()
-                    
-                    /*
-                    if hasTriedSearch && searchPosts.count == 0{
+                    if hasTriedSearch && displayedPosts.count == 0{
                         // Display "No Posts Found"
                         NoMatchesFoundView()
                             .padding(.bottom, 150)
-                    } else if searchPosts.count > 0 {
+                    } else if displayedPosts.count > 0 {
                         List {
-                            ForEach(searchPosts.indices, id: \.self) { index in
-                                PostListingView(post: searchPosts[index])
-                                    .onAppear {
-                                        if index == searchPosts.count - 1 && lastPost != nil {
-                                            Task {
-                                                // TODO: Pagination
+                            ForEach(displayedPosts.indices, id: \.self) { index in
+                                ZStack {
+                                    NavigationLink(destination: ForumPostDetailView(post: $displayedPosts[index]).navigationBarBackButtonHidden(true)) {
+                                        EmptyView()
+                                    }
+                                    .opacity(0)
+                                    PostListingView(isFullView: false, post: $displayedPosts[index])
+                                        /*
+                                        .onAppear {
+                                            if index == displayedPosts.count - 1 /*&& lastPost != nil*/ {
+                                                Task {
+                                                    // TODO: Pagination
+                                                }
                                             }
                                         }
-                                    }
-                                    .padding(5)
+                                        .padding(5)
+                                        */
+                                }
                             }
                             .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
                             .listRowBackground(
@@ -213,40 +275,38 @@ struct SearchForumView: View {
                         .scrollIndicators(ScrollIndicatorVisibility.hidden)
                     }
                     Spacer()
-                   */
+                }
+            }
+            .onAppear() {
+                Task {
+                    await retrieveAllPosts()
                 }
             }
         }
-        .onAppear() {
-            Task {
-                //searchPosts.removeAll()
-                //await getAllPosts(NUM_POSTS: queryNum)
-            }
-        }
     }
-    
+
     /*
      * Function to clear search bar and remove
      * all posts that have been retrieved.
      */
     func clearSearch() {
         searchText = ""
-        searchPosts.removeAll()
+        posts.removeAll()
         lastPost = nil
         filterOption = 0
+        tagOption = 0
+        hasTriedSearch = false
     }
     
     /*
-     * Function to get ALL posts from Firestore
+     * Function to retrieve all posts from Firestore
      */
-    func getAllPosts(NUM_POSTS: Int) async {
-        // Database Reference
+    func retrieveAllPosts() async {
         let db = Firestore.firestore()
         
         do {
-            // Fetch batch of posts from Firestore
             var query: Query! = db.collection("Posts")
-
+            
             // Retrieve documents
             let postBatch = try await query.getDocuments()
             let newPosts = postBatch.documents.compactMap { post -> Post? in
@@ -254,7 +314,83 @@ struct SearchForumView: View {
             }
             
             await MainActor.run(body: {
-                searchPosts += newPosts
+                posts = newPosts
+                print(posts)
+            })
+        } catch {
+            print (error.localizedDescription)
+        }
+    }
+    
+    func searchPosts() {
+        if filterOption == 0 && tagOption == 0 && !hasTriedSearch {
+            displayedPosts = []
+            return
+        }
+        displayedPosts = posts
+
+        // Keyword Search
+        if hasTriedSearch {
+            displayedPosts = displayedPosts.filter { $0.titleAsArray.contains {$0.hasPrefix(searchText.lowercased())} }
+        }
+        
+        // Filter
+        if filterOption == 1 {
+            displayedPosts = displayedPosts.sorted { $0.timeStamp > $1.timeStamp }
+        } else if filterOption == 2 {
+            displayedPosts = displayedPosts.sorted { $0.timeStamp < $1.timeStamp }
+        } else if filterOption == 3 {
+            displayedPosts = displayedPosts.sorted { $0.numReplies > $1.numReplies }
+        }
+        
+        // Tags
+        if tagOption != 0 {
+            displayedPosts = displayedPosts.filter { $0.tag == tagOptions[tagOption] }
+        }
+    }
+    
+    /*
+     * Function to get ALL posts from Firestore
+     */
+    /*
+    func searchPosts(NUM_POSTS: Int) async {
+        // Database Reference
+        let db = Firestore.firestore()
+        
+        do {
+            // Fetch batch of posts from Firestore
+            var query: Query! = db.collection("Posts")
+                .limit(to: NUM_POSTS)
+            // Search for keyword
+            if !searchText.isEmpty {
+                query = query.whereField("titleAsArray", arrayContains: searchText.lowercased())
+            }
+            // Search by [sort]
+            if filterOption == 1 {  // Most Recent
+                query = query.order(by: "timeStamp", descending: true)
+            } else if filterOption == 2 {  // Least Recent
+                query = query.order(by: "timeStamp", descending: false)
+            } else if filterOption == 3 {
+                query = query.order(by: "numReplies", descending: true)
+            }
+            // Search by [tags]
+            if tagOption > 0 && tagOption <= tagOptions.count - 1 {
+                query = query.whereField("tag", isEqualTo: tagOptions[tagOption])
+            }/*
+            // Pagination
+            if let lastPost = lastPost {
+                query = query.start(afterDocument: lastPost)
+            }
+            */
+            // Retrieve documents
+            let postBatch = try await query.getDocuments()
+            let newPosts = postBatch.documents.compactMap { post -> Post? in
+                try? post.data(as: Post.self)
+            }
+            
+            await MainActor.run(body: {
+                posts += newPosts
+                print(posts)
                 lastPost = postBatch.documents.last
             })
             
@@ -263,6 +399,7 @@ struct SearchForumView: View {
         }
         return
     }
+    */
 }
 
 struct FilterOptionsView: View {
