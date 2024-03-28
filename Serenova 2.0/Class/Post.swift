@@ -43,7 +43,21 @@ class Post: Codable, Identifiable {
      */
     func createPost() async throws{
         if ((Auth.auth().currentUser) != nil) {
+            let db = Database.database().reference()
             self.authorID = Auth.auth().currentUser!.uid
+            let ur = db.child("User").child(self.authorID)
+            
+            ur.observeSingleEvent(of: .value) { snapshot in
+                guard let userData = snapshot.value as? [String: Any] else {
+                    print("Error fetching data")
+                    return
+                }
+                
+                // Extract additional information based on your data structure
+                if let username = userData["username"] as? String {
+                    self.authorUsername = username
+                }
+            }
         }
         // Create Firestore document ref
         let ref = Firestore.firestore().collection("Posts")

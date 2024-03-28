@@ -225,7 +225,7 @@ struct PostListingView: View {
                  }.padding(.bottom)
             
                 VStack(alignment: .leading){
-                    Text("@username")
+                    Text("@\(post.authorUsername)")
                         .font(.system(size: 13))
                         .fontWeight(.semibold)
                         .foregroundColor(Color.white)
