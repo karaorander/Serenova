@@ -16,6 +16,7 @@ import iPhoneNumberField
 class AccountInfoViewModel: ObservableObject {
     @Published var username = ""
     @Published var email = ""
+    @Published var password = ""
     @Published var fullname = ""
     @Published var phoneNumber = ""
     @Published var age = ""
@@ -62,12 +63,17 @@ class AccountInfoViewModel: ObservableObject {
                     self.username = username
                 }
                 
+                
                 if let phoneNumber = userData["phoneNumber"] as? String {
                     self.phoneNumber = phoneNumber
                 }
                 
                 if let age = userData["age"] as? String {
                     self.age = age
+                }
+                
+                if let password = userData["password"] as? String {
+                    self.password = password
                 }
                 
                 if let gender = userData["gender"] as? String {
@@ -186,6 +192,7 @@ class AccountInfoViewModel: ObservableObject {
         let user: [String: Any] = ["name": self.fullname,
                     "username": self.username,
                     "email": self.email,
+                    "password": self.password,
                     "phoneNumber": self.phoneNumber,
                     "age": self.age,
                     "gender": self.gender,
@@ -197,6 +204,40 @@ class AccountInfoViewModel: ObservableObject {
                     "hasNightmares": self.hasnightmares,
                     "isEarlyBird": self.isearlybird
             ]
+        
+        
+        func createUser(completion: @escaping (Bool) -> Void) {
+            // Handle User Creation
+            Auth.auth().createUser(withEmail: email, password: password) { authResult,
+                
+                error in
+                  
+                var authErrorMsg = ""
+            
+                if let error = error as NSError? {
+                    if (error.code == 17007) {
+                        // Check if email already in use
+                        authErrorMsg = "Email already taken. Try again."
+                        self.email = ""
+                    } else {
+                        // Handle other error messages
+                        authErrorMsg = error.localizedDescription
+                    }
+                }
+                
+                if let authResult = authResult {
+                    print(authResult)
+                    Task {
+                        do {
+                            currUser = try User(userID: authResult.user.uid, name: self.fullname, email: self.email, phoneNumber: self.phoneNumber)
+                        } catch {
+                            authErrorMsg = error.localizedDescription
+                        }
+                    }
+                }
+                completion(authErrorMsg.isEmpty)
+            }
+        }
         
         ur.updateChildValues(user) { (error, reference) in
             if let error = error {

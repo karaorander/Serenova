@@ -23,16 +23,24 @@ class GoalViewModel: ObservableObject {
     @Published var deepSleepGoalHours : Float = -1
     @Published var deepSleepGoalMins : Float = -1
     @Published var moonCount : Int = -1
+    @Published var age : Int = -1
+    @Published var gender = ""
+    @Published var weight : Float = -1
+    @Published var snore : Bool = true
+    @Published var hadinsomnia : Bool = true
+    @Published var hasinsomnia : Bool = true
+    @Published var hasmedication : Bool = true
+    @Published var hasnightmares : Bool = true
+    @Published var isearlybird : Bool = true
     
     
-
     
     func fetchUsername(completion: @escaping () -> Void) {
         let db = Database.database().reference()
         let id = Auth.auth().currentUser!.uid
         let ur = db.child("User").child(id)
         
-        ur.observeSingleEvent(of: .value) { snapshot in
+        ur.observeSingleEvent(of: .value) { snapshot,<#arg#>  in
             guard let userData = snapshot.value as? [String: Any] else {
                 print("Error fetching data")
                 return
@@ -48,6 +56,43 @@ class GoalViewModel: ObservableObject {
                 //currUser?.totalSleepGoalHours = totalSleepGoalHours
                 
             }
+            
+            if let hasinsomnia = userData["hasInsomnia"] as? Bool {
+                self.hasinsomnia = hasinsomnia
+            }
+            
+            if let hadinsomnia = userData["hadInsomnia"] as? Bool {
+                self.hadinsomnia = hadinsomnia
+            }
+            
+            if let age = userData["age"] as? Int {
+                self.age = age
+            }
+            
+            if let gender = userData["gender"] as? String {
+                self.gender = gender
+            }
+            
+            if let weight = userData["weight"] as? Float {
+                self.weight = weight
+            }
+            
+            if let snore = userData["snore"] as? Bool {
+                self.snore = snore
+            }
+            
+            if let hasmedication = userData["hasmedication"] as? Bool {
+                self.hasmedication = hasmedication
+            }
+            
+            if let hasnightmares = userData["hasnightmares"] as? Bool {
+                self.hasnightmares = hasnightmares
+            }
+            
+            if let isearlybird = userData["isearlybird"] as? Bool {
+                self.isearlybird = isearlybird
+            }
+            
             print("TOTAL SLEEP GOAL RETRIEVED: \(self.totalSleepGoalHours)")
             if let totalSleepGoalMins = userData["totalSleepGoalMins"] as? Float {
                 self.totalSleepGoalMins = totalSleepGoalMins
@@ -79,11 +124,23 @@ class GoalViewModel: ObservableObject {
     }
 }
 
+//tags we filter by: insomnia, meds, male, female, old, kid, baby, snore, nightmares, earlybird
 let articles = [
     Article(articleTitle: "The Importance of Deep Sleep", articleLink: "https://www.medicalnewstoday.com/articles/325363", articlePreview: "Deep sleep plays a crucial role in your overall health...", articleTags: ["Health", "Sleep"], articleId: "1"),
     Article(articleTitle: "5 Tips for Better Sleep Hygiene", articleLink: "https://www.medicalnewstoday.com/articles/325363", articlePreview: "Improving your sleep hygiene can lead to better sleep quality...", articleTags: ["Tips", "Hygiene"], articleId: "2"),
+    
+    Article(articleTitle: "Insomnia: Symptoms, Causes, and Treatments", articleLink: "https://www.sleepfoundation.org/insomnia", articlePreview: "Insomnia is a sleep disorder characterized by difficulty...", articleTags: ["insomnia", "tips", "information"], articleId: "3"),
+    Article(articleTitle: "What is insomnia? Everything you need to know", articleLink: "https://www.medicalnewstoday.com/articles/9155#definition", articlePreview: "Research shows that around 25% of people in the United States experience", articleTags: ["insomnia"], articleId: "4"),
+    Article(articleTitle: "Prevalence of chronic insomnia in adult patients and its correlation with medical comorbidities", articleLink: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5353813/", articlePreview: "Insomnia is one of the common but neglected conditions...", articleTags: ["insomnia"], articleId: "5"),
+    
+    Article(articleTitle: "Medicines for sleep", articleLink: "https://medlineplus.gov/ency/patientinstructions/000758.htm", articlePreview: "Some people may need medicines to help with sleep for a short period of time...", articleTags: ["meds"], articleId: "6"),
+    Article(articleTitle: "The effects of medications on sleep quality and sleep architecture", articleLink: "https://www.uptodate.com/contents/the-effects-of-medications-on-sleep-quality-and-sleep-architecture", articlePreview: "Any medication that passes through the blood-brain barrier has the potential to alter the quality and/or architecture of sleep:...", articleTags: ["meds"], articleId: "7"),
+    Article(articleTitle: "Sleep Medication Use in Adults Aged 18 and Over: United States, 2020", articleLink: "https://www.cdc.gov/nchs/products/databriefs/db462.htm", articlePreview: "In 2020, 8.4% of adults took sleep medication in the last 30 days either...", articleTags: ["meds"], articleId: "8"),
+    
     // Add more articles as needed
-]
+] // ex: index = 0-4 insomnia articles (this is the backup plan)
+
+let myArticles = get_relevent_articles()
 
 struct ArticleRow: View {
     var article: Article
@@ -311,7 +368,8 @@ struct SleepGoalsView: View {
 
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 15) { // Maintain spacing between article boxes
-                                ForEach(articles, id: \.articleId) { article in
+                                
+                                ForEach(myArticles, id: \.articleId) { article in
                                     Link(destination: URL(string: article.articleLink)!) {
                                         VStack(alignment: .leading, spacing: 5) {
                                             Text(article.articleTitle)
@@ -399,6 +457,71 @@ struct SleepGoalsView: View {
         
         
     }
+    /** loc1
+    func get_relevent_articles () -> Array<Article> {
+        
+        var releventArts = [Article]()
+        
+        var userTags = [String()]
+        
+        if (viewModel.hasinsomnia || viewModel.hadinsomnia) {
+            userTags.append("insomnia")
+        }
+        
+        if (viewModel.age > 65) {
+            userTags.append("old")
+        }
+        
+        if (viewModel.age <= 17) {
+            userTags.append("kid")
+        }
+        
+        var gendervar = "female"
+        
+        if (viewModel.gender.lowercased() == gendervar) {
+            userTags.append("female")
+        }
+        
+        gendervar = "male"
+        
+        if (viewModel.gender.lowercased() == gendervar) {
+            userTags.append("male")
+        }
+        
+        if (viewModel.snore) {
+            userTags.append("snore")
+        }
+        
+        if (viewModel.hasmedication) {
+            userTags.append("meds")
+        }
+        
+        if (viewModel.hasnightmares) {
+            userTags.append("nightmares")
+        }
+        
+        if (viewModel.isearlybird) {
+            userTags.append("earlybird")
+        }
+        
+        
+        
+        for article in articles {
+            for tag in article.articleTags {
+                if (userTags.contains(tag)) {
+                    releventArts.append(article)
+                }
+            }
+        }
+        
+        //TODO: Add "read" tag to articles to keep track of if a user has already read an article
+        
+        if (releventArts.count == 0) {
+            return articles
+        }
+        return releventArts
+    } //end of get_relevent_articles
+    */
     //calc percent
     func getPercent(current: CGFloat, Goal: CGFloat) ->String{
          if Goal == 0 {
@@ -501,8 +624,79 @@ struct SleepGoalsView: View {
         }
     }
     
-    
+
 }
+
+
+func get_relevent_articles () -> Array<Article> {
+    
+    var releventArts = [Article]()
+    
+    var userTags = [String()]
+    
+    if (viewModel.hasinsomnia || viewModel.hadinsomnia) {
+        userTags.append("insomnia")
+    }
+    
+    let myAge = Int(viewModel.age) ?? -1
+    
+    if (myAge > 65) {
+        userTags.append("old")
+    }
+    
+    if (myAge <= 17 && myAge >= 5) {
+        userTags.append("kid")
+    }
+    
+    if (myAge < 5 && myAge > -1) {
+        userTags.append("baby")
+    }
+    
+    var gendervar = "female"
+    
+    if (viewModel.gender.lowercased() == gendervar) {
+        userTags.append("female")
+    }
+    
+    gendervar = "male"
+    
+    if (viewModel.gender.lowercased() == gendervar) {
+        userTags.append("male")
+    }
+    
+    if (viewModel.snore) {
+        userTags.append("snore")
+    }
+    
+    if (viewModel.hasmedication) {
+        userTags.append("meds")
+    }
+    
+    if (viewModel.hasnightmares) {
+        userTags.append("nightmares")
+    }
+    
+    if (viewModel.isearlybird) {
+        userTags.append("earlybird")
+    }
+    
+    
+    
+    for article in articles {
+        for tag in article.articleTags {
+            if (userTags.contains(tag)) {
+                releventArts.append(article)
+            }
+        }
+    }
+    
+    //TODO: Add "read" tag to articles to keep track of if a user has already read an article
+    
+    if (releventArts.count == 0) {
+        return articles
+    }
+    return releventArts
+} //end of get_relevent_articles
 
 
 //New view
