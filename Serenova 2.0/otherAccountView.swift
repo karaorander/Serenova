@@ -22,6 +22,31 @@ class OtherAccountViewModel: ObservableObject {
     @Published var moonCount: Int = 0
     @Published var bio: String = ""
     @Published var hasInsomnia: Bool = false
+    @Published var areFriends: Bool = false
+
+        // New method to check if the two users are friends
+        func checkIfFriends(with friendID: String) {
+            guard let currentUserID = Auth.auth().currentUser?.uid else {
+                print("No authenticated user found")
+                return
+            }
+
+            let db = Firestore.firestore()
+            let userFriendsRef = db.collection("FriendRequests").document(currentUserID).collection("Friends")
+
+            // Check if the friendID exists in the current user's "Friends" collection
+            userFriendsRef.document(friendID).getDocument { (document, error) in
+                DispatchQueue.main.async {
+                    if let document = document, document.exists {
+                        print("true")
+                        self.areFriends = true
+                    } else {
+                        print("false")
+                        self.areFriends = false
+                    }
+                }
+            }
+        }
 
     private var ref: DatabaseReference = Database.database().reference().child("User")
 
@@ -54,11 +79,16 @@ class OtherAccountViewModel: ObservableObject {
 struct OtherAccountView: View {
     var userID: String // Accepting userID as a parameter
 
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @StateObject private var viewModel = OtherAccountViewModel()
-
+    @State private var showAlert = false
+    @State private var alertMessage = ""
+    
     var body: some View {
         VStack {
+            Spacer().frame(height: 60)
             VStack(spacing: 20) {
+                
                 // Profile Picture
                 Image(systemName: "person.crop.circle.fill")
                     .resizable()
@@ -71,6 +101,20 @@ struct OtherAccountView: View {
                     .font(.system(size: 25))
                     .fontWeight(.medium)
 
+
+                if viewModel.areFriends {
+                    Text("Friends")
+                        .font(.system(size: 17))
+                        .fontWeight(.medium)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 40)
+                        .background(Color.green)
+                        .foregroundColor(.white)
+                        .cornerRadius(5)
+                        .multilineTextAlignment(.center)
+                }
+                
                 // Full Name
                 Text("Name: \(viewModel.fullName)")
                     .font(.system(size: 17))
@@ -82,19 +126,21 @@ struct OtherAccountView: View {
                     .cornerRadius(5)
 
                 // Moon Count
-                HStack {
-                    Image(systemName: "moon.fill")
-                        .resizable()
-                        .frame(width: 20, height: 20)
-                    Text("Moon Count: \(viewModel.moonCount)")
-                        .font(.system(size: 17))
-                        .fontWeight(.medium)
+                if viewModel.areFriends {
+                    HStack {
+                        Image(systemName: "moon.fill")
+                            .resizable()
+                            .frame(width: 20, height: 20)
+                        Text("Moon Count: \(viewModel.moonCount)")
+                            .font(.system(size: 17))
+                            .fontWeight(.medium)
+                    }
+                    .padding()
+                    .frame(width: 300, height: 40, alignment: .leading)
+                    .background(Color.tranquilMistAshGray)
+                    .foregroundColor(.nightfallHarmonyNavyBlue)
+                    .cornerRadius(5)
                 }
-                .padding()
-                .frame(width: 300, height: 40, alignment: .leading)
-                .background(Color.tranquilMistAshGray)
-                .foregroundColor(.nightfallHarmonyNavyBlue)
-                .cornerRadius(5)
 
                 // Bio
                 Text("Bio: \(viewModel.bio)")
@@ -115,7 +161,11 @@ struct OtherAccountView: View {
                     .background(Color.tranquilMistAshGray)
                     .foregroundColor(.nightfallHarmonyNavyBlue)
                     .cornerRadius(5)
+                
+
             }
+            
+            
 
             Spacer() // Pushes everything up
 
@@ -156,7 +206,24 @@ struct OtherAccountView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             viewModel.fetchUserData(userID: userID)
+            viewModel.checkIfFriends(with: userID) 
         }
+        .alert(isPresented: $showAlert) {
+            Alert(
+                title: Text("Friend Request"),
+                message: Text(alertMessage),
+                dismissButton: .default(Text("OK"))
+            )
+        }
+        .navigationBarBackButtonHidden(true)
+                .navigationBarItems(leading: Button(action: {
+                    self.presentationMode.wrappedValue.dismiss()
+                }) {
+                    HStack {
+                        Image(systemName: "arrow.left") // Customize as needed
+                        Text("Back") // Customize as needed
+                    }
+                })
     }
 
 
@@ -184,6 +251,10 @@ struct OtherAccountView: View {
                 print("Error adding friend: \(error)")
             } else {
                 print("Friend added successfully to Firestore")
+                DispatchQueue.main.async {
+                                self.alertMessage = "Sent Friend Request!"
+                                self.showAlert = true
+                            }
             }
         }
         
@@ -195,6 +266,10 @@ struct OtherAccountView: View {
                 print("Error adding friend: \(error)")
             } else {
                 print("Friend added successfully to Firestore")
+                DispatchQueue.main.async {
+                                self.alertMessage = "Sent Friend Request!"
+                                self.showAlert = true
+                            }
             }
         }
     }
@@ -204,6 +279,6 @@ struct OtherAccountView: View {
 
 
 #Preview {
-    OtherAccountView(userID: "KgU9NVyNbJXG44kdiFEtf5E3reu1")
+    OtherAccountView(userID: "a0eji7VVfHgn5ZBX4BJDUuhMaFn1")
 }
 //add

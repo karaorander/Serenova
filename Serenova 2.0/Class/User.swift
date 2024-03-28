@@ -45,7 +45,6 @@ class User: Codable {
     public var notifications: [String] = []
 
     
-    
     /* Gender */
     enum Gender: String, Codable {
         case Male = "Male"
@@ -110,6 +109,7 @@ class User: Codable {
             print("error")
         }
     }
+    
     
     func addSleepSession(sleepSessionData: [String: Any]) throws {
         // Write new sleep session under the "sleepSessions" node for the user
