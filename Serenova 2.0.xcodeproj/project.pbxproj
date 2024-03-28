@@ -80,6 +80,8 @@
 		E0D1C1682B8815DF00A7609C /* SleepLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D1C1672B8815DF00A7609C /* SleepLogView.swift */; };
 		E0D1C16A2B88244700A7609C /* DateExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0D1C1692B88244700A7609C /* DateExtensions.swift */; };
 		E0EF57532B8A489D00D72221 /* ForumPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EF57522B8A489D00D72221 /* ForumPostView.swift */; };
+		F20DE1BF2BB4D44E009D1C27 /* otherAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20DE1BE2BB4D44E009D1C27 /* otherAccountView.swift */; };
+		F20DE1C12BB4D8EB009D1C27 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20DE1C02BB4D8EB009D1C27 /* NotificationsView.swift */; };
 		F21405152BB015A700F507E7 /* RedeemRewardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21405142BB015A700F507E7 /* RedeemRewardsView.swift */; };
 		F23D7CDF2B7FAF320018F325 /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */; };
 		F299FAF82BB025CD00845FE4 /* JournalPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F299FAF72BB025CD00845FE4 /* JournalPostView.swift */; };
@@ -162,6 +164,8 @@
 		E0D1C1672B8815DF00A7609C /* SleepLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepLogView.swift; sourceTree = "<group>"; };
 		E0D1C1692B88244700A7609C /* DateExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateExtensions.swift; sourceTree = "<group>"; };
 		E0EF57522B8A489D00D72221 /* ForumPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForumPostView.swift; sourceTree = "<group>"; };
+		F20DE1BE2BB4D44E009D1C27 /* otherAccountView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = otherAccountView.swift; sourceTree = "<group>"; };
+		F20DE1C02BB4D8EB009D1C27 /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
 		F21405142BB015A700F507E7 /* RedeemRewardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedeemRewardsView.swift; sourceTree = "<group>"; };
 		F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
 		F299FAF72BB025CD00845FE4 /* JournalPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalPostView.swift; sourceTree = "<group>"; };
@@ -267,10 +271,12 @@
 				23D1E0E22B7A8FDE00539A62 /* Serenova_2_0App.swift */,
 				E02A2BF62B8E62F000235A39 /* SleepManager.swift */,
 				239E081D2B80424A0036AD81 /* AccountInfoView.swift */,
+				F20DE1BE2BB4D44E009D1C27 /* otherAccountView.swift */,
 				E043EA8E2BAC923D0031ABDF /* JournalView.swift */,
 				F299FAF92BB0265400845FE4 /* createJournalView.swift */,
 				23215AE22BB3B2A300132C8E /* FriendRequestView.swift */,
 				E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */,
+				F20DE1C02BB4D8EB009D1C27 /* NotificationsView.swift */,
 				B163D1DB2B8F9ED200DBC5A3 /* ForumView.swift */,
 				B1A7C3962BA7CDB800BCE27F /* ForumPostDetailView.swift */,
 				E0EF57522B8A489D00D72221 /* ForumPostView.swift */,
@@ -555,6 +561,7 @@
 				F21405152BB015A700F507E7 /* RedeemRewardsView.swift in Sources */,
 				E0D1C16A2B88244700A7609C /* DateExtensions.swift in Sources */,
 				E0D1C15F2B880EED00A7609C /* SleepGoalsView.swift in Sources */,
+				F20DE1C12BB4D8EB009D1C27 /* NotificationsView.swift in Sources */,
 				8F638A0B2BA8A5B50030C14F /* RewardsDashboardView.swift in Sources */,
 				E0231FFE2B7DB93D009A4E39 /* ColorExtensions.swift in Sources */,
 				B1A7C3972BA7CDB800BCE27F /* ForumPostDetailView.swift in Sources */,
@@ -573,6 +580,7 @@
 				B1CB24672B87C57100AE8685 /* Conversation.swift in Sources */,
 				E0EF57532B8A489D00D72221 /* ForumPostView.swift in Sources */,
 				F2D887022B8EA03A00C0A87E /* AlarmListView.swift in Sources */,
+				F20DE1BF2BB4D44E009D1C27 /* otherAccountView.swift in Sources */,
 				F299FAF82BB025CD00845FE4 /* JournalPostView.swift in Sources */,
 				E029E4FB2B7DAC4F00E8220B /* SignUpView.swift in Sources */,
 				E0934ECA2B85BA8B00494176 /* CreateUserInfoView.swift in Sources */,

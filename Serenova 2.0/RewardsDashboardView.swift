@@ -70,6 +70,9 @@ struct MoonProgressView: View {
             }
         }
         .frame(maxWidth: .infinity)
+        .onAppear {
+            viewModel.fetchMoons()
+        }
     }
 }
 
