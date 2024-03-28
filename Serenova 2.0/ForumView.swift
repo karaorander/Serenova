@@ -212,7 +212,7 @@ struct PostListingView: View {
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                NavigationLink(destination: OtherAccountView(userID: "XXeBbPufSsMDIoYBX0BNnuLa09i1").navigationBarBackButtonHidden(true)) {
+                NavigationLink(destination: OtherAccountView(userID: post.authorID).navigationBarBackButtonHidden(true)) {
 
                      Image(systemName: "person.crop.circle.fill")
                          .resizable()

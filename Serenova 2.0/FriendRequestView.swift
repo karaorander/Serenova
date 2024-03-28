@@ -50,6 +50,7 @@ class GetNameModel: ObservableObject {
 }
 
 class RequestViewModel: ObservableObject {
+    @StateObject private var viewModel = GetNameModel()
     @Published var friendRequestsArray = [Friend]()
 
        func getRequests() {
@@ -107,12 +108,14 @@ class RequestViewModel: ObservableObject {
         
         let requesterCollectionRef = db.collection("FriendRequests").document(friend.friendID).collection("Friends")
         
+        let requesterOwnref = db.collection("FriendRequests").document(friend.friendID).collection("ownRequests")
+        
         // Add friend to Firestore "friends" collection
         friendsCollectionRef.document(friend.friendID).setData([
             "email": friend.requesterEmail,
             "name": friend.requesterName,
             "friendid" : friend.friendID
-        ]) { error in
+        ], merge: true) { error in
             if let error = error {
                 print("Error adding friend: \(error)")
             } else {
@@ -139,13 +142,36 @@ class RequestViewModel: ObservableObject {
         requesterCollectionRef.document(currentUserID).setData([
             "name": currUser?.username,
             "friendid" : currUser?.userID
-        ]) { error in
+        ], merge: true) { error in
             if let error = error {
                 print("Error adding friend: \(error)")
             } else {
                 print("Friend added successfully to Firestore2: \(friend.friendID)")
             }
         }
+        
+        requesterOwnref.document(currentUserID).delete { error in
+            if let error = error {
+                print("Error removing friend request from Firestore: \(error)")
+            } else {
+                print("Friend request removed successfully from Firestore")
+            }
+        }
+        
+        let friendNotifications = db.collection("FriendRequests").document(friend.friendID).collection("notifications")
+        
+        // Add friend to Firestore "Friends" collection
+        //if let username = currUser?.username {
+        friendNotifications.document().setData([
+            "message": "New Accepted friend request"
+        ], merge: true) { error in
+            if let error = error {
+                print("Error adding notification: \(error)")
+            } else {
+                print("Notification added successfully to Firestore2: \(friend.friendID)")
+            }
+        }
+        //}
     }
     
     func deleteRequest(friend: Friend) {
@@ -170,6 +196,30 @@ class RequestViewModel: ObservableObject {
         // Remove friend from friendRequestsArray
         if let index = self.friendRequestsArray.firstIndex(of: friend) {
             self.friendRequestsArray.remove(at: index)
+        }
+        
+        let requesterOwnref = db.collection("FriendRequests").document(friend.friendID).collection("ownRequests")
+        
+        requesterOwnref.document(currentUserID).delete { error in
+            if let error = error {
+                print("Error removing friend request from Firestore: \(error)")
+            } else {
+                print("Friend request removed successfully from Firestore")
+            }
+        }
+        
+        // Add notification to other user (friend's) notifications
+        let friendNotifications = db.collection("FriendRequests").document(friend.friendID).collection("notifications")
+        
+        // Add friend to Firestore "Friends" collection
+        friendNotifications.document().setData([
+            "message": "New Denied friend request"
+        ], merge: true) { error in
+            if let error = error {
+                print("Error adding notification: \(error)")
+            } else {
+                print("notification added successfully to Firestore2: \(friend.friendID)")
+            }
         }
     }
 }
@@ -228,6 +278,10 @@ struct FriendRequestView: View {
                         }
             }
         }
+        .onReceive(viewModel.$friendRequestsArray) { _ in
+                        // Reload the list whenever friendRequestsArray changes
+                        viewModel.getRequests()
+                    }
         .onAppear {
             viewModel.getRequests()
         }
@@ -292,6 +346,7 @@ struct requestView: View {
                 HStack {
                     Button ("Approve", action: {
                         viewModel.addFriend(friend: friendRequest)
+                        viewModel.getRequests()
                     })
                     .font(.system(size: 15)).fontWeight(.medium).frame(width: 90, height: 30)
                     .background(Color.soothingNightLightGray.opacity(0.4).brightness(0.5))
@@ -300,6 +355,7 @@ struct requestView: View {
                     
                     Button ("Deny", action: {
                         viewModel.deleteRequest(friend: friendRequest)
+                        viewModel.getRequests()
                     })
                     .font(.system(size: 15)).fontWeight(.medium).frame(width: 90, height: 30)
                     .background(Color.soothingNightLightGray.opacity(0.4).brightness(0.5))

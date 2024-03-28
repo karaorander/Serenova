@@ -241,7 +241,7 @@ struct OtherAccountView: View {
         let userCollectionRef = db.collection("FriendRequests").document(currentUserID).collection("ownRequests")
         
         // Update friendRequest
-        recipientCollectionRef.document(userID).setData([
+        recipientCollectionRef.document(currUser!.userID).setData([
             "friendid" : currUser?.userID,
             "requesterName": currUser?.username,
             "status" : 0
