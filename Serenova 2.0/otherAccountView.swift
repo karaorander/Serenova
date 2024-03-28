@@ -17,6 +17,7 @@ import FirebaseStorage
 class OtherAccountViewModel: ObservableObject {
     @Published var userID: String = ""
     @Published var username: String = ""
+    @Published var email: String = ""
     @Published var fullName: String = ""
     @Published var moonCount: Int = 0
     @Published var bio: String = ""
@@ -41,6 +42,7 @@ class OtherAccountViewModel: ObservableObject {
         DispatchQueue.main.async {
             self.userID = userData["userData"] as? String ?? ""
             self.username = userData["username"] as? String ?? ""
+            self.email = userData["email"] as? String ?? ""
             self.fullName = userData["name"] as? String ?? ""
             self.moonCount = userData["moonCount"] as? Int ?? 0
             self.bio = userData["bio"] as? String ?? ""
@@ -60,78 +62,104 @@ struct OtherAccountView: View {
                 // Profile Picture
                 Image(systemName: "person.crop.circle.fill")
                     .resizable()
-                    .frame(width: 100, height: 100)
+                    .frame(width: 90, height: 85)
+                    .clipShape(Circle())
                     .padding()
 
                 // Username
-                Text(viewModel.username)
-                    .font(.title2)
-                    .fontWeight(.bold)
+                Text("Email: \(viewModel.email)")
+                    .font(.system(size: 25))
+                    .fontWeight(.medium)
 
                 // Full Name
-                Text(viewModel.fullName)
-                    .font(.title3)
+                Text("Name: \(viewModel.fullName)")
+                    .font(.system(size: 17))
+                    .fontWeight(.medium)
+                    .padding()
+                    .frame(width: 300, height: 40, alignment: .leading)
+                    .background(Color.tranquilMistAshGray)
+                    .foregroundColor(.nightfallHarmonyNavyBlue)
+                    .cornerRadius(5)
 
                 // Moon Count
                 HStack {
-                    Image(systemName: "moon.fill") // Moon icon
+                    Image(systemName: "moon.fill")
                         .resizable()
                         .frame(width: 20, height: 20)
                     Text("Moon Count: \(viewModel.moonCount)")
-                        .font(.body)
+                        .font(.system(size: 17))
+                        .fontWeight(.medium)
                 }
+                .padding()
+                .frame(width: 300, height: 40, alignment: .leading)
+                .background(Color.tranquilMistAshGray)
+                .foregroundColor(.nightfallHarmonyNavyBlue)
+                .cornerRadius(5)
 
                 // Bio
-                Text(viewModel.bio)
-                    .font(.body)
+                Text("Bio: \(viewModel.bio)")
+                    .font(.system(size: 17))
+                    .fontWeight(.medium)
                     .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(10)
+                    .frame(width: 300, height: 40, alignment: .leading)
+                    .background(Color.tranquilMistAshGray)
+                    .foregroundColor(.nightfallHarmonyNavyBlue)
+                    .cornerRadius(5)
 
                 // Insomnia Status
                 Text("Insomnia: \(viewModel.hasInsomnia ? "Yes" : "No")")
-                    .font(.body)
-                    .fontWeight(.semibold)
+                    .font(.system(size: 17))
+                    .fontWeight(.medium)
+                    .padding()
+                    .frame(width: 300, height: 40, alignment: .leading)
+                    .background(Color.tranquilMistAshGray)
+                    .foregroundColor(.nightfallHarmonyNavyBlue)
+                    .cornerRadius(5)
             }
 
             Spacer() // Pushes everything up
 
             // Add Friend Button
             Button(action: {
+                print("My ID..  : \(currUser?.userID)")
+                sendRequest(userID: userID)
                 print("Add Friend tapped for userID: \(userID)")
-                sendRequest(userID: "MJzixvKqZGWAziPRPq30T9CoOYg1")
             }) {
                 Text("Add Friend")
                     .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.blue)
+                    .frame(maxWidth: .infinity)
+                    .background(Color.nightfallHarmonyNavyBlue)
                     .cornerRadius(10)
             }
             .padding(.horizontal)
 
             // Block Button
             Button(action: {
-                // Implement the block user action here
+                // Action for blocking a user
                 print("Block User tapped for userID: \(userID)")
             }) {
                 Text("Block User")
                     .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
                     .padding()
+                    .frame(maxWidth: .infinity)
                     .background(Color.red)
                     .cornerRadius(10)
             }
             .padding(.horizontal)
             .padding(.bottom, 20) // Add some padding at the bottom
         }
+        .padding()
+        .background(LinearGradient(gradient: Gradient(colors: [.dreamyTwilightMidnightBlue.opacity(0.2), .nightfallHarmonyNavyBlue.opacity(0.6)]), startPoint: .top, endPoint: .bottom))
+        .ignoresSafeArea()
         .navigationTitle("Other Account")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             viewModel.fetchUserData(userID: userID)
         }
     }
+
+
     
     
     // Store new FriendRequest in FireStore for 'Friend'
@@ -176,6 +204,6 @@ struct OtherAccountView: View {
 
 
 #Preview {
-    OtherAccountView(userID: "y09Ua7K0OHThPKH9b1vGgXAJBPm1")
+    OtherAccountView(userID: "KgU9NVyNbJXG44kdiFEtf5E3reu1")
 }
 //add

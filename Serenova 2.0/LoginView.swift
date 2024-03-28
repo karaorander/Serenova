@@ -45,7 +45,7 @@ struct LoginView: View {
         
     NavigationView{
             ZStack {
-                NavigationLink(destination: SleepGoalsView().navigationBarBackButtonHidden(), isActive: $isAuthenticated) { EmptyView() } // Add this line
+                NavigationLink(destination: FriendRequestView().navigationBarBackButtonHidden(), isActive: $isAuthenticated) { EmptyView() } // Add this line
                 
                     .alert(isPresented: $showingAlert) {
                         Alert(title: Text("Login Failed"), message: Text(alertMessage), dismissButton: .default(Text("OK")))

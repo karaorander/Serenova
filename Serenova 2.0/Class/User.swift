@@ -43,6 +43,7 @@ class User: Codable {
     public var moonCount: Int = -1
     public var friends: [String] = []
     public var notifications: [String] = []
+
     
     
     /* Gender */
@@ -67,7 +68,7 @@ class User: Codable {
              gender, weight, height, age, hadInsomnia,
              hasInsomnia, exercisesRegularly, hasMedication,
              doesSnore, hasNightmares, typicalWakeUpTime,
-             typicalBedTime, isEarlyBird, moonCount, friends, notifications
+             typicalBedTime, isEarlyBird, moonCount
     }
     
     /* Database Reference */
