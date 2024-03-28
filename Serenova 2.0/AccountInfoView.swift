@@ -10,6 +10,7 @@ import Firebase
 import FirebaseDatabase
 import FirebaseAuth
 import FirebaseFirestore
+import iPhoneNumberField
 
 //Fetch all data from firebase
 class AccountInfoViewModel: ObservableObject {
@@ -521,6 +522,7 @@ struct BioInfoView: View {
 }
 struct EditProfileView: View {
     @StateObject private var viewModel = AccountInfoViewModel()
+    @State var usernametapped: Bool = false
     @State var gologin = false;
     var body: some View {
         NavigationView {
@@ -539,79 +541,99 @@ struct EditProfileView: View {
                             Spacer().frame(height: 40)
                             
                             //Full Name
-                            HStack {
-                                Text("Name: ")
-                                TextField("",text: $viewModel.fullname)
+                            ZStack {
+                                HStack {
+                                    Text("Name: ")
+                                    TextField("",text: $viewModel.fullname)
+                                }
+                                .padding()
+                                .frame(width: 300, height: 50)
+                                .background(.white.opacity(0.15))
+                                .cornerRadius(10)
                             }
-                            .padding()
-                            .frame(width: 300, height: 50)
-                            .background(.white.opacity(0.15))
-                            .cornerRadius(10)
                             Spacer().frame(height: 15)
                             
                             //Username
-                            HStack {
-                                Text("Username: ")
-                                TextField("",text: $viewModel.username)
+                            ZStack {
+                                HStack {
+                                    Text("Username: ")
+                                    TextField("",text: $viewModel.username)
+                                }
+                                .padding()
+                                .frame(width: 300, height: 50)
+                                .background(.white.opacity(0.15))
+                                .cornerRadius(10)
                             }
-                            .padding()
-                            .frame(width: 300, height: 50)
-                            .background(.white.opacity(0.15))
-                            .cornerRadius(10)
                             Spacer().frame(height: 15)
                             
                             //Email
-                            HStack {
-                                Text("Email: ")
-                                TextField("",text: $viewModel.email)
+                            ZStack {
+                                HStack {
+                                    Text("Email: ")
+                                    TextField("",text: $viewModel.email)
+                                    Image(systemName: isValidEmail() ? "checkmark":"")
+                                }
+                                .padding()
+                                .frame(width: 300, height: 50)
+                                .background(.white.opacity(0.15))
+                                .cornerRadius(10)
                             }
-                            .padding()
-                            .frame(width: 300, height: 50)
-                            .background(.white.opacity(0.15))
-                            .cornerRadius(10)
+                            
                             Spacer().frame(height: 15)
                             
-                            HStack {
-                                Text("Phone: ")
-                                TextField("",text: $viewModel.phoneNumber)
+                            // PHONE
+                            ZStack {
+                                HStack {
+                                    Text("Phone: ")
+                                    iPhoneNumberField("", text: $viewModel.phoneNumber)
+                                        .keyboardType(.decimalPad)
+                                    Image(systemName: isValidPhoneNumber() ? "checkmark":"")
+                                }
+                                .padding()
+                                .frame(width: 300, height: 50)
+                                .background(.white.opacity(0.15))
+                                .cornerRadius(10)
                             }
-                            .padding()
-                            .frame(width: 300, height: 50)
-                            .background(.white.opacity(0.15))
-                            .cornerRadius(10)
                             Spacer().frame(height: 15)
                             
                             //Age
-                            HStack {
-                                Text("Age: ")
-                                TextField("",text: $viewModel.age)
+                            ZStack {
+                                HStack {
+                                    Text("Age: ")
+                                    TextField("",text: $viewModel.age)
+                                }
+                                .padding()
+                                .frame(width: 300, height: 50)
+                                .background(.white.opacity(0.15))
+                                .cornerRadius(10)
                             }
-                            .padding()
-                            .frame(width: 300, height: 50)
-                            .background(.white.opacity(0.15))
-                            .cornerRadius(10)
+                            
                             Spacer().frame(height: 15)
                             
                             //Gender
-                            HStack {
-                                Text("Gender: ")
-                                TextField("",text: $viewModel.gender)
+                            ZStack {
+                                HStack {
+                                    Text("Gender: ")
+                                    TextField("",text: $viewModel.gender)
+                                }
+                                .padding()
+                                .frame(width: 300, height: 50)
+                                .background(.white.opacity(0.15))
+                                .cornerRadius(10)
                             }
-                            .padding()
-                            .frame(width: 300, height: 50)
-                            .background(.white.opacity(0.15))
-                            .cornerRadius(10)
                             Spacer().frame(height: 15)
                             
                             // Height
-                            HStack {
-                                Text("Height: ")
-                                TextField("",text: $viewModel.height)
+                            ZStack {
+                                HStack {
+                                    Text("Height: ")
+                                    TextField("",text: $viewModel.height)
+                                }
+                                .padding()
+                                .frame(width: 300, height: 50)
+                                .background(.white.opacity(0.15))
+                                .cornerRadius(10)
                             }
-                            .padding()
-                            .frame(width: 300, height: 50)
-                            .background(.white.opacity(0.15))
-                            .cornerRadius(10)
                             Spacer().frame(height: 15)
                             
                             // TOGGLES
@@ -673,15 +695,16 @@ struct EditProfileView: View {
                             
                             Spacer().frame(height: 50)
                             
+                            
                             // Delete User button
-                                Button (action: {
-                                    // TODO: Remove all info from database and return to login page
-                                    viewModel.deleteUser()
-                                    gologin = true;
-                                }) {
-                                    Text("Delete Account")
-                                        .font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.soothingNightLightGray.opacity(0.6)).foregroundColor(.nightfallHarmonyNavyBlue.opacity(1)).cornerRadius(10)
-                                }
+                            Button (action: {
+                                // TODO: Remove all info from database and return to login page
+                                viewModel.deleteUser()
+                                gologin = true;
+                            }) {
+                                Text("Delete Account")
+                                    .font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.soothingNightLightGray.opacity(0.6)).foregroundColor(.nightfallHarmonyNavyBlue.opacity(1)).cornerRadius(10)
+                            }
                             
                             
                             // Back button
@@ -704,6 +727,23 @@ struct EditProfileView: View {
                 )
             }
         }
+    }
+    
+    /*
+     * Function to verify that the email is valid
+     */
+    func isValidEmail() -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        
+        return emailTest.evaluate(with: viewModel.email)
+    }
+    
+    /*
+     * Function to verify that the phone-number is valid
+     */
+    func isValidPhoneNumber() -> Bool {
+        return viewModel.phoneNumber.contains(/^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$/)
     }
 }
 
