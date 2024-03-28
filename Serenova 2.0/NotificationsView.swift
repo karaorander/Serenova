@@ -8,6 +8,8 @@
 import SwiftUI
 import FirebaseDatabase
 import FirebaseAuth
+import FirebaseFirestore
+import FirebaseFirestoreSwift
 
 struct NotificationsView: View {
     @StateObject var notificationsModel = NotificationsModel()
@@ -35,47 +37,73 @@ struct NotificationsView: View {
                             .font(.system(size: 25))
                         Spacer()
                     } else {
-                        List(notificationsModel.notifications, id: \.self) { notification in
-                            Text(notification)
-                                .foregroundColor(Color.nightfallHarmonyRoyalPurple)
-                                .listRowBackground(Color.tranquilMistAshGray)
-                        }
-                        .listStyle(PlainListStyle())
-                    }
-
-                    // Navigation Links at the bottom, similar to JournalView
-                    HStack(spacing: 40) {
-                        NavigationLink(destination: SleepGraphView().navigationBarBackButtonHidden(true)) {
-                            Image(systemName: "chart.xyaxis.line")
-                                .resizable()
-                                .frame(width: 30, height: 35)
-                                .foregroundColor(.white)
-                        }
-                        NavigationLink(destination: SleepLogView().navigationBarBackButtonHidden(true)) {
-                            Image(systemName: "zzz")
-                                .resizable()
-                                .frame(width: 30, height: 30)
-                                .foregroundColor(.white)
-                        }
-                        NavigationLink(destination: SleepGoalsView().navigationBarBackButtonHidden(true)) {
-                            Image(systemName: "list.clipboard")
-                                .resizable()
-                                .frame(width: 30, height: 40)
-                                .foregroundColor(.white)
-                        }
-                        NavigationLink(destination: ForumView().navigationBarBackButtonHidden(true)) {
-                            Image(systemName: "person.2")
-                                .resizable()
-                                .frame(width: 45, height: 30)
-                                .foregroundColor(.white)
+                        VStack{
+                            List(notificationsModel.notifications, id: \.self) { notification in
+                                Text(notification)
+                                    .foregroundColor(Color.nightfallHarmonyRoyalPurple.opacity(0.8))
+                                    .listRowBackground(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .fill(Color.nightfallHarmonyRoyalPurple.opacity(0.5))
+                                            .brightness(0.5)
+                                    )
+                            }
+                            //.listStyle(PlainListStyle())
+                            /*.listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))*/
                         }
                     }
-                    .padding()
-                    .background(Color.dreamyTwilightMidnightBlue)
                 }
+                              
             }
+            .overlay(alignment: .bottom, content: {
+            
+            HStack (spacing: 40){
+                NavigationLink(destination: SleepGraphView().navigationBarBackButtonHidden(true)) {
+                    
+                    Image(systemName: "chart.xyaxis.line")
+                        .resizable()
+                        .frame(width: 30, height: 35)
+                        .foregroundColor(.white)
+                    
+                }
+                NavigationLink(destination: SleepLogView().navigationBarBackButtonHidden(true)) {
+                    
+                    Image(systemName: "zzz")
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                        .foregroundColor(.white)
+                    
+                }
+                NavigationLink(destination: SleepGoalsView().navigationBarBackButtonHidden(true)) {
+                    
+                    Image(systemName: "list.clipboard")
+                        .resizable()
+                        .frame(width: 30, height: 40)
+                        .foregroundColor(.white)
+                    
+                }
+                NavigationLink(destination: ForumView().navigationBarBackButtonHidden(true)) {
+                    
+                    Image(systemName: "person.2")
+                        .resizable()
+                        .frame(width: 45, height: 30)
+                        .foregroundColor(.white)
+                    
+                }
+                NavigationLink(destination: JournalView().navigationBarBackButtonHidden(true)) {
+
+                    Image(systemName: "book.closed")
+                        .resizable()
+                        .frame(width: 30, height: 40)
+                        .foregroundColor(.white)
+                
+            }
+            }.padding()
+                .hSpacing(.center)
+                .background(Color.dreamyTwilightMidnightBlue)
+            
+        })
             .onAppear {
-                notificationsModel.updateNoti()
+                notificationsModel.getNotifications()
             }
         }
     }
@@ -84,7 +112,7 @@ struct NotificationsView: View {
 class NotificationsModel: ObservableObject {
     @Published var notifications: [String] = []
 
-    func updateNoti() {
+    /*func updateNoti() {
         if let currentUser = Auth.auth().currentUser {
             let db = Database.database().reference()
             let id = currentUser.uid
@@ -105,8 +133,44 @@ class NotificationsModel: ObservableObject {
             // Handle the case where there's no authenticated user
             print("No authenticated user")
         }
-    }
+    }*/
+    
+    func getNotifications() {
+            if let currentUser = Auth.auth().currentUser {
+                let db = Firestore.firestore()
+                let currentUserID = currentUser.uid
+                
+                // Reference to the "notifications" collection for the current user
+                let notificationsCollectionRef = db.collection("FriendRequests").document(currentUserID).collection("notifications")
+                
+                // Fetch all documents from the "notifications" collection
+                notificationsCollectionRef.getDocuments { (querySnapshot, error) in
+                    if let error = error {
+                        print("Error getting documents: \(error)")
+                    } else {
+                        var tempArray = [String]()
+                        
+                        // Iterate through each document in the "notifications" collection
+                        for document in querySnapshot!.documents {
+                            let data = document.data()
+                            if let message = data["message"] as? String {
+                                // Append the message to the temporary array
+                                tempArray.append(message)
+                            }
+                        }
+                        
+                        // Update the published property on the main queue
+                        DispatchQueue.main.async {
+                            self.notifications = tempArray
+                        }
+                    }
+                }
+            } else {
+                print("No authenticated user")
+            }
+        }
 }
+
 
 struct NotificationsView_Previews: PreviewProvider {
     static var previews: some View {

@@ -50,7 +50,6 @@ class GetNameModel: ObservableObject {
 }
 
 class RequestViewModel: ObservableObject {
-    @StateObject private var viewModel = GetNameModel()
     @Published var friendRequestsArray = [Friend]()
 
        func getRequests() {

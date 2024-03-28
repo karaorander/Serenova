@@ -436,6 +436,14 @@ struct AccountInfoView: View {
                                     .foregroundColor(.white)
                                 
                             }
+                            NavigationLink(destination: JournalView().navigationBarBackButtonHidden(true)) {
+
+                                Image(systemName: "book.closed")
+                                    .resizable()
+                                    .frame(width: 30, height: 40)
+                                    .foregroundColor(.white)
+                            
+                        }
                         }.padding()
                             .hSpacing(.center)
                             .background(Color.dreamyTwilightMidnightBlue)
