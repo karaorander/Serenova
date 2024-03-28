@@ -11,6 +11,44 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import FirebaseStorage
 
+
+class GetNameModel: ObservableObject {
+    @Published var userID: String = ""
+    @Published var username: String = ""
+    @Published var email: String = ""
+    @Published var fullName: String = ""
+    @Published var moonCount: Int = 0
+    @Published var bio: String = ""
+    @Published var hasInsomnia: Bool = false
+
+    private var ref: DatabaseReference = Database.database().reference().child("User")
+
+    // Function to fetch user data based on userID
+    func fetchUserData(userID: String) {
+        ref.child(userID).observeSingleEvent(of: .value, with: { snapshot in
+            guard let value = snapshot.value as? [String: Any] else {
+                print("Error: Could not find user")
+                return
+            }
+            self.parseUserData(userData: value)
+        }) { error in
+            print(error.localizedDescription)
+        }
+    }
+
+    private func parseUserData(userData: [String: Any]) {
+        DispatchQueue.main.async {
+            self.userID = userData["userData"] as? String ?? ""
+            self.username = userData["username"] as? String ?? ""
+            self.email = userData["email"] as? String ?? ""
+            self.fullName = userData["name"] as? String ?? ""
+            self.moonCount = userData["moonCount"] as? Int ?? 0
+            self.bio = userData["bio"] as? String ?? ""
+            self.hasInsomnia = userData["hasInsomnia"] as? Bool ?? false
+        }
+    }
+}
+
 class RequestViewModel: ObservableObject {
     @Published var friendRequestsArray = [Friend]()
 
@@ -34,9 +72,10 @@ class RequestViewModel: ObservableObject {
                            let data = document.data()
                            let friendID = data["friendid"] as? String ?? ""
                            let requesterName = data["requesterName"] as? String ?? ""
+                           let requesterEmail = data["requesterEmail"] as? String ?? ""
                            
                            // Create a Friend object
-                           let friend = Friend(friendID: friendID, requesterName: requesterName)
+                           let friend = Friend(friendID: friendID, requesterName: requesterName, requesterEmail: requesterEmail)
                            
                            // Append to the temporary array
                            tempArray.append(friend)
@@ -70,13 +109,14 @@ class RequestViewModel: ObservableObject {
         
         // Add friend to Firestore "friends" collection
         friendsCollectionRef.document(friend.friendID).setData([
+            "email": friend.requesterEmail,
             "name": friend.requesterName,
             "friendid" : friend.friendID
         ]) { error in
             if let error = error {
                 print("Error adding friend: \(error)")
             } else {
-                print("Friend added successfully to Firestore")
+                print("Friend added successfully to Firestore1: \(friend.friendID)")
                 
                 // Remove friend from Firestore "friendRequests" collection
                             let friendRequestsCollectionRef = db.collection("FriendRequests").document(currentUserID).collection("friendRequests")
@@ -103,7 +143,7 @@ class RequestViewModel: ObservableObject {
             if let error = error {
                 print("Error adding friend: \(error)")
             } else {
-                print("Friend added successfully to Firestore")
+                print("Friend added successfully to Firestore2: \(friend.friendID)")
             }
         }
     }
@@ -191,16 +231,19 @@ struct FriendRequestView: View {
         .onAppear {
             viewModel.getRequests()
         }
+
     }
 }
 
 class Friend: Codable, Hashable {
     public var friendID: String = ""
     public var requesterName: String = ""
+    public var requesterEmail: String = ""
     
-    init(friendID: String, requesterName: String) {
+    init(friendID: String, requesterName: String, requesterEmail: String) {
             self.friendID = friendID
             self.requesterName = requesterName
+            self.requesterEmail = requesterEmail
         }
 
     // Implementing Hashable protocol
@@ -233,13 +276,13 @@ struct NoRequestsView: View {
 
 struct requestView: View {
     @StateObject private var viewModel = RequestViewModel()
+    @StateObject private var viewModel2 = OtherAccountViewModel()
     var friendRequest: Friend
     
     var body: some View {
         VStack(alignment: .leading){
             HStack {
-                Text(friendRequest.requesterName)
-                    .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                Text("Request From: \(viewModel2.fullName)")
                     .foregroundColor(Color.nightfallHarmonyRoyalPurple.opacity(0.9))
                     .padding(.bottom, 2)
                     .brightness(0.5)
@@ -264,6 +307,9 @@ struct requestView: View {
                     .cornerRadius(10)
                 }
             }
+        }
+        .onAppear {
+            viewModel2.fetchUserData(userID: friendRequest.friendID)
         }
     }
 }
