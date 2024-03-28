@@ -66,7 +66,7 @@ class RequestViewModel: ObservableObject {
         // Reference to the user's "friends" collection
         let friendsCollectionRef = db.collection("FriendRequests").document(currentUserID).collection("Friends")
         
-        let senderCollectionRef = db.collection("FriendRequests").document(friend.friendID).collection("Friends")
+        let requesterCollectionRef = db.collection("FriendRequests").document(friend.friendID).collection("Friends")
         
         // Add friend to Firestore "friends" collection
         friendsCollectionRef.document(friend.friendID).setData([
@@ -95,8 +95,8 @@ class RequestViewModel: ObservableObject {
             }
         }
         
-        // Add friend to Firestore "friends" collection
-        senderCollectionRef.document(currentUserID).setData([
+        // Add friend to Firestore "Friends" collection
+        requesterCollectionRef.document(currentUserID).setData([
             "name": currUser?.username,
             "friendid" : currUser?.userID
         ]) { error in
