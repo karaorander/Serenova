@@ -99,8 +99,8 @@ struct OtherAccountView: View {
 
             // Add Friend Button
             Button(action: {
-                sendRequest(userID: viewModel.userID)
                 print("Add Friend tapped for userID: \(userID)")
+                sendRequest(userID: "MJzixvKqZGWAziPRPq30T9CoOYg1")
             }) {
                 Text("Add Friend")
                     .foregroundColor(.white)
@@ -135,17 +135,33 @@ struct OtherAccountView: View {
     
     
     // Store new FriendRequest in FireStore for 'Friend'
+    // Store new ownRequest in Firestore for currUser
     // STATUS: 0 (Unanswered), 1 (Yes), 2 (No)
     func sendRequest(userID: String) {
         let db = Firestore.firestore()
+        let currentUserID = Auth.auth().currentUser!.uid
         
-        let recipientCollectionRef = db.collection("FriendRequests").document(userID).collection("Friends")
+        let recipientCollectionRef = db.collection("FriendRequests").document(userID).collection("friendsRequests")
         
+        let userCollectionRef = db.collection("FriendRequests").document(currentUserID).collection("ownRequests")
+        
+        // Update friendRequest
         recipientCollectionRef.document(userID).setData([
             "friendid" : currUser?.userID,
             "requesterName": currUser?.username,
             "status" : 0
 
+        ]) { error in
+            if let error = error {
+                print("Error adding friend: \(error)")
+            } else {
+                print("Friend added successfully to Firestore")
+            }
+        }
+        
+        // Update ownRequests
+        userCollectionRef.document(userID).setData([
+            "friendid" : userID
         ]) { error in
             if let error = error {
                 print("Error adding friend: \(error)")
