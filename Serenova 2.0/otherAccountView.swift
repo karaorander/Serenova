@@ -141,7 +141,7 @@ struct OtherAccountView: View {
         let db = Firestore.firestore()
         let currentUserID = Auth.auth().currentUser!.uid
         
-        let recipientCollectionRef = db.collection("FriendRequests").document(userID).collection("friendsRequests")
+        let recipientCollectionRef = db.collection("FriendRequests").document(userID).collection("friendRequests")
         
         let userCollectionRef = db.collection("FriendRequests").document(currentUserID).collection("ownRequests")
         
