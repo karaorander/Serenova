@@ -36,9 +36,10 @@ class JournalTests: XCTestCase {
         
     }
     
-  /*  func testUpdateValues() throws {
+   func testUpdateValues() throws {
         
         let journal = Journal()
+       let journalView = JournalView()
         journal.journalId = "testJournalId"
         
         
@@ -47,16 +48,17 @@ class JournalTests: XCTestCase {
             "journalContent": "Updated Journal Content"
         ]
         
-        // Call the updateValues function
-        journal.updateValues(newValues: newValues)
+       journal.updateValues(newValues: newValues) {_ in
+           XCTAssertEqual(journal.journalTitle, "Updated Journal Title", "Journal title should be updated")
+           XCTAssertEqual(journal.journalContent, "Updated Journal Content", "Journal content should be updated")
+       }
+       
        
         
-        XCTAssertEqual(journal.journalTitle, "Updated Journal Title", "Journal title should be updated")
-        XCTAssertEqual(journal.journalContent, "Updated Journal Content", "Journal content should be updated")
         
         
     }
-   */
+   
     
     func testDeleteJournal() throws {
         

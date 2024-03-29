@@ -11,6 +11,7 @@ import FirebaseFirestoreSwift
 import FirebaseDatabase
 import FirebaseAuth
 
+
 class Journal: Codable, Identifiable {
     @DocumentID var journalId: String?
     @ServerTimestamp public var timeStamp: Timestamp?
@@ -72,11 +73,50 @@ class Journal: Codable, Identifiable {
             return dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(timeStamp.seconds)))
         }
     
-    func updateValues(newValues: [String: Any]) {
+    func updateValues(newValues: [String: Any], completion: @escaping (Error?) -> Void) {
         let db = Firestore.firestore()
         let ref = db.collection("Journal").document(self.journalId ?? "")
-        ref.updateData(newValues)
+        
+        // Update values in Firestore
+        ref.updateData(newValues) { error in
+            if let error = error {
+                // Handle error
+                completion(error)
+            } else {
+                // Update local object if Firestore update succeeds
+                for (key, value) in newValues {
+                    // Update each property individually
+                    switch key {
+                    case "journalId":
+                        self.journalId = value as? String
+                    case "timeStamp":
+                        // Handle Timestamp type if needed
+                        break
+                    case "journalDate":
+                        // Handle Date type if needed
+                        break
+                    case "journalTitle":
+                        self.journalTitle = value as? String ?? ""
+                    case "journalContent":
+                        self.journalContent = value as? String ?? ""
+                    case "journalPrivacyStatus":
+                        self.journalPrivacyStatus = value as? Bool ?? true
+                    case "journalTags":
+                        self.journalTags = value as? [String] ?? []
+                    case "userId":
+                        self.userId = value as? String ?? ""
+                    default:
+                        // Handle other properties if needed
+                        break
+                    }
+                }
+                completion(nil) // No error
+            }
+        }
     }
+
+    
+    
     
     func deleteJournal() {
         let db = Firestore.firestore()

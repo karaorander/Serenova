@@ -389,7 +389,11 @@ struct JournalDetailsView: View {
                         // Save button to update the journal content
                         Button("Save") {
                             journal.updateValues(newValues: ["journalTitle" : editedTitle,
-                                                             "journalContent" : editedContent])
+                                                             "journalContent" : editedContent]) {_ in
+                                journal.journalContent = editedContent
+                                journal.journalTitle = editedTitle
+                            }
+                            
                             isEditing = false
                         }
                         .padding().foregroundColor(.white)
