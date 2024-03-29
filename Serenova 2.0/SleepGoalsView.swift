@@ -126,6 +126,101 @@ class GoalViewModel: ObservableObject {
             
         }
     }
+    
+    func get_relevent_articles () -> Array<Article> {
+        if let currUser = currUser {
+            print("geeting")
+            viewModel.fetchUsername()
+        }
+        else {
+            print("dis tha error")
+        }
+        viewModel.fetchUsername()
+        
+        print("in this func, \(viewModel.email) and \(viewModel.hasinsomnia)")
+        var releventArts = [Article]()
+        
+        var userTags = [String()]
+        
+        print(viewModel.hasinsomnia)
+        print(viewModel.hadinsomnia)
+        
+        if (viewModel.hasinsomnia || viewModel.hadinsomnia) {
+            print("here????")
+            userTags.append("insomnia")
+        }
+        
+        let myAge = Int(viewModel.age) ?? -1
+        
+        if (myAge > 65) {
+            userTags.append("old")
+        }
+        
+        if (myAge <= 17 && myAge >= 5) {
+            userTags.append("kid")
+        }
+        
+        if (myAge < 5 && myAge > -1) {
+            userTags.append("baby")
+        }
+        
+        var gendervar = "female"
+        
+        if (viewModel.gender.lowercased() == gendervar) {
+            userTags.append("female")
+        }
+        
+        gendervar = "male"
+        
+        if (viewModel.gender.lowercased() == gendervar) {
+            userTags.append("male")
+        }
+        
+        if (viewModel.snore) {
+            userTags.append("snore")
+        }
+        
+        if (viewModel.hasmedication == true) {
+            userTags.append("meds")
+        }
+        
+        if (viewModel.hasnightmares == true) {
+            userTags.append("nightmares")
+        }
+        
+        if (viewModel.isearlybird) {
+            userTags.append("earlybird")
+        }
+        
+        
+        
+        for article in articles {
+            for tag in article.articleTags {
+                if (userTags.contains(tag)) {
+                    releventArts.append(article)
+                }
+            }
+        }
+        
+        for article in releventArts {
+            if (viewModel.articlesRead.contains(article.articleId)) {
+                let curIndex = releventArts.firstIndex(where: { $0.articleId == article.articleId })
+                
+                releventArts.remove(at: curIndex!)
+            }
+        }
+        
+        
+        if (releventArts.count == 0) {
+            print("inhere")
+            for article in articles {
+                if article.articleTags.contains("other") {
+                    releventArts.append(article)
+                }
+            }
+        }
+        return releventArts
+    } //end of get_relevent_articles
 }
 
 //tags we filter by: insomnia, meds, male, female, old, kid, baby, snore, nightmares, earlybird, and other
@@ -144,7 +239,6 @@ let articles = [
     // Add more articles as needed
 ] // ex: index = 0-4 insomnia articles (this is the backup plan)
 
-let myArticles = get_relevent_articles()
 
 struct ArticleRow: View {
     var article: Article
@@ -196,10 +290,105 @@ struct ArticleCard: View {
         .padding(.vertical, 5) // Slight vertical padding
         .onAppear {
             viewModel2.fetchUsername{
-                get_relevent_articles ()
+                get_relevent_articles()
             }
         }
     }
+    
+    func get_relevent_articles () -> Array<Article> {
+        if let currUser = currUser {
+            print("geeting")
+            viewModel.fetchUsername()
+        }
+        else {
+            print("dis tha error")
+        }
+        viewModel.fetchUsername()
+        
+        print("in this func, \(viewModel.email) and \(viewModel.hasinsomnia)")
+        var releventArts = [Article]()
+        
+        var userTags = [String()]
+        
+        print(viewModel.hasinsomnia)
+        print(viewModel.hadinsomnia)
+        
+        if (viewModel.hasinsomnia || viewModel.hadinsomnia) {
+            print("here????")
+            userTags.append("insomnia")
+        }
+        
+        let myAge = Int(viewModel.age) ?? -1
+        
+        if (myAge > 65) {
+            userTags.append("old")
+        }
+        
+        if (myAge <= 17 && myAge >= 5) {
+            userTags.append("kid")
+        }
+        
+        if (myAge < 5 && myAge > -1) {
+            userTags.append("baby")
+        }
+        
+        var gendervar = "female"
+        
+        if (viewModel.gender.lowercased() == gendervar) {
+            userTags.append("female")
+        }
+        
+        gendervar = "male"
+        
+        if (viewModel.gender.lowercased() == gendervar) {
+            userTags.append("male")
+        }
+        
+        if (viewModel.snore) {
+            userTags.append("snore")
+        }
+        
+        if (viewModel.hasmedication == true) {
+            userTags.append("meds")
+        }
+        
+        if (viewModel.hasnightmares == true) {
+            userTags.append("nightmares")
+        }
+        
+        if (viewModel.isearlybird) {
+            userTags.append("earlybird")
+        }
+        
+        
+        
+        for article in articles {
+            for tag in article.articleTags {
+                if (userTags.contains(tag)) {
+                    releventArts.append(article)
+                }
+            }
+        }
+        
+        for article in releventArts {
+            if (viewModel.articlesRead.contains(article.articleId)) {
+                let curIndex = releventArts.firstIndex(where: { $0.articleId == article.articleId })
+                
+                releventArts.remove(at: curIndex!)
+            }
+        }
+        
+        
+        if (releventArts.count == 0) {
+            print("inhere")
+            for article in articles {
+                if article.articleTags.contains("other") {
+                    releventArts.append(article)
+                }
+            }
+        }
+        return releventArts
+    } //end of get_relevent_articles
 
 }
 
@@ -219,6 +408,9 @@ struct SleepGoalsView: View {
     @State private var viewSleepScore:Bool = false
     
     var body: some View {
+        
+        
+        let myArticles = viewModel.get_relevent_articles()
 
         
         NavigationView {
@@ -469,7 +661,6 @@ struct SleepGoalsView: View {
             
         }
         
-        
     }
 
     //calc percent
@@ -576,98 +767,6 @@ struct SleepGoalsView: View {
     
 
 }
-
-
-func get_relevent_articles () -> Array<Article> {
-    if let currUser = currUser {
-        print("geeting")
-        viewModel.fetchUsername()
-    }
-    else {
-        print("dis tha error")
-    }
-    
-    print("in this func, \(viewModel.email) and \(viewModel.hasinsomnia)")
-    var releventArts = [Article]()
-    
-    var userTags = [String()]
-    
-    if (viewModel.hasinsomnia || viewModel.hadinsomnia) {
-        print("here????")
-        userTags.append("insomnia")
-    }
-    
-    let myAge = Int(viewModel.age) ?? -1
-    
-    if (myAge > 65) {
-        userTags.append("old")
-    }
-    
-    if (myAge <= 17 && myAge >= 5) {
-        userTags.append("kid")
-    }
-    
-    if (myAge < 5 && myAge > -1) {
-        userTags.append("baby")
-    }
-    
-    var gendervar = "female"
-    
-    if (viewModel.gender.lowercased() == gendervar) {
-        userTags.append("female")
-    }
-    
-    gendervar = "male"
-    
-    if (viewModel.gender.lowercased() == gendervar) {
-        userTags.append("male")
-    }
-    
-    if (viewModel.snore) {
-        userTags.append("snore")
-    }
-    
-    if (viewModel.hasmedication) {
-        userTags.append("meds")
-    }
-    
-    if (viewModel.hasnightmares) {
-        userTags.append("nightmares")
-    }
-    
-    if (viewModel.isearlybird) {
-        userTags.append("earlybird")
-    }
-    
-    
-    
-    for article in articles {
-        for tag in article.articleTags {
-            if (userTags.contains(tag)) {
-                releventArts.append(article)
-            }
-        }
-    }
-    
-    for article in releventArts {
-        if (viewModel.articlesRead.contains(article.articleId)) {
-            let curIndex = releventArts.firstIndex(where: { $0.articleId == article.articleId })
-            
-            releventArts.remove(at: curIndex!)
-        }
-    }
-    
-    
-    if (releventArts.count == 0) {
-        print("inhere")
-        for article in articles {
-            if article.articleTags.contains("other") {
-                releventArts.append(article)
-            }
-        }
-    }
-    return releventArts
-} //end of get_relevent_articles
 
 
 //New view
