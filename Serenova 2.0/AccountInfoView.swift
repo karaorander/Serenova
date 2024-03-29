@@ -160,6 +160,18 @@ class AccountInfoViewModel: ObservableObject {
         
     }
     
+   /* func isEmailTaken(email: String, completion: @escaping (Bool) -> Void) {
+        let db = Firestore.firestore()
+        db.collection("users").whereField("email", isEqualTo: email).getDocuments { (querySnapshot, error) in
+            if let error = error {
+                completion(false)
+            } else {
+                let isTaken = !(querySnapshot?.isEmpty ?? true)
+                completion(isTaken)
+            }
+        }
+    }*/
+    
     func deleteUser() {
         let db = Database.database().reference()
         let id = Auth.auth().currentUser!.uid
@@ -516,6 +528,8 @@ struct AccountInfoView: View {
         guard let inputImage = inputImage else { return }
         profileImage = Image(uiImage: inputImage)
     }
+    
+    
 }
 
 struct BioInfoView: View {
@@ -750,7 +764,14 @@ struct EditProfileView: View {
                             
                             // Submit Bio button
                             Button ("Submit", action: {
-                                viewModel.storeData()
+                                /*viewModel.isEmailTaken(email: viewModel.email) { isTaken in
+                                    if isTaken {
+                                        print("taken")
+                                    } else {*/
+                                        // Proceed with saving the new email since it's not taken
+                                        viewModel.storeData()
+                                    //}
+                                //}
                             })
                             .font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.soothingNightLightGray.opacity(0.6)).foregroundColor(.nightfallHarmonyNavyBlue.opacity(1)).cornerRadius(10)
                             
@@ -799,6 +820,7 @@ struct EditProfileView: View {
         
         return emailTest.evaluate(with: viewModel.email)
     }
+    
     
     /*
      * Function to verify that the phone-number is valid

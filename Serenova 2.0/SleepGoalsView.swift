@@ -133,7 +133,7 @@ let articles = [
     Article(articleTitle: "The Importance of Deep Sleep", articleLink: "https://www.medicalnewstoday.com/articles/325363", articlePreview: "Deep sleep plays a crucial role in your overall health...", articleTags: ["Health", "Sleep"], articleId: "1"),
     Article(articleTitle: "5 Tips for Better Sleep Hygiene", articleLink: "https://www.medicalnewstoday.com/articles/325363", articlePreview: "Improving your sleep hygiene can lead to better sleep quality...", articleTags: ["Tips", "Hygiene"], articleId: "2"),
     
-    Article(articleTitle: "Insomnia: Symptoms, Causes, and Treatments", articleLink: "https://www.sleepfoundation.org/insomnia", articlePreview: "Insomnia is a sleep disorder characterized by difficulty...", articleTags: ["insomnia", "tips", "information"], articleId: "3"),
+    Article(articleTitle: "Insomnia: Symptoms, Causes, and Treatments", articleLink: "https://www.sleepfoundation.org/insomnia", articlePreview: "Insomnia is a sleep disorder characterized by difficulty...", articleTags: ["insomnia"], articleId: "3"),
     Article(articleTitle: "What is insomnia? Everything you need to know", articleLink: "https://www.medicalnewstoday.com/articles/9155#definition", articlePreview: "Research shows that around 25% of people in the United States experience", articleTags: ["insomnia"], articleId: "4"),
     Article(articleTitle: "Prevalence of chronic insomnia in adult patients and its correlation with medical comorbidities", articleLink: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5353813/", articlePreview: "Insomnia is one of the common but neglected conditions...", articleTags: ["insomnia"], articleId: "5"),
     
@@ -164,6 +164,7 @@ struct ArticleRow: View {
 
 struct ArticleCard: View {
     var article: Article
+    @StateObject private var viewModel2 = GoalViewModel()
     
     var body: some View {
         VStack {
@@ -193,8 +194,13 @@ struct ArticleCard: View {
         .cornerRadius(12)
         .shadow(radius: 5) // Shadow for depth
         .padding(.vertical, 5) // Slight vertical padding
+        .onAppear {
+            viewModel2.fetchUsername{
+                get_relevent_articles ()
+            }
+        }
     }
-    
+
 }
 
 //potential opening screen
@@ -573,12 +579,21 @@ struct SleepGoalsView: View {
 
 
 func get_relevent_articles () -> Array<Article> {
+    if let currUser = currUser {
+        print("geeting")
+        viewModel.fetchUsername()
+    }
+    else {
+        print("dis tha error")
+    }
     
+    print("in this func, \(viewModel.email) and \(viewModel.hasinsomnia)")
     var releventArts = [Article]()
     
     var userTags = [String()]
     
     if (viewModel.hasinsomnia || viewModel.hadinsomnia) {
+        print("here????")
         userTags.append("insomnia")
     }
     
@@ -644,6 +659,7 @@ func get_relevent_articles () -> Array<Article> {
     
     
     if (releventArts.count == 0) {
+        print("inhere")
         return articles
     }
     return releventArts
