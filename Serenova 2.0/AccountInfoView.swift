@@ -36,7 +36,6 @@ class AccountInfoViewModel: ObservableObject {
     @Published var deepSleepGoalHours : Float = -1
     @Published var deepSleepGoalMins : Float = -1
     @Published var moonCount : Int = -1
-    @Published var articlesRead: [String] = []
     
     func fetchUsername() {
         if let currentUser = Auth.auth().currentUser {
@@ -135,10 +134,6 @@ class AccountInfoViewModel: ObservableObject {
                 
                 if let moonCount = userData["moonCount"] as? Int {
                     self.moonCount = moonCount
-                }
-                
-                if let articlesRead = userData["articlesRead"] as? [String] {
-                    self.articlesRead = articlesRead
                 }
                 
                 if let bio = userData["bio"] as? String {
