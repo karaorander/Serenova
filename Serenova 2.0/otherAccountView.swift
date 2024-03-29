@@ -279,18 +279,26 @@ struct OtherAccountView: View {
                 
                 // Add Friend Button
                 Button(action: {
-                    print("My ID..  : \(currUser?.userID)")
-                    sendRequest(userID: userID)
-                    print("Add Friend tapped for userID: \(userID)")
-                    if let user = currUser {
-                        print("helllooo")
-                        user.updateMoons(rewardCount: 25)
-                        user.hasMedication = true;
-                        user.updateValues(newValues: ["hasMedication" :
+                    if viewModel.areFriends {
+                        DispatchQueue.main.async {
+                                        self.alertMessage = "You are already friends with this user!"
+                                        self.showAlert = true
+                                    }
+                    }
+                    else {
+                        print("My ID..  : \(currUser?.userID)")
+                        sendRequest(userID: userID)
+                        print("Add Friend tapped for userID: \(userID)")
+                        if let user = currUser {
+                            print("helllooo")
+                            user.updateMoons(rewardCount: 25)
+                            user.hasMedication = true;
+                            user.updateValues(newValues: ["hasMedication" :
                                                             user.hasMedication])
-                        user.addNotification("25 Moons Added!")
-                        
-                        //user.sleepGoalReached = true
+                            user.addNotification("25 Moons Added!")
+                            
+                            //user.sleepGoalReached = true
+                        }
                     }
                 }) {
                     Text("Add Friend")

@@ -128,10 +128,10 @@ class GoalViewModel: ObservableObject {
     }
 }
 
-//tags we filter by: insomnia, meds, male, female, old, kid, baby, snore, nightmares, earlybird
+//tags we filter by: insomnia, meds, male, female, old, kid, baby, snore, nightmares, earlybird, and other
 let articles = [
-    Article(articleTitle: "The Importance of Deep Sleep", articleLink: "https://www.medicalnewstoday.com/articles/325363", articlePreview: "Deep sleep plays a crucial role in your overall health...", articleTags: ["Health", "Sleep"], articleId: "1"),
-    Article(articleTitle: "5 Tips for Better Sleep Hygiene", articleLink: "https://www.medicalnewstoday.com/articles/325363", articlePreview: "Improving your sleep hygiene can lead to better sleep quality...", articleTags: ["Tips", "Hygiene"], articleId: "2"),
+    Article(articleTitle: "The Importance of Deep Sleep", articleLink: "https://www.medicalnewstoday.com/articles/325363", articlePreview: "Deep sleep plays a crucial role in your overall health...", articleTags: ["Health", "Sleep", "other"], articleId: "1"),
+    Article(articleTitle: "5 Tips for Better Sleep Hygiene", articleLink: "https://www.medicalnewstoday.com/articles/325363", articlePreview: "Improving your sleep hygiene can lead to better sleep quality...", articleTags: ["Tips", "Hygiene", "other"], articleId: "2"),
     
     Article(articleTitle: "Insomnia: Symptoms, Causes, and Treatments", articleLink: "https://www.sleepfoundation.org/insomnia", articlePreview: "Insomnia is a sleep disorder characterized by difficulty...", articleTags: ["insomnia"], articleId: "3"),
     Article(articleTitle: "What is insomnia? Everything you need to know", articleLink: "https://www.medicalnewstoday.com/articles/9155#definition", articlePreview: "Research shows that around 25% of people in the United States experience", articleTags: ["insomnia"], articleId: "4"),
@@ -660,7 +660,11 @@ func get_relevent_articles () -> Array<Article> {
     
     if (releventArts.count == 0) {
         print("inhere")
-        return articles
+        for article in articles {
+            if article.articleTags.contains("other") {
+                releventArts.append(article)
+            }
+        }
     }
     return releventArts
 } //end of get_relevent_articles
