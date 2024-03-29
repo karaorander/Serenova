@@ -30,6 +30,7 @@ class AccountInfoViewModel: ObservableObject {
     @Published var hasinsomnia : Bool = true
     @Published var hasmedication : Bool = true
     @Published var hasnightmares : Bool = true
+    @Published var exercisesRegularly : Bool = false
     @Published var isearlybird : Bool = true
     @Published var totalSleepGoalHours : Float = -1
     @Published var totalSleepGoalMins : Float = -1
@@ -122,6 +123,10 @@ class AccountInfoViewModel: ObservableObject {
                     self.totalSleepGoalHours = totalHours
                 }
                 
+                if let exercisesRegularly = userData["exercisesRegularly"] as? Bool {
+                    self.exercisesRegularly = exercisesRegularly
+                }
+                
                 if let totalMins = userData["totalSleepGoalMins"] as? Float {
                     self.totalSleepGoalMins = totalMins
                 }
@@ -159,6 +164,18 @@ class AccountInfoViewModel: ObservableObject {
         }
         
     }
+    
+   /* func isEmailTaken(email: String, completion: @escaping (Bool) -> Void) {
+        let db = Firestore.firestore()
+        db.collection("users").whereField("email", isEqualTo: email).getDocuments { (querySnapshot, error) in
+            if let error = error {
+                completion(false)
+            } else {
+                let isTaken = !(querySnapshot?.isEmpty ?? true)
+                completion(isTaken)
+            }
+        }
+    }*/
     
     func deleteUser() {
         let db = Database.database().reference()
@@ -272,6 +289,8 @@ class AccountInfoViewModel: ObservableObject {
             if let error = error {
                 print("Error updating user bio")
             } else {
+                /*self.exercisesRegularly = true;
+                let user: [String: Any] = ["exercisesRegularly": self.exercisesRegularly]*/
                 print("bio updated successfully")
             }
         }
@@ -516,6 +535,9 @@ struct AccountInfoView: View {
         guard let inputImage = inputImage else { return }
         profileImage = Image(uiImage: inputImage)
     }
+    
+    
+    
 }
 
 struct BioInfoView: View {
@@ -550,6 +572,12 @@ struct BioInfoView: View {
                     Button ("Submit", action: {
                         // TODO: Store BIO in database
                         viewModel.storeBio()
+                        if let  user = currUser {
+                            user.updateMoons(rewardCount: 50)
+                            user.exercisesRegularly = true;
+                            user.updateValues(newValues: ["exercisesRegularly" :
+                                                            user.exercisesRegularly])
+                        }
                     })
                     .font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.soothingNightLightGray.opacity(0.6)).foregroundColor(.nightfallHarmonyNavyBlue.opacity(1)).cornerRadius(10)
                     
@@ -750,7 +778,14 @@ struct EditProfileView: View {
                             
                             // Submit Bio button
                             Button ("Submit", action: {
-                                viewModel.storeData()
+                                /*viewModel.isEmailTaken(email: viewModel.email) { isTaken in
+                                    if isTaken {
+                                        print("taken")
+                                    } else {*/
+                                        // Proceed with saving the new email since it's not taken
+                                        viewModel.storeData()
+                                    //}
+                                //}
                             })
                             .font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.soothingNightLightGray.opacity(0.6)).foregroundColor(.nightfallHarmonyNavyBlue.opacity(1)).cornerRadius(10)
                             
@@ -800,11 +835,31 @@ struct EditProfileView: View {
         return emailTest.evaluate(with: viewModel.email)
     }
     
+    
     /*
      * Function to verify that the phone-number is valid
      */
     func isValidPhoneNumber() -> Bool {
         return viewModel.phoneNumber.contains(/^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$/)
+    }
+    
+    func isValidEmail2(email: String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        
+        return emailTest.evaluate(with: email)
+    }
+    
+    
+    /*
+     * Function to verify that the phone-number is valid
+     */
+    func isValidPhoneNumber2(phoneNumber: String) -> Bool {
+        // Regular expression for phone number validation
+        let phoneRegex = "^\\([0-9]{3}\\) [0-9]{3}-[0-9]{4}$"
+        let phoneTest = NSPredicate(format: "SELF MATCHES %@", phoneRegex)
+        
+        return phoneTest.evaluate(with: phoneNumber)
     }
 }
 

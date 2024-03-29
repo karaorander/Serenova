@@ -182,9 +182,10 @@ struct JournalView: View {
                 .whereField("userId", isEqualTo: userId)
                 .order(by: "timeStamp", descending: true)
                 .limit(to: NUM_ENTRIES)
-            
-            if let lastEntry = lastEntry {
-                query = query.start(afterDocument: lastEntry)
+            if lastEntry != nil {
+                if let lastEntry = lastEntry {
+                    query = query.start(afterDocument: lastEntry)
+                }
             }
             
             // Retrieve documents
@@ -215,7 +216,7 @@ struct NoEntriesView1: View {
                 .frame(width: 55, height: 60)
                 .foregroundColor(.white)
                 .padding()
-            Text("Create your first entry")
+            Text("Get started with your journal")
                 .foregroundColor(.white)
                 .font(.system(size: 25))
                 .fontWeight(.semibold)
@@ -389,7 +390,11 @@ struct JournalDetailsView: View {
                         // Save button to update the journal content
                         Button("Save") {
                             journal.updateValues(newValues: ["journalTitle" : editedTitle,
-                                                             "journalContent" : editedContent])
+                                                             "journalContent" : editedContent]) {_ in
+                                journal.journalContent = editedContent
+                                journal.journalTitle = editedTitle
+                            }
+                            
                             isEditing = false
                         }
                         .padding().foregroundColor(.white)

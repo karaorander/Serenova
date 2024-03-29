@@ -126,14 +126,109 @@ class GoalViewModel: ObservableObject {
             
         }
     }
+    
+    func get_relevent_articles () -> Array<Article> {
+        if let currUser = currUser {
+            print("geeting")
+            viewModel.fetchUsername()
+        }
+        else {
+            print("dis tha error")
+        }
+        viewModel.fetchUsername()
+        
+        print("in this func, \(viewModel.email) and \(viewModel.hasinsomnia)")
+        var releventArts = [Article]()
+        
+        var userTags = [String()]
+        
+        print(viewModel.hasinsomnia)
+        print(viewModel.hadinsomnia)
+        
+        if (viewModel.hasinsomnia || viewModel.hadinsomnia) {
+            print("here????")
+            userTags.append("insomnia")
+        }
+        
+        let myAge = Int(viewModel.age) ?? -1
+        
+        if (myAge > 65) {
+            userTags.append("old")
+        }
+        
+        if (myAge <= 17 && myAge >= 5) {
+            userTags.append("kid")
+        }
+        
+        if (myAge < 5 && myAge > -1) {
+            userTags.append("baby")
+        }
+        
+        var gendervar = "female"
+        
+        if (viewModel.gender.lowercased() == gendervar) {
+            userTags.append("female")
+        }
+        
+        gendervar = "male"
+        
+        if (viewModel.gender.lowercased() == gendervar) {
+            userTags.append("male")
+        }
+        
+        if (viewModel.snore) {
+            userTags.append("snore")
+        }
+        
+        if (viewModel.hasmedication == true) {
+            userTags.append("meds")
+        }
+        
+        if (viewModel.hasnightmares == true) {
+            userTags.append("nightmares")
+        }
+        
+        if (viewModel.isearlybird) {
+            userTags.append("earlybird")
+        }
+        
+        
+        
+        for article in articles {
+            for tag in article.articleTags {
+                if (userTags.contains(tag)) {
+                    releventArts.append(article)
+                }
+            }
+        }
+        
+        for article in releventArts {
+            if (viewModel.articlesRead.contains(article.articleId)) {
+                let curIndex = releventArts.firstIndex(where: { $0.articleId == article.articleId })
+                
+                releventArts.remove(at: curIndex!)
+            }
+        }
+        
+        
+        if (releventArts.count == 0) {
+            print("inhere")
+            for article in articles {
+                if article.articleTags.contains("other") {
+                    releventArts.append(article)
+                }
+            }
+        }
+        return releventArts
+    } //end of get_relevent_articles
 }
 
-//tags we filter by: insomnia, meds, male, female, old, kid, baby, snore, nightmares, earlybird
+//tags we filter by: insomnia, meds, male, female, old, kid, baby, snore, nightmares, earlybird, and other
 let articles = [
-    Article(articleTitle: "The Importance of Deep Sleep", articleLink: "https://www.medicalnewstoday.com/articles/325363", articlePreview: "Deep sleep plays a crucial role in your overall health...", articleTags: ["Health", "Sleep"], articleId: "1"),
-    Article(articleTitle: "5 Tips for Better Sleep Hygiene", articleLink: "https://www.medicalnewstoday.com/articles/325363", articlePreview: "Improving your sleep hygiene can lead to better sleep quality...", articleTags: ["Tips", "Hygiene"], articleId: "2"),
+    Article(articleTitle: "The Importance of Deep Sleep", articleLink: "https://www.medicalnewstoday.com/articles/325363", articlePreview: "Deep sleep plays a crucial role in your overall health...", articleTags: ["Health", "Sleep", "other"], articleId: "1"),
+    Article(articleTitle: "5 Tips for Better Sleep Hygiene", articleLink: "https://www.medicalnewstoday.com/articles/325363", articlePreview: "Improving your sleep hygiene can lead to better sleep quality...", articleTags: ["Tips", "Hygiene", "other"], articleId: "2"),
     
-    Article(articleTitle: "Insomnia: Symptoms, Causes, and Treatments", articleLink: "https://www.sleepfoundation.org/insomnia", articlePreview: "Insomnia is a sleep disorder characterized by difficulty...", articleTags: ["insomnia", "tips", "information"], articleId: "3"),
+    Article(articleTitle: "Insomnia: Symptoms, Causes, and Treatments", articleLink: "https://www.sleepfoundation.org/insomnia", articlePreview: "Insomnia is a sleep disorder characterized by difficulty...", articleTags: ["insomnia"], articleId: "3"),
     Article(articleTitle: "What is insomnia? Everything you need to know", articleLink: "https://www.medicalnewstoday.com/articles/9155#definition", articlePreview: "Research shows that around 25% of people in the United States experience", articleTags: ["insomnia"], articleId: "4"),
     Article(articleTitle: "Prevalence of chronic insomnia in adult patients and its correlation with medical comorbidities", articleLink: "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5353813/", articlePreview: "Insomnia is one of the common but neglected conditions...", articleTags: ["insomnia"], articleId: "5"),
     
@@ -144,7 +239,6 @@ let articles = [
     // Add more articles as needed
 ] // ex: index = 0-4 insomnia articles (this is the backup plan)
 
-let myArticles = get_relevent_articles()
 
 struct ArticleRow: View {
     var article: Article
@@ -164,6 +258,7 @@ struct ArticleRow: View {
 
 struct ArticleCard: View {
     var article: Article
+    @StateObject private var viewModel2 = GoalViewModel()
     
     var body: some View {
         VStack {
@@ -193,8 +288,108 @@ struct ArticleCard: View {
         .cornerRadius(12)
         .shadow(radius: 5) // Shadow for depth
         .padding(.vertical, 5) // Slight vertical padding
+        .onAppear {
+            viewModel2.fetchUsername{
+                get_relevent_articles()
+            }
+        }
     }
     
+    func get_relevent_articles () -> Array<Article> {
+        if let currUser = currUser {
+            print("geeting")
+            viewModel.fetchUsername()
+        }
+        else {
+            print("dis tha error")
+        }
+        viewModel.fetchUsername()
+        
+        print("in this func, \(viewModel.email) and \(viewModel.hasinsomnia)")
+        var releventArts = [Article]()
+        
+        var userTags = [String()]
+        
+        print(viewModel.hasinsomnia)
+        print(viewModel.hadinsomnia)
+        
+        if (viewModel.hasinsomnia || viewModel.hadinsomnia) {
+            print("here????")
+            userTags.append("insomnia")
+        }
+        
+        let myAge = Int(viewModel.age) ?? -1
+        
+        if (myAge > 65) {
+            userTags.append("old")
+        }
+        
+        if (myAge <= 17 && myAge >= 5) {
+            userTags.append("kid")
+        }
+        
+        if (myAge < 5 && myAge > -1) {
+            userTags.append("baby")
+        }
+        
+        var gendervar = "female"
+        
+        if (viewModel.gender.lowercased() == gendervar) {
+            userTags.append("female")
+        }
+        
+        gendervar = "male"
+        
+        if (viewModel.gender.lowercased() == gendervar) {
+            userTags.append("male")
+        }
+        
+        if (viewModel.snore) {
+            userTags.append("snore")
+        }
+        
+        if (viewModel.hasmedication == true) {
+            userTags.append("meds")
+        }
+        
+        if (viewModel.hasnightmares == true) {
+            userTags.append("nightmares")
+        }
+        
+        if (viewModel.isearlybird) {
+            userTags.append("earlybird")
+        }
+        
+        
+        
+        for article in articles {
+            for tag in article.articleTags {
+                if (userTags.contains(tag)) {
+                    releventArts.append(article)
+                }
+            }
+        }
+        
+        for article in releventArts {
+            if (viewModel.articlesRead.contains(article.articleId)) {
+                let curIndex = releventArts.firstIndex(where: { $0.articleId == article.articleId })
+                
+                releventArts.remove(at: curIndex!)
+            }
+        }
+        
+        
+        if (releventArts.count == 0) {
+            print("inhere")
+            for article in articles {
+                if article.articleTags.contains("other") {
+                    releventArts.append(article)
+                }
+            }
+        }
+        return releventArts
+    } //end of get_relevent_articles
+
 }
 
 //potential opening screen
@@ -213,6 +408,9 @@ struct SleepGoalsView: View {
     @State private var viewSleepScore:Bool = false
     
     var body: some View {
+        
+        
+        let myArticles = viewModel.get_relevent_articles()
 
         
         NavigationView {
@@ -463,7 +661,6 @@ struct SleepGoalsView: View {
             
         }
         
-        
     }
 
     //calc percent
@@ -570,84 +767,6 @@ struct SleepGoalsView: View {
     
 
 }
-
-
-func get_relevent_articles () -> Array<Article> {
-    
-    var releventArts = [Article]()
-    
-    var userTags = [String()]
-    
-    if (viewModel.hasinsomnia || viewModel.hadinsomnia) {
-        userTags.append("insomnia")
-    }
-    
-    let myAge = Int(viewModel.age) ?? -1
-    
-    if (myAge > 65) {
-        userTags.append("old")
-    }
-    
-    if (myAge <= 17 && myAge >= 5) {
-        userTags.append("kid")
-    }
-    
-    if (myAge < 5 && myAge > -1) {
-        userTags.append("baby")
-    }
-    
-    var gendervar = "female"
-    
-    if (viewModel.gender.lowercased() == gendervar) {
-        userTags.append("female")
-    }
-    
-    gendervar = "male"
-    
-    if (viewModel.gender.lowercased() == gendervar) {
-        userTags.append("male")
-    }
-    
-    if (viewModel.snore) {
-        userTags.append("snore")
-    }
-    
-    if (viewModel.hasmedication) {
-        userTags.append("meds")
-    }
-    
-    if (viewModel.hasnightmares) {
-        userTags.append("nightmares")
-    }
-    
-    if (viewModel.isearlybird) {
-        userTags.append("earlybird")
-    }
-    
-    
-    
-    for article in articles {
-        for tag in article.articleTags {
-            if (userTags.contains(tag)) {
-                releventArts.append(article)
-            }
-        }
-    }
-    
-    for article in releventArts {
-        if (viewModel.articlesRead.contains(article.articleId)) {
-            let curIndex = releventArts.firstIndex(where: { $0.articleId == article.articleId })
-            
-            releventArts.remove(at: curIndex!)
-        }
-    }
-    
-    
-    if (releventArts.count == 0) {
-        return articles
-    }
-    return releventArts
-} //end of get_relevent_articles
 
 
 //New view

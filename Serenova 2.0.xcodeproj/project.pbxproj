@@ -88,6 +88,11 @@
 		F22430EA2BB67A61007EE5B7 /* JournalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22430E72BB67A61007EE5B7 /* JournalTests.swift */; };
 		F22430EC2BB68405007EE5B7 /* AddFriendTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22430EB2BB68405007EE5B7 /* AddFriendTests.swift */; };
 		F22430EE2BB6900C007EE5B7 /* FriendRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22430ED2BB6900C007EE5B7 /* FriendRequestTests.swift */; };
+		F22430F02BB69C86007EE5B7 /* PostPermissionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22430EF2BB69C86007EE5B7 /* PostPermissionsTests.swift */; };
+		F22430F22BB69F93007EE5B7 /* SearchForumTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22430F12BB69F93007EE5B7 /* SearchForumTests.swift */; };
+		F22430F42BB6A9FF007EE5B7 /* SleepScoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22430F32BB6A9FF007EE5B7 /* SleepScoreTests.swift */; };
+		F22430F62BB6BC8C007EE5B7 /* BlockedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22430F52BB6BC8C007EE5B7 /* BlockedTests.swift */; };
+		F22430F82BB6BEEA007EE5B7 /* EditAccountTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22430F72BB6BEEA007EE5B7 /* EditAccountTests.swift */; };
 		F23D7CDF2B7FAF320018F325 /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */; };
 		F299FAF82BB025CD00845FE4 /* JournalPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F299FAF72BB025CD00845FE4 /* JournalPostView.swift */; };
 		F299FAFA2BB0265400845FE4 /* createJournalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F299FAF92BB0265400845FE4 /* createJournalView.swift */; };
@@ -177,6 +182,11 @@
 		F22430E72BB67A61007EE5B7 /* JournalTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JournalTests.swift; path = "../../../Serenova9/Serenova 2.0Tests/JournalTests.swift"; sourceTree = "<group>"; };
 		F22430EB2BB68405007EE5B7 /* AddFriendTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendTests.swift; sourceTree = "<group>"; };
 		F22430ED2BB6900C007EE5B7 /* FriendRequestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRequestTests.swift; sourceTree = "<group>"; };
+		F22430EF2BB69C86007EE5B7 /* PostPermissionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostPermissionsTests.swift; sourceTree = "<group>"; };
+		F22430F12BB69F93007EE5B7 /* SearchForumTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchForumTests.swift; sourceTree = "<group>"; };
+		F22430F32BB6A9FF007EE5B7 /* SleepScoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepScoreTests.swift; sourceTree = "<group>"; };
+		F22430F52BB6BC8C007EE5B7 /* BlockedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedTests.swift; sourceTree = "<group>"; };
+		F22430F72BB6BEEA007EE5B7 /* EditAccountTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAccountTests.swift; sourceTree = "<group>"; };
 		F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
 		F299FAF72BB025CD00845FE4 /* JournalPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalPostView.swift; sourceTree = "<group>"; };
 		F299FAF92BB0265400845FE4 /* createJournalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = createJournalView.swift; sourceTree = "<group>"; };
@@ -329,9 +339,14 @@
 				F22430E72BB67A61007EE5B7 /* JournalTests.swift */,
 				F22430E62BB67A61007EE5B7 /* SleepGoalTests.swift */,
 				7F60D4A12BB3A4CF004D66FB /* RewardTests.swift */,
+				F22430F52BB6BC8C007EE5B7 /* BlockedTests.swift */,
 				F22430EB2BB68405007EE5B7 /* AddFriendTests.swift */,
 				F22430ED2BB6900C007EE5B7 /* FriendRequestTests.swift */,
 				7F60D4A32BB3AFDC004D66FB /* ForumRepliesTests.swift */,
+				F22430F32BB6A9FF007EE5B7 /* SleepScoreTests.swift */,
+				F22430EF2BB69C86007EE5B7 /* PostPermissionsTests.swift */,
+				F22430F12BB69F93007EE5B7 /* SearchForumTests.swift */,
+				F22430F72BB6BEEA007EE5B7 /* EditAccountTests.swift */,
 			);
 			path = "Serenova 2.0Tests";
 			sourceTree = "<group>";
@@ -618,14 +633,19 @@
 			files = (
 				F22430EE2BB6900C007EE5B7 /* FriendRequestTests.swift in Sources */,
 				7F60D4A42BB3AFDC004D66FB /* ForumRepliesTests.swift in Sources */,
+				F22430F22BB69F93007EE5B7 /* SearchForumTests.swift in Sources */,
 				23D1E0F42B7A8FDF00539A62 /* Serenova_2_0Tests.swift in Sources */,
+				F22430F62BB6BC8C007EE5B7 /* BlockedTests.swift in Sources */,
 				E0C98A2C2B90277E00A3D369 /* SleepManagerTests.swift in Sources */,
 				F2E2195E2B82EC6200235824 /* SignUpTests.swift in Sources */,
+				F22430F82BB6BEEA007EE5B7 /* EditAccountTests.swift in Sources */,
+				F22430F42BB6A9FF007EE5B7 /* SleepScoreTests.swift in Sources */,
 				7F60D4A22BB3A4CF004D66FB /* RewardTests.swift in Sources */,
 				E0C98A2F2B9035AE00A3D369 /* SleepSession.swift in Sources */,
 				F22430EA2BB67A61007EE5B7 /* JournalTests.swift in Sources */,
 				F22430E92BB67A61007EE5B7 /* SleepGoalTests.swift in Sources */,
 				F22430E82BB67A61007EE5B7 /* ForumDeleteTests.swift in Sources */,
+				F22430F02BB69C86007EE5B7 /* PostPermissionsTests.swift in Sources */,
 				F22430EC2BB68405007EE5B7 /* AddFriendTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

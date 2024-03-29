@@ -23,7 +23,7 @@ class OtherAccountViewModel: ObservableObject {
     @Published var bio: String = ""
     @Published var hasInsomnia: Bool = false
     @Published var areFriends: Bool = false
-    @Published var blocked: [String] = []
+    @Published var isBlocked: Bool = false
 
         // New method to check if the two users are friends
         func checkIfFriends(with friendID: String) {
@@ -48,19 +48,105 @@ class OtherAccountViewModel: ObservableObject {
                 }
             }
         }
+    
+    func unblockUser(blockedUserID: String) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            print("No authenticated user found")
+            return
+        }
+
+        let db = Firestore.firestore()
+        let userBlockedRef = db.collection("Users").document(currentUserID).collection("BlockedUsers")
+
+        // Remove the blockedUserID from the current user's "BlockedUsers" collection
+        userBlockedRef.document(blockedUserID).delete() { error in
+            if let error = error {
+                print("Error unblocking user: \(error)")
+            } else {
+                print("User successfully unblocked")
+                DispatchQueue.main.async {
+                    self.isBlocked = false // Update isBlocked to false
+                    // Additional UI updates as necessary, e.g., showing an alert
+                }
+            }
+        }
+    }
+    
+    func checkIfBlocked(by userID: String) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            print("No authenticated user found")
+            return
+        }
+
+        let db = Firestore.firestore()
+        let userBlockedRef = db.collection("Users").document(currentUserID).collection("BlockedUsers")
+
+        // Check if the current user's ID exists in the userID's "BlockedUsers" collection
+        userBlockedRef.document(userID).getDocument { [weak self] (document, error) in
+            DispatchQueue.main.async {
+                if let document = document, document.exists {
+                    print("Blocked: true")
+                    self?.isBlocked = true
+                } else {
+                    print("Blocked: false")
+                    self?.isBlocked = false
+                }
+            }
+        }
+    }
 
     private var ref: DatabaseReference = Database.database().reference().child("User")
+    
+    func blockUser(blockedUserID: String) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            print("No authenticated user found")
+            return
+        }
+
+        let db = Firestore.firestore()
+        let userBlockedRef = db.collection("Users").document(currentUserID).collection("BlockedUsers")
+
+        // Add the blockedUserID to the current user's "BlockedUsers" collection
+        userBlockedRef.document(blockedUserID).setData(["blockedid": blockedUserID]) { error in
+            if let error = error {
+                print("Error blocking user: \(error)")
+            } else {
+                print("User successfully blocked")
+                DispatchQueue.main.async {
+                    self.isBlocked = true
+                            }
+
+            }
+        }
+    }
 
     // Function to fetch user data based on userID
     func fetchUserData(userID: String) {
-        ref.child(userID).observeSingleEvent(of: .value, with: { snapshot in
-            guard let value = snapshot.value as? [String: Any] else {
-                print("Error: Could not find user")
-                return
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            print("No authenticated user found")
+            return
+        }
+
+        let db = Firestore.firestore()
+        let blockedRef = db.collection("Users").document(userID).collection("BlockedUsers")
+
+        blockedRef.document(currentUserID).getDocument { [weak self] (document, error) in
+            DispatchQueue.main.async {
+                if let document = document, document.exists {
+                    self?.isBlocked = true // Current user is blocked by this user
+                } else {
+                    self?.isBlocked = false // Current user is not blocked, proceed to fetch user data
+                    self?.ref.child(userID).observeSingleEvent(of: .value, with: { snapshot in
+                        guard let value = snapshot.value as? [String: Any] else {
+                            print("Error: Could not find user")
+                            return
+                        }
+                        self?.parseUserData(userData: value)
+                    }) { error in
+                        print(error.localizedDescription)
+                    }
+                }
             }
-            self.parseUserData(userData: value)
-        }) { error in
-            print(error.localizedDescription)
         }
     }
 
@@ -73,7 +159,6 @@ class OtherAccountViewModel: ObservableObject {
             self.moonCount = userData["moonCount"] as? Int ?? 0
             self.bio = userData["bio"] as? String ?? ""
             self.hasInsomnia = userData["hasInsomnia"] as? Bool ?? false
-            self.blocked = userData["blocked"] as? [String] ?? []
         }
     }
 }
@@ -88,151 +173,166 @@ struct OtherAccountView: View {
     
     var body: some View {
         VStack {
-            Spacer().frame(height: 60)
-            VStack(spacing: 20) {
+            if viewModel.isBlocked {
+                        // Show "Blocked User" message
+                        Spacer()
+                        Text("Blocked User")
+                            .font(.largeTitle)
+                            .foregroundColor(.red)
+                        Spacer()
+                Button(action: {
+                        viewModel.unblockUser(blockedUserID: userID)
+                        print("User unblocked.")
+                    }) {
+                        Text("Unblock User")
+                            .foregroundColor(.white)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.blue) // Choose an appropriate color
+                            .cornerRadius(10)
+                    }
+                    .padding(.horizontal)
+            } else {
                 
-                // Profile Picture
-                Image(systemName: "person.crop.circle.fill")
-                    .resizable()
-                    .frame(width: 90, height: 85)
-                    .clipShape(Circle())
-                    .padding()
-
-                // Username
-                Text("Email: \(viewModel.email)")
-                    .font(.system(size: 25))
-                    .fontWeight(.medium)
-
-
-                if viewModel.areFriends {
-                    Text("Friends")
+                Spacer().frame(height: 60)
+                VStack(spacing: 20) {
+                    
+                    // Profile Picture
+                    Image(systemName: "person.crop.circle.fill")
+                        .resizable()
+                        .frame(width: 90, height: 85)
+                        .clipShape(Circle())
+                        .padding()
+                    
+                    // Username
+                    Text("Email: \(viewModel.email)")
+                        .font(.system(size: 25))
+                        .fontWeight(.medium)
+                    
+                    
+                    if viewModel.areFriends {
+                        Text("Friends")
+                            .font(.system(size: 17))
+                            .fontWeight(.medium)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 40)
+                            .background(Color.green)
+                            .foregroundColor(.white)
+                            .cornerRadius(5)
+                            .multilineTextAlignment(.center)
+                    }
+                    
+                    // Full Name
+                    Text("Name: \(viewModel.fullName)")
                         .font(.system(size: 17))
                         .fontWeight(.medium)
                         .padding()
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 40)
-                        .background(Color.green)
-                        .foregroundColor(.white)
+                        .frame(width: 300, height: 40, alignment: .leading)
+                        .background(Color.tranquilMistAshGray)
+                        .foregroundColor(.nightfallHarmonyNavyBlue)
                         .cornerRadius(5)
-                        .multilineTextAlignment(.center)
-                }
-                
-                // Full Name
-                Text("Name: \(viewModel.fullName)")
-                    .font(.system(size: 17))
-                    .fontWeight(.medium)
-                    .padding()
-                    .frame(width: 300, height: 40, alignment: .leading)
-                    .background(Color.tranquilMistAshGray)
-                    .foregroundColor(.nightfallHarmonyNavyBlue)
-                    .cornerRadius(5)
-
-                // Moon Count
-                if viewModel.areFriends {
-                    HStack {
-                        Image(systemName: "moon.fill")
-                            .resizable()
-                            .frame(width: 20, height: 20)
-                        Text("Moon Count: \(viewModel.moonCount)")
-                            .font(.system(size: 17))
-                            .fontWeight(.medium)
+                    
+                    // Moon Count
+                    if viewModel.areFriends {
+                        HStack {
+                            Image(systemName: "moon.fill")
+                                .resizable()
+                                .frame(width: 20, height: 20)
+                            Text("Moon Count: \(viewModel.moonCount)")
+                                .font(.system(size: 17))
+                                .fontWeight(.medium)
+                        }
+                        .padding()
+                        .frame(width: 300, height: 40, alignment: .leading)
+                        .background(Color.tranquilMistAshGray)
+                        .foregroundColor(.nightfallHarmonyNavyBlue)
+                        .cornerRadius(5)
                     }
-                    .padding()
-                    .frame(width: 300, height: 40, alignment: .leading)
-                    .background(Color.tranquilMistAshGray)
-                    .foregroundColor(.nightfallHarmonyNavyBlue)
-                    .cornerRadius(5)
-                }
-
-                // Bio
-                Text("Bio: \(viewModel.bio)")
-                    .font(.system(size: 17))
-                    .fontWeight(.medium)
-                    .padding()
-                    .frame(width: 300, height: 40, alignment: .leading)
-                    .background(Color.tranquilMistAshGray)
-                    .foregroundColor(.nightfallHarmonyNavyBlue)
-                    .cornerRadius(5)
-
-                // Insomnia Status
-                Text("Insomnia: \(viewModel.hasInsomnia ? "Yes" : "No")")
-                    .font(.system(size: 17))
-                    .fontWeight(.medium)
-                    .padding()
-                    .frame(width: 300, height: 40, alignment: .leading)
-                    .background(Color.tranquilMistAshGray)
-                    .foregroundColor(.nightfallHarmonyNavyBlue)
-                    .cornerRadius(5)
-                
-
-            }
-            
-            
-
-            Spacer() // Pushes everything up
-
-            // Add Friend Button
-            Button(action: {
-                print("My ID..  : \(currUser?.userID)")
-                sendRequest(userID: userID)
-                print("Add Friend tapped for userID: \(userID)")
-            }) {
-                Text("Add Friend")
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color.nightfallHarmonyNavyBlue)
-                    .cornerRadius(10)
-            }
-            .padding(.horizontal)
-
-            // Block Button
-            Button(action: {
-                // Action for blocking a user
-                currUser?.blocked.append(userID)
-                if ((currUser?.friends.contains(userID)) != nil) {
-                    let curIndex = currUser?.friends.firstIndex(where: { $0 == userID })
-                    currUser?.friends.remove(at: curIndex!)
-                }
-                else {
-                    let curIndex = currUser?.blocked.firstIndex(where: { $0 == userID })
-                    currUser?.blocked.remove(at: curIndex!)
+                    
+                    // Bio
+                    Text("Bio: \(viewModel.bio)")
+                        .font(.system(size: 17))
+                        .fontWeight(.medium)
+                        .padding()
+                        .frame(width: 300, height: 40, alignment: .leading)
+                        .background(Color.tranquilMistAshGray)
+                        .foregroundColor(.nightfallHarmonyNavyBlue)
+                        .cornerRadius(5)
+                    
+                    // Insomnia Status
+                    Text("Insomnia: \(viewModel.hasInsomnia ? "Yes" : "No")")
+                        .font(.system(size: 17))
+                        .fontWeight(.medium)
+                        .padding()
+                        .frame(width: 300, height: 40, alignment: .leading)
+                        .background(Color.tranquilMistAshGray)
+                        .foregroundColor(.nightfallHarmonyNavyBlue)
+                        .cornerRadius(5)
+                    
+                    
                 }
                 
-                print("Block User tapped for userID: \(userID)")
-            }) {
                 
-                /**
-                Text("Block User")
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color.red)
-                    .cornerRadius(10)
-            }
-            */
-            if ((currUser?.blocked.contains(userID)) != nil) {
-                Text("Unblock User")
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color.red)
-                    .cornerRadius(10)
                 
-            }
-            else {
-                Text("Block User")
-                    .foregroundColor(.white)
+                Spacer() // Pushes everything up
+                
+                // Add Friend Button
+                Button(action: {
+                    if viewModel.areFriends {
+                        DispatchQueue.main.async {
+                                        self.alertMessage = "You are already friends with this user!"
+                                        self.showAlert = true
+                                    }
+                    }
+                    else {
+                        print("My ID..  : \(currUser?.userID)")
+                        sendRequest(userID: userID)
+                        print("Add Friend tapped for userID: \(userID)")
+                        if let user = currUser {
+                            print("helllooo")
+                            user.updateMoons(rewardCount: 25)
+                            user.hasMedication = true;
+                            user.updateValues(newValues: ["hasMedication" :
+                                                            user.hasMedication])
+                            user.addNotification("25 Moons Added!")
+                            
+                            //user.sleepGoalReached = true
+                        }
+                    }
+                }) {
+                    Text("Add Friend")
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.nightfallHarmonyNavyBlue)
+                        .cornerRadius(10)
+                }
+                .padding(.horizontal)
+                
+                // Block Button
+                Button(action: {
+                    viewModel.blockUser(blockedUserID: userID)
+                    print("user block.")
+                    DispatchQueue.main.async {
+                                    self.alertMessage = "User Blocked."
+                                    self.showAlert = true
+                                }
+
+                    // Optionally dismiss the view after blocking
+                }) {
+                    HStack {
+                        Text("Block User")
+                            .foregroundColor(.white)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.red)
+                            .cornerRadius(10)
+                    }
+                    .foregroundColor(.blue)
                     .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color.red)
-                    .cornerRadius(10)
+                }
             }
-            }
-            
-            
-            .padding(.horizontal)
-            .padding(.bottom, 20) // Add some padding at the bottom
         }
         .padding()
         .background(LinearGradient(gradient: Gradient(colors: [.dreamyTwilightMidnightBlue.opacity(0.2), .nightfallHarmonyNavyBlue.opacity(0.6)]), startPoint: .top, endPoint: .bottom))
@@ -241,7 +341,8 @@ struct OtherAccountView: View {
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             viewModel.fetchUserData(userID: userID)
-            viewModel.checkIfFriends(with: userID) 
+            viewModel.checkIfFriends(with: userID)
+            viewModel.checkIfBlocked(by: userID)
         }
         .alert(isPresented: $showAlert) {
             Alert(
@@ -261,6 +362,8 @@ struct OtherAccountView: View {
                 })
     }
 
+
+    
     
     // Store new FriendRequest in FireStore for 'Friend'
     // Store new ownRequest in Firestore for currUser
@@ -306,6 +409,7 @@ struct OtherAccountView: View {
             }
         }
     }
+
 }
 
 

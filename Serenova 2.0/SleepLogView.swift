@@ -474,11 +474,14 @@ struct ManualLogView: View {
                 print("min: \(durationMinutes)")
                 print("dur2: \(viewModel.totalSleepGoalHours)")
                 print("min2: \(viewModel.totalSleepGoalMins)")
-                if (abs(durationHours - Int(viewModel.totalSleepGoalHours)) < 5) {
+                if (abs(durationHours - Int(viewModel.totalSleepGoalHours)) < 3) {
                     if let user = currUser {
                         print("helllooo")
                         user.updateMoons(rewardCount: 20)
                         user.addNotification("20 Moons Added!")
+                        user.doesSnore = true;
+                        user.updateValues(newValues: ["doesSnore" :
+                                                            user.doesSnore])
                         //user.sleepGoalReached = true
                     }
                     else {
