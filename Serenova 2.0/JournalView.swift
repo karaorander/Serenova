@@ -182,9 +182,10 @@ struct JournalView: View {
                 .whereField("userId", isEqualTo: userId)
                 .order(by: "timeStamp", descending: true)
                 .limit(to: NUM_ENTRIES)
-            
-            if let lastEntry = lastEntry {
-                query = query.start(afterDocument: lastEntry)
+            if lastEntry != nil {
+                if let lastEntry = lastEntry {
+                    query = query.start(afterDocument: lastEntry)
+                }
             }
             
             // Retrieve documents
