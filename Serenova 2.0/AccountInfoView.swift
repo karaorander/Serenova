@@ -30,6 +30,7 @@ class AccountInfoViewModel: ObservableObject {
     @Published var hasinsomnia : Bool = true
     @Published var hasmedication : Bool = true
     @Published var hasnightmares : Bool = true
+    @Published var exercisesRegularly : Bool = false
     @Published var isearlybird : Bool = true
     @Published var totalSleepGoalHours : Float = -1
     @Published var totalSleepGoalMins : Float = -1
@@ -120,6 +121,10 @@ class AccountInfoViewModel: ObservableObject {
                 
                 if let totalHours = userData["totalSleepGoalHours"] as? Float {
                     self.totalSleepGoalHours = totalHours
+                }
+                
+                if let exercisesRegularly = userData["exercisesRegularly"] as? Bool {
+                    self.exercisesRegularly = exercisesRegularly
                 }
                 
                 if let totalMins = userData["totalSleepGoalMins"] as? Float {
@@ -284,6 +289,8 @@ class AccountInfoViewModel: ObservableObject {
             if let error = error {
                 print("Error updating user bio")
             } else {
+                /*self.exercisesRegularly = true;
+                let user: [String: Any] = ["exercisesRegularly": self.exercisesRegularly]*/
                 print("bio updated successfully")
             }
         }
@@ -565,6 +572,12 @@ struct BioInfoView: View {
                     Button ("Submit", action: {
                         // TODO: Store BIO in database
                         viewModel.storeBio()
+                        if let  user = currUser {
+                            user.updateMoons(rewardCount: 50)
+                            user.exercisesRegularly = true;
+                            user.updateValues(newValues: ["exercisesRegularly" :
+                                                            user.exercisesRegularly])
+                        }
                     })
                     .font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.soothingNightLightGray.opacity(0.6)).foregroundColor(.nightfallHarmonyNavyBlue.opacity(1)).cornerRadius(10)
                     

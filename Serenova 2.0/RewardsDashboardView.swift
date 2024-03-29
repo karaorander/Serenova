@@ -11,6 +11,9 @@ import FirebaseAuth
 
 class MoonProgressViewModel: ObservableObject {
     @Published var moonCount : Int = -1
+    public var hasMedication: Bool = false
+    public var doesSnore: Bool = false
+    public var exercisesRegularly: Bool = false
     
     func fetchMoons() {
         if let currentUser = Auth.auth().currentUser {
@@ -25,6 +28,15 @@ class MoonProgressViewModel: ObservableObject {
             
             if let moonCount = userData["moonCount"] as? Int {
                 self.moonCount = moonCount
+            }
+            if let hasMedication = userData["hasMedication"] as? Bool {
+                self.hasMedication = hasMedication
+            }
+            if let exercisesRegularly = userData["exercisesRegularly"] as? Bool {
+                self.exercisesRegularly = exercisesRegularly
+            }
+            if let doesSnore = userData["doesSnore"] as? Bool {
+                self.doesSnore = doesSnore
             }
         }
         } else {
@@ -130,9 +142,9 @@ struct RewardsDashboardView: View {
                             
                             // Current Tasks Section
                             VStack {
-                                TaskView(taskName: "Sleep Streak", moonReward: 100, iconName: "moon.zzz", description: "Maintain a 7-day sleep streak to earn 100 moons.")
-                                TaskView(taskName: "Wellness Warrior", moonReward: 50, iconName: "link", description: "Complete 5 wellness activities this week to earn 50 moons.")
-                                TaskView(taskName: "Mindfulness Master", moonReward: 25, iconName: "speaker.wave.2", description: "Participate in a 10-minute mindfulness session to earn 25 moons.")
+                                TaskView(taskName: "Meet Your Sleep Goals", moonReward: 20, iconName: "moon.zzz", description: "If your acutal sleep time is within 3 hours of range of your sleep goal, you will earn 20 moons!", isTaskCompleted: viewModel.doesSnore)
+                                TaskView(taskName: "Request a User", moonReward: 25, iconName: "person.badge.plus", description: "If you request a user to be their friend, you will earn 25 moons for your dedication and usage of our app.", isTaskCompleted: viewModel.hasMedication)
+                                TaskView(taskName: "Add a Bio", moonReward: 50, iconName: "pencil.circle.fill", description: "Everytime you click on a recomended article, you will earn 10 moons!", isTaskCompleted: viewModel.exercisesRegularly)
                             }
                         }
                     }
@@ -205,6 +217,7 @@ struct TaskView: View {
     var moonReward: Int
     var iconName: String
     var description: String
+    var isTaskCompleted: Bool
     @State private var showPopover = false
 
     var body: some View {
@@ -218,7 +231,7 @@ struct TaskView: View {
             Text("\(moonReward) Moons")
         }
         .padding()
-        .background(Color.white.opacity(0.1))
+        .background(isTaskCompleted ? Color.green.opacity(0.5) : Color.white.opacity(0.1))
         .cornerRadius(10)
         .onTapGesture {
             self.showPopover = true

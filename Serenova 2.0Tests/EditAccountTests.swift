@@ -35,9 +35,6 @@ class AccountInfoViewModelTests: XCTestCase {
 
         XCTAssertNotNil(Auth.auth().currentUser == nil, "User should be removed from authentication")
         
-        // Check if the user's data has been removed from Firestore
-        // You may need to fetch the user's data from Firestore to confirm deletion
-        // Assert accordingly based on your data model and structure
     }
     
     func testIsValidEmail() {

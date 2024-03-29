@@ -282,6 +282,16 @@ struct OtherAccountView: View {
                     print("My ID..  : \(currUser?.userID)")
                     sendRequest(userID: userID)
                     print("Add Friend tapped for userID: \(userID)")
+                    if let user = currUser {
+                        print("helllooo")
+                        user.updateMoons(rewardCount: 25)
+                        user.hasMedication = true;
+                        user.updateValues(newValues: ["hasMedication" :
+                                                            user.hasMedication])
+                        user.addNotification("25 Moons Added!")
+                        
+                        //user.sleepGoalReached = true
+                    }
                 }) {
                     Text("Add Friend")
                         .foregroundColor(.white)
