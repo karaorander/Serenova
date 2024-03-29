@@ -13,8 +13,8 @@ struct ForumPostDetailView: View {
    
     @Binding var post: Post
     @State private var isReplyWindowOpen = false
-    @State private var replies: [Reply] = []
-    @State private var reply: String = ""
+    @State var replies: [Reply] = []
+    @State var reply: String = ""
     @State private var showError:Bool = false
     @State private var errorMess: String = ""
     @State private var queryNum: Int = 25

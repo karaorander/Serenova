@@ -43,6 +43,7 @@ class User: Codable {
     public var moonCount: Int = -1
     public var friends: [String] = []
     public var notifications: [String] = []
+    public var blocked: [String] = []
 
     
     /* Gender */
@@ -99,6 +100,10 @@ class User: Codable {
     
     func addFriend(_ friendID: String) {
         friends.append(friendID)
+    }
+    
+    func blockUser(_ blockedID: String) {
+        blocked.append(blockedID)
     }
     
     func addNotification(_ noti: String) {

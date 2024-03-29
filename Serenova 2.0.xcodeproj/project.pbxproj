@@ -83,6 +83,11 @@
 		F20DE1BF2BB4D44E009D1C27 /* otherAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20DE1BE2BB4D44E009D1C27 /* otherAccountView.swift */; };
 		F20DE1C12BB4D8EB009D1C27 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20DE1C02BB4D8EB009D1C27 /* NotificationsView.swift */; };
 		F21405152BB015A700F507E7 /* RedeemRewardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21405142BB015A700F507E7 /* RedeemRewardsView.swift */; };
+		F22430E82BB67A61007EE5B7 /* ForumDeleteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22430E52BB67A61007EE5B7 /* ForumDeleteTests.swift */; };
+		F22430E92BB67A61007EE5B7 /* SleepGoalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22430E62BB67A61007EE5B7 /* SleepGoalTests.swift */; };
+		F22430EA2BB67A61007EE5B7 /* JournalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22430E72BB67A61007EE5B7 /* JournalTests.swift */; };
+		F22430EC2BB68405007EE5B7 /* AddFriendTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22430EB2BB68405007EE5B7 /* AddFriendTests.swift */; };
+		F22430EE2BB6900C007EE5B7 /* FriendRequestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22430ED2BB6900C007EE5B7 /* FriendRequestTests.swift */; };
 		F23D7CDF2B7FAF320018F325 /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */; };
 		F299FAF82BB025CD00845FE4 /* JournalPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F299FAF72BB025CD00845FE4 /* JournalPostView.swift */; };
 		F299FAFA2BB0265400845FE4 /* createJournalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F299FAF92BB0265400845FE4 /* createJournalView.swift */; };
@@ -167,6 +172,11 @@
 		F20DE1BE2BB4D44E009D1C27 /* otherAccountView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = otherAccountView.swift; sourceTree = "<group>"; };
 		F20DE1C02BB4D8EB009D1C27 /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
 		F21405142BB015A700F507E7 /* RedeemRewardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedeemRewardsView.swift; sourceTree = "<group>"; };
+		F22430E52BB67A61007EE5B7 /* ForumDeleteTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ForumDeleteTests.swift; path = "../../../Serenova9/Serenova 2.0Tests/ForumDeleteTests.swift"; sourceTree = "<group>"; };
+		F22430E62BB67A61007EE5B7 /* SleepGoalTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SleepGoalTests.swift; path = "../../../Serenova9/Serenova 2.0Tests/SleepGoalTests.swift"; sourceTree = "<group>"; };
+		F22430E72BB67A61007EE5B7 /* JournalTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JournalTests.swift; path = "../../../Serenova9/Serenova 2.0Tests/JournalTests.swift"; sourceTree = "<group>"; };
+		F22430EB2BB68405007EE5B7 /* AddFriendTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendTests.swift; sourceTree = "<group>"; };
+		F22430ED2BB6900C007EE5B7 /* FriendRequestTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendRequestTests.swift; sourceTree = "<group>"; };
 		F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
 		F299FAF72BB025CD00845FE4 /* JournalPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalPostView.swift; sourceTree = "<group>"; };
 		F299FAF92BB0265400845FE4 /* createJournalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = createJournalView.swift; sourceTree = "<group>"; };
@@ -315,7 +325,12 @@
 				23D1E0F32B7A8FDF00539A62 /* Serenova_2_0Tests.swift */,
 				F2E2195D2B82EC6200235824 /* SignUpTests.swift */,
 				E0C98A2B2B90277E00A3D369 /* SleepManagerTests.swift */,
+				F22430E52BB67A61007EE5B7 /* ForumDeleteTests.swift */,
+				F22430E72BB67A61007EE5B7 /* JournalTests.swift */,
+				F22430E62BB67A61007EE5B7 /* SleepGoalTests.swift */,
 				7F60D4A12BB3A4CF004D66FB /* RewardTests.swift */,
+				F22430EB2BB68405007EE5B7 /* AddFriendTests.swift */,
+				F22430ED2BB6900C007EE5B7 /* FriendRequestTests.swift */,
 				7F60D4A32BB3AFDC004D66FB /* ForumRepliesTests.swift */,
 			);
 			path = "Serenova 2.0Tests";
@@ -601,12 +616,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F22430EE2BB6900C007EE5B7 /* FriendRequestTests.swift in Sources */,
 				7F60D4A42BB3AFDC004D66FB /* ForumRepliesTests.swift in Sources */,
 				23D1E0F42B7A8FDF00539A62 /* Serenova_2_0Tests.swift in Sources */,
 				E0C98A2C2B90277E00A3D369 /* SleepManagerTests.swift in Sources */,
 				F2E2195E2B82EC6200235824 /* SignUpTests.swift in Sources */,
 				7F60D4A22BB3A4CF004D66FB /* RewardTests.swift in Sources */,
 				E0C98A2F2B9035AE00A3D369 /* SleepSession.swift in Sources */,
+				F22430EA2BB67A61007EE5B7 /* JournalTests.swift in Sources */,
+				F22430E92BB67A61007EE5B7 /* SleepGoalTests.swift in Sources */,
+				F22430E82BB67A61007EE5B7 /* ForumDeleteTests.swift in Sources */,
+				F22430EC2BB68405007EE5B7 /* AddFriendTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
