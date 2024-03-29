@@ -530,6 +530,7 @@ struct AccountInfoView: View {
     }
     
     
+    
 }
 
 struct BioInfoView: View {
@@ -827,6 +828,25 @@ struct EditProfileView: View {
      */
     func isValidPhoneNumber() -> Bool {
         return viewModel.phoneNumber.contains(/^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$/)
+    }
+    
+    func isValidEmail2(email: String) -> Bool {
+        let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
+        
+        return emailTest.evaluate(with: email)
+    }
+    
+    
+    /*
+     * Function to verify that the phone-number is valid
+     */
+    func isValidPhoneNumber2(phoneNumber: String) -> Bool {
+        // Regular expression for phone number validation
+        let phoneRegex = "^\\([0-9]{3}\\) [0-9]{3}-[0-9]{4}$"
+        let phoneTest = NSPredicate(format: "SELF MATCHES %@", phoneRegex)
+        
+        return phoneTest.evaluate(with: phoneNumber)
     }
 }
 
