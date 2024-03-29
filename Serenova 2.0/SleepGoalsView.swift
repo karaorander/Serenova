@@ -32,6 +32,7 @@ class GoalViewModel: ObservableObject {
     @Published var hasmedication : Bool = true
     @Published var hasnightmares : Bool = true
     @Published var isearlybird : Bool = true
+    @Published var articlesRead : [String] = []
     
     
     
@@ -40,7 +41,7 @@ class GoalViewModel: ObservableObject {
         let id = Auth.auth().currentUser!.uid
         let ur = db.child("User").child(id)
         
-        ur.observeSingleEvent(of: .value) { snapshot,<#arg#>  in
+        ur.observeSingleEvent(of: .value) { snapshot,arg  in
             guard let userData = snapshot.value as? [String: Any] else {
                 print("Error fetching data")
                 return
@@ -54,7 +55,6 @@ class GoalViewModel: ObservableObject {
             if let totalSleepGoalHours = userData["totalSleepGoalHours"] as? Float {
                 self.totalSleepGoalHours = totalSleepGoalHours
                 //currUser?.totalSleepGoalHours = totalSleepGoalHours
-                
             }
             
             if let hasinsomnia = userData["hasInsomnia"] as? Bool {
@@ -91,6 +91,10 @@ class GoalViewModel: ObservableObject {
             
             if let isearlybird = userData["isearlybird"] as? Bool {
                 self.isearlybird = isearlybird
+            }
+            
+            if let articlesRead = userData["articlesRead"] as? [String] {
+                self.articlesRead = articlesRead
             }
             
             print("TOTAL SLEEP GOAL RETRIEVED: \(self.totalSleepGoalHours)")
@@ -160,7 +164,7 @@ struct ArticleRow: View {
 
 struct ArticleCard: View {
     var article: Article
-
+    
     var body: some View {
         VStack {
             // Placeholder for an article image
@@ -175,6 +179,9 @@ struct ArticleCard: View {
                         .padding(),
                     alignment: .bottomLeading
                 )
+                .onTapGesture {
+                    viewModel.articlesRead.append(article.articleId)
+                }
 
             Text(article.articlePreview)
                 .font(.subheadline)
@@ -187,6 +194,7 @@ struct ArticleCard: View {
         .shadow(radius: 5) // Shadow for depth
         .padding(.vertical, 5) // Slight vertical padding
     }
+    
 }
 
 //potential opening screen
@@ -457,71 +465,7 @@ struct SleepGoalsView: View {
         
         
     }
-    /** loc1
-    func get_relevent_articles () -> Array<Article> {
-        
-        var releventArts = [Article]()
-        
-        var userTags = [String()]
-        
-        if (viewModel.hasinsomnia || viewModel.hadinsomnia) {
-            userTags.append("insomnia")
-        }
-        
-        if (viewModel.age > 65) {
-            userTags.append("old")
-        }
-        
-        if (viewModel.age <= 17) {
-            userTags.append("kid")
-        }
-        
-        var gendervar = "female"
-        
-        if (viewModel.gender.lowercased() == gendervar) {
-            userTags.append("female")
-        }
-        
-        gendervar = "male"
-        
-        if (viewModel.gender.lowercased() == gendervar) {
-            userTags.append("male")
-        }
-        
-        if (viewModel.snore) {
-            userTags.append("snore")
-        }
-        
-        if (viewModel.hasmedication) {
-            userTags.append("meds")
-        }
-        
-        if (viewModel.hasnightmares) {
-            userTags.append("nightmares")
-        }
-        
-        if (viewModel.isearlybird) {
-            userTags.append("earlybird")
-        }
-        
-        
-        
-        for article in articles {
-            for tag in article.articleTags {
-                if (userTags.contains(tag)) {
-                    releventArts.append(article)
-                }
-            }
-        }
-        
-        //TODO: Add "read" tag to articles to keep track of if a user has already read an article
-        
-        if (releventArts.count == 0) {
-            return articles
-        }
-        return releventArts
-    } //end of get_relevent_articles
-    */
+
     //calc percent
     func getPercent(current: CGFloat, Goal: CGFloat) ->String{
          if Goal == 0 {
@@ -690,7 +634,14 @@ func get_relevent_articles () -> Array<Article> {
         }
     }
     
-    //TODO: Add "read" tag to articles to keep track of if a user has already read an article
+    for article in releventArts {
+        if (viewModel.articlesRead.contains(article.articleId)) {
+            let curIndex = releventArts.firstIndex(where: { $0.articleId == article.articleId })
+            
+            releventArts.remove(at: curIndex!)
+        }
+    }
+    
     
     if (releventArts.count == 0) {
         return articles
