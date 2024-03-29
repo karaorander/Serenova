@@ -42,8 +42,8 @@ class User: Codable {
     public var deepSleepGoalMins: Float = -1
     public var moonCount: Int = -1
     public var friends: [String] = []
+    public var blocked: [String] = []
     public var notifications: [String] = []
-    public var articlesRead: [String] = []
 
     
     /* Gender */
@@ -102,8 +102,8 @@ class User: Codable {
         friends.append(friendID)
     }
     
-    func addArticle(_ articleID: String) {
-        articlesRead.append(articleID)
+    func blockUser(_ blockedID: String) {
+        blocked.append(blockedID)
     }
     
     func addNotification(_ noti: String) {
