@@ -153,10 +153,10 @@ struct createJournalView: View {
                 // Comment out the guard below and use
                 // the second constructor for Post (uncomment it)
                 
-                guard currUser != nil else {
+              /*  guard currUser != nil else {
                     await errorAlerts("ERROR! Not signed in.")
                     return
-                }
+                }*/
                 
                 // Create new Post Object
                 //var newPost = Post(title: postTitle, content: postText

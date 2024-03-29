@@ -216,7 +216,7 @@ struct NoEntriesView1: View {
                 .frame(width: 55, height: 60)
                 .foregroundColor(.white)
                 .padding()
-            Text("Create your first entry")
+            Text("Get started with your journal")
                 .foregroundColor(.white)
                 .font(.system(size: 25))
                 .fontWeight(.semibold)
