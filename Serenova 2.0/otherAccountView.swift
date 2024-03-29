@@ -23,6 +23,7 @@ class OtherAccountViewModel: ObservableObject {
     @Published var bio: String = ""
     @Published var hasInsomnia: Bool = false
     @Published var areFriends: Bool = false
+    @Published var blocked: [String] = []
 
         // New method to check if the two users are friends
         func checkIfFriends(with friendID: String) {
@@ -72,6 +73,7 @@ class OtherAccountViewModel: ObservableObject {
             self.moonCount = userData["moonCount"] as? Int ?? 0
             self.bio = userData["bio"] as? String ?? ""
             self.hasInsomnia = userData["hasInsomnia"] as? Bool ?? false
+            self.blocked = userData["blocked"] as? [String] ?? []
         }
     }
 }
@@ -187,8 +189,20 @@ struct OtherAccountView: View {
             // Block Button
             Button(action: {
                 // Action for blocking a user
+                currUser?.blocked.append(userID)
+                if ((currUser?.friends.contains(userID)) != nil) {
+                    let curIndex = currUser?.friends.firstIndex(where: { $0 == userID })
+                    currUser?.friends.remove(at: curIndex!)
+                }
+                else {
+                    let curIndex = currUser?.blocked.firstIndex(where: { $0 == userID })
+                    currUser?.blocked.remove(at: curIndex!)
+                }
+                
                 print("Block User tapped for userID: \(userID)")
             }) {
+                
+                /**
                 Text("Block User")
                     .foregroundColor(.white)
                     .padding()
@@ -196,6 +210,27 @@ struct OtherAccountView: View {
                     .background(Color.red)
                     .cornerRadius(10)
             }
+            */
+            if ((currUser?.blocked.contains(userID)) != nil) {
+                Text("Unblock User")
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.red)
+                    .cornerRadius(10)
+                
+            }
+            else {
+                Text("Block User")
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.red)
+                    .cornerRadius(10)
+            }
+            }
+            
+            
             .padding(.horizontal)
             .padding(.bottom, 20) // Add some padding at the bottom
         }
@@ -226,8 +261,6 @@ struct OtherAccountView: View {
                 })
     }
 
-
-    
     
     // Store new FriendRequest in FireStore for 'Friend'
     // Store new ownRequest in Firestore for currUser
