@@ -36,7 +36,8 @@ class AccountInfoViewModel: ObservableObject {
     @Published var deepSleepGoalHours : Float = -1
     @Published var deepSleepGoalMins : Float = -1
     @Published var moonCount : Int = -1
-    @Published var articlesRead: [String] = []
+    @Published var articlesRead : [String] = []
+    @Published var blocked : [String] = []
     
     func fetchUsername() {
         if let currentUser = Auth.auth().currentUser {
@@ -141,6 +142,10 @@ class AccountInfoViewModel: ObservableObject {
                     self.articlesRead = articlesRead
                 }
                 
+                if let blocked = userData["blocked"] as? [String] {
+                    self.blocked = blocked
+                }
+                
                 if let bio = userData["bio"] as? String {
                     self.bio = bio
                     if (self.bio == "") {
@@ -207,7 +212,9 @@ class AccountInfoViewModel: ObservableObject {
                     "hasInsomnia": self.hasinsomnia,
                     "hasMedication": self.hasmedication,
                     "hasNightmares": self.hasnightmares,
-                    "isEarlyBird": self.isearlybird
+                    "isEarlyBird": self.isearlybird,
+                    "readArticles": self.articlesRead,
+                    "blocked": self.blocked
             ]
         
         
