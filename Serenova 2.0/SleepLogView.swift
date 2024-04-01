@@ -233,6 +233,8 @@ struct SleepLogView: View {
                         currentHrs = Int(totalSleepTime ?? 0) / 3600
                         currentMin = (Int(totalSleepTime ?? 0) % 3600) / 60
                                     }, date: currentDate)
+                    sleepManager.retrieveSleepAnalysis(completion: {})
+
                 }
             }
         }
@@ -507,6 +509,8 @@ struct ManualLogView: View {
         }.padding()
             .onAppear {
                 viewModel.fetchUsername()
+                
+
             }
             .alert(
                 "Success!",
