@@ -585,6 +585,27 @@ struct OffsetKey: PreferenceKey {
     }
 }
 
+// I'm hiding some functions here until UIViews and a Message Class are made
+func storeTimeStamp() {
+    let currentTimestamp = Date()
+        
+    // TODO: store timestamp in Firebase
+}
+
+// need a specific getter function because the date needs to be formatted
+func getTimeStamp() -> String {
+    // TODO: get timestamp from Firebase
+    
+    let timestamp = Date() // TODO: retrieve from Firebase
+    let formatter = DateFormatter()
+    formatter.timeStyle = .short // format is MM/DD/YY
+    formatter.dateStyle = .medium // format is HH:MM.SS (AM/PM)
+    
+    let timestampString = formatter.string (from: timestamp)
+    
+    return timestampString
+}
+
 #Preview {
     SleepLogView()
 }
