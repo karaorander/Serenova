@@ -26,7 +26,6 @@ import Firebase
  
  * Inside the dispatch queue is where to manipulate the queried values (totalSleepTime, deepSleepTime, coreSleepTime, remSleepTime)
  / assign to local variables if needed
- 
  */
 
 
