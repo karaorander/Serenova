@@ -11,6 +11,30 @@ import Firebase
 import FirebaseDatabase
 import FirebaseDatabaseSwift
 
+class ConversationViewModel: ObservableObject {
+    
+    func fetchUsername(completion: @escaping () -> Void) {
+        let db = Database.database().reference()
+        let id = Auth.auth().currentUser!.uid
+        let ur = db.child("User").child(id)
+        
+        ur.observeSingleEvent(of: .value) { snapshot,arg  in
+            guard let userData = snapshot.value as? [String: Any] else {
+                print("Error fetching data")
+                return
+            }
+            
+            // TODO: Extract additional information based on your data structure
+                                    
+            self.objectWillChange.send()
+                            
+            // Call the completion closure to indicate that data fetching is completed
+            completion()
+            
+        }
+    }
+}
+
 struct ConversationListView: View {
     
     @State var conversationList: [Conversation] = []
