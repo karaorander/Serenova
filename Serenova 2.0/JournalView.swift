@@ -256,7 +256,12 @@ struct JournalListingView: View {
                             .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
                     }
                     
-                    
+                    if(!journal.journalPrivacyStatus) {
+                        Text("Published").font(.system(size: 13))
+                            .fontWeight(.semibold)
+                            .foregroundColor(.dreamyTwilightLavenderPurple)
+                            .multilineTextAlignment(.trailing)
+                    }
                 }
                 .padding(.vertical, 10)
             
@@ -300,14 +305,25 @@ struct JournalListingView: View {
     
     
 }
+
+
 struct JournalDetailsView: View {
-    let journal: Journal
+    let journal:Journal
+    @State var isPublished: Bool = false
+    
     @State private var editedContent: String = ""
     @State private var editedTitle: String = ""
+    
     @State private var isEditing: Bool = false
     @Environment(\.dismiss) private var dismiss
-    
+    @State private var showError: Bool = false
+    @State private var publishedListener: ListenerRegistration?
 
+
+    private var journalRef: DocumentReference {
+            Firestore.firestore().collection("Journal").document(journal.journalId ?? "")
+        }
+    
     var body: some View {
         ZStack {
             
@@ -324,6 +340,9 @@ struct JournalDetailsView: View {
                                 "chevron.left").hSpacing(.leading).foregroundColor(.white)
                     }.padding()
                     if !isEditing {
+                        if(!isPublished) {
+                            Text("Published").foregroundColor(.white).padding().font(.system(size: 15))
+                        }
                         Button("Edit") {
                             editedContent = journal.journalContent
                             editedTitle = journal.journalTitle
@@ -332,13 +351,35 @@ struct JournalDetailsView: View {
                         .padding()
                         .foregroundColor(.white)
                         Menu {
-                            Button("Delete", role: .destructive) {
+                            Button("Delete Enrty", role: .destructive) {
                                 journal.deleteJournal()
                                 dismiss()
                             }
                         } label: {
-                            Text("Delete Entry").font(.callout).foregroundColor(Color.red)
+                            Image(systemName: "trash").foregroundColor(.red).padding()
                         }.padding()
+                        Menu {
+                            Button(action: {
+                                if(journal.journalPrivacyStatus){
+                                    journal.updateValues(newValues: ["journalPrivacyStatus" : false]) {_ in
+                                        journal.journalPrivacyStatus = false
+                                    }
+                                }else {
+                                    journal.updateValues(newValues: ["journalPrivacyStatus" : true]) {_ in
+                                        journal.journalPrivacyStatus = true
+                                    }
+                                }
+                            }){
+                                if(!isPublished) {
+                                    Text("Unpublish").font(.callout).foregroundColor(Color.red)
+                                } else {
+                                    Text("Publish").font(.callout).foregroundColor(Color.black)
+                                }
+                            }
+                        } label : {
+                            Image(systemName: "arrowshape.turn.up.right.fill").foregroundColor(.white).padding()
+                            
+                        }
                         
                     } else {
                         Button("Cancel") {
@@ -416,10 +457,48 @@ struct JournalDetailsView: View {
             }.onAppear {
                 editedContent = journal.journalContent
                 editedTitle = journal.journalTitle
+                fetchPrivacyStatus()
+                                
+                listenForPrivacyChanges()
+                        
+                   
+            }
+            .onDisappear {
+                publishedListener?.remove()
+                
             }
         }
     }
+    private func listenForPrivacyChanges() {
+        // Listener for privacy status of journal to get updates in real time
+            publishedListener = journalRef.addSnapshotListener { documentSnapshot, error in
+                guard let document = documentSnapshot else {
+                    print("Error fetching document: \(error!)")
+                    return
+                }
+                
+                guard let data = document.data() else {
+                    print("Document data was empty.")
+                    return
+                }
+                
+                DispatchQueue.main.async {
+                            isPublished = data["journalPrivacyStatus"] as? Bool ?? false
+                        }
+            }
+        }
+    private func fetchPrivacyStatus() {
+            journalRef.getDocument { document, error in
+                if let document = document, document.exists {
+                    let data = document.data()
+                    isPublished = data?["journalPrivacyStatus"] as? Bool ?? false
+                } else {
+                    print("Document does not exist")
+                }
+            }
+        }
 }
+
 
 struct NoStyle1: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
