@@ -36,29 +36,6 @@ class SleepScoreModel: ObservableObject {
                 self.fullname = fullname
             }
             
-            if let totalSleepGoalHours = userData["totalSleepGoalHours"] as? Float {
-                self.totalSleepGoalHours = totalSleepGoalHours
-                //currUser?.totalSleepGoalHours = totalSleepGoalHours
-                
-            }
-            print("TOTAL SLEEP GOAL RETRIEVED: \(self.totalSleepGoalHours)")
-            if let totalSleepGoalMins = userData["totalSleepGoalMins"] as? Float {
-                self.totalSleepGoalMins = totalSleepGoalMins
-                //currUser?.totalSleepGoalMins = totalSleepGoalMins
-            }
-            
-            if let deepSleepGoalHours = userData["deepSleepGoalHours"] as? Float {
-                self.deepSleepGoalHours = deepSleepGoalHours
-                //currUser?.deepSleepGoalHours = deepSleepGoalHours
-            }
-            print("TOTAL SLEEP GOAL RETRIEVED: \(self.deepSleepGoalHours)")
-            
-            
-            if let deepSleepGoalMins = userData["deepSleepGoalMins"] as? Float {
-                self.deepSleepGoalMins = deepSleepGoalMins
-                //currUser?.deepSleepGoalMins = deepSleepGoalMins
-            }
-            
             if let moonCount = userData["moonCount"]
                 as? Int {
                 self.moonCount = moonCount
@@ -117,7 +94,7 @@ struct SleepScoreView: View {
                             }){
                                 Image(systemName: "chevron.left").foregroundColor(.white)
                             }
-                            Text("X's Sleep Score")
+                            Text("\(viewModel.fullname)'s Sleep Score")
                                 .font(Font.custom("NovaSquareSlim-Bold", size: 25))
                                 .foregroundColor(.white)
                                 .scaledToFit().minimumScaleFactor(0.01)
@@ -128,21 +105,21 @@ struct SleepScoreView: View {
                         
                         VStack {
                             HStack {
-                                Image(systemName: "zzz").foregroundColor(.tranquilMistMauve).padding(.leading)
-                                Text("Welcome to your daily sleep score! This score is based off of the quality of recorded sleep in the past day.")
-                                    .font(Font.system(size: 12, weight: .bold))
+                                Image(systemName: "zzz").foregroundColor(.tranquilMistMauve).padding(.leading).padding(.top)
+                                Text("Welcome to your daily sleep score!")
+                                    .font(Font.system(size: 14, weight: .bold))
                                     .foregroundColor(.tranquilMistMauve)
-                                    .frame(width: 300, alignment: .center)
+                                    .frame(width: 300, alignment: .leading)
                                     .lineSpacing(4)
                                     .padding(.top)
                                     .padding(.trailing)
                             }
                             HStack {
-                                Image(systemName: "star.fill").foregroundColor(.nightfallHarmonyNavyBlue).font(.system(size: 12)).padding(.leading)
+                                Image(systemName: "").foregroundColor(.nightfallHarmonyNavyBlue).font(.system(size: 12)).padding(.leading)
                                 Text("Log your sleep and check back here to see today's score and to learn more about last night's sleep cycle! 💫")
                                     .font(Font.system(size: 12, weight: .medium))
                                     .foregroundColor(.nightfallHarmonyNavyBlue)
-                                    .frame(width: 300, alignment: .center)
+                                    .frame(width: 300, alignment: .leading)
                                     .lineSpacing(4)
                                     .padding(.vertical)
                                     .padding(.trailing)
@@ -152,11 +129,7 @@ struct SleepScoreView: View {
                             .cornerRadius(15)
                             .shadow(color: .white.opacity(0.1), radius: 10)
                         Spacer()
-                        Text("Today's Score")
-                            .font(Font.custom("NovaSquareSlim-Bold", size: 30))
-                            .foregroundColor(.pink).opacity(0.5)
-                            .scaledToFit().minimumScaleFactor(0.01)
-                            .lineLimit(1)
+                        
                         Text("\(sleepScore)")
                             .font(.system(size: 75))
                             .foregroundColor(.white)
@@ -164,13 +137,12 @@ struct SleepScoreView: View {
                             .lineLimit(1)
                             .padding()
                             .frame(width: 200, height: 200).background(Color.tranquilMistAshGray.opacity(0.1)).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(100)
+                        Text("Today's Score")
+                            .font(Font.custom("NovaSquareSlim-Bold", size: 30))
+                            .foregroundColor(.moonlitSerenitySteelBlue).opacity(0.9)
+                            .scaledToFit().minimumScaleFactor(0.01)
+                            .lineLimit(1)
                         Spacer()
-                        VStack {
-                            Text("Deep sleep score:\(deepSleepScore)")
-                            Text("Light sleep score: \(coreSleepScore)")
-                            Text("REM sleep score:\(remSleepMin)")
-                            Text("Other sleep: \(otherSleepScore)")
-                        }
                         
                         
                         Spacer()
@@ -179,13 +151,26 @@ struct SleepScoreView: View {
                             Text("Analyzing the stages:").foregroundColor(.dreamyTwilightMidnightBlue)
                                 .font(.system(size: 20, weight: .bold))
                                 .hSpacing(.leading)
-                                .padding()
-                            Text("\(totalSleepMin) minutes in total\n\(deepSleepMin) minutes spent in deep sleep\n\(coreSleepMin) minutes spent in light sleep\n\(remSleepMin) minutes spent in REM").foregroundColor(.white).font(.system(size: 20,weight:.medium))
+                                .padding(.leading).padding(.top)
+                            Text("\(totalSleepMin) minutes in total\n\(deepSleepMin) minutes spent in deep sleep\n\(coreSleepMin) minutes spent in light sleep\n\(remSleepMin) minutes spent in REM").foregroundColor(.white).font(.system(size: 14,weight:.medium))
+                                .hSpacing(.leading).padding(.leading)
                             Spacer()
                             
+                           
                         }.background(.white.opacity(0.06))
                             .cornerRadius(15)
                             .shadow(color: .white.opacity(0.1), radius: 10).padding()
+                        VStack {
+                           
+                            Text("How it's weighted").foregroundColor(.dreamyTwilightMidnightBlue)
+                                .font(.system(size: 20, weight: .bold)).hSpacing(.leading).padding(.leading).padding(.top)
+                            Text("Recommended sleep for adults is 7-9 hours.  This score is normalized to the ideal 8hrs of sleep!").foregroundColor(.white).font(.system(size: 14,weight:.medium)).hSpacing(.leading).padding(.leading).lineSpacing(4)
+                            Spacer()
+                            Text("Your score calculated as follows:\n +100 for 8hrs+ of total sleep\n +10 for every hour in deep sleep\n +5 for every hour in light sleep\n +5 for every hour in REM").foregroundColor(.gray).font(.system(size: 14,weight:.bold)).hSpacing(.leading).padding(.leading).lineSpacing(4).padding(.bottom)
+                            
+                        }.background(Color.tranquilMistMauve.opacity(0.1))
+                            .cornerRadius(15)
+                            .shadow(color: .tranquilMistMauve.opacity(0.1), radius: 10).padding()
                             
                         
                         
@@ -196,23 +181,25 @@ struct SleepScoreView: View {
             }
 
         }.onAppear() {
-            sleepManager.querySleepData(completion: { totalSleepTime, deepSleepTime, coreSleepTime, remSleepTime in
-                DispatchQueue.main.async {
-                   
-                    totalSleepMin = (Int(totalSleepTime ?? 0)) / 60
-                    print(totalSleepMin)
-                    deepSleepMin = (Int(deepSleepTime ?? 0)) / 60
-                    coreSleepMin = (Int(coreSleepTime ?? 0)) / 60
-                    remSleepMin = (Int(remSleepTime ?? 0)) / 60
-                    otherSleepMin = (Int(totalSleepTime ?? 0)) / 60-(((Int(deepSleepTime ?? 0)) / 60) +
-                                                                     ((Int(coreSleepTime ?? 0)) / 60) + ((Int(remSleepTime ?? 0)) / 60))
-                    if totalSleepMin == 0 {
-                        sleepScore = 0
-                    } else {
-                        sleepScore = calculateSleepScore(deepSleepMinutes: (Int(deepSleepTime ?? 0)) / 60, coreSleepMinutes: (Int(coreSleepTime ?? 0)) / 60, remSleepMinutes: (Int(remSleepTime ?? 0)) / 60, totalSleepMinutes: (Int(totalSleepTime ?? 0)) / 60)
+            viewModel.fetchUsername {
+                sleepManager.querySleepData(completion: { totalSleepTime, deepSleepTime, coreSleepTime, remSleepTime in
+                    DispatchQueue.main.async {
+                       
+                        totalSleepMin = (Int(totalSleepTime ?? 0)) / 60
+                        print(totalSleepMin)
+                        deepSleepMin = (Int(deepSleepTime ?? 0)) / 60
+                        coreSleepMin = (Int(coreSleepTime ?? 0)) / 60
+                        remSleepMin = (Int(remSleepTime ?? 0)) / 60
+                        otherSleepMin = (Int(totalSleepTime ?? 0)) / 60-(((Int(deepSleepTime ?? 0)) / 60) +
+                                                                         ((Int(coreSleepTime ?? 0)) / 60) + ((Int(remSleepTime ?? 0)) / 60))
+                        if totalSleepMin == 0 {
+                            sleepScore = 0
+                        } else {
+                            sleepScore = calculateSleepScore(deepSleepMinutes: (Int(deepSleepTime ?? 0)) / 60, coreSleepMinutes: (Int(coreSleepTime ?? 0)) / 60, remSleepMinutes: (Int(remSleepTime ?? 0)) / 60, totalSleepMinutes: (Int(totalSleepTime ?? 0)) / 60)
+                        }
                     }
-                }
-            }, date: Date())
+                }, date: Date())
+            }
             
         }
     }
@@ -233,33 +220,43 @@ struct SleepScoreView: View {
     }
     
     func calculateSleepScore(deepSleepMinutes: Int, coreSleepMinutes: Int, remSleepMinutes: Int, totalSleepMinutes: Int) -> Int {
-        // Define weights for each sleep stage
-        let deepSleepWeight = 0.4
-        let otherSleepWeight = 0.3
-        let coreSleepWeight = 0.2
-        let remSleepWeight = 0.1
+        var deviation:Int = 0
+        
+        let idealSleepDuration = 8 * 60
+        // Calc deviation from ideal sleep duration
+         deviation = 0
+        if(!(totalSleepMinutes > idealSleepDuration)) {
+            deviation = abs(totalSleepMinutes - idealSleepDuration)
+        }
+        
 
-        // Define ideal sleep duration in minutes
-        let idealSleepDuration = 8 * 60 // 8 hours converted to minutes
-
-        // Calculate deviation from ideal sleep duration
-        let deviation = abs(totalSleepMinutes - idealSleepDuration)
-
-        // Normalize other sleep minutes based on ideal sleep duration
+        
         let otherSleepMinutes = totalSleepMinutes - (deepSleepMinutes + coreSleepMinutes + remSleepMinutes) - deviation
 
-        // Calculate stage scores
-        otherSleepScore = Int(Double(otherSleepMinutes) / Double(idealSleepDuration) * otherSleepWeight * 100)
-        deepSleepScore = Int(Double(deepSleepMinutes) / Double(idealSleepDuration) * deepSleepWeight * 100)
-        coreSleepScore = Int(Double(coreSleepMinutes) / Double(idealSleepDuration) * coreSleepWeight * 100)
-        remSleepScore = Int(Double(remSleepMinutes) / Double(idealSleepDuration) * remSleepWeight * 100)
+        
+        let deepSleepWeight = 10
+        let otherSleepWeight = 5
+        let coreSleepWeight = 5
+        let remSleepWeight = 5
 
-        // Combine stage scores
-        let combinedScore = otherSleepScore + deepSleepScore + coreSleepScore + remSleepScore
+        let deepSleepHours = deepSleepMinutes / 60
+        let otherSleepHours = otherSleepMinutes / 60
+        let coreSleepHours = coreSleepMinutes / 60
+        let remSleepHours = remSleepMinutes / 60
+
+        let deepSleepScore = deepSleepHours * deepSleepWeight
+        let otherSleepScore = otherSleepHours * otherSleepWeight
+        let coreSleepScore = coreSleepHours * coreSleepWeight
+        let remSleepScore = remSleepHours * remSleepWeight
+        
+
+        // combine stage scores
+        var combinedScore = 100
+        combinedScore -= max(0, deviation / 10)
+        combinedScore += deepSleepScore + coreSleepScore + remSleepScore
 
         return combinedScore
     }
-
 
     
 }

@@ -157,9 +157,9 @@ class SleepManager {
             //calling query to Firebase to add manually logged sessions to total sleep time
             self.queryManualSession(date: date, completion: { totalManualSleep in
                 DispatchQueue.main.async {
-                    totalSleepTime += totalManualSleep
-                    self.sleepSession.durationHours = Int(totalSleepTime) / 3600
-                    self.sleepSession.durationMinutes = (Int(totalSleepTime) % 3600) / 60
+                    totalSleepDuration += totalManualSleep
+                    self.sleepSession.durationHours = Int(totalSleepDuration) / 3600
+                    self.sleepSession.durationMinutes = (Int(totalSleepDuration) % 3600) / 60
                     self.sleepSession.deepHours = Int(deepSleepDuration) / 3600
                     self.sleepSession.deepMinutes = (Int(deepSleepDuration) % 3600) / 60
                     self.sleepSession.coreHours = Int(coreSleepDuration) / 3600
@@ -174,7 +174,7 @@ class SleepManager {
                     print("CORE %d", self.sleepSession.coreMinutes)
                     print("REM %d", self.sleepSession.remHours)
                     print(" %d", self.sleepSession.remMinutes)
-                    completion(totalSleepTime, deepSleepDuration, coreSleepDuration, remSleepDuration)
+                    completion(totalSleepDuration, deepSleepDuration, coreSleepDuration, remSleepDuration)
                 }
             })
         }

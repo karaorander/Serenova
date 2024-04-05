@@ -40,7 +40,7 @@ class GoalViewModel: ObservableObject {
         let id = Auth.auth().currentUser!.uid
         let ur = db.child("User").child(id)
         
-        ur.observeSingleEvent(of: .value) { snapshot,arg  in
+        ur.observe(.value) { snapshot,arg  in
             guard let userData = snapshot.value as? [String: Any] else {
                 print("Error fetching data")
                 return
@@ -524,8 +524,8 @@ struct SleepGoalsView: View {
     */
     //calc percent
     func getPercent(current: CGFloat, Goal: CGFloat) ->String{
-         if Goal == 0 {
-             return String(format: "No Goals!")
+        if Goal <= 0.0 || current <= 0.0 {
+             return String(format: "0.0")
         }
         var per = (current / Goal) * 100
         if per < 0 {
@@ -544,6 +544,8 @@ struct SleepGoalsView: View {
         let hrs = value / 60
         return String(format: "%.1f", hrs)
     }
+    
+    
     
     func getTotalSleep() {
         let calendar = Calendar.current
@@ -586,6 +588,8 @@ struct SleepGoalsView: View {
             }*/
         }
     }
+    
+
     
     func updateGoalStats() {
         goal_stats = [
