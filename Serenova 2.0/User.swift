@@ -44,6 +44,7 @@ class User: Codable {
     public var friends: [String] = []
     public var blocked: [String] = []
     public var notifications: [String] = []
+    public var conversations: [Conversation] = []
 
     
     /* Gender */
