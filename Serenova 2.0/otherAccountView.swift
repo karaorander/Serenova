@@ -416,6 +416,6 @@ struct OtherAccountView: View {
 
 
 #Preview {
-    OtherAccountView(userID: "a0eji7VVfHgn5ZBX4BJDUuhMaFn1")
+    OtherAccountView(userID: "KgU9NVyNbJXG44kdiFEtf5E3reu1")
 }
 //add

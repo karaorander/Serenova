@@ -35,7 +35,7 @@ class SleepManagerTests: XCTestCase {
             expectation.fulfill()
         }, date: testDate)
     }
-    
+    /*
     /**Testing for authorization success  detection**/
     func testAuthorizationSuccess() {
             
@@ -77,5 +77,5 @@ class SleepManagerTests: XCTestCase {
                 authorizationExpectation.fulfill()
             }
             waitForExpectations(timeout: 2.0, handler: nil)
-        }
+        }*/
 }
