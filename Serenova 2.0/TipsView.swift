@@ -77,7 +77,12 @@ struct TipsView: View {
                             
                             SectionHeaderView(title: "Sleep Hygiene Tips")
                             ForEach(0..<3) { _ in // Replace with actual data
-                                TipsCardView(tipTitle: "Maintain a Sleep Schedule", tipDescription: "Sticking to a consistent sleep schedule helps regulate your body's clock.")
+                                ExpandableTipView(tipTitle: "Maintain a Sleep Schedule",
+                                                                     tipDescription: "Sticking to a consistent sleep schedule helps regulate your body's clock.",
+                                                                     detailedSteps: ["Decide on a fixed bedtime and wake-up time.",
+                                                                                     "Avoid sleeping in, even on weekends.",
+                                                                                     "Nap to make up for lost sleep, but not too late in the day."])
+
                             }
                             
                             SectionHeaderView(title: "Science of Sleep")
@@ -103,6 +108,54 @@ struct SectionHeaderView: View {
             .foregroundColor(.white)
             .padding(.vertical)
             .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+struct ExpandableTipView: View {
+    var tipTitle: String
+    var tipDescription: String
+    var detailedSteps: [String]
+    @State private var isExpanded = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Button(action: {
+                withAnimation(.easeInOut) {
+                    isExpanded.toggle()
+                }
+            }) {
+                HStack {
+                    Text(tipTitle)
+                        .font(.headline)
+                        .foregroundColor(.white)
+                    Spacer()
+                    Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                        .foregroundColor(.white)
+                }
+            }
+            .padding()
+            .background(Color.blue.opacity(0.5))
+            .cornerRadius(10)
+
+            if isExpanded {
+                VStack(alignment: .leading, spacing: 5) {
+                    ForEach(detailedSteps.indices, id: \.self) { index in
+                        Text("Step \(index + 1): \(detailedSteps[index])")
+                            .font(.subheadline)
+                            .foregroundColor(.white)
+                            .padding(.leading, 16)
+                            .padding(.top, 5)
+                    }
+                }
+                .padding(.bottom, 10)
+                .background(Color.blue.opacity(0.5))
+                .cornerRadius(10)
+                .transition(.move(edge: .top).combined(with: .opacity))
+                .zIndex(1) // Ensure this layer is above the button when animating
+            }
+        }
+        .shadow(radius: 5)
+        .padding(.horizontal)
     }
 }
 
