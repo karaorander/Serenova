@@ -66,6 +66,9 @@ struct AlarmClockView: View {
                     Button("Set Alarm") {
                         //sleepManager.alarmTime = alarmTime
                         //sleepManager.alarmSession()
+                        if let user = currUser {
+                            user.addAlarm(selectedSound)
+                        }
                     }
                     .font(.custom("NovaSquare-Bold", size: 20))
                     .foregroundColor(.white)
