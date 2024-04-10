@@ -18,6 +18,8 @@ struct JournalView: View {
     @State private var journalEntries: [Journal] = []
     @State private var queryNum: Int = 25
     @State private var lastEntry: DocumentSnapshot?
+    @State private var privateView: Bool = true
+    @State private var refreshing: Bool = true
     
     var body: some View {
         NavigationView {
@@ -44,7 +46,7 @@ struct JournalView: View {
                             
                         Spacer()
                         
-                        Text("Journal")
+                        Text("Dream Journal")
                             .font(Font.custom("NovaSquareSlim-Bold", size: 35))
                             .foregroundColor(.white)
                         
@@ -55,33 +57,58 @@ struct JournalView: View {
                     }
                     .padding()
                     .padding(.horizontal, 15)
-                        
+                    
                     if journalEntries.count == 0 {
                         NoEntriesView1()
                     } else {
                         ZStack {
                             Color.tranquilMistAshGray
                             List {
-                                ForEach(journalEntries, id: \.id) { entry in
-                                    JournalListingView(journal: entry)
-                                        .onAppear {
-                                            if lastEntry != nil {
-                                                Task {
-                                                    await queryJournal(NUM_ENTRIES: queryNum)
+                                if(privateView) {
+                                    ForEach(journalEntries, id: \.id) { entry in
+                                        JournalListingView(journal: entry)
+                                            .onAppear {
+                                                if lastEntry != nil {
+                                                    Task {
+                                                        await queryJournal(NUM_ENTRIES: queryNum)
+                                                    }
                                                 }
                                             }
+                                            .padding(5)
+                                    }
+                                    .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                                    .padding(8)
+                                    .listRowSpacing(10)
+                                    .listStyle(PlainListStyle())
+                                    .scrollIndicators(ScrollIndicatorVisibility.hidden)
+                                    .listRowBackground(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .fill(Color.dreamyTwilightMidnightBlue).padding()
+                                    )
+                                } else {
+                                    ForEach(journalEntries, id: \.id) { entry in
+                                        if !entry.journalPrivacyStatus {
+                                            JournalListingView(journal: entry)
+                                                .onAppear {
+                                                    if lastEntry != nil {
+                                                        Task {
+                                                            await queryPublishedJournal(NUM_ENTRIES: queryNum)
+                                                        }
+                                                    }
+                                                }
+                                                .padding(5)
                                         }
-                                        .padding(5)
+                                    }
+                                    .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                                    .padding(8)
+                                    .listRowSpacing(10)
+                                    .listStyle(PlainListStyle())
+                                    .scrollIndicators(ScrollIndicatorVisibility.hidden)
+                                    .listRowBackground(
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .fill(Color.dreamyTwilightMidnightBlue).padding()
+                                    )
                                 }
-                                .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
-                                .padding(8)
-                                .listRowSpacing(10)
-                                .listStyle(PlainListStyle())
-                                .scrollIndicators(ScrollIndicatorVisibility.hidden)
-                                .listRowBackground(
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .fill(Color.dreamyTwilightMidnightBlue).padding()
-                                )
                                 
                                 
                             }.background(Color.dreamyTwilightMidnightBlue)
@@ -149,10 +176,13 @@ struct JournalView: View {
                 }
             }
             .onAppear() {
-               UIRefreshControl.appearance().tintColor = .white
                 Task {
-                    if journalEntries.count == 0 {
-                        await queryJournal(NUM_ENTRIES: queryNum)
+                    UIRefreshControl.appearance().tintColor = .white
+                    Task {
+                        if journalEntries.count == 0 {
+                            await queryJournal(NUM_ENTRIES: queryNum)
+                        }
+                        
                     }
                 }
             }
@@ -202,6 +232,51 @@ struct JournalView: View {
         } catch {
             print (error.localizedDescription)
         }
+        refreshing = false
+        return
+    }
+    func queryPublishedJournal(NUM_ENTRIES: Int) async {
+        print("PUBLISHED JOURNALS\n")
+        // Database Reference
+        let db = Firestore.firestore()
+        
+        do {
+            var userId: String = ""
+            if let user = Auth.auth().currentUser {
+                // User is signed in
+                userId = user.uid
+                
+               // print("User ID:", userId)
+            } else {
+                // No user is signed in
+                print("No user signed in")
+            }
+            // Fetch batch of posts from Firestore
+            var query: Query! = db.collection("Journal")
+                //.whereField("journalPrivacyStatus", isEqualTo: false)
+                .order(by: "timeStamp", descending: true)
+                .limit(to: NUM_ENTRIES)
+            if lastEntry != nil {
+                if let lastEntry = lastEntry {
+                    query = query.start(afterDocument: lastEntry)
+                }
+            }
+            
+            // Retrieve documents
+            let journalBatch = try await query.getDocuments()
+            let newEntries = journalBatch.documents.compactMap { post -> Journal? in
+                try? post.data(as: Journal.self)
+            }
+            
+            await MainActor.run(body: {
+                journalEntries += newEntries
+                lastEntry = journalBatch.documents.last
+            })
+            
+        } catch {
+            print (error.localizedDescription)
+        }
+        refreshing = false
         return
     }
 }
@@ -299,8 +374,7 @@ struct JournalListingView: View {
                 
                 
         })
-        // TODO: Link to Post page
-        //NavigationLink(destination: ForumPostView().navigationBarBackButtonHidden(true))
+        
     }
     
     
