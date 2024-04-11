@@ -99,7 +99,7 @@ struct CreateConversationView: View {
                         Button(action: {
                             //createPost()
                             createConversation()
-                            isCreatingPost = true
+                            //isCreatingPost = true
                         }) {
                             Text("Send").font(.callout)
                                 .foregroundColor(.dreamyTwilightOrchid)
@@ -347,12 +347,12 @@ struct CreateConversationView: View {
         let storageRef = Storage.storage().reference()
         
         // Create a reference to the file you want to upload
-        let postImageRef = storageRef.child("postMedia/\(UUID().uuidString).jpg")
+        let messageImageRef = storageRef.child("postMedia/\(UUID().uuidString).jpg")
 
         // Upload image
-        if let postImageData = messageImageData {
-            let _ = try await postImageRef.putDataAsync(postImageData)
-            try await postImageURL = postImageRef.downloadURL()
+        if let messageImage = messageImageData {
+            let _ = try await messageImageRef.putDataAsync(messageImage)
+            try await postImageURL = messageImageRef.downloadURL()
         }
     }
     
