@@ -21,8 +21,16 @@ class Conversation {
     public var participants: [String] = []
     public var messages: [Message] = []
     public var convoId: String = ""
+    public var numParticipants = -1;
     
-    init() {}
+    //public var givenParticipant: String = ""
+    //public var firstMessage: String = ""
+    
+    init(participants: [String]) {
+        self.participants = participants
+        //self.titleAsArray = title.lowercased().split(separator: " ").map { String($0) }
+        //self.content = content
+    }
 
     func addMessage(_ messageToAdd: Message) {
         messages.append(messageToAdd)

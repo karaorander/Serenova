@@ -11,7 +11,41 @@ import PhotosUI
 import Firebase
 import FirebaseStorage
 
-//Create New Post View
+
+class CreateConvoViewModel: ObservableObject  {
+    @Published var fullname = ""
+    @Published var username = ""
+
+    func fetchUsername(completion: @escaping () -> Void) {
+        let db = Database.database().reference()
+        let id = Auth.auth().currentUser!.uid
+        let ur = db.child("User").child(id)
+        
+        ur.observe(.value) { snapshot,arg  in
+            guard let userData = snapshot.value as? [String: Any] else {
+                print("Error fetching data")
+                return
+            }
+            
+            // Extract additional information based on your data structure
+            if let fullname = userData["name"] as? String {
+                self.fullname = fullname
+            }
+            if let username = userData["username"] as? String {
+                self.username = username
+            }
+     
+            self.objectWillChange.send()
+                            
+                            // Call the completion closure to indicate that data fetching is completed
+                            completion()
+        }
+    }
+}
+
+private var viewModel = AccountInfoViewModel()
+
+//Create New Conversation View
 struct CreateConversationView: View {
     /// callback
     //var onPos: (Post)->()
@@ -22,6 +56,7 @@ struct CreateConversationView: View {
     @State var messageReceiver: String = ""
     @State var messageImageData: Data?
     @State var postImageURL: URL?
+    
     
     ///use app storage to get user data from firebase.  EX:
     //@AppStorage("userName") var userName: String = ""
@@ -36,7 +71,7 @@ struct CreateConversationView: View {
     @State private var isCreatingPost: Bool = false
     @State private var isPosted: Bool = false
     
-    @State var tagOptions: [String] = ["None", "Questions", "Tips", "Hacks", "Support", "Goals", "Midnight Thoughts"]
+
     @State private var tagOption: Int = 0
     @State private var showTagOptions: Bool = false
     
@@ -53,19 +88,20 @@ struct CreateConversationView: View {
                 VStack {
                     HStack {
                         Menu {
-                            Button("Delete Post", role: .destructive) {
+                            Button("Delete Conversation", role: .destructive) {
                                 dismiss()
                             }
                         } label: {
                             Text("Cancel").font(.callout).foregroundColor(Color.dreamyTwilightOrchid)
                         }
-                        NavigationLink ("", destination: ForumView().navigationBarBackButtonHidden(true), isActive: $isPosted)
+                        NavigationLink ("", destination: ConversationListView().navigationBarBackButtonHidden(true))
                         Spacer()
                         Button(action: {
-                            createPost()
+                            //createPost()
+                            createConversation()
                             isCreatingPost = true
                         }) {
-                            Text("Post").font(.callout)
+                            Text("Send").font(.callout)
                                 .foregroundColor(.dreamyTwilightOrchid)
                                 .padding(.horizontal,20)
                                 .padding(.vertical, 6)
@@ -130,11 +166,7 @@ struct CreateConversationView: View {
                                 
                             }
                     }
-                    .sheet(isPresented: $showTagOptions, content: {
-                        TagOptionsView(tagOption: $tagOption)
-                            .padding(.horizontal, 25)
-                            .presentationDetents([.fraction(0.55)])
-                    })
+                    
                     Divider()
                     HStack {
                         Button {
@@ -199,6 +231,62 @@ struct CreateConversationView: View {
         })
     }
     
+    func createConversation() {
+        showkeyboard = false
+        isLoading = true
+        
+        Task {
+            do {
+                // TESTING IN PREVIEW MODE:
+                // Comment out the guard below and use
+                // the second constructor for Post (uncomment it)
+                
+                guard currUser != nil else {
+                    await errorAlerts("ERROR! Not signed in.")
+                    return
+                }
+                
+
+                // Create new Post Object
+                //var newPost = Post(title: postTitle, content: postText
+                                   //authorUsername: currUser.username,
+                                   //authorID: currUser.userID,
+                                   //authorProfilePhoto: currUser.profileURL)
+                var allParticipants: [String] = []
+                
+                allParticipants.append(viewModel.username)
+                //allParticipants.append(<#T##newElement: Any##Any#>)
+                let newConversation = Conversation(participants: allParticipants)
+                
+                // Store Image & Get DownloadURL
+                if messageImageData != nil {
+                    // Completion block for uploading image
+                    try await storeImage()
+                    
+                    // Set imageURL of Post
+                    guard let postImageURL = postImageURL else {
+                        await errorAlerts("Failed to upload photo.")
+                        return
+                    }
+                    //newMessage.imageURL = postImageURL
+                            
+                    // Save post to Firebase (media)
+                    //try await newMessage.createPost()
+                    //isPosted = true
+                } else {
+                    // Save post to Firebase (no media)
+                    //try await newMessage.createPost()
+                    //isPosted = true
+                }
+                
+            } catch {
+                await errorAlerts(error)
+            }
+        }
+        
+    }
+    
+    /*
     func createPost() {
         showkeyboard = false
         isLoading = true
@@ -249,6 +337,7 @@ struct CreateConversationView: View {
             }
         }
     }
+    */
     
     /*
      * Function to store image in Firebase Storage
