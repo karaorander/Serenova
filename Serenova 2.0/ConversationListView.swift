@@ -35,7 +35,27 @@ class ConversationViewModel: ObservableObject {
     }
 }
 
+struct NoConversationsView: View {
+    var body: some View {
+        VStack (alignment: .center){
+            Spacer()
+            Image(systemName: "moon.stars.fill")
+                .resizable()
+                .frame(width: 60, height: 60)
+                .foregroundColor(.white)
+                .padding()
+            Text("No Conversations Yet")
+                .foregroundColor(.white)
+                .font(.system(size: 30))
+                .fontWeight(.semibold)
+            Spacer()
+        }
+    }
+}
+
 struct ConversationListView: View {
+    
+    @StateObject private var viewModel = GoalViewModel()
     
     @State var conversationList: [Conversation] = []
     @State private var queryNum: Int = 25
@@ -66,7 +86,7 @@ struct ConversationListView: View {
                             
                         Spacer()
                         
-                        Text("Nova Forum")
+                        Text("These are your direct messages")
                             .font(Font.custom("NovaSquareSlim-Bold", size: 35))
                             .foregroundColor(.white)
                         
@@ -85,7 +105,7 @@ struct ConversationListView: View {
                     .padding(.horizontal, 15)
                         
                     if conversationList.count == 0 {
-                        NoPostsView()
+                        NoConversationsView()
                     } else {
                         List {
                             ForEach(conversationList.indices, id: \.self) { index in
@@ -158,6 +178,15 @@ struct ConversationListView: View {
                     .padding()
                     .padding(.horizontal, 15)
                     .hSpacing(.center)
+                }
+            }.onAppear() {
+                UIRefreshControl.appearance().tintColor = .white
+                Task {
+                    // Prevents crash but data will not be loaded
+                    // Need to run in simulator
+                    if currUser != nil {
+                        //await queryPosts(NUM_POSTS: queryNum)
+                    }
                 }
             }
         }

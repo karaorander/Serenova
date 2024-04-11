@@ -120,13 +120,13 @@ struct ForumView: View {
                         
                         Spacer()
                         
-                        // TODO: Link to direct messages
-                        //NavigationLink(destination: ForumPostView().navigationBarBackButtonHidden(true)) {
-                        Image(systemName: "text.bubble.fill")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                            .foregroundColor(.white)
-                        //}.isDetailLink(false
+                        NavigationLink(destination: ConversationListView().navigationBarBackButtonHidden(true)) {
+                            Image(systemName: "text.bubble.fill")
+                                .resizable()
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(.white)
+                        }.isDetailLink(false)
+
                     })
                     .padding()
                     .padding(.horizontal, 15)
