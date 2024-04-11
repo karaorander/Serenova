@@ -66,6 +66,7 @@
 		B1FC3C9D2BB20F8E00DED169 /* Serenova_2_0UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1FC3C9C2BB20F8E00DED169 /* Serenova_2_0UITests.swift */; };
 		B1FC3C9F2BB20F8E00DED169 /* Serenova_2_0UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1FC3C9E2BB20F8E00DED169 /* Serenova_2_0UITestsLaunchTests.swift */; };
 		D77212442BC756BA00CDFA89 /* ConversationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77212432BC756BA00CDFA89 /* ConversationListView.swift */; };
+		D77212462BC7660800CDFA89 /* CreateConversationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77212452BC7660800CDFA89 /* CreateConversationView.swift */; };
 		E0231FFE2B7DB93D009A4E39 /* ColorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0231FFD2B7DB93D009A4E39 /* ColorExtensions.swift */; };
 		E029E4FB2B7DAC4F00E8220B /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */; };
 		E02A2BF72B8E62F000235A39 /* SleepManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E02A2BF62B8E62F000235A39 /* SleepManager.swift */; };
@@ -165,6 +166,7 @@
 		B1FC3C9C2BB20F8E00DED169 /* Serenova_2_0UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serenova_2_0UITests.swift; sourceTree = "<group>"; };
 		B1FC3C9E2BB20F8E00DED169 /* Serenova_2_0UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serenova_2_0UITestsLaunchTests.swift; sourceTree = "<group>"; };
 		D77212432BC756BA00CDFA89 /* ConversationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationListView.swift; sourceTree = "<group>"; };
+		D77212452BC7660800CDFA89 /* CreateConversationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateConversationView.swift; sourceTree = "<group>"; };
 		E0231FFD2B7DB93D009A4E39 /* ColorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtensions.swift; sourceTree = "<group>"; };
 		E029E4FA2B7DAC4F00E8220B /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
 		E02A2BF52B8E62EF00235A39 /* Serenova 2.0Tests2-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Serenova 2.0Tests2-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -298,6 +300,7 @@
 				E0231FFB2B7DB8F8009A4E39 /* Extensions */,
 				23D1E0E22B7A8FDE00539A62 /* Serenova_2_0App.swift */,
 				D77212432BC756BA00CDFA89 /* ConversationListView.swift */,
+				D77212452BC7660800CDFA89 /* CreateConversationView.swift */,
 				F20CA4D52BC3132100C49411 /* AlarmListView.swift */,
 				F20CA4D42BC3132100C49411 /* AlarmView.swift */,
 				E02A2BF62B8E62F000235A39 /* SleepManager.swift */,
@@ -604,6 +607,7 @@
 				F21405152BB015A700F507E7 /* RedeemRewardsView.swift in Sources */,
 				E0D1C16A2B88244700A7609C /* DateExtensions.swift in Sources */,
 				E0D1C15F2B880EED00A7609C /* SleepGoalsView.swift in Sources */,
+				D77212462BC7660800CDFA89 /* CreateConversationView.swift in Sources */,
 				F20DE1C12BB4D8EB009D1C27 /* NotificationsView.swift in Sources */,
 				8F638A0B2BA8A5B50030C14F /* RewardsDashboardView.swift in Sources */,
 				E0231FFE2B7DB93D009A4E39 /* ColorExtensions.swift in Sources */,

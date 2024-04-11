@@ -86,7 +86,7 @@ struct ConversationListView: View {
                             
                         Spacer()
                         
-                        Text("These are your direct messages")
+                        Text("Direct Messages")
                             .font(Font.custom("NovaSquareSlim-Bold", size: 35))
                             .foregroundColor(.white)
                         
@@ -157,7 +157,7 @@ struct ConversationListView: View {
                         
                         Spacer()
                         
-                        NavigationLink(destination: ForumPostView().navigationBarBackButtonHidden(true)) {
+                        NavigationLink(destination: CreateConversationView().navigationBarBackButtonHidden(true)) {
                             Image(systemName: "plus")
                                 .fontWeight(.semibold)
                                 .foregroundStyle(Color.dreamyTwilightOrchid)
@@ -167,13 +167,12 @@ struct ConversationListView: View {
                         
                         Spacer()
                         
-                        // TODO: Link to direct messages
-                        //NavigationLink(destination: ForumPostView().navigationBarBackButtonHidden(true)) {
-                        Image(systemName: "text.bubble.fill")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                            .foregroundColor(.white)
-                        //}.isDetailLink(false
+                        NavigationLink(destination: ForumPostView().navigationBarBackButtonHidden(true)) {
+                            Image(systemName: "person.2")
+                                .resizable()
+                                .frame(width: 45, height: 30)
+                                .foregroundColor(.white)
+                        }
                     })
                     .padding()
                     .padding(.horizontal, 15)
