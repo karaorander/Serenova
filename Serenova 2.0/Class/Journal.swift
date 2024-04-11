@@ -1,3 +1,5 @@
+
+
 //
 //  Journal.swift
 //  Serenova 2.0
@@ -16,6 +18,7 @@ class Journal: Codable, Identifiable {
     @DocumentID var journalId: String?
     @ServerTimestamp public var timeStamp: Timestamp?
     var userId: String?
+    var username: String = ""
     var journalDate: Date?
     var journalTime: String = ""
     var journalTitle: String = ""
@@ -32,6 +35,7 @@ class Journal: Codable, Identifiable {
         case journalPrivacyStatus
         case journalTags
         case userId
+        case username
     }
     
     private var ref: DatabaseReference! = Database.database().reference()
@@ -46,6 +50,7 @@ class Journal: Codable, Identifiable {
         if let user = Auth.auth().currentUser {
             // User is signed in
             self.userId = user.uid
+            self.username = currUser?.name ?? ""
             // Now you have the UID
             print("User ID:", userId)
         } else {
@@ -57,6 +62,7 @@ class Journal: Codable, Identifiable {
     }
     
     func addJournalEntry() async throws {
+        
         self.journalTime = getRealTime()
         let ref = Firestore.firestore().collection("Journal")
         // Write new sleepSession object to Database

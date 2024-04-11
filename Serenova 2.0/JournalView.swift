@@ -58,6 +58,63 @@ struct JournalView: View {
                     .padding()
                     .padding(.horizontal, 15)
                     
+                    HStack {
+                        Button( action: {
+                            self.privateView = true
+                            self.refreshing = true
+                            Task {
+                                journalEntries = []
+                                lastEntry = nil
+                                await queryJournal(NUM_ENTRIES: queryNum)
+                            }
+                            
+                        }, label: {
+                            Text("Your Dreams")
+                                .font(.system(size: 18, weight: .medium))
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 12)
+                                .padding(.leading)
+                            Image(systemName: "zzz")
+                                .font(.system(size: 18))
+                                .foregroundColor(.white)
+                                .padding(.trailing)
+                        })
+                        
+                            .background(privateView ? Color.tranquilMistMauve.opacity(0.5) : Color.clear)
+                            .cornerRadius(2)
+                        Button( action: {
+                            self.privateView = false
+                            self.refreshing = true
+                            Task {
+                                journalEntries = []
+                                lastEntry = nil
+                                await queryPublishedJournal(NUM_ENTRIES: queryNum)
+                            }
+                            
+                            print("shared\n")
+                           
+                        }, label: {
+                            Text("Dream Sharing")
+                                .font(.system(size: 18, weight: .medium))
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding(.leading)
+                                .padding(.vertical, 12)
+                            Image(systemName: "rainbow")
+                                .font(.system(size: 18))
+                                .foregroundColor(.white)
+                                .padding(.trailing)
+                                })
+                        
+                        .background(!privateView ? Color.tranquilMistMauve.opacity(0.5) : Color.clear)
+                        .cornerRadius(2)
+                            
+                    }.background(Color.clear)
+                        .edgesIgnoringSafeArea(.horizontal)
+                    
+                        
+                    
                     if journalEntries.count == 0 {
                         NoEntriesView1()
                     } else {
@@ -88,7 +145,7 @@ struct JournalView: View {
                                 } else {
                                     ForEach(journalEntries, id: \.id) { entry in
                                         if !entry.journalPrivacyStatus {
-                                            JournalListingView(journal: entry)
+                                            JournalListingView2(journal: entry)
                                                 .onAppear {
                                                     if lastEntry != nil {
                                                         Task {
@@ -106,19 +163,33 @@ struct JournalView: View {
                                     .scrollIndicators(ScrollIndicatorVisibility.hidden)
                                     .listRowBackground(
                                         RoundedRectangle(cornerRadius: 10)
-                                            .fill(Color.dreamyTwilightMidnightBlue).padding()
+                                            .fill(Color.dreamyTwilightSlateGray.opacity(0.7)).padding()
+                                            
                                     )
+                                   
+                                    
                                 }
                                 
                                 
-                            }.background(Color.dreamyTwilightMidnightBlue)
+                            }
+                           
                                 .refreshable {
-                                    Task {
-                                        journalEntries = []
-                                        lastEntry = nil
-                                        await queryJournal(NUM_ENTRIES: queryNum)
+                                    if(privateView) {
+                                        UIRefreshControl.appearance().tintColor = .white
+                                        Task {
+                                            journalEntries = []
+                                            lastEntry = nil
+                                            await queryJournal(NUM_ENTRIES: queryNum)
+                                        }
+                                    } else {
+                                        Task {
+                                            journalEntries = []
+                                            lastEntry = nil
+                                            await queryPublishedJournal(NUM_ENTRIES: queryNum)
+                                        }
                                     }
                                 }
+                                
                                 .overlay(alignment: .bottom, content:  {NavigationLink(destination: createJournalView().navigationBarBackButtonHidden(true)) {
                                     Image(systemName: "plus")
                                         .fontWeight(.semibold)
@@ -127,6 +198,7 @@ struct JournalView: View {
                                         .background(.white, in: .circle)
                                         .padding()
                                 }.isDetailLink(false)})
+                                
                         }
                     }
                     HStack (spacing: 40){
@@ -177,13 +249,14 @@ struct JournalView: View {
             }
             .onAppear() {
                 Task {
-                    UIRefreshControl.appearance().tintColor = .white
-                    Task {
-                        if journalEntries.count == 0 {
-                            await queryJournal(NUM_ENTRIES: queryNum)
+                        UIRefreshControl.appearance().tintColor = .white
+                        Task {
+                            if journalEntries.count == 0 {
+                                await queryJournal(NUM_ENTRIES: queryNum)
+                            }
                         }
-                        
-                    }
+                   
+                    
                 }
             }
         }
@@ -379,7 +452,179 @@ struct JournalListingView: View {
     
     
 }
+struct JournalListingView2: View {
+    
+    let journal: Journal
+    
+    
+    @State private var isClicked: Bool = false
+    @State private var selectedJournal: Journal?
+    var body: some View {
+        Button (action: {isClicked.toggle()
+            selectedJournal = journal}) {
+            VStack(alignment: .leading) {
+                HStack {
+                
+                    
+                    VStack(alignment: .leading, spacing: 5){
+                        NavigationLink(destination: OtherAccountView(userID: journal.userId ?? "").navigationBarBackButtonHidden(true)) {
+                            Text("\(journal.username)")
+                                .font(Font.custom("NovaSquareSlim-Bold", size: 20))
+                                .shadow(radius: 20)
+                                .fontWeight(.semibold)
+                                .foregroundColor(Color.nightfallHarmonyNavyBlue)
+                        }
+                            .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                        Text("\(journal.getRealTime())")
+                            .font(.system(size: 13))
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color.nightfallHarmonyNavyBlue)
+                            .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                    }
+                    
+                    
+                }
+                .padding(.vertical, 10)
+            
+                // Post preview content
+                Text(journal.journalTitle)
+                    .font(.system(size: 20))
+                    .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                    .foregroundColor(Color.nightfallHarmonyRoyalPurple)
+                    .padding(.bottom, 2)
+                    .brightness(0.3)
+                    .saturation(1.5)
+                // Limit word count of preview to: 50 characters
+                if journal.journalContent.count <= 55 {
+                    Text(journal.journalContent)
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                        .padding(.bottom, 8)
+                } else {
+                    Text(journal.journalContent.prefix(55) + "...")
+                        .foregroundColor(.white)
+                        .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                        .padding(.bottom, 8)
+                }
+                
+                
+                
+                
+            }
+        }
+        .buttonStyle(NoStyle1())
+        .listRowSeparator(.hidden)
+        .sheet(isPresented: $isClicked, content: {
+            PublishedDetailsView(journal: journal)
+                .presentationDetents([.height(700)])
+                .presentationCornerRadius(30)
+                .background(Color.dreamyTwilightSlateGray)
+                
+                
+        })
+        
+        
+    }
+    
+    
+}
 
+struct PublishedDetailsView: View {
+    let journal: Journal
+    //user data
+    //TODO: add sleep attribute for date in Date extension for sleep object
+    
+    
+    @State private var showPersonalAccount: Bool = false
+    
+    //dismiss currentenvironment
+    @Environment(\.dismiss) private var dismiss
+    var body: some View {
+        NavigationView {
+            
+            VStack {
+                
+                ScrollView(.vertical, showsIndicators: false) {
+                    Button(action: {
+                        dismiss()
+                    }, label: {
+                        Image(systemName: "x.square")
+                            .font(.title)
+                            .foregroundColor(.moonlitSerenityCharcoalGray)
+                    }).position(x:340, y:40)
+                    
+                    
+                    HStack (spacing: 5){
+                        Image(systemName:"text.book.closed")
+                            .font(.custom("NovaSquareSlim-Bold", size: 25)).foregroundColor(.tranquilMistMauve)
+                        
+                        Text(journal.journalTitle)
+                            .font(.custom("NovaSquareSlim-Bold", size: 30))
+                            .foregroundColor(.tranquilMistMauve)
+                        
+                    }.hSpacing(.leading)
+                        .padding(.leading)
+                        .padding(.top)
+                    if currUser?.userID != journal.userId {
+                        NavigationLink(destination: OtherAccountView(userID: journal.userId ?? "").navigationBarBackButtonHidden(true)) {
+                            HStack {
+                                Image(systemName:"person.fill")
+                                    .font(.system(size: 20)).fontWeight(.medium).foregroundColor(.nightfallHarmonyNavyBlue)
+                                
+                                
+                                Text(journal.username)
+                                    .font(.system(size: 20)).fontWeight(.medium).foregroundColor(.nightfallHarmonyNavyBlue)
+                                
+                                
+                            }
+                            .hSpacing(.leading)
+                            .padding(.leading)
+                            .padding(.top)
+                            .underline()
+                        }
+                    } else {
+                        Button(action: {
+                            showPersonalAccount.toggle()
+                        }, label:{
+                            HStack {
+                                Image(systemName:"person.fill")
+                                    .font(.system(size: 20)).fontWeight(.medium).foregroundColor(.nightfallHarmonyNavyBlue)
+                                
+                                
+                                Text(journal.username)
+                                    .font(.system(size: 20)).fontWeight(.medium).foregroundColor(.nightfallHarmonyNavyBlue)
+                                
+                                
+                            }
+                            .hSpacing(.leading)
+                            .padding(.leading)
+                            .padding(.top)
+                            .underline()
+                        })
+                        
+                    }
+                    
+                    
+                    Text(journal.journalContent)
+                        .padding(.top)
+                        .font(.system(size: 18)).fontWeight(.medium).foregroundColor(.moonlitSerenityCharcoalGray)
+                        .padding(.leading)
+                        .padding(.vertical)
+                        .hSpacing(.leading)
+                    
+                    
+                }.sheet(isPresented: $showPersonalAccount, content: {
+                    AccountInfoView()
+                        
+                        
+                        
+                })
+                
+            }
+        }
+    }
+
+}
 
 struct JournalDetailsView: View {
     let journal:Journal
@@ -414,24 +659,25 @@ struct JournalDetailsView: View {
                                 "chevron.left").hSpacing(.leading).foregroundColor(.white)
                     }.padding()
                     if !isEditing {
-                        if(!isPublished) {
-                            Text("Published").foregroundColor(.white).padding().font(.system(size: 15))
-                        }
-                        Button("Edit") {
+                        
+                        Button(action:{
                             editedContent = journal.journalContent
                             editedTitle = journal.journalTitle
                             isEditing = true
-                        }
+                        }, label: {
+                            Text("Edit").foregroundColor(.white).font(.system(size: 16, weight: .medium))
+                               
+                        })
                         .padding()
-                        .foregroundColor(.white)
+                        
                         Menu {
-                            Button("Delete Enrty", role: .destructive) {
+                            Button("Delete Entry", role: .destructive) {
                                 journal.deleteJournal()
                                 dismiss()
                             }
                         } label: {
                             Image(systemName: "trash").foregroundColor(.red).padding()
-                        }.padding()
+                        }
                         Menu {
                             Button(action: {
                                 if(journal.journalPrivacyStatus){
@@ -451,7 +697,7 @@ struct JournalDetailsView: View {
                                 }
                             }
                         } label : {
-                            Image(systemName: "arrowshape.turn.up.right.fill").foregroundColor(.white).padding()
+                            Image(systemName: "arrowshape.turn.up.right.fill").foregroundColor(.tranquilMistMauve).padding(.trailing)
                             
                         }
                         
@@ -464,20 +710,31 @@ struct JournalDetailsView: View {
                 }
                 Spacer()
                 ScrollView(.vertical, showsIndicators: false) {
+                    if(!isPublished) {
+                        Text("Published").foregroundColor(.white).font(.system(size: 12, weight: .bold))
+                           
+                            .padding(.leading)
+                            .padding(.bottom)
+                            .hSpacing(.leading)
+                            
+                    }
                     Text("Journal Details")
                         .font(Font.custom("NovaSquareSlim-Bold", size: 35))
-                        .foregroundColor(.white)
+                        .foregroundColor(.tranquilMistMauve)
+                        .padding(.leading)
+                        .hSpacing(.leading)
+                    
                     if !isEditing {
                         TextField(journal.journalTitle, text: $editedTitle)
                             .font(.system(size: 20)).fontWeight(.bold).foregroundColor(.white)
-                            .padding()
+                            .padding(.top)
                             .disabled(!isEditing)
-                            .padding(.horizontal, 30)
+                            .padding(.leading)
                         TextField(journal.journalContent, text: $editedContent, axis: .vertical)
-                            .padding()
+                            .padding(.top)
                             .font(.system(size: 18)).fontWeight(.medium).foregroundColor(.white)
                             .disabled(!isEditing)
-                            .padding(.horizontal, 30)
+                            .padding(.leading)
                     } else {
                         
                             TextField(journal.journalTitle, text: $editedTitle)
@@ -572,6 +829,7 @@ struct JournalDetailsView: View {
             }
         }
 }
+
 
 
 struct NoStyle1: ButtonStyle {
