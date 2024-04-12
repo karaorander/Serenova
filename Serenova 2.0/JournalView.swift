@@ -190,17 +190,7 @@ struct JournalView: View {
                                     }
                                 }
                                 
-                                .overlay(alignment: .bottom, content:  {
-                                    VStack{
-                                        NavigationLink(destination: createJournalView().navigationBarBackButtonHidden(true)) {
-                                            Image(systemName: "plus")
-                                                .fontWeight(.semibold)
-                                                .foregroundStyle(Color.dreamyTwilightMidnightBlue)
-                                                .frame(width: 50, height: 50)
-                                                .background(.white, in: .circle)
-                                                .padding()
-                                        }.isDetailLink(false)
-                                        MenuView()}})
+                                
                             
                                 
                         }
@@ -208,6 +198,33 @@ struct JournalView: View {
                     
                 }
             }
+            .overlay(alignment: .bottom, content:  {
+                VStack{
+                    NavigationLink(destination: createJournalView().navigationBarBackButtonHidden(true)
+                        .onDisappear {
+                            if(privateView) {
+                                UIRefreshControl.appearance().tintColor = .white
+                                Task {
+                                    journalEntries = []
+                                    lastEntry = nil
+                                    await queryJournal(NUM_ENTRIES: queryNum)
+                                }
+                            } else {
+                                Task {
+                                    journalEntries = []
+                                    lastEntry = nil
+                                    await queryPublishedJournal(NUM_ENTRIES: queryNum)
+                                }
+                            }
+                        }) {
+                        Image(systemName: "plus")
+                            .fontWeight(.semibold)
+                            .foregroundStyle(Color.dreamyTwilightMidnightBlue)
+                            .frame(width: 50, height: 50)
+                            .background(.white, in: .circle)
+                            .padding()
+                    }.isDetailLink(false)
+                    MenuView()}})
             .onAppear() {
                 Task {
                         UIRefreshControl.appearance().tintColor = .white
@@ -241,15 +258,13 @@ struct JournalView: View {
                 // No user is signed in
                 print("No user signed in")
             }
-            // Fetch batch of posts from Firestore
+            
             var query: Query! = db.collection("Journal")
                 .whereField("userId", isEqualTo: userId)
                 .order(by: "timeStamp", descending: true)
                 .limit(to: NUM_ENTRIES)
-            if lastEntry != nil {
-                if let lastEntry = lastEntry {
-                    query = query.start(afterDocument: lastEntry)
-                }
+            if let lastEntry = lastEntry, let timestamp = lastEntry["timeStamp"] as? Timestamp {
+                query = query.start(after: [timestamp])
             }
             
             // Retrieve documents
@@ -285,15 +300,13 @@ struct JournalView: View {
                 // No user is signed in
                 print("No user signed in")
             }
-            // Fetch batch of posts from Firestore
+            
             var query: Query! = db.collection("Journal")
                 //.whereField("journalPrivacyStatus", isEqualTo: false)
                 .order(by: "timeStamp", descending: true)
                 .limit(to: NUM_ENTRIES)
-            if lastEntry != nil {
-                if let lastEntry = lastEntry {
-                    query = query.start(afterDocument: lastEntry)
-                }
+            if let lastEntry = lastEntry, let timestamp = lastEntry["timeStamp"] as? Timestamp {
+                query = query.start(after: [timestamp])
             }
             
             // Retrieve documents
@@ -331,14 +344,7 @@ struct NoEntriesView1: View {
                 .fontWeight(.semibold)
             Spacer()
             
-        }.overlay(alignment: .bottom, content:  {NavigationLink(destination: createJournalView().navigationBarBackButtonHidden(true)) {
-            Image(systemName: "plus")
-                .fontWeight(.semibold)
-                .foregroundStyle(Color.dreamyTwilightMidnightBlue)
-                .frame(width: 50, height: 50)
-                .background(.white, in: .circle)
-                .padding()
-        }.isDetailLink(false)})
+        }
     }
 }
 
