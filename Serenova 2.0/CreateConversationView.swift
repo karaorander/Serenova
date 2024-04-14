@@ -15,6 +15,7 @@ import FirebaseStorage
 class CreateConvoViewModel: ObservableObject  {
     @Published var fullname = ""
     @Published var username = ""
+    @Published var userID = ""
     //@Published var isBlocked: Bool = false
 
 
@@ -35,6 +36,9 @@ class CreateConvoViewModel: ObservableObject  {
             }
             if let username = userData["username"] as? String {
                 self.username = username
+            }
+            if let userID = userData["userID"] as? String {
+                self.userID = userID
             }
      
             self.objectWillChange.send()
@@ -302,13 +306,29 @@ struct CreateConversationView: View {
                                    //authorProfilePhoto: currUser.profileURL)
                 var allParticipants: [String] = []
                 
-                // check if user is blocked -- TODO: needs to be fore each user added
+                // check if user is blocked -- TODO: needs to be for each user added
                 if (!(viewModel.checkIfBlocked(by: viewModel.username)) &&
                     !(viewModel.checkIfCurrUserBlocked(by: viewModel.username))) {
                     allParticipants.append(viewModel.username)
                 }
+                              
+                
                 //allParticipants.append(<#T##newElement: Any##Any#>)
                 let newConversation = Conversation(participants: allParticipants)
+                
+                // notify user they've been added to a Conversation -- TODO: needs to be for each user added
+                let db = Firestore.firestore()
+                let convoNotification = db.collection("FriendRequests").document(viewModel.userID).collection("notifications")
+                
+                convoNotification.document().setData([
+                    "message": "You've been added to a new conversation"
+                ], merge: true) { error in
+                    if let error = error {
+                        print("Error adding notification: \(error)")
+                    } else {
+                        print("Notification added successfully to Firestore2: \(viewModel.userID)")
+                    }
+                }
                 
                 // Store Image & Get DownloadURL
                 if messageImageData != nil {
