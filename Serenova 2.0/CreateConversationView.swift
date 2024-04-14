@@ -15,6 +15,8 @@ import FirebaseStorage
 class CreateConvoViewModel: ObservableObject  {
     @Published var fullname = ""
     @Published var username = ""
+    //@Published var isBlocked: Bool = false
+
 
     func fetchUsername(completion: @escaping () -> Void) {
         let db = Database.database().reference()
@@ -41,9 +43,55 @@ class CreateConvoViewModel: ObservableObject  {
                             completion()
         }
     }
+    
+    func checkIfBlocked(by userID: String) -> Bool {
+        var result = false;
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            print("No authenticated user found")
+            return false
+        }
+
+        let db = Firestore.firestore()
+        let userBlockedRef = db.collection("Users").document(currentUserID).collection("BlockedUsers")
+
+        // Check if the current user's ID exists in the userID's "BlockedUsers" collection
+        userBlockedRef.document(userID).getDocument { [weak self] (document, error) in
+            DispatchQueue.main.async {
+                if let document = document, document.exists {
+                    result = true
+                } else {
+                   result = false
+                }
+            }
+        }
+        return result
+    }
+    
+    func checkIfCurrUserBlocked(by userID: String) -> Bool {
+        var result = false;
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            print("No authenticated user found")
+            return false
+        }
+        
+        let db = Firestore.firestore()
+        let userRef = db.collection("Users").document(userID).collection("BlockedUsers")
+        
+        // check if the currentUserID exists in userID's "BlockedUsers"
+        userRef.document(currentUserID).getDocument { [weak self] (document, error) in
+            DispatchQueue.main.async {
+                if let document = document, document.exists {
+                    result = true
+                } else {
+                   result = false
+                }
+            }
+        }
+        return result
+    }
 }
 
-private var viewModel = AccountInfoViewModel()
+private var viewModel = CreateConvoViewModel()
 
 //Create New Conversation View
 struct CreateConversationView: View {
@@ -240,7 +288,7 @@ struct CreateConversationView: View {
                 // TESTING IN PREVIEW MODE:
                 // Comment out the guard below and use
                 // the second constructor for Post (uncomment it)
-                
+                                
                 guard currUser != nil else {
                     await errorAlerts("ERROR! Not signed in.")
                     return
@@ -254,7 +302,11 @@ struct CreateConversationView: View {
                                    //authorProfilePhoto: currUser.profileURL)
                 var allParticipants: [String] = []
                 
-                allParticipants.append(viewModel.username)
+                // check if user is blocked -- TODO: needs to be fore each user added
+                if (!(viewModel.checkIfBlocked(by: viewModel.username)) &&
+                    !(viewModel.checkIfCurrUserBlocked(by: viewModel.username))) {
+                    allParticipants.append(viewModel.username)
+                }
                 //allParticipants.append(<#T##newElement: Any##Any#>)
                 let newConversation = Conversation(participants: allParticipants)
                 
