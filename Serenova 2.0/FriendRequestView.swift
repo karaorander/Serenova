@@ -162,7 +162,8 @@ class RequestViewModel: ObservableObject {
         // Add friend to Firestore "Friends" collection
         //if let username = currUser?.username {
         friendNotifications.document().setData([
-            "message": "New Accepted friend request"
+            "message": "New Accepted friend request",
+            "type": "friend"
         ], merge: true) { error in
             if let error = error {
                 print("Error adding notification: \(error)")
@@ -212,7 +213,8 @@ class RequestViewModel: ObservableObject {
         
         // Add friend to Firestore "Friends" collection
         friendNotifications.document().setData([
-            "message": "New Denied friend request"
+            "message": "New Denied friend request",
+            "type": "friend"
         ], merge: true) { error in
             if let error = error {
                 print("Error adding notification: \(error)")

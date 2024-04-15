@@ -70,6 +70,7 @@ struct NotificationsView: View {
                         VStack {
                             List(notificationsModel.notifications, id: \.self) { notification in
                                 HStack {
+                                    Spacer().frame(width: 5)
                                     Text(notification)
                                         .foregroundColor(Color.nightfallHarmonyRoyalPurple.opacity(0.8))
                                         .listRowBackground(
@@ -91,6 +92,7 @@ struct NotificationsView: View {
                                             .foregroundColor(.white)
                                             .cornerRadius(5)
                                     }
+                                    Spacer().frame(width: 5)
                                 }
                                 .listRowInsets(EdgeInsets())  // Add this line if needed to ensure correct layout
                             }
@@ -148,6 +150,7 @@ struct NotificationsView: View {
             
         })
             .onAppear {
+                notificationsModel.getPreferences()
                 notificationsModel.getNotifications()
             }
         }
@@ -177,9 +180,14 @@ class NotificationsModel: ObservableObject {
                         // Iterate through each document in the "notifications" collection
                         for document in querySnapshot!.documents {
                             let data = document.data()
-                            if let message = data["message"] as? String {
-                                // Append the message to the temporary array
-                                tempArray.append(message)
+                            if let type = data["type"] as?
+                                String {
+                                if (type == "friend" && self.friendNotifications) || (type == "message" && self.messageNotifications) {
+                                    if let message = data["message"] as? String {
+                                        // Append the message to the temporary array
+                                        tempArray.append(message)
+                                    }
+                                }
                             }
                         }
                         
@@ -301,7 +309,6 @@ struct NotificationsSettingsView: View {
                 .ignoresSafeArea()
 
                 VStack(spacing: 0) {
-                    Spacer().frame(height: 20)
                     HStack {
                         Spacer().frame(width: 10)
                         NavigationLink(destination: NotificationsView()
