@@ -25,8 +25,8 @@ struct VideoLinkView: View {
     var body: some View {
         VStack {
             // Placeholder for video thumbnail
-            Rectangle()
-                .fill(LinearGradient(gradient: Gradient(colors: [.blue.opacity(0.6), .purple.opacity(0.6)]), startPoint: .topLeading, endPoint: .bottomTrailing))
+            Image(systemName: "film") // Replace "sleep_image" with the name of your sleep-related image asset
+                .resizable()
                 .aspectRatio(16/9, contentMode: .fit)
                 .cornerRadius(10)
                 .shadow(radius: 5)
