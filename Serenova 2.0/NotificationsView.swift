@@ -156,8 +156,8 @@ struct NotificationsView: View {
 
 class NotificationsModel: ObservableObject {
     @Published var notifications: [String] = []
-    @Published var friendNotifications: Bool = false
-    @Published var messageNotifications: Bool = false
+    @Published var friendNotifications: Bool = true
+    @Published var messageNotifications: Bool = true
     
     func getNotifications() {
             if let currentUser = Auth.auth().currentUser {
