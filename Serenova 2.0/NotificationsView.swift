@@ -149,7 +149,6 @@ struct NotificationsView: View {
         })
             .onAppear {
                 notificationsModel.getNotifications()
-                notificationsModel.storePreferences()
             }
         }
     }
@@ -159,29 +158,6 @@ class NotificationsModel: ObservableObject {
     @Published var notifications: [String] = []
     @Published var friendNotifications: Bool = false
     @Published var messageNotifications: Bool = false
-
-    /*func updateNoti() {
-        if let currentUser = Auth.auth().currentUser {
-            let db = Database.database().reference()
-            let id = currentUser.uid
-            let ur = db.child("User").child(id)
-            ur.observeSingleEvent(of: .value) { snapshot in
-                guard let userData = snapshot.value as? [String: Any] else {
-                    print("Error fetching data")
-                    return
-                }
-                
-                if let notifications = userData["notifications"] as? [String] {
-                    DispatchQueue.main.async {
-                        self.notifications = notifications
-                    }
-                }
-            }
-        } else {
-            // Handle the case where there's no authenticated user
-            print("No authenticated user")
-        }
-    }*/
     
     func getNotifications() {
             if let currentUser = Auth.auth().currentUser {
@@ -256,41 +232,56 @@ class NotificationsModel: ObservableObject {
     }
     
     func getPreferences() {
-        if let currentUser = Auth.auth().currentUser {
-            let db = Database.database().reference()
-            let id = Auth.auth().currentUser!.uid
-            let ur = db.child("User").child(id)
-            // Now you can use userRef safely
-            
-            ur.observeSingleEvent(of: .value) { snapshot in
-                guard let userData = snapshot.value as? [String: Any] else {
-                    print("Error fetching data")
-                    return
-                }
-                
-                // Extract additional information based on your data structure
-                if let friend = userData["friendNotifications"] as? Bool {
-                    self.friendNotifications = friend
-                }
-                
-                if let message = userData["messageNotifications"] as? Bool {
-                    self.messageNotifications = message
+        guard let currentUser = Auth.auth().currentUser else {
+            print("No authenticated user")
+            return
+        }
+
+        let db = Database.database().reference()
+        let userRef = db.child("User").child(currentUser.uid)
+
+        userRef.observeSingleEvent(of: .value) { snapshot in
+            guard let userData = snapshot.value as? [String: Any] else {
+                print("Error fetching data: invalid data format")
+                return
+            }
+
+            // Extracting friendNotifications and messageNotifications
+            if let friendNotifications = userData["friendNotifications"] as? Bool {
+                DispatchQueue.main.async {
+                    self.friendNotifications = friendNotifications
                 }
             }
-        } else {
-            // Handle the case where there's no authenticated user
-            print("No authenticated user")
+            
+            if let messageNotifications = userData["messageNotifications"] as? Bool {
+                DispatchQueue.main.async {
+                    self.messageNotifications = messageNotifications
+                }
+            }
         }
     }
     
     func storePreferences() {
-        let db = Database.database().reference()
-        let id = Auth.auth().currentUser!.uid
-        let ur = db.child("User").child(id)
+        guard let currentUser = Auth.auth().currentUser else {
+            print("No authenticated user")
+            return
+        }
 
-        let user: [String: Any] = ["friendNotifications": self.friendNotifications,
-                    "messageNotifications": self.messageNotifications
-            ]
+        let db = Database.database().reference()
+        let userRef = db.child("User").child(currentUser.uid)
+
+        let userData: [String: Any] = [
+            "friendNotifications": self.friendNotifications,
+            "messageNotifications": self.messageNotifications
+        ]
+
+        userRef.updateChildValues(userData) { error, _ in
+            if let error = error {
+                print("Error updating user preferences: \(error)")
+            } else {
+                print("Preferences updated successfully")
+            }
+        }
     }
 }
 
@@ -310,9 +301,11 @@ struct NotificationsSettingsView: View {
                 .ignoresSafeArea()
 
                 VStack(spacing: 0) {
+                    Spacer().frame(height: 20)
                     HStack {
                         Spacer().frame(width: 10)
-                        NavigationLink(destination: NotificationsView().navigationBarBackButtonHidden(true)) {
+                        NavigationLink(destination: NotificationsView()
+                        .navigationBarBackButtonHidden(true)) {
                             Image(systemName: "chevron.backward")
                                 .resizable()
                                 .fontWeight(.semibold)
@@ -362,7 +355,7 @@ struct NotificationsSettingsView: View {
                             }
                         }
                     }*/
-                    Spacer().frame(height: 20)
+                    Spacer().frame(height: 30)
                     VStack{
                         //Friends Notification Toggle
                         Toggle(isOn: $notificationsModel.friendNotifications, label: {Text ("Friend Requests")})
@@ -383,9 +376,19 @@ struct NotificationsSettingsView: View {
                             .foregroundColor(.tranquilMistAshGray).cornerRadius(5)
                             .brightness(0.3)
                     }
+                    
+                    Spacer().frame(height:50)
+                    
+                    // Submit button
+                    Button (action: {
+                        notificationsModel.storePreferences()
+                    }) {
+                        Text("Submit")
+                            .font(.system(size: 20)).fontWeight(.medium).frame(width: 300, height: 50).background(Color.soothingNightLightGray.opacity(0.6)).foregroundColor(.nightfallHarmonyNavyBlue.opacity(1)).cornerRadius(10)
+                    }
                     Spacer()
                 }
-            }
+            }/*
             .overlay(alignment: .bottom, content: {
             
             HStack (spacing: 40){
@@ -433,7 +436,7 @@ struct NotificationsSettingsView: View {
                 .hSpacing(.center)
                 .background(Color.dreamyTwilightMidnightBlue)
             
-        })
+        })*/
             .onAppear {
                 notificationsModel.getPreferences()
             }
