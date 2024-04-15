@@ -497,7 +497,7 @@ struct AccountInfoView: View {
                                     .foregroundColor(.white)
                                 
                             }
-                            NavigationLink(destination: SleepLogView().navigationBarBackButtonHidden(true)) {
+                            NavigationLink(destination: TipsView().navigationBarBackButtonHidden(true)) {
                                 
                                 Image(systemName: "zzz")
                                     .resizable()
