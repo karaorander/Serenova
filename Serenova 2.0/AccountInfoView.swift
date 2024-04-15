@@ -475,7 +475,7 @@ struct AccountInfoView: View {
                         //Menu Bar
                     }.overlay(alignment: .bottom, content: {
                         
-                        HStack (spacing: 40){
+                        HStack (spacing: 30){
                             NavigationLink(destination: SleepGraphView().navigationBarBackButtonHidden(true)) {
                                 
                                 Image(systemName: "chart.xyaxis.line")
@@ -497,6 +497,13 @@ struct AccountInfoView: View {
                                 Image(systemName: "list.clipboard")
                                     .resizable()
                                     .frame(width: 30, height: 40)
+                                    .foregroundColor(.white)
+                                
+                            }
+                            NavigationLink(destination: AlarmClockView()) {
+                                Image(systemName: "alarm")
+                                    .resizable()
+                                    .frame(width: 30, height: 35)
                                     .foregroundColor(.white)
                                 
                             }

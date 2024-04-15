@@ -1,5 +1,9 @@
 import SwiftUI
-
+import FirebaseAuth
+import Firebase
+import FirebaseFirestore
+import FirebaseFirestoreSwift
+import FirebaseStorage
 
 
 struct AlarmClockView: View {
@@ -67,7 +71,22 @@ struct AlarmClockView: View {
                         //sleepManager.alarmTime = alarmTime
                         //sleepManager.alarmSession()
                         if let user = currUser {
+                            print("hi7iii")
+                            let db = Firestore.firestore()
+                            let currentUserID = Auth.auth().currentUser!.uid
                             user.addAlarm(selectedSound)
+                            let alarmNoti = db.collection("FriendRequests").document(currentUserID).collection("notifications")
+                            // Add friend to Firestore "Friends" collection
+                            //if let username = currUser?.username {
+                            alarmNoti.document().setData([
+                                "message": "Alarm Set at _ time!"
+                            ], merge: true) { error in
+                                if let error = error {
+                                    print("Error adding notification: \(error)")
+                                } else {
+                                    print("Notification added successfully to Firestore2: \(currentUserID)")
+                                }
+                            }
                         }
                     }
                     .font(.custom("NovaSquare-Bold", size: 20))
@@ -76,7 +95,7 @@ struct AlarmClockView: View {
                     .background(Color.nightfallHarmonyRoyalPurple) // Purple background
                     .cornerRadius(20)
                     .padding()
-                    
+                    NavigationLink ("", destination: ListOfAlarmsView().navigationBarBackButtonHidden(true))
                     Spacer()
                 }
                 .background(LinearGradient(gradient: Gradient(colors: [ .nightfallHarmonyRoyalPurple.opacity(0.8), .dreamyTwilightMidnightBlue.opacity(0.7), .nightfallHarmonyNavyBlue.opacity(0.8)]), startPoint: .top, endPoint: .bottom))
