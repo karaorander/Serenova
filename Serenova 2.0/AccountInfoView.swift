@@ -404,12 +404,12 @@ struct AccountInfoView: View {
                                 .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
                             }
                             
-                            //Notification Toggle
+                            /*Notification Toggle
                             Toggle(isOn: $toggleIsOn, label: {Text ("Notifications")})
                                 .toggleStyle(SwitchToggleStyle(tint: .moonlitSerenityCharcoalGray))
                                 .padding().frame(width:300, height: 40)
                                 .fontWeight(.medium)
-                                .background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
+                                .background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)*/
                             //TODO: need to enable push notifications
                             
                             Text("Moon Rewards Count: \(viewModel.moonCount)")
@@ -430,7 +430,7 @@ struct AccountInfoView: View {
                             }
                             
                             // Notifications Button
-                            NavigationLink(destination: NotificationsView()){
+                            NavigationLink(destination: NotificationsView().navigationBarBackButtonHidden(true)){
                                 HStack{
                                     Text("Notifications")
                                         .padding()

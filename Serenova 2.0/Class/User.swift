@@ -43,6 +43,8 @@ class User: Codable {
     public var moonCount: Int = -1
     public var friends: [String] = []
     public var notifications: [String] = []
+    public var friendNotifications: Bool = true
+    public var messageNotifications: Bool = true
     public var blocked: [String] = []
     public var alarms: [String] = []
 
