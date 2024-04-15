@@ -22,6 +22,7 @@ struct createJournalView: View {
     
     ///use app storage to get user data from firebase.  EX:
     //@AppStorage("userName") var userName: String = ""
+    @State private var publishToggle:Bool = false
     @State private var isLoading:Bool = false
     @State private var showError:Bool = false
     @State private var errorMess: String = ""
@@ -34,6 +35,9 @@ struct createJournalView: View {
     @State var tagOptions: [String] = ["None", "Questions", "Tips", "Hacks", "Support", "Goals", "Midnight Thoughts"]
     @State private var tagOption: Int = 0
     @State private var showTagOptions: Bool = false
+    
+    @State private var selectedFriends = Set<String>() // to track selected friends
+    @State private var isDropdownOpen = false 
     
     @Environment(\.dismiss) private var dismiss
     var body: some View {
@@ -76,15 +80,91 @@ struct createJournalView: View {
                             .foregroundColor(.dreamyTwilightMidnightBlue)
                         Image(systemName: "moon.dust").font(.system(size: 35)).foregroundColor(.dreamyTwilightMidnightBlue)
                     }
+                    //Notification Toggle
+                    
                     ScrollView(.vertical, showsIndicators:false) {
                         VStack(spacing: 15){
+                           
+                           /* HStack {
+                                Button(action: {
+                                    fetchAllFriendIDs { friendIDs, error in
+                                        if let error = error {
+                                            // Handle error
+                                            print("Error fetching friend IDs: \(error.localizedDescription)")
+                                            return
+                                        }
+                                        
+                                        if let friendIDs = friendIDs {
+                                            currUser?.friends = friendIDs
+                                            print("Friend IDs retrieved successfully: \(friendIDs)")
+                                        }
+                                    }
+                                }, label: {
+                                    HStack {
+                                        Image(systemName: "tag.fill")
+                                            .font(.system(size: 20, weight: .medium))
+                                            .foregroundColor(.tranquilMistMauve.opacity(0.6))
+                                        Text("Tag Friends")
+                                            .font(.system(size: 20, weight: .medium))
+                                            .foregroundColor(.tranquilMistMauve.opacity(0.6))
+                                        
+                                    }
+                                    
+                                })
+                            }.hSpacing(.leading) */
+                            HStack {
+                                Button(action: {
+                                    isDropdownOpen.toggle() // toggle the dropdown
+                                }, label: {
+                                    HStack {
+                                        Image(systemName: "tag.fill")
+                                            .font(.system(size: 20, weight: .medium))
+                                            .foregroundColor(.tranquilMistMauve.opacity(0.6))
+                                        Text("Tag Friends")
+                                            .font(.system(size: 20, weight: .medium))
+                                            .foregroundColor(.tranquilMistMauve.opacity(0.6))
+                                    }
+                                })
+                            }.padding()
+                                           
+                            if isDropdownOpen {
+                                ScrollView(.vertical, showsIndicators:false) {
+                                    List {
+                                        ForEach(currUser?.friends ?? [], id: \.self) { friend in
+                                            Button(action: {
+                                                if selectedFriends.contains(friend) {
+                                                    selectedFriends.remove(friend) // remove from selection if already selected
+                                                } else {
+                                                    selectedFriends.insert(friend) // add to selection if not already selected
+                                                }
+                                            }, label: {
+                                                HStack {
+                                                    Text(friend)
+                                                    Spacer()
+                                                    if selectedFriends.contains(friend) {
+                                                        Image(systemName: "checkmark")
+                                                    }
+                                                }
+                                            })
+                                        }
+                                    }
+                                    .frame(height: 100) // set a fixed height for the dropdown
+                                    .border(Color.gray) // add a border to the dropdown
+                                    .background(Color.white.opacity(0.1))
+                                    .cornerRadius(10) // add corner radius to the dropdown
+                                    .padding()
+                                }
+                            }
+                                           
+                                           Spacer()
+                                       
                             HStack {
                                 TextField("Title", text: $journalTitle)
                                     .fontWeight(.bold)
                                     .foregroundColor(.white)
                                     .focused($showkeyboard)
                             }.padding()
-                                .background(Color.dreamyTwilightMidnightBlue.opacity(0.3))
+                                .background(Color.dreamyTwilightMidnightBlue.opacity(0.2))
                                 .cornerRadius(10)
                             // Tags
                             
@@ -95,9 +175,16 @@ struct createJournalView: View {
                                     .frame(minHeight: 150, alignment: .top)
                                     
                             }.padding()
-                                .background(Color.dreamyTwilightMidnightBlue.opacity(0.3))
+                                .background(Color.dreamyTwilightMidnightBlue.opacity(0.2))
                                 .cornerRadius(10)
                         }.padding(15)
+                        Toggle(isOn: $publishToggle, label: {Text ("Make Public")})
+                            .toggleStyle(SwitchToggleStyle(tint: .moonlitSerenityCharcoalGray))
+                            .hSpacing(.leading)
+                            .padding().frame(width:200, height: 40)
+                            .fontWeight(.medium)
+                            .background(Color.tranquilMistAshGray.opacity(0.1)).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
+                        
                            
                             
                     }
@@ -125,6 +212,19 @@ struct createJournalView: View {
                  */
                 }
 
+        }.onAppear {
+            fetchAllFriendIDs { friendIDs, error in
+                if let error = error {
+                    // Handle error
+                    print("Error fetching friend IDs: \(error.localizedDescription)")
+                    return
+                }
+                
+                if let friendIDs = friendIDs {
+                    currUser?.friends = friendIDs
+                    print("Friend IDs retrieved successfully: \(friendIDs)")
+                }
+            }
         }
     }
     //error handling -> error alerts
@@ -165,6 +265,8 @@ struct createJournalView: View {
                                    //authorProfilePhoto: currUser.profileURL)
                 
                 let newEntry = Journal(journalTitle: journalTitle, journalContent: journalText)
+                newEntry.journalPrivacyStatus = !publishToggle
+                newEntry.journalTags = Array(selectedFriends)
                 try await newEntry.addJournalEntry()
                 
                 // Store Image & Get DownloadURL
@@ -174,7 +276,33 @@ struct createJournalView: View {
             }
         }
     }
-    
+    func fetchAllFriendIDs(completion: @escaping ([String]?, Error?) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            print("No authenticated user found")
+            completion(nil, NSError(domain: "Auth", code: 401, userInfo: [NSLocalizedDescriptionKey: "No authenticated user found"]))
+            return
+        }
+
+        let db = Firestore.firestore()
+        let userFriendsRef = db.collection("FriendRequests").document(currentUserID).collection("Friends")
+
+        // Retrieve all documents from the "Friends" collection
+        userFriendsRef.getDocuments { (snapshot, error) in
+            if let error = error {
+                completion(nil, error)
+                return
+            }
+
+            var friendIDs: [String] = []
+            for document in snapshot!.documents {
+                let friendID = document.documentID
+                friendIDs.append(friendID)
+            }
+
+            completion(friendIDs, nil)
+        }
+    }
+
     /*
      * Function to store image in Firebase Storage
      */

@@ -13,7 +13,10 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import FirebaseStorage
 
+
+
 struct JournalView: View {
+    @StateObject private var viewModel = OtherAccountViewModel()
     
     @State private var journalEntries: [Journal] = []
     @State private var queryNum: Int = 25
@@ -69,7 +72,7 @@ struct JournalView: View {
                             }
                             
                         }, label: {
-                            Text("Your Dreams")
+                            Text("Your Journal")
                                 .font(.system(size: 18, weight: .medium))
                                 .foregroundColor(.white)
                                 .frame(maxWidth: .infinity)
@@ -376,6 +379,13 @@ struct JournalListingView: View {
                             .fontWeight(.semibold)
                             .foregroundColor(.dreamyTwilightLavenderPurple)
                             .multilineTextAlignment(.trailing)
+                    }
+                    if(journal.journalTags != []) {
+                        Image(systemName: "person.2.fill")
+                            .fontWeight(.semibold)
+                            .foregroundColor(.moonlitSerenityCharcoalGray)
+                            .multilineTextAlignment(.trailing)
+                        
                     }
                 }
                 .padding(.vertical, 10)
