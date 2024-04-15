@@ -9,9 +9,10 @@ import FirebaseStorage
 struct AlarmClockView: View {
     let sleepManager = SleepManager()
 
-    @State private var alarmTime: Date = Date()
-    @State private var selectedSound: String = "Default"
-    @State private var isRepeating: Bool = false // State to handle the repeating toggle
+
+    @State public var alarmTime: Date = Date()
+    @State public var selectedSound: String = "Default"
+    @State public var isRepeating: Bool = false // State to handle the repeating toggle
     var colors = [Color.tranquilMistAccentTurquoise.opacity(0.6), Color.dreamyTwilightMidnightBlue]
     let sounds = ["Default", "Beep", "Ring", "Digital"]
 
@@ -103,6 +104,10 @@ struct AlarmClockView: View {
             }
         }
         
+    }
+    
+    func setAlarmTime(_ time: Date) {
+        alarmTime = time
     }
 }
 

@@ -102,6 +102,7 @@
 		F299FAF82BB025CD00845FE4 /* JournalPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F299FAF72BB025CD00845FE4 /* JournalPostView.swift */; };
 		F299FAFA2BB0265400845FE4 /* createJournalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F299FAF92BB0265400845FE4 /* createJournalView.swift */; };
 		F2C2EFC92BCC93A8005BC175 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C2EFC82BCC93A8005BC175 /* MenuView.swift */; };
+		F2C2EFCB2BCCC970005BC175 /* AlarmTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C2EFCA2BCCC970005BC175 /* AlarmTests.swift */; };
 		F2D887002B8E8E9200C0A87E /* AlarmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D886FF2B8E8E9200C0A87E /* AlarmView.swift */; };
 		F2D887022B8EA03A00C0A87E /* AlarmListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D887012B8EA03A00C0A87E /* AlarmListView.swift */; };
 		F2E2195E2B82EC6200235824 /* SignUpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E2195D2B82EC6200235824 /* SignUpTests.swift */; };
@@ -202,6 +203,7 @@
 		F299FAF72BB025CD00845FE4 /* JournalPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalPostView.swift; sourceTree = "<group>"; };
 		F299FAF92BB0265400845FE4 /* createJournalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = createJournalView.swift; sourceTree = "<group>"; };
 		F2C2EFC82BCC93A8005BC175 /* MenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
+		F2C2EFCA2BCCC970005BC175 /* AlarmTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmTests.swift; sourceTree = "<group>"; };
 		F2D886FF2B8E8E9200C0A87E /* AlarmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmView.swift; sourceTree = "<group>"; };
 		F2D887012B8EA03A00C0A87E /* AlarmListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmListView.swift; sourceTree = "<group>"; };
 		F2E219542B82EBEB00235824 /* Serenova 2.0Tests2.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Serenova 2.0Tests2.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -365,6 +367,7 @@
 				F22430EF2BB69C86007EE5B7 /* PostPermissionsTests.swift */,
 				F22430F12BB69F93007EE5B7 /* SearchForumTests.swift */,
 				F22430F72BB6BEEA007EE5B7 /* EditAccountTests.swift */,
+				F2C2EFCA2BCCC970005BC175 /* AlarmTests.swift */,
 			);
 			path = "Serenova 2.0Tests";
 			sourceTree = "<group>";
@@ -659,6 +662,7 @@
 				7F60D4A42BB3AFDC004D66FB /* ForumRepliesTests.swift in Sources */,
 				F22430F22BB69F93007EE5B7 /* SearchForumTests.swift in Sources */,
 				23D1E0F42B7A8FDF00539A62 /* Serenova_2_0Tests.swift in Sources */,
+				F2C2EFCB2BCCC970005BC175 /* AlarmTests.swift in Sources */,
 				F22430F62BB6BC8C007EE5B7 /* BlockedTests.swift in Sources */,
 				E0C98A2C2B90277E00A3D369 /* SleepManagerTests.swift in Sources */,
 				F2E2195E2B82EC6200235824 /* SignUpTests.swift in Sources */,
