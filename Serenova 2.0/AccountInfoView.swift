@@ -429,6 +429,19 @@ struct AccountInfoView: View {
                                 .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
                             }
                             
+                            // Notifications Button
+                            NavigationLink(destination: NotificationsView()){
+                                HStack{
+                                    Text("Notifications")
+                                        .padding()
+                                    Spacer()
+                                    Image(systemName:
+                                            "arrow.right")
+                                    .padding()
+                                }
+                                .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
+                            }
+                            
                             // Bio Button
                             NavigationLink(destination: BioInfoView()){
                                 HStack{

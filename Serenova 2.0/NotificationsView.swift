@@ -37,18 +37,33 @@ struct NotificationsView: View {
                             .font(.system(size: 25))
                         Spacer()
                     } else {
-                        VStack{
+                        VStack {
                             List(notificationsModel.notifications, id: \.self) { notification in
-                                Text(notification)
-                                    .foregroundColor(Color.nightfallHarmonyRoyalPurple.opacity(0.8))
-                                    .listRowBackground(
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .fill(Color.nightfallHarmonyRoyalPurple.opacity(0.5))
-                                            .brightness(0.5)
-                                    )
+                                HStack {
+                                    Text(notification)
+                                        .foregroundColor(Color.nightfallHarmonyRoyalPurple.opacity(0.8))
+                                        .listRowBackground(
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .fill(Color.nightfallHarmonyRoyalPurple.opacity(0.5))
+                                                .brightness(0.5)
+                                        )
+                                    
+                                    Spacer()
+                                    
+                                    Button(action: {
+                                        // Call removeNotification on the clicked notification
+                                        notificationsModel.removeNotification(notification)
+                                    }) {
+                                        Text("Seen")
+                                            .padding(.horizontal, 10)
+                                            .padding(.vertical, 4)
+                                            .background(Color.blue.opacity(0.7))
+                                            .foregroundColor(.white)
+                                            .cornerRadius(5)
+                                    }
+                                }
+                                .listRowInsets(EdgeInsets())  // Add this line if needed to ensure correct layout
                             }
-                            //.listStyle(PlainListStyle())
-                            /*.listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))*/
                         }
                     }
                 }
@@ -169,6 +184,43 @@ class NotificationsModel: ObservableObject {
                 print("No authenticated user")
             }
         }
+    
+    func removeNotification(_ notification: String) {
+        // Check if the notification exists in the notifications array
+        if let index = notifications.firstIndex(of: notification) {
+            // Remove the notification from the array
+            notifications.remove(at: index)
+            
+            // Remove the notification from Firestore
+            if let currentUser = Auth.auth().currentUser {
+                let db = Firestore.firestore()
+                let currentUserID = currentUser.uid
+                
+                // Reference to the "notifications" collection for the current user
+                let notificationsCollectionRef = db.collection("FriendRequests").document(currentUserID).collection("notifications")
+                
+                // Find the document to delete by message
+                notificationsCollectionRef.whereField("message", isEqualTo: notification).getDocuments { querySnapshot, error in
+                    if let error = error {
+                        print("Error getting documents: \(error)")
+                    } else {
+                        for document in querySnapshot!.documents {
+                            // Delete the document
+                            document.reference.delete { error in
+                                if let error = error {
+                                    print("Error deleting document: \(error)")
+                                } else {
+                                    print("Notification successfully deleted")
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                print("No authenticated user")
+            }
+        }
+    }
 }
 
 
