@@ -26,7 +26,7 @@ struct SignUpView: View {
     @State private var authError: Bool = false;
     @State private var authErrorMsg = ""
     
-    @State private var toggleIsOn: Bool = false
+    @State private var notifications: Bool = false
     @State private var passwordTapped: Bool = false;
 
     @Environment(\.presentationMode) var presentationMode
@@ -74,7 +74,7 @@ struct SignUpView: View {
     }
 
     func getToggleIsOn() -> Bool {
-        return toggleIsOn
+        return notifications
     }
     
     
@@ -201,7 +201,7 @@ struct SignUpView: View {
                         }
                     }
                     Spacer()
-                    Toggle(isOn: $toggleIsOn, label: {Text ("Allow Push Notifications")})
+                    Toggle(isOn: $notifications, label: {Text ("Allow Push Notifications")})
                         .toggleStyle(SwitchToggleStyle(tint: .moonlitSerenityCharcoalGray))
                         .padding().frame(width:300, height: 20)
                         .fontWeight(.medium)
@@ -352,9 +352,33 @@ struct SignUpView: View {
             if (success) {
                 addtoFriends()
                 showSignUp2 = true
+                storePreferences()
             } else {
                 authError = true
                 return
+            }
+        }
+    }
+    
+    func storePreferences() {
+        guard let currentUser = Auth.auth().currentUser else {
+            print("No authenticated user")
+            return
+        }
+
+        let db = Database.database().reference()
+        let userRef = db.child("User").child(currentUser.uid)
+
+        let userData: [String: Any] = [
+            "friendNotifications": self.notifications,
+            "messageNotifications": self.notifications
+        ]
+
+        userRef.updateChildValues(userData) { error, _ in
+            if let error = error {
+                print("Error updating user preferences: \(error)")
+            } else {
+                print("Preferences updated successfully")
             }
         }
     }
@@ -391,6 +415,8 @@ struct SignUpView: View {
             }
             completion(authErrorMsg.isEmpty)
         }
+        
+        
     }
     
 }
