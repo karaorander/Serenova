@@ -21,7 +21,7 @@ import SwiftUI
  */
 struct MenuView: View {
     var body: some View {
-        HStack (spacing: 40){
+        HStack (spacing: 30){
             NavigationLink(destination: SleepGraphView().navigationBarBackButtonHidden(true)) {
                 
                 Image(systemName: "chart.xyaxis.line")
@@ -30,28 +30,35 @@ struct MenuView: View {
                     .foregroundColor(.white)
                 
             }
-        NavigationLink(destination: SleepLogView().navigationBarBackButtonHidden(true)) {
-
+            NavigationLink(destination: TipsView().navigationBarBackButtonHidden(true)) {
+                
                 Image(systemName: "zzz")
                     .resizable()
                     .frame(width: 30, height: 30)
                     .foregroundColor(.white)
-            
-        }
+                
+            }
             NavigationLink(destination: SleepGoalsView().navigationBarBackButtonHidden(true)) {
-
+                
                 Image(systemName: "list.clipboard")
                     .resizable()
                     .frame(width: 30, height: 40)
                     .foregroundColor(.white)
-            
-        }
+                
+            }
+            NavigationLink(destination: AlarmClockView()) {
+                Image(systemName: "alarm")
+                    .resizable()
+                    .frame(width: 30, height: 35)
+                    .foregroundColor(.white)
+                
+            }
             NavigationLink(destination: ForumView().navigationBarBackButtonHidden(true)) {
-
-                    Image(systemName: "person.2")
-                        .resizable()
-                        .frame(width: 45, height: 30)
-                        .foregroundColor(.white)
+                
+                Image(systemName: "person.2")
+                    .resizable()
+                    .frame(width: 45, height: 30)
+                    .foregroundColor(.white)
                 
             }
             NavigationLink(destination: JournalView().navigationBarBackButtonHidden(true)) {
