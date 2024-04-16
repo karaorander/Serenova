@@ -513,6 +513,8 @@ struct PublishedDetailsView: View {
     
     
     @State private var showPersonalAccount: Bool = false
+    @State private var viewModel = GetNameModel()
+    @State private var friendNames: [String: String] = [:]
     
     //dismiss currentenvironment
     @Environment(\.dismiss) private var dismiss
@@ -579,7 +581,32 @@ struct PublishedDetailsView: View {
                             .underline()
                         })
                         
-                    }
+                    } 
+                    HStack {
+                        if !journal.journalTags.isEmpty {
+                            Image(systemName: "tag.fill")
+                                .font(.system(size: 20, weight: .medium))
+                                .foregroundColor(Color.tranquilMistMauve.opacity(0.6))
+                        }
+                        
+                        ForEach(journal.journalTags, id: \.self) { tag in
+                            let ref = fetchUserData(userID: tag)
+                                
+                            if let friendName = friendNames[tag] {
+                                NavigationLink(destination: OtherAccountView(userID: tag).navigationBarBackButtonHidden(true)) {
+                                    Text(friendName)
+                                        .font(Font.custom("NovaSquareSlim-Bold", size: 20))
+                                        .shadow(radius: 20)
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(Color.tranquilMistMauve)
+                                        .underline()
+                                }
+                            } else {
+                                Text("Loading...")
+                            }
+                        }
+                    }.hSpacing(.leading)
+                    .padding()
                     
                     
                     Text(journal.journalContent)
@@ -600,6 +627,25 @@ struct PublishedDetailsView: View {
             }
         }
     }
+    func fetchUserData(userID: String) {
+        var ref: DatabaseReference = Database.database().reference().child("User")
+                DispatchQueue.main.async {
+                ref.child(userID).observeSingleEvent(of: .value, with: { snapshot in
+                    guard let value = snapshot.value as? [String: Any] else {
+                        print("Error: Could not find user")
+                        return
+                    }
+                    if let friendName = value["name"] as? String {
+                        friendNames[userID] = friendName
+                    }
+                
+                    
+                }) { error in
+                    print(error.localizedDescription)
+                }
+                    
+            }
+        }
 
 }
 
@@ -721,17 +767,23 @@ struct JournalDetailsView: View {
                                 }
                                 
                                 ForEach(journal.journalTags, id: \.self) { tag in
-                                    let userData = viewModel.fetchUserData(userID: tag)
-                                    let name = viewModel.fullName
-                                    
-                                    NavigationLink(destination: OtherAccountView(userID: tag).navigationBarBackButtonHidden(true)) {
-                                        Text(name)
-                                            .font(Font.custom("NovaSquareSlim-Bold", size: 20))
-                                            .shadow(radius: 20)
-                                            .fontWeight(.semibold)
-                                            .foregroundColor(Color.tranquilMistMauve)
-                                            .underline()
+                                       
+                                    let ref = fetchUserData(userID: tag)
+                                        
+                                    if let friendName = friendNames[tag] {
+                                        NavigationLink(destination: OtherAccountView(userID: tag).navigationBarBackButtonHidden(true)) {
+                                            Text(friendName)
+                                                .font(Font.custom("NovaSquareSlim-Bold", size: 20))
+                                                .shadow(radius: 20)
+                                                .fontWeight(.semibold)
+                                                .foregroundColor(Color.tranquilMistMauve)
+                                                .underline()
+                                        }
+                                    } else {
+                                        Text("Loading...")
                                     }
+                                    
+                                    
                                 }
                             }.hSpacing(.leading)
                             .padding()
