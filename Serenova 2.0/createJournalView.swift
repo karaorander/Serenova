@@ -132,30 +132,35 @@ struct createJournalView: View {
                                            
                             if isDropdownOpen {
                                 ScrollView(.vertical, showsIndicators:false) {
+                                    
                                     List {
-                                        ForEach(currUser?.friends ?? [], id: \.self) { friend in
-                                            Button(action: {
-                                                if selectedFriends.contains(friend) {
-                                                    selectedFriends.remove(friend)
-                                                } else {
-                                                    selectedFriends.insert(friend)
-                                                }
-                                            }, label: {
-                                                HStack {
-                                                    if let friendName = friendNames[friend] {
-                                                        Text(friendName)
-                                                    } else {
-                                                        Text("Loading...")
-                                                    }
-                                                    Spacer()
+                                        if currUser?.friends == [] {
+                                            Text("No friends yet!")
+                                        } else {
+                                            ForEach(currUser?.friends ?? [], id: \.self) { friend in
+                                                Button(action: {
                                                     if selectedFriends.contains(friend) {
-                                                        Image(systemName: "checkmark")
+                                                        selectedFriends.remove(friend)
+                                                    } else {
+                                                        selectedFriends.insert(friend)
                                                     }
+                                                }, label: {
+                                                    HStack {
+                                                        if let friendName = friendNames[friend] {
+                                                            Text(friendName)
+                                                        } else {
+                                                            Text("Loading...")
+                                                        }
+                                                        Spacer()
+                                                        if selectedFriends.contains(friend) {
+                                                            Image(systemName: "checkmark")
+                                                        }
+                                                    }
+                                                }).onAppear {
+                                                    fetchUserData(userID: friend)
                                                 }
-                                            }).onAppear {
-                                                fetchUserData(userID: friend)
                                             }
-                                        }
+                                    }
                                     }
                                     .frame(height: 100)
                                     .border(Color.gray)
