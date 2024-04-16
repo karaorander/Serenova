@@ -593,17 +593,34 @@ struct PublishedDetailsView: View {
                             let ref = fetchUserData(userID: tag)
                                 
                             if let friendName = friendNames[tag] {
-                                NavigationLink(destination: OtherAccountView(userID: tag).navigationBarBackButtonHidden(true)) {
-                                    Text(friendName)
-                                        .font(Font.custom("NovaSquareSlim-Bold", size: 20))
-                                        .shadow(radius: 20)
-                                        .fontWeight(.semibold)
-                                        .foregroundColor(Color.tranquilMistMauve)
-                                        .underline()
+                                if tag == currUser?.userID {
+                                    Menu {
+                                        Button("Remove tag?", role: .destructive) {
+                                            journal.journalTags.removeAll(where: { $0 == tag })
+                                            journal.updateValues(newValues: ["journalTags" : journal.journalTags]){_ in }
+                                        }
+                                    } label: {
+                                        Text(friendName)
+                                            .font(Font.custom("NovaSquareSlim-Bold", size: 20))
+                                            .shadow(radius: 20)
+                                            .fontWeight(.semibold)
+                                            .foregroundColor(Color.tranquilMistMauve)
+                                            .underline()
+                                    }
+                                } else {
+                                    NavigationLink(destination: OtherAccountView(userID: tag).navigationBarBackButtonHidden(true)) {
+                                        Text(friendName)
+                                            .font(Font.custom("NovaSquareSlim-Bold", size: 20))
+                                            .shadow(radius: 20)
+                                            .fontWeight(.semibold)
+                                            .foregroundColor(Color.tranquilMistMauve)
+                                            .underline()
+                                    }
                                 }
                             } else {
                                 Text("Loading...")
                             }
+                                
                         }
                     }.hSpacing(.leading)
                     .padding()
