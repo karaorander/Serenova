@@ -15,7 +15,7 @@ import FirebaseStorage
 struct createJournalView: View {
     /// callback
     //var onPos: (Post)->()
-    
+    @State private var viewModel = GetNameModel()
     @State var journalText: String = ""
     @State var journalTitle: String = ""
     
@@ -36,8 +36,9 @@ struct createJournalView: View {
     @State private var tagOption: Int = 0
     @State private var showTagOptions: Bool = false
     
-    @State private var selectedFriends = Set<String>() // to track selected friends
-    @State private var isDropdownOpen = false 
+    @State private var selectedFriends = Set<String>() 
+    @State private var friendNames: [String: String] = [:]
+    @State private var isDropdownOpen = false
     
     @Environment(\.dismiss) private var dismiss
     var body: some View {
@@ -125,7 +126,9 @@ struct createJournalView: View {
                                             .foregroundColor(.tranquilMistMauve.opacity(0.6))
                                     }
                                 })
-                            }.padding()
+                            }.hSpacing(.leading)
+                            .padding()
+                                
                                            
                             if isDropdownOpen {
                                 ScrollView(.vertical, showsIndicators:false) {
@@ -133,25 +136,31 @@ struct createJournalView: View {
                                         ForEach(currUser?.friends ?? [], id: \.self) { friend in
                                             Button(action: {
                                                 if selectedFriends.contains(friend) {
-                                                    selectedFriends.remove(friend) // remove from selection if already selected
+                                                    selectedFriends.remove(friend)
                                                 } else {
-                                                    selectedFriends.insert(friend) // add to selection if not already selected
+                                                    selectedFriends.insert(friend)
                                                 }
                                             }, label: {
                                                 HStack {
-                                                    Text(friend)
+                                                    if let friendName = friendNames[friend] {
+                                                        Text(friendName)
+                                                    } else {
+                                                        Text("Loading...")
+                                                    }
                                                     Spacer()
                                                     if selectedFriends.contains(friend) {
                                                         Image(systemName: "checkmark")
                                                     }
                                                 }
-                                            })
+                                            }).onAppear {
+                                                fetchUserData(userID: friend)
+                                            }
                                         }
                                     }
-                                    .frame(height: 100) // set a fixed height for the dropdown
-                                    .border(Color.gray) // add a border to the dropdown
+                                    .frame(height: 100)
+                                    .border(Color.gray)
                                     .background(Color.white.opacity(0.1))
-                                    .cornerRadius(10) // add corner radius to the dropdown
+                                    .cornerRadius(10)
                                     .padding()
                                 }
                             }
@@ -166,7 +175,7 @@ struct createJournalView: View {
                             }.padding()
                                 .background(Color.dreamyTwilightMidnightBlue.opacity(0.2))
                                 .cornerRadius(10)
-                            // Tags
+                            
                             
                             HStack {
                                 TextField("What's on your mind?", text: $journalText, axis: .vertical)
@@ -302,10 +311,25 @@ struct createJournalView: View {
             completion(friendIDs, nil)
         }
     }
-
-    /*
-     * Function to store image in Firebase Storage
-     */
+    private var ref: DatabaseReference = Database.database().reference().child("User")
+    func fetchUserData(userID: String) {
+                DispatchQueue.main.async {
+                ref.child(userID).observeSingleEvent(of: .value, with: { snapshot in
+                    guard let value = snapshot.value as? [String: Any] else {
+                        print("Error: Could not find user")
+                        return
+                    }
+                    if let friendName = value["name"] as? String {
+                        friendNames[userID] = friendName
+                    }
+                
+                    
+                }) { error in
+                    print(error.localizedDescription)
+                }
+                    
+            }
+        }
     
 }
 

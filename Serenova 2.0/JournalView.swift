@@ -16,7 +16,7 @@ import FirebaseStorage
 
 
 struct JournalView: View {
-    @StateObject private var viewModel = OtherAccountViewModel()
+    @StateObject private var viewModel = GetNameModel()
     
     @State private var journalEntries: [Journal] = []
     @State private var queryNum: Int = 25
@@ -605,15 +605,23 @@ struct PublishedDetailsView: View {
 
 struct JournalDetailsView: View {
     let journal:Journal
+    
+    @State private var viewModel = GetNameModel()
     @State var isPublished: Bool = false
     
     @State private var editedContent: String = ""
     @State private var editedTitle: String = ""
+    @State private var tags: [String] = []
     
     @State private var isEditing: Bool = false
     @Environment(\.dismiss) private var dismiss
     @State private var showError: Bool = false
     @State private var publishedListener: ListenerRegistration?
+    
+    @State private var isDropdownOpen:Bool = false
+    @State private var selectedFriends = Set<String>()
+    @State private var friendNames: [String: String] = [:]
+
 
 
     private var journalRef: DocumentReference {
@@ -621,6 +629,7 @@ struct JournalDetailsView: View {
         }
     
     var body: some View {
+        NavigationView {
         ZStack {
             
             LinearGradient(gradient: Gradient(colors: [
@@ -628,120 +637,187 @@ struct JournalDetailsView: View {
                 .dreamyTwilightMidnightBlue]),
                            startPoint: .topLeading, endPoint: .bottomLeading)
             .ignoresSafeArea()
-            VStack {
-                HStack {
-                    Button{ dismiss()
-                    } label: {
-                        Image(systemName:
-                                "chevron.left").hSpacing(.leading).foregroundColor(.white)
-                    }.padding()
-                    if !isEditing {
-                        
-                        Button(action:{
-                            editedContent = journal.journalContent
-                            editedTitle = journal.journalTitle
-                            isEditing = true
-                        }, label: {
-                            Text("Edit").foregroundColor(.white).font(.system(size: 16, weight: .medium))
-                               
-                        })
-                        .padding()
-                        
-                        Menu {
-                            Button("Delete Entry", role: .destructive) {
-                                journal.deleteJournal()
-                                dismiss()
-                            }
+            
+                VStack {
+                    HStack {
+                        Button{ dismiss()
                         } label: {
-                            Image(systemName: "trash").foregroundColor(.red).padding()
-                        }
-                        Menu {
-                            Button(action: {
-                                if(journal.journalPrivacyStatus){
-                                    journal.updateValues(newValues: ["journalPrivacyStatus" : false]) {_ in
-                                        journal.journalPrivacyStatus = false
-                                    }
-                                }else {
-                                    journal.updateValues(newValues: ["journalPrivacyStatus" : true]) {_ in
-                                        journal.journalPrivacyStatus = true
-                                    }
+                            Image(systemName:
+                                    "chevron.left").hSpacing(.leading).foregroundColor(.white)
+                        }.padding()
+                        if !isEditing {
+                            
+                            Button(action:{
+                                editedContent = journal.journalContent
+                                editedTitle = journal.journalTitle
+                                isEditing = true
+                            }, label: {
+                                Text("Edit").foregroundColor(.white).font(.system(size: 16, weight: .medium))
+                                
+                            })
+                            .padding()
+                            
+                            Menu {
+                                Button("Delete Entry", role: .destructive) {
+                                    journal.deleteJournal()
+                                    dismiss()
                                 }
-                            }){
-                                if(!isPublished) {
-                                    Text("Unpublish").font(.callout).foregroundColor(Color.red)
-                                } else {
-                                    Text("Publish").font(.callout).foregroundColor(Color.black)
-                                }
+                            } label: {
+                                Image(systemName: "trash").foregroundColor(.red).padding()
                             }
-                        } label : {
-                            Image(systemName: "arrowshape.turn.up.right.fill").foregroundColor(.tranquilMistMauve).padding(.trailing)
+                            Menu {
+                                Button(action: {
+                                    if(journal.journalPrivacyStatus){
+                                        journal.updateValues(newValues: ["journalPrivacyStatus" : false]) {_ in
+                                            journal.journalPrivacyStatus = false
+                                        }
+                                    }else {
+                                        journal.updateValues(newValues: ["journalPrivacyStatus" : true]) {_ in
+                                            journal.journalPrivacyStatus = true
+                                        }
+                                    }
+                                }){
+                                    if(!isPublished) {
+                                        Text("Unpublish").font(.callout).foregroundColor(Color.red)
+                                    } else {
+                                        Text("Publish").font(.callout).foregroundColor(Color.black)
+                                    }
+                                }
+                            } label : {
+                                Image(systemName: "arrowshape.turn.up.right.fill").foregroundColor(.tranquilMistMauve).padding(.trailing)
+                                
+                            }
+                            
+                        } else {
+                            Button("Cancel") {
+                                isEditing = false
+                            }
+                            .padding().foregroundColor(.white)
+                        }
+                    }
+                    Spacer()
+                    ScrollView(.vertical, showsIndicators: false) {
+                        if(!isPublished) {
+                            Text("Published").foregroundColor(.white).font(.system(size: 12, weight: .bold))
+                            
+                                .padding(.leading)
+                                .padding(.bottom)
+                                .hSpacing(.leading)
                             
                         }
-                        
-                    } else {
-                        Button("Cancel") {
-                            isEditing = false
-                        }
-                        .padding().foregroundColor(.white)
-                    }
-                }
-                Spacer()
-                ScrollView(.vertical, showsIndicators: false) {
-                    if(!isPublished) {
-                        Text("Published").foregroundColor(.white).font(.system(size: 12, weight: .bold))
-                           
+                        Text("Journal Details")
+                            .font(Font.custom("NovaSquareSlim-Bold", size: 35))
+                            .foregroundColor(.tranquilMistMauve)
                             .padding(.leading)
-                            .padding(.bottom)
                             .hSpacing(.leading)
-                            
-                    }
-                    Text("Journal Details")
-                        .font(Font.custom("NovaSquareSlim-Bold", size: 35))
-                        .foregroundColor(.tranquilMistMauve)
-                        .padding(.leading)
-                        .hSpacing(.leading)
-                    
-                    if !isEditing {
-                        TextField(journal.journalTitle, text: $editedTitle)
-                            .font(.system(size: 20)).fontWeight(.bold).foregroundColor(.white)
-                            .padding(.top)
-                            .disabled(!isEditing)
-                            .padding(.leading)
-                        TextField(journal.journalContent, text: $editedContent, axis: .vertical)
-                            .padding(.top)
-                            .font(.system(size: 18)).fontWeight(.medium).foregroundColor(.white)
-                            .disabled(!isEditing)
-                            .padding(.leading)
-                    } else {
                         
+                        
+                       
+                            HStack {
+                                if !journal.journalTags.isEmpty {
+                                    Image(systemName: "tag.fill")
+                                        .font(.system(size: 20, weight: .medium))
+                                        .foregroundColor(Color.tranquilMistMauve.opacity(0.6))
+                                }
+                                
+                                ForEach(journal.journalTags, id: \.self) { tag in
+                                    let userData = viewModel.fetchUserData(userID: tag)
+                                    let name = viewModel.fullName
+                                    
+                                    NavigationLink(destination: OtherAccountView(userID: tag).navigationBarBackButtonHidden(true)) {
+                                        Text(name)
+                                            .font(Font.custom("NovaSquareSlim-Bold", size: 20))
+                                            .shadow(radius: 20)
+                                            .fontWeight(.semibold)
+                                            .foregroundColor(Color.tranquilMistMauve)
+                                            .underline()
+                                    }
+                                }
+                            }.hSpacing(.leading)
+                            .padding()
+                        
+                        
+                        if isEditing {
+                            ScrollView(.vertical, showsIndicators:false) {
+                                List {
+                                    ForEach(currUser?.friends ?? [], id: \.self) { friend in
+                                        Button(action: {
+                                            if selectedFriends.contains(friend) {
+                                                selectedFriends.remove(friend)
+                                            } else {
+                                                selectedFriends.insert(friend)
+                                            }
+                                        }, label: {
+                                            HStack {
+                                                if let friendName = friendNames[friend] {
+                                                    Text(friendName)
+                                                } else {
+                                                    Text("Loading...")
+                                                }
+                                                Spacer()
+                                                if selectedFriends.contains(friend) {
+                                                    Image(systemName: "checkmark")
+                                                }
+                                            }
+                                        }).onAppear {
+                                            fetchUserData(userID: friend)
+                                        }
+                                    }
+                                }
+                                .frame(height: 100)
+                                .border(Color.gray)
+                                .background(Color.white.opacity(0.1))
+                                .cornerRadius(10)
+                                .padding()
+                            }
+                        }
+                    
+
+                        
+                        if !isEditing {
+                            TextField(journal.journalTitle, text: $editedTitle)
+                                .font(.system(size: 20)).fontWeight(.bold).foregroundColor(.white)
+                                .padding(.top)
+                                .disabled(!isEditing)
+                                .padding(.leading)
+                            TextField(journal.journalContent, text: $editedContent, axis: .vertical)
+                                .padding(.top)
+                                .font(.system(size: 18)).fontWeight(.medium).foregroundColor(.white)
+                                .disabled(!isEditing)
+                                .padding(.leading)
+                        } else {
+                            
                             TextField(journal.journalTitle, text: $editedTitle)
                                 .font(.system(size: 25)).fontWeight(.bold).foregroundColor(.white)
                                 .padding()
                                 .disabled(!isEditing)
                                 .padding(.horizontal, 30)
                                 .background(.white.opacity(0.15)).cornerRadius(10).padding()
-                       
-                        TextField(journal.journalContent, text: $editedContent, axis: .vertical)
-                            .font(.system(size: 18)).fontWeight(.medium).foregroundColor(.white)
-                            .padding()
-                            .disabled(!isEditing)
-                            .padding(.horizontal, 30)
-                            .background(.white.opacity(0.15)).cornerRadius(10).padding()
-                    }
+                            
+                            TextField(journal.journalContent, text: $editedContent, axis: .vertical)
+                                .font(.system(size: 18)).fontWeight(.medium).foregroundColor(.white)
+                                .padding()
+                                .disabled(!isEditing)
+                                .padding(.horizontal, 30)
+                                .background(.white.opacity(0.15)).cornerRadius(10).padding()
+                        }
                         
-                }
-                
-               Spacer()
-                
-                // Display editable text field only when editing mode is enabled
-                if isEditing {
+                    }
                     
+                    Spacer()
+                    
+                    // Display editable text field only when editing mode is enabled
+                    if isEditing {
+                        
                         // Save button to update the journal content
                         Button("Save") {
                             journal.updateValues(newValues: ["journalTitle" : editedTitle,
-                                                             "journalContent" : editedContent]) {_ in
+                                                             "journalContent" : editedContent,
+                                                             "journalTags" : Array(selectedFriends)
+                                                            ]) {_ in
                                 journal.journalContent = editedContent
                                 journal.journalTitle = editedTitle
+                                journal.journalTags = Array(selectedFriends)
                             }
                             
                             isEditing = false
@@ -749,9 +825,12 @@ struct JournalDetailsView: View {
                         .padding().foregroundColor(.white)
                         .buttonStyle(NoStyle1())
                         
-                       
-                   
-                } else {
+                        
+                        
+                        
+                        
+                        
+                    } else {
                         // Save button to update the journal content
                         Button("") {
                             
@@ -759,24 +838,57 @@ struct JournalDetailsView: View {
                         .padding()
                         
                         
+                        
+                    }
+                    Spacer()
+                }.onAppear {
+                    editedContent = journal.journalContent
+                    editedTitle = journal.journalTitle
+                    fetchPrivacyStatus()
+                    listenForPrivacyChanges()
+                    fetchAllFriendIDs { friendIDs, error in
+                        if let error = error {
+                            // Handle error
+                            print("Error fetching friend IDs: \(error.localizedDescription)")
+                            return
+                        }
+                        
+                        if let friendIDs = friendIDs {
+                            currUser?.friends = friendIDs
+                            
+                        }
+                    }
+                    selectedFriends = Set(journal.journalTags)
+                    
                     
                 }
-                Spacer()
-            }.onAppear {
-                editedContent = journal.journalContent
-                editedTitle = journal.journalTitle
-                fetchPrivacyStatus()
-                                
-                listenForPrivacyChanges()
-                        
-                   
-            }
-            .onDisappear {
-                publishedListener?.remove()
-                
+                .onDisappear {
+                    publishedListener?.remove()
+                    
+                }
             }
         }
     }
+    
+    func fetchUserData(userID: String) {
+        var ref: DatabaseReference = Database.database().reference().child("User")
+                DispatchQueue.main.async {
+                ref.child(userID).observeSingleEvent(of: .value, with: { snapshot in
+                    guard let value = snapshot.value as? [String: Any] else {
+                        print("Error: Could not find user")
+                        return
+                    }
+                    if let friendName = value["name"] as? String {
+                        friendNames[userID] = friendName
+                    }
+                
+                    
+                }) { error in
+                    print(error.localizedDescription)
+                }
+                    
+            }
+        }
     private func listenForPrivacyChanges() {
         // Listener for privacy status of journal to get updates in real time
             publishedListener = journalRef.addSnapshotListener { documentSnapshot, error in
@@ -792,6 +904,7 @@ struct JournalDetailsView: View {
                 
                 DispatchQueue.main.async {
                             isPublished = data["journalPrivacyStatus"] as? Bool ?? false
+                    selectedFriends = Set(data["journalTags"] as? [String] ?? [])
                         }
             }
         }
@@ -805,6 +918,33 @@ struct JournalDetailsView: View {
                 }
             }
         }
+    
+    func fetchAllFriendIDs(completion: @escaping ([String]?, Error?) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            print("No authenticated user found")
+            completion(nil, NSError(domain: "Auth", code: 401, userInfo: [NSLocalizedDescriptionKey: "No authenticated user found"]))
+            return
+        }
+
+        let db = Firestore.firestore()
+        let userFriendsRef = db.collection("FriendRequests").document(currentUserID).collection("Friends")
+
+        // Retrieve all documents from the "Friends" collection
+        userFriendsRef.getDocuments { (snapshot, error) in
+            if let error = error {
+                completion(nil, error)
+                return
+            }
+
+            var friendIDs: [String] = []
+            for document in snapshot!.documents {
+                let friendID = document.documentID
+                friendIDs.append(friendID)
+            }
+
+            completion(friendIDs, nil)
+        }
+    }
 }
 
 
