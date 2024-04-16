@@ -7,18 +7,17 @@
 
 import SwiftUI
 
-
 class Alarm: Identifiable, ObservableObject {
     let id = UUID()
     @Published var time: Date
     @Published var sound: String
 
-    init(time: Date, sound: String) {
-        self.time = time
+    init(seconds: Int, sound: String) {
+        let referenceDate = Calendar.current.startOfDay(for: Date())
+        self.time = referenceDate.addingTimeInterval(TimeInterval(seconds))
         self.sound = sound
     }
 }
-
 
 struct EditAlarmView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -47,13 +46,15 @@ struct EditAlarmView: View {
 
 
 struct ListOfAlarmsView: View {
-    @State private var alarms = [
-        Alarm(time: Date().addingTimeInterval(3600), sound: "Default"),
-        Alarm(time: Date().addingTimeInterval(7200), sound: "Beep"),
-        Alarm(time: Date().addingTimeInterval(10800), sound: "Ring")
-    ]
+    /*@State private var alarms = [
+        Alarm(seconds: 5403, sound: "Default"),
+        Alarm(seconds: 3600, sound: "Beep")
+        //Alarm(time: Date().addingTimeInterval(0), sound: "Ring")
+    ]*/
+    @State private var alarms: [Alarm] = []
     @State private var isShowingEditView: Bool = false
     @State private var selectedAlarmIndex: Int?
+
 
     var body: some View {
         NavigationView {
@@ -67,20 +68,24 @@ struct ListOfAlarmsView: View {
                                             .foregroundColor(.white)
                                             .padding(.bottom, 20)
                     List {
-                        ForEach(alarms.indices, id: \.self) { index in
-                            HStack {
-                                AlarmRow(alarm: $alarms[index])
-                                    .onTapGesture {
-                                        self.selectedAlarmIndex = index
-                                        self.isShowingEditView = true
+                        if let user = currUser {
+                            ForEach(user.alarms.indices, id: \.self) { index in
+                                if index < alarms.count { // Check if index is within bounds of alarms array
+                                    HStack {
+                                        AlarmRow(alarm: $alarms[index])
+                                            .onTapGesture {
+                                                self.selectedAlarmIndex = index
+                                                self.isShowingEditView = true
+                                            }
                                     }
+                                    .padding()
+                                    .background(Color.nightfallHarmonyRoyalPurple)
+                                    .cornerRadius(10)
+                                    .listRowBackground(Color.clear)
+                                }
                             }
-                            .padding()
-                            .background(Color.nightfallHarmonyRoyalPurple)
-                            .cornerRadius(10)
-                            .listRowBackground(Color.clear)
+                            .onDelete(perform: delete)
                         }
-                        .onDelete(perform: delete)
                     }
                     .toolbar {
                         EditButton()
@@ -97,6 +102,18 @@ struct ListOfAlarmsView: View {
             }
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
+        }
+        .onAppear {
+            if let user = currUser {
+                print("hey.. \(user.alarms[0])")
+                
+                for (index, _) in user.sounds.enumerated() {
+                    if index < user.alarms.count && index < user.sounds.count {
+                        let alarm = Alarm(seconds: user.alarms[index], sound: user.sounds[index])
+                        alarms.append(alarm)
+                    }
+                }
+            }
         }
     }
     

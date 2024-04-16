@@ -43,10 +43,9 @@ class User: Codable {
     public var moonCount: Int = -1
     public var friends: [String] = []
     public var notifications: [String] = []
-    public var friendNotifications: Bool = true
-    public var messageNotifications: Bool = true
     public var blocked: [String] = []
-    public var alarms: [String] = []
+    public var alarms: [Int] = []
+    public var sounds: [String] = []
 
     
     /* Gender */
@@ -105,12 +104,16 @@ class User: Codable {
         friends.append(friendID)
     }
     
-    func addAlarm(_ alarmID: String) {
+    func addAlarm(_ alarmID: Int) {
         alarms.append(alarmID)
     }
     
     func blockUser(_ blockedID: String) {
         blocked.append(blockedID)
+    }
+    
+    func addSound(_ soundID: String) {
+        blocked.append(soundID)
     }
     
     func addNotification(_ noti: String) {
