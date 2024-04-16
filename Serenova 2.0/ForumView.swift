@@ -209,6 +209,8 @@ struct PostListingView: View {
     @State private var likesListener: ListenerRegistration?
     @State private var hasChanged: Bool = false  // Change to activate change in view
 
+    @State private var selectedFriends = Set<String>()
+    @State private var friendNames: [String: String] = [:]
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
@@ -238,7 +240,8 @@ struct PostListingView: View {
                 }
             }
             .padding(.vertical, 10)
-        
+            
+             
             // Post preview content
             Text(post.title)
                 .font(.custom("NovaSquareSlim-Bold", size: 20))
@@ -273,6 +276,48 @@ struct PostListingView: View {
                     .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
                     .padding(.bottom, 8)
             }
+            HStack {
+                if !post.userTags.isEmpty {
+                    Image(systemName: "tag.fill")
+                        .font(.system(size: 20, weight: .medium))
+                        .foregroundColor(Color.tranquilMistMauve.opacity(0.6))
+                }
+                
+                ForEach($post.userTags, id: \.self) { $tag in
+                    let ref = fetchUserData(userID: tag)
+                        
+                    if let friendName = friendNames[tag] {
+                        if tag == currUser?.userID {
+                            Menu {
+                                Button("Remove tag?", role: .destructive) {
+                                    post.userTags.removeAll(where: { $0 == tag })
+                                    post.updateValues(newValues: ["userTags" : post.userTags]){_ in }
+                                }
+                            } label: {
+                                Text(friendName)
+                                    .font(Font.custom("NovaSquareSlim-Bold", size: 20))
+                                    .shadow(radius: 20)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(Color.tranquilMistMauve)
+                                    .underline()
+                            }
+                        } else {
+                            NavigationLink(destination: OtherAccountView(userID: tag).navigationBarBackButtonHidden(true)) {
+                                Text(friendName)
+                                    .font(Font.custom("NovaSquareSlim-Bold", size: 20))
+                                    .shadow(radius: 20)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(Color.tranquilMistMauve)
+                                    .underline()
+                            }
+                        }
+                    } else {
+                        Text("Loading...")
+                    }
+                        
+                }
+            }.hSpacing(.leading)
+            .padding()
             
             if let imageURL = post.imageURL {
                 let _ = self.loadImage(imageURL: imageURL)
@@ -384,6 +429,25 @@ struct PostListingView: View {
             likesListener = nil
         }
     }
+    func fetchUserData(userID: String) {
+        var ref: DatabaseReference = Database.database().reference().child("User")
+                DispatchQueue.main.async {
+                ref.child(userID).observeSingleEvent(of: .value, with: { snapshot in
+                    guard let value = snapshot.value as? [String: Any] else {
+                        print("Error: Could not find user")
+                        return
+                    }
+                    if let friendName = value["name"] as? String {
+                        friendNames[userID] = friendName
+                    }
+                
+                    
+                }) { error in
+                    print(error.localizedDescription)
+                }
+                    
+            }
+        }
     
     /*
      * Function to load images from Firebase Storage

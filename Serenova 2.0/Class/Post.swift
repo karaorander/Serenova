@@ -18,6 +18,7 @@ class Post: Codable, Identifiable {
     public var timeStamp: Double = Date().timeIntervalSince1970
     public var imageURL: URL?
     public var tag: String?
+    public var userTags: [String] = []
     public var numReplies: Int = 0
     public var likedIDs: [String] = []
     public var dislikedIDs: [String] = []
@@ -29,13 +30,14 @@ class Post: Codable, Identifiable {
      * Constructor for Post
      * TODO: Fill in other details! (i.e authorID, authorUsername, authorProfilePicture)
      */
-    init(title: String, content: String, tag: String? = nil) {
+    init(title: String, content: String, tag: String? = nil, userTags: [String]) {
         self.title = title
         self.titleAsArray = title.lowercased().split(separator: " ").map { String($0) }
         self.content = content
         if tag != nil {
             self.tag = tag
         }
+        self.userTags = userTags
     }
     
     /*
@@ -65,6 +67,48 @@ class Post: Codable, Identifiable {
         try ref.addDocument(from: self)
     }
     
+    func updateValues(newValues: [String: Any], completion: @escaping (Error?) -> Void) {
+            guard let postID = postID else {
+                completion(PostError.missingPostID)
+                return
+            }
+            
+            let db = Firestore.firestore()
+            let postRef = db.collection("Posts").document(postID)
+            
+            // Update values in Firestore
+            postRef.updateData(newValues) { error in
+                if let error = error {
+                    // Handle error
+                    completion(error)
+                } else {
+                    
+                    for (key, value) in newValues {
+                        // Update each property individually
+                        switch key {
+                        case "title":
+                            self.title = value as? String ?? ""
+                        case "content":
+                            self.content = value as? String ?? ""
+                        case "tag":
+                            self.tag = value as? String
+                        case "userTags":
+                            self.userTags = value as? [String] ?? []
+                        case "numReplies":
+                            self.numReplies = value as? Int ?? 0
+                        default:
+                            break
+                        }
+                    }
+                    completion(nil)
+                }
+            }
+        }
+    
+    enum PostError: Error {
+        case missingPostID
+    }
+    
     /*
      * Function to get relative date
      */
@@ -80,6 +124,7 @@ class Post: Codable, Identifiable {
         let dateFormatter = DateFormatter()
         return dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(timeStamp)))
     }
+    
 }
 
 class Reply: Codable, Identifiable {

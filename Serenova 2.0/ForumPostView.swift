@@ -39,6 +39,10 @@ struct ForumPostView: View {
     @State private var tagOption: Int = 0
     @State private var showTagOptions: Bool = false
     
+    @State private var isDropdownOpen:Bool = false
+    @State private var selectedFriends = Set<String>()
+    @State private var friendNames: [String: String] = [:]
+    
     @Environment(\.dismiss) private var dismiss
     var body: some View {
         NavigationView{
@@ -114,6 +118,57 @@ struct ForumPostView: View {
                                     .buttonStyle(NoStyle())
                                 }
                                 Spacer()
+                            }
+                            HStack {
+                                Button(action: {
+                                    isDropdownOpen.toggle() // toggle the dropdown
+                                }, label: {
+                                    HStack {
+                                        Image(systemName: "tag.fill")
+                                            .font(.system(size: 20, weight: .medium))
+                                            .foregroundColor(.tranquilMistMauve.opacity(0.6))
+                                        Text("Tag Friends")
+                                            .font(.system(size: 20, weight: .medium))
+                                            .foregroundColor(.tranquilMistMauve.opacity(0.6))
+                                    }
+                                })
+                            }.hSpacing(.leading)
+                            .padding()
+                                
+                                           
+                            if isDropdownOpen {
+                                ScrollView(.vertical, showsIndicators:false) {
+                                    List {
+                                        ForEach(currUser?.friends ?? [], id: \.self) { friend in
+                                            Button(action: {
+                                                if selectedFriends.contains(friend) {
+                                                    selectedFriends.remove(friend)
+                                                } else {
+                                                    selectedFriends.insert(friend)
+                                                }
+                                            }, label: {
+                                                HStack {
+                                                    if let friendName = friendNames[friend] {
+                                                        Text(friendName)
+                                                    } else {
+                                                        Text("Loading...")
+                                                    }
+                                                    Spacer()
+                                                    if selectedFriends.contains(friend) {
+                                                        Image(systemName: "checkmark")
+                                                    }
+                                                }
+                                            }).onAppear {
+                                                fetchUserData(userID: friend)
+                                            }
+                                        }
+                                    }
+                                    .frame(height: 100)
+                                    .border(Color.gray)
+                                    .background(Color.white.opacity(0.1))
+                                    .cornerRadius(10)
+                                    .padding()
+                                }
                             }
                             HStack {
                                 TextField("Share sleep exeriences + tips!", text: $postText, axis: .vertical)
@@ -213,8 +268,23 @@ struct ForumPostView: View {
                  */
                 }
 
+        }.onAppear {
+            fetchAllFriendIDs { friendIDs, error in
+                if let error = error {
+                    // Handle error
+                    print("Error fetching friend IDs: \(error.localizedDescription)")
+                    return
+                }
+                
+                if let friendIDs = friendIDs {
+                    currUser?.friends = friendIDs
+                    print("Friend IDs retrieved successfully: \(friendIDs)")
+                }
+            }
+
         }
     }
+    
     //error handling -> error alerts
     func errorAlerts(_ error: Error)async{
         await MainActor.run(body: {
@@ -253,7 +323,7 @@ struct ForumPostView: View {
                                    //authorID: currUser.userID,
                                    //authorProfilePhoto: currUser.profileURL)
                 
-                let newPost = Post(title: postTitle, content: postText, tag: tagOptions[tagOption])
+                let newPost = Post(title: postTitle, content: postText, tag: tagOptions[tagOption], userTags: Array(selectedFriends))
                 
                 // Store Image & Get DownloadURL
                 if postImageData != nil {
@@ -296,6 +366,51 @@ struct ForumPostView: View {
         if let postImageData = postImageData {
             let _ = try await postImageRef.putDataAsync(postImageData)
             try await postImageURL = postImageRef.downloadURL()
+        }
+    }
+    func fetchUserData(userID: String) {
+        var ref: DatabaseReference = Database.database().reference().child("User")
+                DispatchQueue.main.async {
+                ref.child(userID).observeSingleEvent(of: .value, with: { snapshot in
+                    guard let value = snapshot.value as? [String: Any] else {
+                        print("Error: Could not find user")
+                        return
+                    }
+                    if let friendName = value["name"] as? String {
+                        friendNames[userID] = friendName
+                    }
+                
+                    
+                }) { error in
+                    print(error.localizedDescription)
+                }
+                    
+            }
+        }
+    func fetchAllFriendIDs(completion: @escaping ([String]?, Error?) -> Void) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            print("No authenticated user found")
+            completion(nil, NSError(domain: "Auth", code: 401, userInfo: [NSLocalizedDescriptionKey: "No authenticated user found"]))
+            return
+        }
+
+        let db = Firestore.firestore()
+        let userFriendsRef = db.collection("FriendRequests").document(currentUserID).collection("Friends")
+
+        // Retrieve all documents from the "Friends" collection
+        userFriendsRef.getDocuments { (snapshot, error) in
+            if let error = error {
+                completion(nil, error)
+                return
+            }
+
+            var friendIDs: [String] = []
+            for document in snapshot!.documents {
+                let friendID = document.documentID
+                friendIDs.append(friendID)
+            }
+
+            completion(friendIDs, nil)
         }
     }
     

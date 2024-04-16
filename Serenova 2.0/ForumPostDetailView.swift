@@ -444,7 +444,7 @@ struct ForumPostDetailView_Preview: PreviewProvider {
                                      content: "Zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz\n" +
                                               "Zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz\n" +
                                               "Zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz\n" +
-                                              "Zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz\n")
+                                     "Zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz\n", userTags: [])
         
         samplePost.postID = "1"
         return ForumPostDetailView(post: $samplePost)

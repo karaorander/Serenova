@@ -16,7 +16,7 @@ final class ForumReplyTests: XCTestCase {
 
     func testCreateReply() {
         // Set up your test scenario
-        let post = Post(title: "Test Post", content: "Test Content")
+        let post = Post(title: "Test Post", content: "Test Content", userTags: [])
         let bindingPost = Binding<Post>(get: { post }, set: { _ in })
         let forumPostDetailView = ForumPostDetailView(post: bindingPost)
 
@@ -31,7 +31,7 @@ final class ForumReplyTests: XCTestCase {
     }
 
     func testCreateReplyWithError() {
-        let post = Post(title: "Test Post", content: "Test Content")
+        let post = Post(title: "Test Post", content: "Test Content", userTags: [])
         let bindingPost = Binding<Post>(get: { post }, set: { _ in })
         let forumPostDetailView = ForumPostDetailView(post: bindingPost)
         let replyContent = "" //testing error with empty  / no reply maded
@@ -41,7 +41,7 @@ final class ForumReplyTests: XCTestCase {
 
     func testQueryReplies() async {
         // Set up your test scenario
-        let post = Post(title: "Test Post", content: "Test Content")
+        let post = Post(title: "Test Post", content: "Test Content", userTags: [])
         let bindingPost = Binding<Post>(get: { post }, set: { _ in })
         let forumPostDetailView = ForumPostDetailView(post: bindingPost)
 

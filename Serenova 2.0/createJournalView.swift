@@ -311,8 +311,9 @@ struct createJournalView: View {
             completion(friendIDs, nil)
         }
     }
-    private var ref: DatabaseReference = Database.database().reference().child("User")
+
     func fetchUserData(userID: String) {
+        var ref: DatabaseReference = Database.database().reference().child("User")
                 DispatchQueue.main.async {
                 ref.child(userID).observeSingleEvent(of: .value, with: { snapshot in
                     guard let value = snapshot.value as? [String: Any] else {
