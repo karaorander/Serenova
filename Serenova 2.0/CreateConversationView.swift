@@ -321,7 +321,8 @@ struct CreateConversationView: View {
                 let convoNotification = db.collection("FriendRequests").document(viewModel.userID).collection("notifications")
                 
                 convoNotification.document().setData([
-                    "message": "You've been added to a new conversation"
+                    "message": "You've been added to a new conversation",
+                    "type": "message"
                 ], merge: true) { error in
                     if let error = error {
                         print("Error adding notification: \(error)")
