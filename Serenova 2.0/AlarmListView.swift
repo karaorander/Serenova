@@ -102,6 +102,11 @@ struct ListOfAlarmsView: View {
                         EditAlarmView(viewModel: viewModel, alarm: viewModel.alarms[index])
                     }
                 }
+                .overlay(alignment: .bottom, content: {
+                    
+                   MenuView()
+                    
+                })
             }
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)

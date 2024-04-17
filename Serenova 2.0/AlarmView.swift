@@ -23,7 +23,7 @@ struct AlarmClockView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                NavigationLink(destination: ListOfAlarmsView(), isActive: $isClicked) { EmptyView() } // Add this line
+                NavigationLink(destination: ListOfAlarmsView().navigationBarBackButtonHidden(true), isActive: $isClicked) { EmptyView() } // Add this line
                 LinearGradient(gradient: Gradient(colors: [ .nightfallHarmonyRoyalPurple.opacity(0.8), .dreamyTwilightMidnightBlue.opacity(0.7), .nightfallHarmonyNavyBlue.opacity(0.8)]), startPoint: .top, endPoint: .bottom)
                     .ignoresSafeArea()
                 
@@ -141,6 +141,11 @@ struct AlarmClockView: View {
                 .alert(isPresented: $showAlert) {
                     Alert(title: Text("Alarm Set"), message: Text("Your alarm has been successfully set!"), dismissButton: .default(Text("OK")))
                 }
+                .overlay(alignment: .bottom, content: {
+                    
+                   MenuView()
+                    
+                })
                 .ignoresSafeArea()
             }
         }

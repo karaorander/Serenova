@@ -233,6 +233,11 @@ struct TipsView: View {
                         .padding(.horizontal)
                     }
                 }
+                .overlay(alignment: .bottom, content: {
+                    
+                   MenuView()
+                    
+                })
             }
         }
         .navigationBarHidden(true) // Hide the navigation bar for a cleaner look

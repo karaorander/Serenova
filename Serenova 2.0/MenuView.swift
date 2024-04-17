@@ -46,7 +46,7 @@ struct MenuView: View {
                     .foregroundColor(.white)
                 
             }
-            NavigationLink(destination: AlarmClockView()) {
+            NavigationLink(destination: AlarmClockView().navigationBarBackButtonHidden(true)) {
                 Image(systemName: "alarm")
                     .resizable()
                     .frame(width: 30, height: 35)

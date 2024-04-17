@@ -430,7 +430,7 @@ struct AccountInfoView: View {
                             }
                             
                             // Notifications Button
-                            NavigationLink(destination: NotificationsView().navigationBarBackButtonHidden(true)){
+                            NavigationLink(destination: TipsView()){
                                 HStack{
                                     Text("Notifications")
                                         .padding()
