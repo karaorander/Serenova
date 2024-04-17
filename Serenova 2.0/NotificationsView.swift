@@ -391,7 +391,7 @@ struct NotificationsSettingsView: View {
                             .foregroundColor(.tranquilMistAshGray).cornerRadius(5)
                             .brightness(0.3)
                         
-                        Toggle(isOn: $notificationsModel.friendNotifications, label: {Text ("Alarms")})
+                        Toggle(isOn: $notificationsModel.alarmNotifications, label: {Text ("Alarms")})
                             .toggleStyle(SwitchToggleStyle(tint: .nightfallHarmonyNavyBlue))
                             .padding().frame(width:350, height: 40)
                             .fontWeight(.medium)
