@@ -22,7 +22,10 @@ struct JournalView: View {
     @State private var queryNum: Int = 25
     @State private var lastEntry: DocumentSnapshot?
     @State private var privateView: Bool = true
+    @State private var privacy: String = "Private"
     @State private var refreshing: Bool = true
+    @State private var currentFriends: [String] = []
+    
     
     var body: some View {
         NavigationView {
@@ -147,7 +150,10 @@ struct JournalView: View {
                                     )
                                 } else {
                                     ForEach(journalEntries, id: \.id) { entry in
-                                        if !entry.journalPrivacyStatus {
+                                        // Check if the current user is friends with entry's userId
+
+                                        // Only render the journal entry if it is public or the current user is friends with the userId
+                                        if entry.journalPrivacyStatus == "Public" || (currentFriends.contains(entry.userId!) && entry.journalPrivacyStatus == "Friends") {
                                             JournalListingView2(journal: entry)
                                                 .onAppear {
                                                     if lastEntry != nil {
@@ -229,6 +235,7 @@ struct JournalView: View {
                     }.isDetailLink(false)
                     MenuView()}})
             .onAppear() {
+                checkIfFriends()
                 Task {
                         UIRefreshControl.appearance().tintColor = .white
                         Task {
@@ -238,6 +245,37 @@ struct JournalView: View {
                         }
                    
                     
+                }
+            }
+        }
+    }
+
+    /* Load friends in for privacy */
+    func checkIfFriends() {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            print("No authenticated user found")
+            return
+        }
+
+        let db = Firestore.firestore()
+        let userFriendsRef = db.collection("FriendRequests").document(currentUserID).collection("Friends")
+
+        // Fetch all documents from the Friends subcollection
+        userFriendsRef.getDocuments { (querySnapshot, error) in
+            DispatchQueue.main.async {
+                if let documents = querySnapshot?.documents {
+                    // Clear the currentFriends array first to avoid duplicates
+                    currentFriends.removeAll()
+                    
+                    // Append each document's ID to the currentFriends array
+                    for document in documents {
+                        currentFriends.append(document.documentID)
+                    }
+                    
+                    // Print the number of friends added (optional)
+                    print("Added \(currentFriends.count) friends to the array.")
+                } else {
+                    print("Failed to fetch friends: \(error?.localizedDescription ?? "Unknown error")")
                 }
             }
         }
@@ -374,7 +412,7 @@ struct JournalListingView: View {
                             .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
                     }
                     
-                    if(!journal.journalPrivacyStatus) {
+                    if(journal.journalPrivacyStatus == "Public") {
                         Text("Published").font(.system(size: 13))
                             .fontWeight(.semibold)
                             .foregroundColor(.dreamyTwilightLavenderPurple)
@@ -671,6 +709,7 @@ struct JournalDetailsView: View {
     
     @State private var viewModel = GetNameModel()
     @State var isPublished: Bool = false
+    @State var isFriends: Bool = false
     
     @State private var editedContent: String = ""
     @State private var editedTitle: String = ""
@@ -730,13 +769,13 @@ struct JournalDetailsView: View {
                             }
                             Menu {
                                 Button(action: {
-                                    if(journal.journalPrivacyStatus){
-                                        journal.updateValues(newValues: ["journalPrivacyStatus" : false]) {_ in
-                                            journal.journalPrivacyStatus = false
+                                    if(journal.journalPrivacyStatus == "Private"){
+                                        journal.updateValues(newValues: ["journalPrivacyStatus" : "Public"]) {_ in
+                                            journal.journalPrivacyStatus = "Public"
                                         }
                                     }else {
-                                        journal.updateValues(newValues: ["journalPrivacyStatus" : true]) {_ in
-                                            journal.journalPrivacyStatus = true
+                                        journal.updateValues(newValues: ["journalPrivacyStatus" : "Private"]) {_ in
+                                            journal.journalPrivacyStatus = "Private"
                                         }
                                     }
                                 }){

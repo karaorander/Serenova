@@ -23,7 +23,7 @@ class Journal: Codable, Identifiable {
     var journalTime: String = ""
     var journalTitle: String = ""
     var journalContent: String = ""
-    var journalPrivacyStatus: Bool = true // True = Private
+    var journalPrivacyStatus: String = "Private" // initially private
     var journalTags: [String] = []
     
     enum CodingKeys: String, CodingKey {
@@ -106,7 +106,7 @@ class Journal: Codable, Identifiable {
                     case "journalContent":
                         self.journalContent = value as? String ?? ""
                     case "journalPrivacyStatus":
-                        self.journalPrivacyStatus = value as? Bool ?? true
+                        self.journalPrivacyStatus = value as? String ?? "Private"
                     case "journalTags":
                         self.journalTags = value as? [String] ?? []
                     case "userId":

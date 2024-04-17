@@ -39,6 +39,7 @@ struct createJournalView: View {
     @State private var selectedFriends = Set<String>() 
     @State private var friendNames: [String: String] = [:]
     @State private var isDropdownOpen = false
+    @State private var privacy: String = "Private"
     
     @Environment(\.dismiss) private var dismiss
     var body: some View {
@@ -126,7 +127,31 @@ struct createJournalView: View {
                                             .foregroundColor(.tranquilMistMauve.opacity(0.6))
                                     }
                                 })
-                            }.hSpacing(.leading)
+                                Spacer()
+                                
+                                //Privacy Menu
+                                Menu {
+                                    Button("Private") {
+                                        privacy = "Private"
+                                    }
+                                    Button("Public") {
+                                        privacy = "Public"
+                                    }
+                                    Button("Friends") {
+                                        privacy = "Friends"
+                                    }
+                                } label: {
+                                    Text("\(privacy)")
+                                        .font(.system(size: 20, weight: .medium))
+                                        .foregroundColor(.tranquilMistMauve.opacity(0.6))
+                                    
+                                    Image(systemName: "lock")
+                                        .resizable()
+                                        .frame(width: 25, height: 30)
+                                        .foregroundColor(.white)
+                                }
+                            }
+                            .hSpacing(.leading)
                             .padding()
                                 
                                            
@@ -192,12 +217,15 @@ struct createJournalView: View {
                                 .background(Color.dreamyTwilightMidnightBlue.opacity(0.2))
                                 .cornerRadius(10)
                         }.padding(15)
+                        
+                        /*
                         Toggle(isOn: $publishToggle, label: {Text ("Make Public")})
                             .toggleStyle(SwitchToggleStyle(tint: .moonlitSerenityCharcoalGray))
                             .hSpacing(.leading)
                             .padding().frame(width:200, height: 40)
                             .fontWeight(.medium)
                             .background(Color.tranquilMistAshGray.opacity(0.1)).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
+                         */
                         
                            
                             
@@ -279,7 +307,7 @@ struct createJournalView: View {
                                    //authorProfilePhoto: currUser.profileURL)
                 
                 let newEntry = Journal(journalTitle: journalTitle, journalContent: journalText)
-                newEntry.journalPrivacyStatus = !publishToggle
+                newEntry.journalPrivacyStatus = privacy
                 newEntry.journalTags = Array(selectedFriends)
                 try await newEntry.addJournalEntry()
                 
