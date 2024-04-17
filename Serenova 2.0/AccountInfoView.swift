@@ -513,7 +513,7 @@ struct AccountInfoView: View {
                                     .foregroundColor(.white)
                                 
                             }
-                            NavigationLink(destination: ListOfAlarmsView()) {
+                            NavigationLink(destination: AlarmClockView()) {
                                 Image(systemName: "alarm")
                                     .resizable()
                                     .frame(width: 30, height: 35)

@@ -113,7 +113,7 @@ class User: Codable {
     }
     
     func addSound(_ soundID: String) {
-        blocked.append(soundID)
+        sounds.append(soundID)
     }
     
     func addNotification(_ noti: String) {

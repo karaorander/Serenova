@@ -19,113 +19,107 @@ class Alarm: Identifiable, ObservableObject {
     }
 }
 
-struct EditAlarmView: View {
-    @Environment(\.presentationMode) var presentationMode
-    @ObservedObject var alarm: Alarm // Changed to @ObservedObject
-    let sounds = ["Default", "Beep", "Ring", "Digital"]
+class AlarmListViewModel: ObservableObject {
+    @Published var alarms: [Alarm] = []
+    @Published var isShowingEditView = false
+    var selectedAlarmIndex: Int?
+    
+    var selectedAlarm: Alarm?
 
-    var body: some View {
-        NavigationView {
-            Form {
-                DatePicker("Select Time", selection: $alarm.time, displayedComponents: .hourAndMinute)
-                    .datePickerStyle(GraphicalDatePickerStyle())
-
-                Picker("Select Sound", selection: $alarm.sound) {
-                    ForEach(sounds, id: \.self) {
-                        Text($0)
-                    }
+    func populateAlarms() {
+        print("sup")
+        if let user = currUser {
+            var alarmArray: [Alarm] = []
+            print("enum: \(user.sounds.enumerated())")
+            //print("is elemnt: \(user.sounds[0])")
+            for (index, _) in user.sounds.enumerated() {
+                print("NOT HERE!")
+                if index < user.alarms.count && index < user.sounds.count {
+                    let alarm = Alarm(seconds: user.alarms[index], sound: user.sounds[index])
+                    print("acc appending")
+                    alarmArray.append(alarm)
                 }
             }
-            .navigationTitle("Edit Alarm")
-            .navigationBarItems(trailing: Button("Done") {
-                self.presentationMode.wrappedValue.dismiss()
-            })
+            print("yeahhh")
+            alarms = alarmArray
+        }
+    }
+
+    func delete(at offsets: IndexSet) {
+        if let user = currUser {
+            user.alarms.remove(atOffsets: offsets)
+            populateAlarms() // Update the alarms array after deletion
+        }
+    }
+    
+    func edit(alarm: Alarm) {
+        if let index = alarms.firstIndex(where: { $0.id == alarm.id }) {
+            alarms[index] = alarm
         }
     }
 }
 
 
+
+
 struct ListOfAlarmsView: View {
-    /*@State private var alarms = [
-        Alarm(seconds: 5403, sound: "Default"),
-        Alarm(seconds: 3600, sound: "Beep")
-        //Alarm(time: Date().addingTimeInterval(0), sound: "Ring")
-    ]*/
-    @State private var alarms: [Alarm] = []
-    @State private var isShowingEditView: Bool = false
-    @State private var selectedAlarmIndex: Int?
-
-
+    @StateObject private var viewModel = AlarmListViewModel()
     var body: some View {
         NavigationView {
             ZStack {
-                LinearGradient(gradient: Gradient(colors: [.nightfallHarmonyRoyalPurple.opacity(0.8), .dreamyTwilightMidnightBlue.opacity(0.7), .nightfallHarmonyNavyBlue.opacity(0.8)]), startPoint: .top, endPoint: .bottom)
-                                    .ignoresSafeArea()
+                // Your background gradient and other UI elements
+                
                 VStack(spacing: 20) {
-                    
+                    // Your UI components, including the list of alarms
                     Text("Alarms")
-                                            .font(.custom("NovaSquare-Bold", size: 50)) // Customize the font here
-                                            .foregroundColor(.white)
-                                            .padding(.bottom, 20)
+                        .font(.custom("NovaSquare-Bold", size: 50))
+                        .foregroundColor(.white)
+                        .padding(.bottom, 20)
+
                     List {
-                        if let user = currUser {
-                            ForEach(user.alarms.indices, id: \.self) { index in
-                                if index < alarms.count { // Check if index is within bounds of alarms array
-                                    HStack {
-                                        AlarmRow(alarm: $alarms[index])
-                                            .onTapGesture {
-                                                self.selectedAlarmIndex = index
-                                                self.isShowingEditView = true
-                                            }
+                        ForEach(viewModel.alarms) { alarm in
+                            HStack {
+                                AlarmRow(alarm: alarm)
+                                    .onTapGesture {
+                                        viewModel.selectedAlarm = alarm
+                                        viewModel.selectedAlarmIndex = viewModel.alarms.firstIndex(where: { $0.id == alarm.id })
+                                        viewModel.isShowingEditView = true
                                     }
-                                    .padding()
-                                    .background(Color.nightfallHarmonyRoyalPurple)
-                                    .cornerRadius(10)
-                                    .listRowBackground(Color.clear)
-                                }
                             }
-                            .onDelete(perform: delete)
+                            .padding()
+                            .background(Color.nightfallHarmonyRoyalPurple)
+                            .cornerRadius(10)
+                            .listRowBackground(Color.clear)
                         }
+                        .onDelete(perform: viewModel.delete)
+                        .id(UUID())
                     }
-                    .toolbar {
-                        EditButton()
-                    }
-                    .sheet(isPresented: $isShowingEditView) {
-                        if let index = selectedAlarmIndex {
-                            EditAlarmView(alarm: alarms[index])
-                        }
-                    }
-                    
                 }
                 .background(LinearGradient(gradient: Gradient(colors: [.nightfallHarmonyRoyalPurple.opacity(0.8), .dreamyTwilightMidnightBlue.opacity(0.7), .nightfallHarmonyNavyBlue.opacity(0.8)]), startPoint: .top, endPoint: .bottom))
                 .listStyle(PlainListStyle())
+                .sheet(isPresented: $viewModel.isShowingEditView) {
+                    if let index = viewModel.selectedAlarmIndex {
+                        EditAlarmView(viewModel: viewModel, alarm: viewModel.alarms[index])
+                    }
+                }
             }
             .navigationTitle("")
             .navigationBarTitleDisplayMode(.inline)
         }
         .onAppear {
-            if let user = currUser {
-                print("hey.. \(user.alarms[0])")
-                
-                for (index, _) in user.sounds.enumerated() {
-                    if index < user.alarms.count && index < user.sounds.count {
-                        let alarm = Alarm(seconds: user.alarms[index], sound: user.sounds[index])
-                        alarms.append(alarm)
-                    }
-                }
-            }
+            print("populating")
+            viewModel.populateAlarms()
         }
     }
-    
-    
-    func delete(at offsets: IndexSet) {
-        alarms.remove(atOffsets: offsets)
+    func saveEditedAlarm(_ editedAlarm: Alarm) {
+        viewModel.edit(alarm: editedAlarm)
     }
 }
 
 
-struct AlarmRow: View {
-    @Binding var alarm: Alarm
+
+/*struct AlarmRow: View {
+    var alarm: Alarm
     var body: some View {
         HStack {
             Text(alarm.time, style: .time)
@@ -138,6 +132,56 @@ struct AlarmRow: View {
                 .font(.custom("NovaSquare-Bold", size: 18))
                 .foregroundColor(.white)
             
+        }
+        .padding()
+        .background(Color.nightfallHarmonyRoyalPurple)
+        .cornerRadius(10)
+    }
+}*/
+
+struct EditAlarmView: View {
+    @ObservedObject var viewModel: AlarmListViewModel
+    @State private var editedAlarm: Alarm
+    @Environment(\.presentationMode) var presentationMode
+
+    init(viewModel: AlarmListViewModel, alarm: Alarm) {
+        self.viewModel = viewModel
+        self._editedAlarm = State(initialValue: alarm)
+    }
+
+    var body: some View {
+        VStack {
+            DatePicker("Time", selection: $editedAlarm.time, displayedComponents: .hourAndMinute)
+                .datePickerStyle(WheelDatePickerStyle())
+                .labelsHidden()
+
+            // Add any additional fields for editing alarm details, such as sound selection
+
+            Button("Save") {
+                viewModel.edit(alarm: editedAlarm) // Update the alarm in the view model
+                presentationMode.wrappedValue.dismiss()
+            }
+            .padding()
+        }
+        .padding()
+        .navigationBarTitle("Edit Alarm")
+    }
+}
+
+struct AlarmRow: View {
+    @ObservedObject var alarm: Alarm // Use @ObservedObject
+
+    var body: some View {
+        HStack {
+            Text(alarm.time, style: .time)
+                .font(.custom("NovaSquare-Bold", size: 18))
+                .foregroundColor(.white)
+
+            Spacer()
+
+            Text(alarm.sound)
+                .font(.custom("NovaSquare-Bold", size: 18))
+                .foregroundColor(.white)
         }
         .padding()
         .background(Color.nightfallHarmonyRoyalPurple)

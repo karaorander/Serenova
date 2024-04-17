@@ -99,7 +99,6 @@
 		F22430F62BB6BC8C007EE5B7 /* BlockedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22430F52BB6BC8C007EE5B7 /* BlockedTests.swift */; };
 		F22430F82BB6BEEA007EE5B7 /* EditAccountTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22430F72BB6BEEA007EE5B7 /* EditAccountTests.swift */; };
 		F23D7CDF2B7FAF320018F325 /* ResetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */; };
-		F299FAF82BB025CD00845FE4 /* JournalPostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F299FAF72BB025CD00845FE4 /* JournalPostView.swift */; };
 		F299FAFA2BB0265400845FE4 /* createJournalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F299FAF92BB0265400845FE4 /* createJournalView.swift */; };
 		F2C2EFC92BCC93A8005BC175 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C2EFC82BCC93A8005BC175 /* MenuView.swift */; };
 		F2C2EFCB2BCCC970005BC175 /* AlarmTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C2EFCA2BCCC970005BC175 /* AlarmTests.swift */; };
@@ -200,7 +199,6 @@
 		F22430F52BB6BC8C007EE5B7 /* BlockedTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedTests.swift; sourceTree = "<group>"; };
 		F22430F72BB6BEEA007EE5B7 /* EditAccountTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditAccountTests.swift; sourceTree = "<group>"; };
 		F23D7CDE2B7FAF320018F325 /* ResetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordView.swift; sourceTree = "<group>"; };
-		F299FAF72BB025CD00845FE4 /* JournalPostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalPostView.swift; sourceTree = "<group>"; };
 		F299FAF92BB0265400845FE4 /* createJournalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = createJournalView.swift; sourceTree = "<group>"; };
 		F2C2EFC82BCC93A8005BC175 /* MenuView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		F2C2EFCA2BCCC970005BC175 /* AlarmTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmTests.swift; sourceTree = "<group>"; };
@@ -323,7 +321,6 @@
 				E0934EC92B85BA8B00494176 /* CreateUserInfoView.swift */,
 				8FE41FBC2BB4CB930067CEB9 /* SleepScoreView.swift */,
 				23B3854A2B8E7F0200F2C614 /* SleepGraphView.swift */,
-				F299FAF72BB025CD00845FE4 /* JournalPostView.swift */,
 				E0D1C15E2B880EED00A7609C /* SleepGoalsView.swift */,
 				F20CA4D22BC0495F00C49411 /* TipsView.swift */,
 				E0D1C1672B8815DF00A7609C /* SleepLogView.swift */,
@@ -638,7 +635,6 @@
 				F2D887022B8EA03A00C0A87E /* AlarmListView.swift in Sources */,
 				F2C2EFC92BCC93A8005BC175 /* MenuView.swift in Sources */,
 				F20DE1BF2BB4D44E009D1C27 /* otherAccountView.swift in Sources */,
-				F299FAF82BB025CD00845FE4 /* JournalPostView.swift in Sources */,
 				E029E4FB2B7DAC4F00E8220B /* SignUpView.swift in Sources */,
 				E0934ECA2B85BA8B00494176 /* CreateUserInfoView.swift in Sources */,
 				23D1E0E32B7A8FDE00539A62 /* Serenova_2_0App.swift in Sources */,

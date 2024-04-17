@@ -161,6 +161,7 @@ class NotificationsModel: ObservableObject {
     @Published var notifications: [String] = []
     @Published var friendNotifications: Bool = true
     @Published var messageNotifications: Bool = true
+    @Published var alarmNotifications: Bool = true
     
     func getNotifications() {
             if let currentUser = Auth.auth().currentUser {
@@ -182,7 +183,7 @@ class NotificationsModel: ObservableObject {
                             let data = document.data()
                             if let type = data["type"] as?
                                 String {
-                                if (type == "friend" && self.friendNotifications) || (type == "message" && self.messageNotifications) {
+                                if (type == "friend" && self.friendNotifications) || (type == "message" && self.messageNotifications) || (type == "alarm" && self.alarmNotifications) {
                                     if let message = data["message"] as? String {
                                         // Append the message to the temporary array
                                         tempArray.append(message)
@@ -266,6 +267,12 @@ class NotificationsModel: ObservableObject {
                     self.messageNotifications = messageNotifications
                 }
             }
+            
+            if let alarmNotifications = userData["alarmNotifications"] as? Bool {
+                DispatchQueue.main.async {
+                    self.alarmNotifications = alarmNotifications
+                }
+            }
         }
     }
     
@@ -280,7 +287,8 @@ class NotificationsModel: ObservableObject {
 
         let userData: [String: Any] = [
             "friendNotifications": self.friendNotifications,
-            "messageNotifications": self.messageNotifications
+            "messageNotifications": self.messageNotifications,
+            "alarmNotifications": self.alarmNotifications
         ]
 
         userRef.updateChildValues(userData) { error, _ in
@@ -379,6 +387,15 @@ struct NotificationsSettingsView: View {
                             .toggleStyle(SwitchToggleStyle(tint: .nightfallHarmonyNavyBlue))
                             .padding().frame(width:350, height: 40)
                             .fontWeight(.medium)
+                        //.background(Color.tranquilMistAshGray)
+                            .foregroundColor(.tranquilMistAshGray).cornerRadius(5)
+                            .brightness(0.3)
+                        
+                        Toggle(isOn: $notificationsModel.friendNotifications, label: {Text ("Alarms")})
+                            .toggleStyle(SwitchToggleStyle(tint: .nightfallHarmonyNavyBlue))
+                            .padding().frame(width:350, height: 40)
+                            .fontWeight(.medium)
+                        
                         //.background(Color.tranquilMistAshGray)
                             .foregroundColor(.tranquilMistAshGray).cornerRadius(5)
                             .brightness(0.3)
