@@ -56,7 +56,7 @@ class Post: Codable, Identifiable {
                 }
                 
                 // Extract additional information based on your data structure
-                if let username = userData["username"] as? String {
+                if let username = userData["name"] as? String {
                     self.authorUsername = username
                 }
             }
