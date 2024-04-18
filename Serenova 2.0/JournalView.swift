@@ -601,8 +601,15 @@ struct JournalListingView2: View {
                     return
                     
                 }
+                
+               
                 // Save post to Firebase
                 let newReply = JournalReply(replyContent: reply, parentPostID: journal.journalId!)
+                
+                if (newReply.replyContent == "") {
+                    return
+                }
+
                 try await newReply.createReply()
                 replies.append(newReply)
                 print("reply appened.")
