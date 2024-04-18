@@ -88,6 +88,7 @@
 		F20DE1BF2BB4D44E009D1C27 /* otherAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20DE1BE2BB4D44E009D1C27 /* otherAccountView.swift */; };
 		F20DE1C12BB4D8EB009D1C27 /* NotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20DE1C02BB4D8EB009D1C27 /* NotificationsView.swift */; };
 		F21405152BB015A700F507E7 /* RedeemRewardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21405142BB015A700F507E7 /* RedeemRewardsView.swift */; };
+		F21F80C72BD0FC8100A8B0B5 /* TipsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21F80C62BD0FC8100A8B0B5 /* TipsTests.swift */; };
 		F22430E82BB67A61007EE5B7 /* ForumDeleteTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22430E52BB67A61007EE5B7 /* ForumDeleteTests.swift */; };
 		F22430E92BB67A61007EE5B7 /* SleepGoalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22430E62BB67A61007EE5B7 /* SleepGoalTests.swift */; };
 		F22430EA2BB67A61007EE5B7 /* JournalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22430E72BB67A61007EE5B7 /* JournalTests.swift */; };
@@ -188,6 +189,7 @@
 		F20DE1BE2BB4D44E009D1C27 /* otherAccountView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = otherAccountView.swift; sourceTree = "<group>"; };
 		F20DE1C02BB4D8EB009D1C27 /* NotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsView.swift; sourceTree = "<group>"; };
 		F21405142BB015A700F507E7 /* RedeemRewardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedeemRewardsView.swift; sourceTree = "<group>"; };
+		F21F80C62BD0FC8100A8B0B5 /* TipsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipsTests.swift; sourceTree = "<group>"; };
 		F22430E52BB67A61007EE5B7 /* ForumDeleteTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ForumDeleteTests.swift; path = "../../../Serenova9/Serenova 2.0Tests/ForumDeleteTests.swift"; sourceTree = "<group>"; };
 		F22430E62BB67A61007EE5B7 /* SleepGoalTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SleepGoalTests.swift; path = "../../../Serenova9/Serenova 2.0Tests/SleepGoalTests.swift"; sourceTree = "<group>"; };
 		F22430E72BB67A61007EE5B7 /* JournalTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JournalTests.swift; path = "../../../Serenova9/Serenova 2.0Tests/JournalTests.swift"; sourceTree = "<group>"; };
@@ -365,6 +367,7 @@
 				F22430F12BB69F93007EE5B7 /* SearchForumTests.swift */,
 				F22430F72BB6BEEA007EE5B7 /* EditAccountTests.swift */,
 				F2C2EFCA2BCCC970005BC175 /* AlarmTests.swift */,
+				F21F80C62BD0FC8100A8B0B5 /* TipsTests.swift */,
 			);
 			path = "Serenova 2.0Tests";
 			sourceTree = "<group>";
@@ -655,6 +658,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F22430EE2BB6900C007EE5B7 /* FriendRequestTests.swift in Sources */,
+				F21F80C72BD0FC8100A8B0B5 /* TipsTests.swift in Sources */,
 				7F60D4A42BB3AFDC004D66FB /* ForumRepliesTests.swift in Sources */,
 				F22430F22BB69F93007EE5B7 /* SearchForumTests.swift in Sources */,
 				23D1E0F42B7A8FDF00539A62 /* Serenova_2_0Tests.swift in Sources */,
