@@ -12,6 +12,8 @@ class Message {
     var senderUsername: String = ""
     var recipientUsername: String = ""
     var isSent: Bool = false
+    var convoId: String = ""
+    var userId: String?
     
     init() {}
     
