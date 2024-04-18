@@ -576,8 +576,8 @@ struct SleepGoalsView: View {
     
     
     func getTotalGoal() -> Float{
-        if let currUser = currUser {
-            var totalGoal = (viewModel.totalSleepGoalHours * 60) + viewModel.totalSleepGoalMins
+        if currUser != nil {
+            let totalGoal = (viewModel.totalSleepGoalHours * 60) + viewModel.totalSleepGoalMins
             goal_stats[1].goal = CGFloat(totalGoal)
             if (totalGoal < 0) {
                 return 0
@@ -590,8 +590,8 @@ struct SleepGoalsView: View {
     }
 
     func getDeepGoal() -> Float{
-        if let currUser = currUser {
-            var deepGoal = (viewModel.deepSleepGoalHours * 60) + viewModel.deepSleepGoalMins
+        if currUser != nil {
+            let deepGoal = (viewModel.deepSleepGoalHours * 60) + viewModel.deepSleepGoalMins
             goal_stats[0].goal = CGFloat(deepGoal)
             if (deepGoal < 0) {
                 return 0
@@ -779,8 +779,8 @@ struct EditGoalsView: View {
     }
     
     func getTotalGoal() -> Float{
-        if let currUser = currUser {
-            var totalGoal = (viewModel.totalSleepGoalHours * 60) + viewModel.totalSleepGoalMins
+        if currUser != nil {
+            let totalGoal = (viewModel.totalSleepGoalHours * 60) + viewModel.totalSleepGoalMins
             if (totalGoal < 0) {
                 return 0
             } else {
@@ -792,8 +792,8 @@ struct EditGoalsView: View {
     }
 
     func getDeepGoal() -> Float{
-        if let currUser = currUser {
-            var deepGoal = (viewModel.deepSleepGoalHours * 60) + viewModel.deepSleepGoalMins
+        if currUser != nil {
+            let deepGoal = (viewModel.deepSleepGoalHours * 60) + viewModel.deepSleepGoalMins
             if (deepGoal < 0) {
                 return 0
             } else {
@@ -806,7 +806,7 @@ struct EditGoalsView: View {
     
     // description and name format can be changed
     func metTotalGoal() {
-        var currentData = goal_stats[1].currentData
+        let currentData = goal_stats[1].currentData
         if (getTotalGoal() >= Float(currentData)) {
             currUser?.updateMoons(rewardCount: 50)
         }
@@ -814,7 +814,7 @@ struct EditGoalsView: View {
     
     // description and name format can be changed
     func metDeepGoal() {
-        var currentData = goal_stats[0].currentData
+        let currentData = goal_stats[0].currentData
         if (getDeepGoal() >= Float(currentData)) {
             currUser?.updateMoons(rewardCount: 50)
         }

@@ -10,7 +10,7 @@ class Message {
     var timeStamp: Double = Date().timeIntervalSince1970
     var senderID: String = ""
     var senderUsername: String = ""
-    var recipient: User?
+    var recipientUsername: String = ""
     var isSent: Bool = false
     
     init() {}
@@ -38,6 +38,12 @@ class Message {
         }
         // TODO: store message to Firebase
         
+    }
+    
+    init(messageContent: String, messageSender: String, messageReceiver: String) {
+        self.messageContent =  messageContent
+        self.senderUsername = messageSender
+        self.recipientUsername = messageReceiver
     }
     
     /*

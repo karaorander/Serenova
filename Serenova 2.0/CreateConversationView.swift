@@ -150,7 +150,8 @@ struct CreateConversationView: View {
                         Spacer()
                         Button(action: {
                             //createPost()
-                            createConversation()
+                            let newMessage = Message(messageContent: messageText, messageSender: currUser?.username ?? "", messageReceiver: messageReceiver)
+                            createConversation(recipient: messageReceiver, message: newMessage)
                             //isCreatingPost = true
                         }) {
                             Text("Send").font(.callout)
@@ -283,7 +284,7 @@ struct CreateConversationView: View {
         })
     }
     
-    func createConversation() {
+    func createConversation(recipient: String, message: Message) {
         showkeyboard = false
         isLoading = true
         
@@ -306,16 +307,20 @@ struct CreateConversationView: View {
                                    //authorProfilePhoto: currUser.profileURL)
                 var allParticipants: [String] = []
                 
+                allParticipants.append(recipient)
+                print(recipient)
                 // check if user is blocked -- TODO: needs to be for each user added
                 if (!(viewModel.checkIfBlocked(by: viewModel.username)) &&
                     !(viewModel.checkIfCurrUserBlocked(by: viewModel.username))) {
                     allParticipants.append(viewModel.username)
+                    print(viewModel.username)
                 }
                               
                 
                 //allParticipants.append(<#T##newElement: Any##Any#>)
                 let newConversation = Conversation(participants: allParticipants)
-                
+                newConversation.messages.append(message)
+                currUser?.addConversation(newConversation)
                 // notify user they've been added to a Conversation -- TODO: needs to be for each user added
                 let db = Firestore.firestore()
                 let convoNotification = db.collection("FriendRequests").document(viewModel.userID).collection("notifications")

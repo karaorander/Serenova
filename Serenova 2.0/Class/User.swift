@@ -46,6 +46,7 @@ class User: Codable {
     public var blocked: [String] = []
     public var alarms: [Int] = []
     public var sounds: [String] = []
+    public var conversations: [Conversation] = []
 
     
     /* Gender */
@@ -114,6 +115,10 @@ class User: Codable {
     
     func addSound(_ soundID: String) {
         sounds.append(soundID)
+    }
+    
+    func addConversation(_ convoID: Conversation) {
+        conversations.append(convoID)
     }
     
     func addNotification(_ noti: String) {
