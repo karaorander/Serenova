@@ -320,7 +320,7 @@ struct SleepGoalsView: View {
                         NavigationLink (destination: EditGoalsView().navigationBarBackButtonHidden(true)) {
                             HStack {
                                 Text("Edit Sleep Goals").font(.system(size: 18)).fontWeight(.medium)
-                                    .foregroundColor(.white)
+                                    .foregroundColor(.nightfallHarmonyNavyBlue)
                                     .cornerRadius(10)
                                 Image(systemName: "arrow.right").foregroundColor(.white)
                             }.frame(width: 320, height: 50)
@@ -331,6 +331,17 @@ struct SleepGoalsView: View {
                         NavigationLink (destination: SleepScoreView().navigationBarBackButtonHidden(true)) {
                             HStack {
                                 Text("View Today's Sleep Score").font(.system(size: 18)).fontWeight(.medium)
+                                    .foregroundColor(.nightfallHarmonyNavyBlue)
+                                    .cornerRadius(10)
+                                Image(systemName: "arrow.right").foregroundColor(.white)
+                            }.frame(width: 320, height: 50)
+                                .background(Color.tranquilMistAshGray)
+                                .foregroundColor(.nightfallHarmonyNavyBlue)
+                                .cornerRadius(10)
+                        }
+                        NavigationLink (destination: TipsView().navigationBarBackButtonHidden(true)) {
+                            HStack {
+                                Text("View Your Personlized Tips").font(.system(size: 18)).fontWeight(.medium)
                                     .foregroundColor(.nightfallHarmonyNavyBlue)
                                     .cornerRadius(10)
                                 Image(systemName: "arrow.right").foregroundColor(.white)

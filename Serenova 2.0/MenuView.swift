@@ -30,7 +30,7 @@ struct MenuView: View {
                     .foregroundColor(.white)
                 
             }
-            NavigationLink(destination: TipsView().navigationBarBackButtonHidden(true)) {
+            NavigationLink(destination: SleepLogView().navigationBarBackButtonHidden(true)) {
                 
                 Image(systemName: "zzz")
                     .resizable()
