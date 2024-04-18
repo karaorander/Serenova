@@ -15,8 +15,8 @@ struct AlarmClockView: View {
     @State public var alarmTime: Date = Date()
     @State public var selectedSound: String = "Default"
     @State public var isRepeating: Bool = false // State to handle the repeating toggle
-    @State private var showAlert = false
-    @State private var isClicked = false
+    @State public var showAlert = false
+    @State public var isClicked = false
     var colors = [Color.tranquilMistAccentTurquoise.opacity(0.6), Color.dreamyTwilightMidnightBlue]
     let sounds = ["Default", "Beep", "Ring", "Digital"]
 

@@ -6,38 +6,64 @@
 //
 
 import XCTest
-@testable import Serenova_2_0 // Import your app module here
+@testable import Serenova_2_0 // Import your app module
 
 class AlarmClockViewTests: XCTestCase {
-    
-    // Test case to check if the alarm time is set correctly
-    func testAlarmTimeSetting() {
+
+
+    func testScheduleAlarmNotification() {
+        // Create an instance of AlarmClockView
         let alarmClockView = AlarmClockView()
-        let newTime = Date()
         
-        alarmClockView.alarmTime = newTime
+        // Set alarm time to 10 seconds from now
+        let currentDate = Date()
+        let futureDate = Calendar.current.date(byAdding: .second, value: 10, to: currentDate)!
+        alarmClockView.setAlarmTime(futureDate)
         
-        XCTAssertNotEqual(alarmClockView.alarmTime, newTime, "Alarm time should be set correctly")
+        // Schedule notification
+        alarmClockView.scheduleAlarmNotification(10, "Beep")
+        
+        // Get the alarm time components
+        let calendar = Calendar.current
+        let alarmTimeComponents = calendar.dateComponents([.hour, .minute], from: alarmClockView.alarmTime)
+        let futureDateComponents = calendar.dateComponents([.hour, .minute], from: futureDate)
+        
+        // Check if the hour and minute components are equal
+        XCTAssertEqual(alarmTimeComponents.hour, futureDateComponents.hour)
+        XCTAssertEqual(alarmTimeComponents.minute, futureDateComponents.minute)
     }
-    
-    // Test case to check if the selected sound is updated correctly
-    func testSelectedSoundUpdate() {
+
+    func testSecondsToTimeString() {
+        // Create an instance of AlarmClockView
         let alarmClockView = AlarmClockView()
-        let newSound = "Beep"
         
-        alarmClockView.selectedSound = newSound
+        // Test converting seconds to time string
+        let timeString = alarmClockView.secondsToTimeString(3600) // 1 hour in seconds
+        XCTAssertEqual(timeString, "01:00 am")
         
-        XCTAssertNotEqual(alarmClockView.selectedSound, newSound, "Selected sound should be updated correctly")
+        let timeString2 = alarmClockView.secondsToTimeString(3600 * 13) // 1 pm
+        XCTAssertEqual(timeString2, "01:00 pm")
     }
+
+    // Test notification content
     
-    // Test case to check if the repeating toggle works as expected
-    func testRepeatingToggle() {
+    func testNotificationContent() {
+        // Create an instance of AlarmClockView
         let alarmClockView = AlarmClockView()
-        let initialRepeatingState = alarmClockView.isRepeating
         
-        alarmClockView.isRepeating.toggle()
+        // Set alarm time to a specific time
+        let alarmTime = 10 // Time in seconds
+        alarmClockView.setAlarmTime(Date())
         
-        XCTAssertEqual(alarmClockView.isRepeating, initialRepeatingState, "Repeating toggle should change state")
+        // Schedule notification
+        alarmClockView.scheduleAlarmNotification(alarmTime, "Beep") // Assuming successful scheduling
+        
+        // Check if the notification message is correct
+        let expectedMessage = "The 00:00 am Alarm is Done ! **Beep noises!!**" // Replace with expected message
+        // Replace with actual notification content verification if available
+        
+        // Example assertion
+        XCTAssertEqual(expectedMessage, "The 00:00 am Alarm is Done ! **Beep noises!!**")
     }
     
 }

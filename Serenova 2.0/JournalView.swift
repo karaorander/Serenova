@@ -1234,7 +1234,7 @@ struct JournalCommentView: View {
                     .foregroundColor(Color.white)
                     .foregroundColor(.clear)
                 VStack(alignment: .leading){
-                    Text("@\(currUser?.name ?? "@User")")
+                    Text("@\(commentReply.authorID)")
                         .font(.system(size: 13))
                         .fontWeight(.semibold)
                         .foregroundColor(Color.white)
