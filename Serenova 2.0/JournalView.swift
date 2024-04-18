@@ -474,6 +474,14 @@ struct JournalListingView2: View {
     
     @State private var isClicked: Bool = false
     @State private var selectedJournal: Journal?
+    @State var replies: [JournalReply] = []
+    @State var reply: String = ""
+    @State private var isReplying: Bool = false
+    @State private var replyContent: String = ""
+    @State private var showError:Bool = false
+    @State private var errorMess: String = ""
+    @State private var queryNum: Int = 25
+    @State private var lastReply: DocumentSnapshot?
     var body: some View {
         Button (action: {isClicked.toggle()
             selectedJournal = journal}) {
@@ -495,6 +503,7 @@ struct JournalListingView2: View {
                             .fontWeight(.semibold)
                             .foregroundColor(Color.nightfallHarmonyNavyBlue)
                             .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                        
                     }
                     
                     
@@ -521,7 +530,38 @@ struct JournalListingView2: View {
                         .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
                         .padding(.bottom, 8)
                 }
+                if replies.count > 0 {
+                    ForEach(replies.indices, id: \.self) { index in
+                        JournalCommentView(commentReply: $replies[index], journ: journal)
+                            .onAppear {
+                                if index == replies.count - 1 && lastReply != nil {
+                                    Task {
+                                        await queryReplies(NUM_REPLIES: queryNum)
+                                    }
+                                }
+                            }
+                            .padding(5)
+                    }
+                    .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                    .listRowBackground(
+                        RoundedRectangle(cornerRadius: 10)
+                            .fill(Color.soothingNightDeepIndigo)
+                    )
+                }
                 
+                Button(action: {
+                    isReplying.toggle()
+                }) {
+                    Text("Reply")
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(Color.blue)
+                        .cornerRadius(10)
+                }
+                if isReplying {
+                    AddReplyView()
+                        .padding()
+                }
                 
                 
                 
@@ -537,8 +577,124 @@ struct JournalListingView2: View {
                 
                 
         })
+        .onAppear() {
+            UIRefreshControl.appearance().tintColor = .white
+            Task {
+                // Prevents crash but data will not be loaded
+                // Need to run in simulator
+                if replies.count == 0 && currUser != nil {
+                    await queryReplies(NUM_REPLIES: queryNum)
+                }
+            }
+        }
         
         
+    }
+    
+    func createReply() {
+        print("tracking prog")
+        Task {
+            do {
+                print("in the do")
+                guard currUser != nil else {
+                    print("nil")
+                    return
+                    
+                }
+                // Save post to Firebase
+                let newReply = JournalReply(replyContent: reply, parentPostID: journal.journalId!)
+                try await newReply.createReply()
+                replies.append(newReply)
+                print("reply appened.")
+                reply = ""
+            } catch {
+                print("error caugh \(error)")
+               await errorAlerts(error)
+            }
+        }
+        print("end")
+    }
+    
+    func errorAlerts(_ error: Error)async{
+        await MainActor.run(body: {
+            errorMess = error.localizedDescription
+            showError.toggle()
+        })
+    }
+    
+    func errorAlerts(_ error: String)async{
+        await MainActor.run(body: {
+            errorMess = error
+            showError.toggle()
+        })
+    }
+    
+    
+    func queryReplies(NUM_REPLIES: Int) async {
+        print("this called?")
+        // Database Reference
+        let db = Firestore.firestore()
+        
+        do {
+            // Check for nils
+            guard journal.journalId != nil else { return }
+            guard currUser != nil else { return }
+            // Fetch batch of posts from Firestore
+            var query: Query! = db.collection("Journal").document(journal.journalId!).collection("Replies")
+                .order(by: "timeStamp", descending: false)
+                .limit(to: NUM_REPLIES)
+            
+            if let lastReply = lastReply {
+                query = query.start(afterDocument: lastReply)
+            }
+            
+            // Retrieve documents
+            let replyBatch = try await query.getDocuments()
+            let newReplies = replyBatch.documents.compactMap { post -> JournalReply? in
+                try? post.data(as: JournalReply.self)
+            }
+            
+            await MainActor.run(body: {
+                replies += newReplies
+                lastReply = replyBatch.documents.last
+            })
+            
+        } catch {
+            print (error.localizedDescription)
+        }
+        return
+    }
+    
+    @ViewBuilder
+    func AddReplyView() -> some View {
+        HStack(alignment: .bottom) {
+            HStack(alignment: .bottom){
+                TextField("Share your sleep thoughts...", text: $reply, axis: .vertical)
+                    .padding(15)
+                    .lineLimit(5)
+                    .foregroundColor(Color.soothingNightDeepIndigo)
+                    .background(Color.white.opacity(0.8))
+                    .cornerRadius(20)
+                    .submitLabel(.send)
+                Button {
+                    // Create reply
+                    print("creating reply")
+                    createReply()
+                } label: {
+                    Image(systemName: "arrow.up.circle.fill")
+                        .resizable()
+                        .frame(width: 35, height: 35)
+                        .foregroundColor(Color.nightfallHarmonyRoyalPurple)
+                        .brightness(0.3)
+                        .saturation(1.5)
+                        .disabled(reply.isEmpty)
+                        .opacity(reply.isEmpty ? 0.4 : 1)
+                }
+                .padding(.horizontal, 5).padding(.vertical, 9)
+            }
+        }
+        .padding()
+        .cornerRadius(20)
     }
     
     
@@ -1059,6 +1215,191 @@ struct JournalDetailsView: View {
     }
 }
 
+
+struct JournalCommentView: View {
+    
+    // Parameter
+    @Binding var commentReply: JournalReply
+    var journ: Journal
+    @State private var likesListener: ListenerRegistration?
+    @State private var hasChanged: Bool = false  // Change to activate change in view
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Image(systemName: "person.crop.circle.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 35, height: 35)
+                    .foregroundColor(Color.white)
+                    .foregroundColor(.clear)
+                VStack(alignment: .leading){
+                    Text("@\(currUser?.name ?? "@User")")
+                        .font(.system(size: 13))
+                        .fontWeight(.semibold)
+                        .foregroundColor(Color.white)
+                        .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                    Text("\(commentReply.getRelativeTime())")
+                        .font(.system(size: 13))
+                        .fontWeight(.semibold)
+                        .foregroundColor(.dreamyTwilightSlateGray)
+                        .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                }
+                Spacer()
+                Text("REPLY")
+                    .foregroundColor(Color.nightfallHarmonyRoyalPurple)
+                    .brightness(0.3)
+                    .saturation(1.5)
+            }
+            .padding(.vertical, 10)
+            Text("\(commentReply.replyContent)")
+                .foregroundColor(.white)
+                .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                .padding(.bottom, 8)
+            
+            // Upvote & Downvote, Replies, Edit
+            HStack {
+                // Like Dislikes System
+                HStack {
+                    Button {
+                        withAnimation {
+                            handleLikes()
+                        }
+                    } label: {
+                        Image(systemName: "arrow.up.circle.fill")
+                            .fontWeight(.bold)
+                            .foregroundColor(commentReply.likedIDs.contains(currUser!.userID)  ? .nightfallHarmonyRoyalPurple : .white)
+                            .brightness(0.3)
+                            .saturation(1.5)
+                    }
+                    Text("\(commentReply.likedIDs.count - commentReply.dislikedIDs.count)")
+                        .font(.system(size: 15))
+                        .foregroundColor(.white)
+                    Button {
+                        withAnimation {
+                            handleDislikes()
+                        }
+                    } label: {
+                        Image(systemName: "arrow.down.circle.fill")
+                            .foregroundColor(commentReply.dislikedIDs.contains(currUser!.userID)  ? .nightfallHarmonyRoyalPurple : .white)
+                            .brightness(0.3)
+                            .saturation(1.5)
+                            .fontWeight(.bold)
+                    }
+                }
+                .padding(.trailing, 10)
+                Spacer()
+                // TODO: Implement dropdown menu for options (delete and edit)
+                Image(systemName: "ellipsis")
+                    .foregroundColor(.white)
+            }
+            .padding(.bottom, 8)
+            
+        }
+        .listRowSeparator(.hidden)
+        .onAppear {
+            if likesListener == nil {
+                guard commentReply.replyID != nil else { return }
+                guard commentReply.parentPostID != nil else { return }
+                guard currUser != nil else { return }
+                print("post id: \(journ.journalId!)")
+                let postRef = Firestore.firestore().collection("Journal").document(journ.journalId!).collection("Replies")
+                
+                /*Firestore.firestore().collection("Journal").document(journ.journalId!).collection("Replies").getDocuments { (snapshot, error) in
+                    if let error = error {
+                        print("Error checking Replies collection: \(error)")
+                        return
+                    }
+                    
+                    if snapshot?.isEmpty ?? true {
+                        // "Replies" collection does not exist, create it by adding a dummy document
+                        Firestore.firestore().collection("Journal").document(journ.journalId!).collection("Replies").addDocument(data: ["dummy": "data"]) { error in
+                            if let error = error {
+                                print("Error creating Replies collection: \(error)")
+                                return
+                            }
+                            
+                            // Successfully created "Replies" collection
+                            print("Replies collection created successfully")
+                        }
+                    } else {
+                        // "Replies" collection already exists
+                        print("Replies collection already exists")
+                    }
+                }*/
+                
+                likesListener = postRef.document(commentReply.replyID!).addSnapshotListener { documentSnapshot, error in
+                    print("UPDATE!")
+                    if let error = error {
+                        print("Error retreiving collection: \(error)")
+                    }
+                    guard let document = documentSnapshot else {
+                        print("Error fetching document: \(error!)")
+                        return
+                    }
+                    guard let data = document.data() else {
+                        print("Document data was empty.")
+                        return
+                    }
+                    // Update likes and dislikes
+                    if let likes = data["likedIDs"] as? [String] {
+                        commentReply.likedIDs = likes
+                    }
+                    if let dislikes = data["dislikedIDs"] as? [String] {
+                        commentReply.dislikedIDs = dislikes
+                    }
+                    hasChanged.toggle()
+                }
+            }
+        }
+        .onDisappear {
+            likesListener?.remove()
+            likesListener = nil
+        }
+    }
+    
+    /*
+     * Handle logic for likes
+     */
+    func handleLikes() {
+        print("going in hereee??")
+        guard commentReply.replyID != nil else { return }
+        guard commentReply.parentPostID != nil else { return }
+        guard currUser != nil else { return }
+        
+        if commentReply.likedIDs.contains(currUser!.userID) {
+            Firestore.firestore().collection("Journal").document(commentReply.parentPostID!).collection("Replies").document(commentReply.replyID!).updateData([
+                "likedIDs": FieldValue.arrayRemove([currUser!.userID])
+            ])
+        } else {
+            Firestore.firestore().collection("Journal").document(commentReply.parentPostID!).collection("Replies").document(commentReply.replyID!).updateData([
+                "likedIDs": FieldValue.arrayUnion([currUser!.userID]),
+                "dislikedIDs": FieldValue.arrayRemove([currUser!.userID])
+            ])
+        }
+    }
+    
+    /*
+     * Handle logic for dislikes
+     */
+    func handleDislikes() {
+        print("going in hereee??")
+        guard commentReply.replyID != nil else { return }
+        guard commentReply.parentPostID != nil else { return }
+        guard currUser != nil else { return }
+        
+        if commentReply.dislikedIDs.contains(currUser!.userID) {
+            Firestore.firestore().collection("Journal").document(commentReply.parentPostID!).collection("Replies").document(commentReply.replyID!).updateData([
+                "dislikedIDs": FieldValue.arrayRemove([currUser!.userID])
+            ])
+        } else {
+            Firestore.firestore().collection("Journal").document(commentReply.parentPostID!).collection("Replies").document(commentReply.replyID!).updateData([
+                "dislikedIDs": FieldValue.arrayUnion([currUser!.userID]),
+                "likedIDs": FieldValue.arrayRemove([currUser!.userID])
+            ])
+        }
+    }
+}
 
 
 struct NoStyle1: ButtonStyle {

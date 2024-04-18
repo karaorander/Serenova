@@ -341,7 +341,7 @@ struct SleepGoalsView: View {
                         }
                         NavigationLink (destination: TipsView().navigationBarBackButtonHidden(true)) {
                             HStack {
-                                Text("View Your Personlized Tips").font(.system(size: 18)).fontWeight(.medium)
+                                Text("Sleep Tips").font(.system(size: 18)).fontWeight(.medium)
                                     .foregroundColor(.nightfallHarmonyNavyBlue)
                                     .cornerRadius(10)
                                 Image(systemName: "arrow.right").foregroundColor(.white)

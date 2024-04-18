@@ -37,6 +37,20 @@ let tips = [
     // Add more articles as needed
 ] // ex: index = 0-4 insomnia articles (this is the backup plan)
 
+struct Video {
+    var title: String
+    var url: URL
+    var tags: [String]
+}
+
+let videos = [
+    Video(title: "Sleep Meditation", url: URL(string: "https://www.youtube.com/watch?v=t0kACis_dJE")!, tags: ["male"]),
+    Video(title: "Tips for Better Sleep", url: URL(string: "https://www.youtube.com/watch?v=ZKNQ6gsW45M")!, tags: ["female"]),
+    Video(title: "Tips for Better Sleep", url: URL(string: "https://www.youtube.com/watch?v=j5Sl8LyI7k8")!, tags: ["insomnia"]),
+    Video(title: "Tips for Better Sleep", url: URL(string: "https://www.youtube.com/watch?v=WVPtF7gr1jw")!, tags: ["insomnia"])
+    // Add more videos as needed
+]
+
 class TipsViewModel: ObservableObject {
     @Published var fullname = ""
     @Published var totalSleepGoalHours : Float = -1
@@ -199,8 +213,9 @@ struct TipsView: View {
                             SectionHeaderView(title: "Sleep Videos")
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: 20) {
-                                    VideoLinkView(videoURL: URL(string: "https://www.youtube.com/watch?v=t0kACis_dJE")!)
-                                    VideoLinkView(videoURL: URL(string: "https://www.youtube.com/watch?v=ZKNQ6gsW45M")!)
+                                    ForEach(get_relevant_video_urls(), id: \.self) { videoURL in
+                                        VideoLinkView(videoURL: videoURL)
+                                    }
                                 }
                             }
                             .frame(height: 250) // Increase height to accommodate the video links better
@@ -319,7 +334,81 @@ struct TipsView: View {
         }
         return releventArts
     } //end of get_relevent_articles
+    
+    
+    func get_relevant_video_urls() -> [URL] {
+        var relevantURLs = [URL]()
+        
+        var userTags = [String()]
+        
+        if (viewModel.hasinsomnia || viewModel.hadinsomnia) {
+            print("insomn")
+            userTags.append("insomnia")
+        }
+        
+        let myAge = Int(viewModel.age) ?? -1
+        
+        if (myAge > 65) {
+            print("old")
+            userTags.append("old")
+        }
+        
+        if (myAge <= 17 && myAge >= 5) {
+            print("kid")
+            userTags.append("kid")
+        }
+        
+        if (myAge < 5 && myAge > -1) {
+            print("baby")
+            userTags.append("baby")
+        }
+        
+        var gendervar = "female"
+        
+        if (viewModel.gender.lowercased() == gendervar) {
+            print("female")
+            userTags.append("female")
+        }
+        
+        gendervar = "male"
+        
+        if (viewModel.gender.lowercased() == gendervar) {
+            print("male")
+            userTags.append("male")
+        }
+        
+        if (viewModel.snore) {
+            print("snore")
+            userTags.append("snore")
+        }
+        
+        if (viewModel.hasmedication) {
+            print("meddy")
+            userTags.append("meds")
+        }
+        
+        if (viewModel.hasnightmares) {
+            print("nightm")
+            userTags.append("nightmares")
+        }
+        
+        if (viewModel.isearlybird) {
+            print("earlybird")
+            userTags.append("earlybird")
+        }
+
+        for video in videos {
+            for tag in video.tags {
+                if userTags.contains(tag) {
+                    relevantURLs.append(video.url)
+                    break // Once a relevant tag is found, no need to check other tags for this video
+                }
+            }
+        }
+        return relevantURLs
+    }
 }
+
 
 struct SectionHeaderView: View {
     var title: String

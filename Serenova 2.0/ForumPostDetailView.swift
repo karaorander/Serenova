@@ -282,6 +282,7 @@ struct NoRepliesView: View {
 }
 
 struct CommentView: View {
+    
     // Parameter
     @Binding var commentReply: Reply
     @State private var likesListener: ListenerRegistration?
@@ -401,6 +402,7 @@ struct CommentView: View {
      * Handle logic for likes
      */
     func handleLikes() {
+        print("going in hereee??")
         guard commentReply.replyID != nil else { return }
         guard commentReply.parentPostID != nil else { return }
         guard currUser != nil else { return }
@@ -421,6 +423,7 @@ struct CommentView: View {
      * Handle logic for dislikes
      */
     func handleDislikes() {
+        print("going in hereee??")
         guard commentReply.replyID != nil else { return }
         guard commentReply.parentPostID != nil else { return }
         guard currUser != nil else { return }
