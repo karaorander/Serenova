@@ -5,7 +5,18 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 import FirebaseDatabase
 
-class Message {
+struct Message: Codable {
+    var senderID: String
+    var timestamp: Date
+    var content: String
+    
+    init(senderID: String, timestamp: Date, content: String) {
+        self.senderID = senderID
+        self.timestamp = timestamp
+        self.content = content
+    }
+}
+/*class Message {
     var messageContent = ""
     var timeStamp: Double = Date().timeIntervalSince1970
     var senderID: String = ""
@@ -63,4 +74,4 @@ class Message {
         let dateFormatter = DateFormatter()
         return dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(timeStamp)))
     }
-}
+}*/

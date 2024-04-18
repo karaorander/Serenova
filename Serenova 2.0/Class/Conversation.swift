@@ -1,38 +1,43 @@
-//
-//  Conversation.swift
-//  Serenova 2.0
-//
-//  Created by Caitlin Wilson on 2/19/24.
-//
-
 import Foundation
 import Firebase
 import FirebaseFirestore
-import FirebaseAuth
+import FirebaseFirestoreSwift
 import FirebaseDatabase
+import FirebaseAuth
 
-// Global User Variable
-var currConvo: Conversation?
-
-
-class Conversation {
-    //var participantOne: User?
-    //var participantTwo: User?
+class Conversation: Codable, Identifiable {
+    @DocumentID var convoId: String?
     public var participants: [String] = []
     public var messages: [Message] = []
-    public var convoId: String = ""
-    public var numParticipants = -1;
+   // public var convoId: String = ""
+    public var numParticipants = -1
     
-    //public var givenParticipant: String = ""
-    //public var firstMessage: String = ""
     
+    enum CodingKeys: String, CodingKey {
+        case convoId
+        case participants
+        case messages
+        case numParticipants
+    }
+
     init(participants: [String]) {
         self.participants = participants
-        //self.titleAsArray = title.lowercased().split(separator: " ").map { String($0) }
-        //self.content = content
+        self.numParticipants = participants.count
     }
 
     func addMessage(_ messageToAdd: Message) {
         messages.append(messageToAdd)
+    }
+    
+    // Function to create a conversation in Firestore
+    func createConversation() async throws{
+        let db = Firestore.firestore()
+        
+        // Create a new document reference for the conversation
+        let ref = db.collection("Conversations")
+        
+        try ref.addDocument(from: self)
+        
+        
     }
 }

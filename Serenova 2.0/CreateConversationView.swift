@@ -16,6 +16,200 @@ class CreateConvoViewModel: ObservableObject  {
     @Published var fullname = ""
     @Published var username = ""
     @Published var userID = ""
+    @Published var userIDs: [String] = []
+    @Published var usernames: [String] = []
+    
+    
+        
+        // Function to fetch usernames from the database
+        func fetchUserIDs(completion: @escaping () -> Void) {
+            let db = Database.database().reference().child("User")
+            db.observeSingleEvent(of: .value) { snapshot in
+                guard let usersData = snapshot.value as? [String: Any] else {
+                    print("Error fetching user data")
+                    return
+                }
+                self.userIDs = Array(usersData.keys)
+                
+                          
+                completion()
+            }
+            
+        }
+    
+    func fetchUsernames(completion: @escaping () -> Void) {
+        let db = Database.database().reference().child("User")
+        db.observeSingleEvent(of: .value) { snapshot in
+            guard let usersData = snapshot.value as? [String: [String: Any]] else {
+                print("Error fetching user data")
+                return
+            }
+            // Extract names from usersData
+            let names = usersData.compactMap { $0.value["name"] as? String }
+            self.usernames = names
+            self.userIDs = Array(usersData.keys)
+            completion()
+        }
+    }
+    
+    func fetchUsername(completion: @escaping () -> Void) {
+        let db = Database.database().reference()
+        let id = Auth.auth().currentUser!.uid
+        let ur = db.child("User").child(id)
+        
+        ur.observe(.value) { snapshot,arg  in
+            guard let userData = snapshot.value as? [String: Any] else {
+                print("Error fetching data")
+                return
+            }
+            
+            // Extract additional information based on your data structure
+            if let fullname = userData["name"] as? String {
+                self.fullname = fullname
+            }
+            if let username = userData["username"] as? String {
+                self.username = username
+            }
+            if let userID = userData["userID"] as? String {
+                self.userID = userID
+            }
+            
+            self.objectWillChange.send()
+            
+            // Call the completion closure to indicate that data fetching is completed
+            completion()
+        }
+    }
+    
+    func checkIfBlocked(by userID: String) -> Bool {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            print("No authenticated user found")
+            return false
+        }
+        
+        let db = Firestore.firestore()
+        let userBlockedRef = db.collection("Users").document(currentUserID).collection("BlockedUsers")
+        
+        var isBlocked = false
+        
+        userBlockedRef.document(userID).getDocument { document, error in
+            if let error = error {
+                print("Error checking blocked status:", error.localizedDescription)
+                return
+            }
+            
+            if let _ = document?.data() {
+                isBlocked = true
+            }
+        }
+        
+        return isBlocked
+    }
+    
+    
+}
+
+
+
+struct CreateConversationView: View {
+    @StateObject var viewModel = CreateConvoViewModel()
+    @State private var messageReceiver: String = ""
+    @State private var messageText: String = ""
+    @Environment(\.dismiss) private var dismiss
+    
+    @State private var selectedUsernameIndex = 0
+        
+        // Add a property to store the selected username
+        var selectedUsername: String {
+            viewModel.usernames[selectedUsernameIndex]
+        }
+    
+    var body: some View {
+        VStack {
+            VStack {
+                        // Add a picker view to select a username
+                        Picker("Select User", selection: $selectedUsernameIndex) {
+                            ForEach(0..<viewModel.userIDs.count, id: \.self) { index in
+                                Text(viewModel.userIDs[index])
+                            }
+                        }
+                        .pickerStyle(MenuPickerStyle())
+                        .padding()
+                        
+                        
+                    }
+                    .onAppear {
+                        // Fetch usernames when the view appears
+                      //  viewModel.fetchUsernames { }
+                        viewModel.fetchUserIDs {}
+                    }
+            
+            
+            TextField("Message", text: $messageText)
+                .padding()
+                .background(Color.gray.opacity(0.2))
+                .cornerRadius(8)
+                .padding(.horizontal)
+            
+            Button(action: {
+                // Validate input and create conversation
+                createConversation()
+                print("CREATING....")
+                dismiss()
+               // dismiss()
+            }) {
+                Text("Send")
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.blue)
+                    .cornerRadius(8)
+            }
+            .padding()
+        }
+        .navigationTitle("New Conversation")
+    }
+    
+    func createConversation() {
+        guard !messageText.isEmpty else {
+            // Show an alert indicating that both fields are required
+            return
+        }
+        
+        // Check if the recipient exists and is not blocked
+        viewModel.fetchUsername {
+            Task {
+                do {
+                    
+                  /*  if viewModel.username.isEmpty {
+                        // Show an alert indicating that the recipient does not exist
+                        //  } else if viewModel.checkIfBlocked(by: viewModel.username) {
+                        // Show an alert indicating that the recipient is blocked
+                    } else {*/
+                        print("CREATING MESSAGE")
+                        // Create a new conversation
+                        let message = Message(senderID: Auth.auth().currentUser!.uid, timestamp: Date(), content: messageText)
+                    let newConversation = Conversation(participants: [Auth.auth().currentUser!.uid, viewModel.userIDs[selectedUsernameIndex]])
+                        newConversation.addMessage(message)
+                        try await newConversation.createConversation()
+                        // Save the conversation to Firestore or your backend database
+                        
+                    //}
+                } catch {
+                    
+                }
+            }
+        }
+    }
+}
+
+
+/*
+
+class CreateConvoViewModel: ObservableObject  {
+    @Published var fullname = ""
+    @Published var username = ""
+    @Published var userID = ""
     //@Published var isBlocked: Bool = false
 
 
@@ -440,3 +634,4 @@ struct CreateConversationView: View {
 #Preview {
     ForumPostView()
 }
+*/
