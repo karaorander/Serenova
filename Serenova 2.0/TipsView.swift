@@ -136,6 +136,107 @@ class TipsViewModel: ObservableObject {
     }
 }
 
+struct BreathingExercise {
+    var title: String
+    var url: URL
+}
+
+let breathingExercises = [
+    BreathingExercise(title: "4-7-8 Breathing Technique", url: URL(string: "https://www.youtube.com/watch?v=YRPh_GaiL8s")!),
+    BreathingExercise(title: "Box Breathing Exercise", url: URL(string: "https://www.youtube.com/watch?v=gz4G31LGyog")!)
+    // Add more breathing exercises as needed
+]
+
+struct BreathingExerciseView: View {
+    var breathingExercise: BreathingExercise
+    
+    var body: some View {
+        VStack {
+            // Placeholder for breathing exercise thumbnail
+            Image(systemName: "waveform") // Replace with your own thumbnail image
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 200, height: 150) // Adjust size as needed
+                .cornerRadius(10)
+                .shadow(radius: 5)
+                .padding(.bottom, 10)
+            
+            Button(action: {
+                // Open the breathing exercise URL
+                UIApplication.shared.open(breathingExercise.url)
+            }) {
+                Text(breathingExercise.title)
+                    .font(.headline)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.dreamyTwilightAccentViolet.opacity(0.4)) // Customize button color
+                    .cornerRadius(8)
+                    .shadow(radius: 3)
+            }
+            .padding(.horizontal, 20)
+        }
+        .padding()
+        .background(Color.dreamyTwilightAccentViolet.opacity(0.3)) // Change background color as desired
+        .cornerRadius(15)
+        .shadow(radius: 5)
+        .padding(.horizontal)
+    }
+}
+
+   // .nightfallHarmonyRoyalPurple.opacity(0.5), , .nightfallHarmonyNavyBlue
+
+struct GuidedMeditation {
+    var title: String
+    var url: URL
+}
+
+let guidedMeditations = [
+    GuidedMeditation(title: "Body Scan Meditation", url: URL(string: "https://www.youtube.com/watch?v=_v-OpjTUT18")!),
+    GuidedMeditation(title: "Loving-Kindness Meditation", url: URL(string: "https://www.youtube.com/watch?v=sz7cpV7ERsM")!)
+    // Add more guided meditations as needed
+]
+
+struct GuidedMeditationView: View {
+    var guidedMeditation: GuidedMeditation
+    
+    var body: some View {
+        VStack {
+            // Placeholder for guided meditation thumbnail
+            Image(systemName: "person.fill") // Replace with your own thumbnail image
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 200, height: 150) // Adjust size as needed
+                .cornerRadius(10)
+                .shadow(radius: 5)
+                .padding(.bottom, 10)
+            
+            Button(action: {
+                // Open the guided meditation URL
+                UIApplication.shared.open(guidedMeditation.url)
+            }) {
+                Text(guidedMeditation.title)
+                    .font(.headline)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.nightfallHarmonyNavyBlue.opacity(0.3)) // Customize button color
+                    .cornerRadius(8)
+                    .shadow(radius: 3)
+            }
+            .padding(.horizontal, 20)
+        }
+        .padding()
+        .background(Color.nightfallHarmonyNavyBlue.opacity(0.2)) // Change background color as desired
+        .cornerRadius(15)
+        .shadow(radius: 5)
+        .padding(.horizontal)
+    }
+}
+
+
 struct VideoLinkView: View {
     var videoURL: URL
     @State private var isPresentingWebView = false // State to control the presentation of the WebView
@@ -220,20 +321,33 @@ struct TipsView: View {
                             }
                             .frame(height: 250) // Increase height to accommodate the video links better
                             
-                            SectionHeaderView(title: "Sleep Hygiene Tips")
-                            ForEach(0..<3) { _ in // Replace with actual data
-                                ExpandableTipView(tipTitle: "Maintain a Sleep Schedule",
-                                                                     tipDescription: "Sticking to a consistent sleep schedule helps regulate your body's clock.",
-                                                                     detailedSteps: ["Decide on a fixed bedtime and wake-up time.",
-                                                                                     "Avoid sleeping in, even on weekends.",
-                                                                                     "Nap to make up for lost sleep, but not too late in the day."])
-
+                            SectionHeaderView(title: "Detailed Tips")
+                            ForEach(getSleepHygieneTips(), id: \.self) { tipView in
+                                tipView
                             }
                             
-                            SectionHeaderView(title: "Science of Sleep")
-                            ForEach(0..<3) { _ in // Replace with actual data
-                                ArticleCardView(articleTitle: "The Role of REM Sleep", articleDescription: "Explore the importance of REM sleep in learning and memory.")
+                            SectionHeaderView(title: "Breathing Exercises")
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 20) {
+                                    ForEach(breathingExercises, id: \.title) { breathingExercise in
+                                        BreathingExerciseView(breathingExercise: breathingExercise)
+                                    }
+                                }
                             }
+                            .frame(height: 250)
+                            
+                            SectionHeaderView(title: "Guided Meditations")
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 20) {
+                                    ForEach(guidedMeditations, id: \.title) { guidedMeditation in
+                                        GuidedMeditationView(guidedMeditation: guidedMeditation)
+                                    }
+                                }
+                            }
+                            .frame(height: 250)
+                            Spacer()
+                            Spacer()
+                            
                         }
                         .padding(.horizontal)
                     }
@@ -335,6 +449,58 @@ struct TipsView: View {
         return releventArts
     } //end of get_relevent_articles
     
+    func getSleepHygieneTips() -> [ExpandableTipView] {
+        var sleepHygieneTips = [ExpandableTipView]()
+        
+        // Customize this logic based on user preferences
+        if viewModel.hasinsomnia || viewModel.hadinsomnia {
+            let insomniaTip = ExpandableTipView(tipTitle: "Manage Insomnia",
+                                                tipDescription: "Effective strategies for managing insomnia.",
+                                                detailedSteps: ["Practice relaxation techniques before bedtime.",
+                                                                "Limit exposure to screens before sleep.",
+                                                                "Create a calming bedtime routine."])
+            sleepHygieneTips.append(insomniaTip)
+        }
+        
+        let gender = viewModel.gender.lowercased()
+
+        if gender == "male" {
+            let maleTip = ExpandableTipView(tipTitle: "Male Sleep Tips",
+                                            tipDescription: "Sleep tips tailored for men.",
+                                            detailedSteps: ["Engage in regular physical activity.",
+                                                            "Avoid heavy meals close to bedtime.",
+                                                            "Create a comfortable sleep environment."])
+            sleepHygieneTips.append(maleTip)
+        } else if gender == "female" {
+            let femaleTip = ExpandableTipView(tipTitle: "Female Sleep Tips",
+                                              tipDescription: "Sleep tips tailored for women.",
+                                              detailedSteps: ["Practice relaxation techniques.",
+                                                              "Establish a consistent sleep schedule.",
+                                                              "Limit caffeine intake, especially in the afternoon."])
+            sleepHygieneTips.append(femaleTip)
+        }
+
+        if viewModel.age < 5 {
+            let babyTip = ExpandableTipView(tipTitle: "Baby Sleep Tips",
+                                            tipDescription: "Tips for improving your baby's sleep.",
+                                            detailedSteps: ["Establish a soothing bedtime routine.",
+                                                            "Create a sleep-friendly environment.",
+                                                            "Watch for signs of tiredness."])
+            sleepHygieneTips.append(babyTip)
+        } else if viewModel.isearlybird {
+            let earlyBirdTip = ExpandableTipView(tipTitle: "Early Bird Sleep Tips",
+                                                  tipDescription: "Tips for optimizing sleep for early risers.",
+                                                  detailedSteps: ["Go to bed and wake up at the same time every day, even on weekends.",
+                                                                  "Get exposure to natural light in the morning.",
+                                                                  "Limit caffeine intake in the afternoon and evening."])
+            sleepHygieneTips.append(earlyBirdTip)
+        }
+        
+        // Add more conditions based on user preferences
+        
+        return sleepHygieneTips
+    }
+    
     
     func get_relevant_video_urls() -> [URL] {
         var relevantURLs = [URL]()
@@ -422,7 +588,7 @@ struct SectionHeaderView: View {
             .frame(maxWidth: .infinity, alignment: .center) // Center alignment
     }
 }
-struct ExpandableTipView: View {
+struct ExpandableTipView: View, Hashable {
     var tipTitle: String
     var tipDescription: String
     var detailedSteps: [String]
@@ -467,6 +633,17 @@ struct ExpandableTipView: View {
         }
         .shadow(radius: 5)
         .padding(.horizontal)
+    }
+    
+    // Implementing Hashable protocol
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(tipTitle)
+        hasher.combine(tipDescription)
+        hasher.combine(detailedSteps)
+    }
+    
+    static func == (lhs: ExpandableTipView, rhs: ExpandableTipView) -> Bool {
+        return lhs.tipTitle == rhs.tipTitle && lhs.tipDescription == rhs.tipDescription && lhs.detailedSteps == rhs.detailedSteps
     }
 }
 
