@@ -29,6 +29,41 @@ class Conversation: Codable, Identifiable {
         messages.append(messageToAdd)
     }
     
+    func updateValues(newValues: [String: Any], completion: @escaping (Error?) -> Void) {
+        guard let convoID = convoId else {
+            //completion(ConvoError.missingConvoID)
+            // ^^ provide error message
+            return
+        }
+            
+        let db = Firestore.firestore()
+        let convoRef = db.collection("Conversations").document(convoID)
+        
+        // Update values in Firestore
+        convoRef.updateData(newValues) { error in
+            if let error = error {
+                // Handle error
+                completion(error)
+            } else {
+                    
+                for (key, value) in newValues {
+                    // Update each property individually
+                    switch key {
+                    case "participants":
+                        self.participants = value as? [String] ?? []
+                    case "messages":
+                        self.messages = value as? [Message] ?? []
+                    case "numParticipants":
+                        self.numParticipants = value as? Int ?? 0
+                    default:
+                        break
+                    }
+                }
+                completion(nil)
+            }
+        }
+    }
+    
     // Function to create a conversation in Firestore
     func createConversation() async throws{
         let db = Firestore.firestore()

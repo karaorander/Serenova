@@ -12,6 +12,7 @@ import FirebaseDatabase
 import FirebaseDatabaseSwift
 
 class ConversationViewModel: ObservableObject {
+    @State var participants: [String] = []
     
     func fetchUsername(completion: @escaping () -> Void) {
         let db = Database.database().reference()
@@ -25,6 +26,10 @@ class ConversationViewModel: ObservableObject {
             }
             
             // TODO: Extract additional information based on your data structure
+            
+            if let participants = userData["participants"] as? [String] {
+                self.participants = participants
+            }
                                     
             self.objectWillChange.send()
                             
@@ -55,7 +60,7 @@ struct NoConversationsView: View {
 
 struct ConversationListView: View {
     
-    @StateObject private var viewModel = GoalViewModel()
+    @StateObject private var viewModel = ConversationViewModel()
     
     @State var conversationList: [Conversation] = []
     @State private var queryNum: Int = 25
@@ -189,6 +194,27 @@ struct ConversationListView: View {
                 }
             }
         }
+    }
+    
+    func deleteConversation(conversation: Conversation) {
+        let db = Firestore.firestore()
+        
+        let currentUserID = Auth.auth().currentUser!.uid
+           
+           // Reference to the particular "conversation" collection
+        let convoCollectionRef = db.collection("Conversations").document(conversation.convoId!)
+           
+           // Delete the userID from conversation
+        var newParticipants = viewModel.participants
+        
+        if let index = newParticipants.firstIndex(of: currentUserID) {
+            newParticipants.remove(at: index)
+        }
+        
+        convoCollectionRef.updateData([
+            "participants": FieldValue.arrayRemove([currUser!.userID])
+        ])
+        
     }
 }
 
