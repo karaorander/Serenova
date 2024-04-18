@@ -172,7 +172,7 @@ struct ConversationListView: View {
                         
                         Spacer()
                         
-                        NavigationLink(destination: ForumPostView().navigationBarBackButtonHidden(true)) {
+                        NavigationLink(destination: ForumPostView(postText: "", postTitle: "").navigationBarBackButtonHidden(true)) {
                             Image(systemName: "person.2")
                                 .resizable()
                                 .frame(width: 45, height: 30)

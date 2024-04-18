@@ -17,8 +17,8 @@ struct ForumPostView: View {
     
 
         
-    @State var postText: String = ""
-    @State var postTitle: String = ""
+    @State var postText: String
+    @State var postTitle: String
     @State var postImageData: Data?
     @State var postImageURL: URL?
     
@@ -422,5 +422,5 @@ struct ForumPostView: View {
 
 
 #Preview {
-    ForumPostView()
+    ForumPostView(postText: "", postTitle: "")
 }

@@ -110,7 +110,7 @@ struct ForumView: View {
                         
                         Spacer()
                         
-                        NavigationLink(destination: ForumPostView().navigationBarBackButtonHidden(true)) {
+                        NavigationLink(destination: ForumPostView(postText: "", postTitle: "").navigationBarBackButtonHidden(true)) {
                             Image(systemName: "plus")
                                 .fontWeight(.semibold)
                                 .foregroundStyle(Color.dreamyTwilightOrchid)

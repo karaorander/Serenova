@@ -61,6 +61,8 @@ struct SleepScoreView: View {
     @State private var isLoading:Bool = false
     @State private var showError:Bool = false
     @State private var errorMess: String = ""
+    @State private var exportTitle: String = ""
+    @State private var exportContent: String = ""
     
     @FocusState private var showkeyboard: Bool
     @Environment(\.dismiss) private var dismiss
@@ -99,7 +101,12 @@ struct SleepScoreView: View {
                                 .foregroundColor(.white)
                                 .scaledToFit().minimumScaleFactor(0.01)
                                 .lineLimit(1).hSpacing(.center)
-                            
+                            NavigationLink(destination: ForumPostView(postText: exportContent, postTitle: exportTitle).navigationBarBackButtonHidden(true)) {
+                                Image(systemName: "square.and.arrow.up")
+                                    .resizable()
+                                    .frame(width: 20, height: 25)
+                                    .foregroundColor(.white)
+                            }.isDetailLink(false)
                             
                         }.padding()
                         
@@ -197,6 +204,11 @@ struct SleepScoreView: View {
                         } else {
                             sleepScore = calculateSleepScore(deepSleepMinutes: (Int(deepSleepTime ?? 0)) / 60, coreSleepMinutes: (Int(coreSleepTime ?? 0)) / 60, remSleepMinutes: (Int(remSleepTime ?? 0)) / 60, totalSleepMinutes: (Int(totalSleepTime ?? 0)) / 60)
                         }
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.dateFormat = "EEEE, MMM d"
+                        let dateString = dateFormatter.string(from: Date())
+                        exportTitle = "\(viewModel.fullname)'s Sleep: \(dateString)"
+                        exportContent = "💫 \(viewModel.fullname)'s sleep score of the day: \(sleepScore)\n\nThe breakdown:\n\(totalSleepMin) minutes in total\n\(deepSleepMin) minutes spent in deep sleep\n\(coreSleepMin) minutes spent in light sleep\n\(remSleepMin) minutes spent in REM"
                     }
                 }, date: Date())
             }
