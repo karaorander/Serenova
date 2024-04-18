@@ -39,33 +39,77 @@ class SleepScoreTests: XCTestCase {
     }
     
     func testIdealSleepScenario() {
-            let sleepScore = calculateSleepScore(deepSleepMinutes: 120, coreSleepMinutes: 240, remSleepMinutes: 90, totalSleepMinutes: 480)
-            XCTAssertGreaterThan(sleepScore, 100, "The sleep score for an ideal sleep scenario should be close to 100.")
+        let sleepScore = calculateSleepScore(deepSleepMinutes: 120, coreSleepMinutes: 240, remSleepMinutes: 90, totalSleepMinutes: 480)
+        XCTAssertGreaterThan(sleepScore, 100, "The sleep score for an ideal sleep scenario should be close to 100.")
+    }
+    
+    // Test for zero sleep scenario
+    func testZeroSleepScenario() {
+        let sleepScore = calculateSleepScore(deepSleepMinutes: 0, coreSleepMinutes: 0, remSleepMinutes: 0, totalSleepMinutes: 0)
+        XCTAssertEqual(sleepScore, 0, "The sleep score for a zero sleep scenario should be 0.")
+    }
+    
+    // Test for excessive sleep scenario
+    func testExcessiveSleepScenario() {
+        let sleepScore = calculateSleepScore(deepSleepMinutes: 180, coreSleepMinutes: 300, remSleepMinutes: 120, totalSleepMinutes: 600)
+        XCTAssertGreaterThan(sleepScore, 100, "The sleep score for an excessive sleep scenario should be greater than 100.")
+    }
+    
+    // Test for single stage sleep scenario
+    func testSingleStageSleepScenario() {
+        let sleepScore = SleepScoreView().calculateSleepScore(deepSleepMinutes: 480, coreSleepMinutes: 0, remSleepMinutes: 0, totalSleepMinutes: 480)
+        XCTAssertGreaterThanOrEqual(sleepScore, 0, "The sleep score for a single stage sleep scenario should be greater than 0.")
+    }
+    
+    // Test for negative values scenario
+    func testNegativeValuesScenario() {
+        let sleepScore = SleepScoreView().calculateSleepScore(deepSleepMinutes: -120, coreSleepMinutes: -240, remSleepMinutes: -90, totalSleepMinutes: -480)
+        XCTAssertEqual(sleepScore, 0, "The sleep score for negative values should be handled gracefully, potentially defaulting to 0.")
+    }
+    
+    func testExportSleepDataAsForumPost() {
+        let viewModel = SleepScoreModel()
+        viewModel.fullname = "Test User"
+        
+        // Simulate sleep data
+        let totalSleepMin = 480
+        let deepSleepMin = 240
+        let coreSleepMin = 120
+        let remSleepMin = 120
+        
+        let view = SleepScoreView(viewModel: viewModel)
+        view.totalSleepMin = totalSleepMin
+        view.deepSleepMin = deepSleepMin
+        view.coreSleepMin = coreSleepMin
+        view.remSleepMin = remSleepMin
+        
+        // Calculate sleep score
+        let sleepScore = view.calculateSleepScore(deepSleepMinutes: deepSleepMin, coreSleepMinutes: coreSleepMin, remSleepMinutes: remSleepMin, totalSleepMinutes: totalSleepMin)
+        
+       
+        let expectation = XCTestExpectation(description: "View appeared")
+        
+        // Trigger onAppear to generate export title and content
+        view.onAppear {
+           
+            let exportTitle = view.exportTitle
+            let exportContent = view.exportContent
+            
+            // Expected values
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "EEEE, MMM d"
+            let dateString = dateFormatter.string(from: Date())
+            let expectedTitle = "\(viewModel.fullname)'s Sleep: \(dateString)"
+            let expectedContent = "💫 \(viewModel.fullname)'s sleep score of the day: \(sleepScore)\n\nThe breakdown:\n\(totalSleepMin) minutes in total\n\(deepSleepMin) minutes spent in deep sleep\n\(coreSleepMin) minutes spent in light sleep\n\(remSleepMin) minutes spent in REM"
+            
+            XCTAssertEqual(exportTitle, expectedTitle)
+            XCTAssertEqual(exportContent, expectedContent)
+            
+            
+            expectation.fulfill()
         }
-
-        // Test for zero sleep scenario
-        func testZeroSleepScenario() {
-            let sleepScore = calculateSleepScore(deepSleepMinutes: 0, coreSleepMinutes: 0, remSleepMinutes: 0, totalSleepMinutes: 0)
-            XCTAssertEqual(sleepScore, 0, "The sleep score for a zero sleep scenario should be 0.")
-        }
-
-        // Test for excessive sleep scenario
-        func testExcessiveSleepScenario() {
-            let sleepScore = calculateSleepScore(deepSleepMinutes: 180, coreSleepMinutes: 300, remSleepMinutes: 120, totalSleepMinutes: 600)
-            XCTAssertGreaterThan(sleepScore, 100, "The sleep score for an excessive sleep scenario should be greater than 100.")
-        }
-
-        // Test for single stage sleep scenario
-        func testSingleStageSleepScenario() {
-            let sleepScore = SleepScoreView().calculateSleepScore(deepSleepMinutes: 480, coreSleepMinutes: 0, remSleepMinutes: 0, totalSleepMinutes: 480)
-            XCTAssertGreaterThanOrEqual(sleepScore, 0, "The sleep score for a single stage sleep scenario should be greater than 0.")
-        }
-
-        // Test for negative values scenario
-        func testNegativeValuesScenario() {
-            let sleepScore = SleepScoreView().calculateSleepScore(deepSleepMinutes: -120, coreSleepMinutes: -240, remSleepMinutes: -90, totalSleepMinutes: -480)
-            XCTAssertEqual(sleepScore, 0, "The sleep score for negative values should be handled gracefully, potentially defaulting to 0.")
-        }
+        
+        
+    }
 }
-
 

@@ -61,17 +61,17 @@ struct SleepScoreView: View {
     @State private var isLoading:Bool = false
     @State private var showError:Bool = false
     @State private var errorMess: String = ""
-    @State private var exportTitle: String = ""
-    @State private var exportContent: String = ""
+    @State var exportTitle: String = ""
+    @State var exportContent: String = ""
     
     @FocusState private var showkeyboard: Bool
     @Environment(\.dismiss) private var dismiss
     
-    @State private var totalSleepMin:Int = 0
-    @State private var otherSleepMin:Int = 0
-    @State private var deepSleepMin:Int = 0
-    @State private var coreSleepMin:Int = 0
-    @State private var remSleepMin:Int = 0
+    @State var totalSleepMin:Int = 0
+    @State var otherSleepMin:Int = 0
+    @State var deepSleepMin:Int = 0
+    @State var coreSleepMin:Int = 0
+    @State var remSleepMin:Int = 0
     
     @State private var deepSleepScore:Int = 0
     @State private var coreSleepScore:Int = 0
@@ -204,6 +204,7 @@ struct SleepScoreView: View {
                         } else {
                             sleepScore = calculateSleepScore(deepSleepMinutes: (Int(deepSleepTime ?? 0)) / 60, coreSleepMinutes: (Int(coreSleepTime ?? 0)) / 60, remSleepMinutes: (Int(remSleepTime ?? 0)) / 60, totalSleepMinutes: (Int(totalSleepTime ?? 0)) / 60)
                         }
+                        
                         let dateFormatter = DateFormatter()
                         dateFormatter.dateFormat = "EEEE, MMM d"
                         let dateString = dateFormatter.string(from: Date())
@@ -266,8 +267,13 @@ struct SleepScoreView: View {
         var combinedScore = 100
         combinedScore -= max(0, deviation / 10)
         combinedScore += deepSleepScore + coreSleepScore + remSleepScore
-
-        return combinedScore
+        
+        if combinedScore < 0 {
+            return 0
+        } else {
+            
+            return combinedScore
+        }
     }
 
     
