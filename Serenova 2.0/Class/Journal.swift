@@ -172,7 +172,6 @@ class JournalReply: Codable, Identifiable {
         try await ref.document(self.parentPostID!).updateData([
             "numReplies" : FieldValue.increment(Int64(1))
         ]);
-
     }
     
     /*
