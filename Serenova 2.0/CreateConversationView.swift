@@ -263,72 +263,6 @@ struct CreateConversationView: View {
     }
 }
 
-
-/*
-
-class CreateConvoViewModel: ObservableObject  {
-    @Published var fullname = ""
-    @Published var username = ""
-    @Published var userID = ""
-    //@Published var isBlocked: Bool = false
-
-
-    func fetchUsername(completion: @escaping () -> Void) {
-        let db = Database.database().reference()
-        let id = Auth.auth().currentUser!.uid
-        let ur = db.child("User").child(id)
-        
-        ur.observe(.value) { snapshot,arg  in
-            guard let userData = snapshot.value as? [String: Any] else {
-                print("Error fetching data")
-                return
-            }
-            
-            // Extract additional information based on your data structure
-            if let fullname = userData["name"] as? String {
-                self.fullname = fullname
-            }
-            if let username = userData["username"] as? String {
-                self.username = username
-            }
-            if let userID = userData["userID"] as? String {
-                self.userID = userID
-            }
-     
-            self.objectWillChange.send()
-                            
-                            // Call the completion closure to indicate that data fetching is completed
-                            completion()
-        }
-        .navigationTitle("New Conversation")
-    }
-    
-    
-    
-    func checkIfCurrUserBlocked(by userID: String) -> Bool {
-        var result = false;
-        guard let currentUserID = Auth.auth().currentUser?.uid else {
-            print("No authenticated user found")
-            return false
-        }
-        
-        let db = Firestore.firestore()
-        let userRef = db.collection("Users").document(userID).collection("BlockedUsers")
-        
-        // check if the currentUserID exists in userID's "BlockedUsers"
-        userRef.document(currentUserID).getDocument { [weak self] (document, error) in
-            DispatchQueue.main.async {
-                if let document = document, document.exists {
-                    result = true
-                } else {
-                   result = false
-                }
-            }
-        }
-        return result
-    }
-}
-
 private var viewModel = CreateConvoViewModel()
 
 //Create New Conversation View
@@ -339,6 +273,9 @@ struct CreateBrandNewConversationView: View {
     @State var messageReceiver: String = ""
     @State var messageImageData: Data?
     @State var matchedUsers: [[String:Any]] = []
+    
+    @State private var newConvo: Conversation?
+    @State private var hasClicked: Bool = false
     
     ///use app storage to get user data from firebase.  EX:
     //@AppStorage("userName") var userName: String = ""
@@ -410,7 +347,8 @@ struct CreateBrandNewConversationView: View {
                             VStack {
                                 Button {
                                     // TODO: Create new chat
-                                    // TODO: Navigate to new chat
+                                    createConversation(participants: [(matchedUsers[index]["key"] as? String)].compactMap { $0 })
+                                    hasClicked = true
                                 } label: {
                                     MatchedUsersView(user: matchedUsers[index])
                                         .padding(10)
@@ -427,6 +365,10 @@ struct CreateBrandNewConversationView: View {
                     .listRowSpacing(2)
                     .listStyle(PlainListStyle())
                     .scrollIndicators(ScrollIndicatorVisibility.hidden)
+                    
+                    if let newConvo = newConvo {
+                        NavigationLink ("", destination: MessagingView(convoID: newConvo.convoId!).navigationBarBackButtonHidden(false), isActive: $hasClicked)
+                    }
 
                 }.vSpacing(.top)
                     .alert(
@@ -461,10 +403,11 @@ struct CreateBrandNewConversationView: View {
         let db = Database.database().reference().child("User")
         db.queryOrdered(byChild: "name").queryEqual(toValue: messageReceiver).observeSingleEvent(of:.value) { snapshots, arg in
             for snapshot in snapshots.children.allObjects as! [DataSnapshot] {
-                guard let userData = snapshot.value as? [String: Any] else {
+                guard var userData = snapshot.value as? [String: Any] else {
                     print("Error fetching data")
                     return
                 }
+                userData["key"] = snapshot.key
                 // TODO: Check if blocked
                 matchedUsers.append(userData);
                 print("HERE IS THE COUNT: ")
@@ -473,82 +416,34 @@ struct CreateBrandNewConversationView: View {
         }
     }
 
-    func createConversation(recipient: String, message: Message) {
-        showkeyboard = false
-        isLoading = true
-
-        Task {
-            do {
-                // TESTING IN PREVIEW MODE:
-                // Comment out the guard below and use
-                // the second constructor for Post (uncomment it)
-                                
-                guard currUser != nil else {
-                    await errorAlerts("ERROR! Not signed in.")
-                    return
-                }
-                
-
-                // Create new Post Object
-                //var newPost = Post(title: postTitle, content: postText
-                                   //authorUsername: currUser.username,
-                                   //authorID: currUser.userID,
-                                   //authorProfilePhoto: currUser.profileURL)
-                var allParticipants: [String] = []
-                
-                allParticipants.append(recipient)
-                print(recipient)
-                // check if user is blocked -- TODO: needs to be for each user added
-                if (!(viewModel.checkIfBlocked(by: viewModel.username))) {
-                    allParticipants.append(viewModel.username)
-                    print(viewModel.username)
-                }
-                              
-                
-                //allParticipants.append(<#T##newElement: Any##Any#>)
-                let newConversation = Conversation(participants: allParticipants)
-                newConversation.messages.append(message)
-                currUser?.addConversation(newConversation)
-                // notify user they've been added to a Conversation -- TODO: needs to be for each user added
-                let db = Firestore.firestore()
-                let convoNotification = db.collection("FriendRequests").document(viewModel.userID).collection("notifications")
-                
-                convoNotification.document().setData([
-                    "message": "You've been added to a new conversation",
-                    "type": "message"
-                ], merge: true) { error in
-                    if let error = error {
-                        print("Error adding notification: \(error)")
-                    } else {
-                        print("Notification added successfully to Firestore2: \(viewModel.userID)")
-                    }
-                }
-                /*
-                // Store Image & Get DownloadURL
-                if messageImageData != nil {
-                    // Completion block for uploading image
-                    try await storeImage()
+    func createConversation(participants: [String]) {
+        // Check if the recipient exists and is not blocked
+        //viewModel.checkIfBlocked(by: viewModel.userIDs[selectedUsernameIndex]) {}
+        viewModel.fetchUsername() //{
+            Task {
+                do {
+                    /*if viewModel.username.isEmpty {
+                     // Show an alert indicating that the recipient does not exist
+                     } else
+                     } else {*/
+                    print("CREATING MESSAGE")
+                    // Create a new conversation
+                    //let message = Message(senderID: Auth.auth().currentUser!.uid, content: messageText)
+                    newConvo = Conversation(participants: participants)
+                    //newConversation.addMessage(message)
+                    /*viewModel.checkIfCurrUserBlocked(by: viewModel.userIDs[selectedUsernameIndex])
+                    if viewModel.isBlocked {
+                        // TODO: Show an alert indicating that the recipient is blocked
+                        print("user is blocked")
+                    }*/
+                    try await newConvo!.createConversation()
+                    // Save the conversation to Firestore or your backend database
                     
-                    // Set imageURL of Post
-                    guard let postImageURL = postImageURL else {
-                        await errorAlerts("Failed to upload photo.")
-                        return
-                    }
-                    //newMessage.imageURL = postImageURL
-                            
-                    // Save post to Firebase (media)
-                    //try await newMessage.createPost()
-                    //isPosted = true
-                } else {
-                    // Save post to Firebase (no media)
-                    //try await newMessage.createPost()
-                    //isPosted = true
+                    //}
+                } catch {
+                    
                 }
-                */
-            } catch {
-                await errorAlerts(error)
             }
-        }
     }
 }
 
@@ -566,6 +461,8 @@ struct CreateGroupConversationView: View {
     @State var matchedUsers: [[String:Any]] = []
     @State var groupUsers: [[String:Any]] = []
     
+    @State private var hasClicked: Bool = false
+    @State private var newConvo: Conversation?
     
     ///use app storage to get user data from firebase.  EX:
     //@AppStorage("userName") var userName: String = ""
@@ -690,8 +587,8 @@ struct CreateGroupConversationView: View {
                     
                     Button {
                         if groupUsers.count != 0 {
-                            // TODO: Create new chat
-                            // TODO: Handle navigation to new chat
+                            createConversation(participants: groupUsers.compactMap { $0["key"] as? String })
+                            hasClicked = true
                         }
                     } label: {
                         Text("Create Group")
@@ -702,6 +599,10 @@ struct CreateGroupConversationView: View {
                     .background(Color.moonlitSerenityLilac)
                     .cornerRadius(20)
                     .buttonStyle(NoStyle())
+                    
+                    if let newConvo = newConvo {
+                        NavigationLink ("", destination: MessagingView(convoID: newConvo.convoId!).navigationBarBackButtonHidden(false), isActive: $hasClicked)
+                    }
                 }.vSpacing(.top)
                     .alert(
                         "Conversation Creation Failure",
@@ -735,10 +636,11 @@ struct CreateGroupConversationView: View {
         let db = Database.database().reference().child("User")
         db.queryOrdered(byChild: "name").queryEqual(toValue: messageReceiver).observeSingleEvent(of:.value) { snapshots, arg in
             for snapshot in snapshots.children.allObjects as! [DataSnapshot] {
-                guard let userData = snapshot.value as? [String: Any] else {
+                guard var userData = snapshot.value as? [String: Any] else {
                     print("Error fetching data")
                     return
                 }
+                userData["key"] = snapshot.key
                 // TODO: Check if blocked
                 matchedUsers.append(userData);
                 print("HERE IS THE COUNT: ")
@@ -746,78 +648,32 @@ struct CreateGroupConversationView: View {
             }
         }
     }
-    
-    func createConversation() {
-        showkeyboard = false
-        isLoading = true
-        
+
+    func createConversation(participants: [String]) {
+        // Check if the recipient exists and is not blocked
+        //viewModel.checkIfBlocked(by: viewModel.userIDs[selectedUsernameIndex]) {}
+        viewModel.fetchUsername() //{
         Task {
             do {
-                // TESTING IN PREVIEW MODE:
-                // Comment out the guard below and use
-                // the second constructor for Post (uncomment it)
-                                
-                guard currUser != nil else {
-                    await errorAlerts("ERROR! Not signed in.")
-                    return
-                }
-                
-
-                // Create new Post Object
-                //var newPost = Post(title: postTitle, content: postText
-                                   //authorUsername: currUser.username,
-                                   //authorID: currUser.userID,
-                                   //authorProfilePhoto: currUser.profileURL)
-                var allParticipants: [String] = []
-                /*
-                // check if user is blocked -- TODO: needs to be for each user added
-                if (!(viewModel.checkIfBlocked(by: viewModel.username)) &&
-                    !(viewModel.checkIfCurrUserBlocked(by: viewModel.username))) {
-                    allParticipants.append(viewModel.username)
-                }
-                */
-                
-                //allParticipants.append(<#T##newElement: Any##Any#>)
-                let newConversation = Conversation(participants: allParticipants)
-                
-                // notify user they've been added to a Conversation -- TODO: needs to be for each user added
-                let db = Firestore.firestore()
-                let convoNotification = db.collection("FriendRequests").document(viewModel.userID).collection("notifications")
-                
-                convoNotification.document().setData([
-                    "message": "You've been added to a new conversation",
-                    "type": "message"
-                ], merge: true) { error in
-                    if let error = error {
-                        print("Error adding notification: \(error)")
-                    } else {
-                        print("Notification added successfully to Firestore2: \(viewModel.userID)")
-                    }
-                }
-                /*
-                // Store Image & Get DownloadURL
-                if messageImageData != nil {
-                    // Completion block for uploading image
-                    try await storeImage()
-                    
-                    // Set imageURL of Post
-                    guard let postImageURL = postImageURL else {
-                        await errorAlerts("Failed to upload photo.")
-                        return
-                    }
-                    //newMessage.imageURL = postImageURL
-                            
-                    // Save post to Firebase (media)
-                    //try await newMessage.createPost()
-                    //isPosted = true
-                } else {
-                    // Save post to Firebase (no media)
-                    //try await newMessage.createPost()
-                    //isPosted = true
-                }
-                */
+                /*if viewModel.username.isEmpty {
+                 // Show an alert indicating that the recipient does not exist
+                 } else
+                 } else {*/
+                print("CREATING MESSAGE")
+                // Create a new conversation
+                //let message = Message(senderID: Auth.auth().currentUser!.uid, content: messageText)
+                newConvo = Conversation(participants: participants)
+                //newConversation.addMessage(message)
+                /*viewModel.checkIfCurrUserBlocked(by: viewModel.userIDs[selectedUsernameIndex])
+                 if viewModel.isBlocked {
+                 // TODO: Show an alert indicating that the recipient is blocked
+                 print("user is blocked")
+                 }*/
+                try await newConvo!.createConversation()
+                // Save the conversation to Firestore or your backend database
+                //}
             } catch {
-                await errorAlerts(error)
+                
             }
         }
     }

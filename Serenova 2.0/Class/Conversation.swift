@@ -22,6 +22,7 @@ class Conversation: Codable, Identifiable {
 
     init(participants: [String]) {
         self.participants = participants
+        self.participants.append(Auth.auth().currentUser!.uid)
         self.numParticipants = participants.count
     }
 
@@ -94,7 +95,9 @@ class Conversation: Codable, Identifiable {
         // Create a new document reference for the conversation
         let ref = db.collection("Conversations")
         
-        try ref.addDocument(from: self)
+        let documentRef = ref.document()
+        try documentRef.setData(from: self)
+        convoId = documentRef.documentID
         
         for participant in participants {
             // Send participants a notification on addition to a groupchat

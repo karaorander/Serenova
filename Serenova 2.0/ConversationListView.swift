@@ -61,11 +61,12 @@ struct NoConversationsView: View {
 struct IndividualConversation: View {
     // Parameter
     var conversation: Conversation
+    @State private var names: [String] = []
     
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                if conversation.numParticipants == 0 {
+                if conversation.numParticipants == 2 {
                     Image(systemName: "person.fill")
                         .resizable()
                         .aspectRatio(contentMode: .fill)
@@ -73,7 +74,7 @@ struct IndividualConversation: View {
                         .foregroundColor(Color.white)
                         .foregroundColor(.clear)
                         .padding(.horizontal)
-                } else if conversation.numParticipants == 1 {
+                } else if conversation.numParticipants > 2 {
                     Image(systemName: "person.3.fill")
                         .resizable()
                         .aspectRatio(contentMode: .fill)
@@ -82,14 +83,14 @@ struct IndividualConversation: View {
                         .padding(.horizontal)
                 }
                 VStack(alignment: .leading){
-                    Text("[NAME(S)]")
-                        .font(.system(size: 13))
+                    Text("\(names.joined(separator: ", ")))")
+                        .font(.system(size: 15))
                         .fontWeight(.semibold)
                         .foregroundColor(Color.white)
                         .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
                         .padding(.bottom, 5)
                     Text("MOST RECENT MESSAGE")
-                        .font(.system(size: 13))
+                        .font(.system(size: 15))
                         .fontWeight(.semibold)
                         .foregroundColor(.moonlitSerenityLilac)
                         .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
@@ -105,14 +106,40 @@ struct IndividualConversation: View {
             }
             .padding(.vertical, 8).padding(.horizontal, 10)
         }
+        .onAppear() {
+            names = []
+            fetchUsernames()
+        }
+    }
+    
+    func fetchUsernames() {
+        
+        let db = Database.database().reference()
+        let id = Auth.auth().currentUser!.uid
+        let ur = db.child("User")
+        
+        for participant in conversation.participants {
+            if participant == Auth.auth().currentUser?.uid {
+                continue
+            }
+            let currRef = ur.child(participant)
+            currRef.observeSingleEvent(of: .value) { snapshot,arg  in
+                guard let userData = snapshot.value as? [String: Any] else {
+                    print("Error fetching data")
+                    return
+                }
+                if let name = userData["name"] as? String {
+                    names.append(name)
+                }
+            }
+        }
     }
 }
 
 struct ConversationListView: View {
     
     @StateObject private var viewModel = ConversationViewModel()
-    
-    @State var conversationList: [Conversation] = [Conversation(participants: []), Conversation(participants: ["ELLO"])]
+    @State var conversationList: [Conversation] = []
     @State private var queryNum: Int = 25
     @State private var lastConversation: DocumentSnapshot?
     
@@ -155,7 +182,7 @@ struct ConversationListView: View {
                             ForEach(conversationList.indices, id: \.self) { index in
                                 ZStack {
                                         ForEach(conversationList, id: \.convoId) { conversation in
-            
+                                                /*
                                                 VStack(alignment: .leading, spacing: 5) {
                                                     Text("\(conversation.messages[0])")
                                                         .font(.headline)
@@ -167,21 +194,19 @@ struct ConversationListView: View {
                                                 .background(Color.moonlitSerenityLilac.opacity(0.1)) // Set background color
                                                 .cornerRadius(10)
                                                 .shadow(radius: 2)
-                                            
+                                                 */
                                         }
                                     
-                                    /*
-                                    NavigationLink(destination: ForumPostDetailView(post: $conversationList[index]).navigationBarBackButtonHidden(true)) {
+                                    NavigationLink(destination: MessagingView(convoID: conversationList[index].convoId!).navigationBarBackButtonHidden(false)) {
                                         EmptyView()
                                     }
                                     .opacity(0)
-                                    */
                                     IndividualConversation(conversation: conversationList[index])
                                         .padding(.vertical, 15)
                                         .onAppear {
                                             if index == conversationList.count - 1 && lastConversation != nil {
                                                 Task {
-                                                    //await queryConversations(NUM_POSTS: queryNum)
+                                                    await queryChats(NUM_CHATS: queryNum)
                                                 }
                                             }
                                         }
@@ -239,8 +264,8 @@ struct ConversationListView: View {
                 Task {
                     // Prevents crash but data will not be loaded
                     // Need to run in simulator
-                    if currUser != nil {
-                        //await queryPosts(NUM_POSTS: queryNum)
+                    if conversationList.count == 0 && currUser != nil {
+                        await queryChats(NUM_CHATS: queryNum)
                     }
                 }
             }
@@ -266,6 +291,41 @@ struct ConversationListView: View {
             "participants": FieldValue.arrayRemove([currUser!.userID])
         ])
         
+    }
+    
+    /*
+     * Retrieves posts from Firebase
+     */
+    func queryChats(NUM_CHATS: Int) async {
+        // Database Reference
+        let db = Firestore.firestore()
+        
+        do {
+            // Fetch batch of posts from Firestore
+            var query: Query! = db.collection("Conversations")
+                .whereField("participants", arrayContains: Auth.auth().currentUser!.uid)
+                .limit(to: NUM_CHATS)
+            
+            if let lastConversation = lastConversation {
+                query = query.start(afterDocument: lastConversation)
+            }
+            
+            // Retrieve documents
+            let chatBatch = try await query.getDocuments()
+            let newChats = chatBatch.documents.compactMap { convo -> Conversation? in
+                try? convo.data(as: Conversation.self)
+            }
+            
+            await MainActor.run(body: {
+                conversationList += newChats
+                print(conversationList)
+                lastConversation = chatBatch.documents.last
+            })
+            
+        } catch {
+            print (error.localizedDescription)
+        }
+        return
     }
 }
 
