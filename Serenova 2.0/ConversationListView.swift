@@ -80,7 +80,7 @@ struct ConversationListView: View {
                 VStack(spacing: 0) {
                     HStack {
                         // TODO: Make Dropdown Menu with different options (e.g. Home)
-                        NavigationLink(destination: SleepGoalsView().navigationBarBackButtonHidden(true)) {
+                        NavigationLink(destination: AccountInfoView().navigationBarBackButtonHidden(true)) {
                             
                             Image(systemName: "line.horizontal.3.decrease")
                                 .resizable()
