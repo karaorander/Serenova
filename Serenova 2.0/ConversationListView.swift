@@ -292,11 +292,12 @@ struct ConversationListView: View {
 //        if let index = newParticipants.firstIndex(of: currentUserID) {
 //            newParticipants.remove(at: index)
 //        }
-        
+        conversation.numParticipants -= 1
         convoCollectionRef.updateData([
             "participants": FieldValue.arrayRemove([currUser!.userID])
         ])
-        
+        // REMOVE FROM LIST
+        conversationList.removeAll(where: {$0.convoId == conversation.convoId})
     }
     
     /*
