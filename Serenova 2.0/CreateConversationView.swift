@@ -408,10 +408,18 @@ struct CreateBrandNewConversationView: View {
                     return
                 }
                 userData["key"] = snapshot.key
-                // TODO: Check if blocked
-                matchedUsers.append(userData);
-                print("HERE IS THE COUNT: ")
-                print(matchedUsers.count)
+                
+                if (userData["key"] as! String) == Auth.auth().currentUser?.uid {
+                    continue
+                }
+                // Check if user is blocked
+                viewModel.checkIfBlocked(by: userData["key"] as! String) { blockedByCurrentUser in
+                    viewModel.checkIfCurrUserBlocked(by: userData["key"] as! String) { currentUserBlockedByUser in
+                        if !blockedByCurrentUser && !currentUserBlockedByUser {
+                            matchedUsers.append(userData);
+                        }
+                    }
+                }
             }
         }
     }
@@ -641,10 +649,18 @@ struct CreateGroupConversationView: View {
                     return
                 }
                 userData["key"] = snapshot.key
-                // TODO: Check if blocked
-                matchedUsers.append(userData);
-                print("HERE IS THE COUNT: ")
-                print(matchedUsers.count)
+
+                if (userData["key"] as! String) == Auth.auth().currentUser?.uid {
+                    continue
+                }
+                
+                viewModel.checkIfBlocked(by: userData["key"] as! String) { blockedByCurrentUser in
+                    viewModel.checkIfCurrUserBlocked(by: userData["key"] as! String) { currentUserBlockedByUser in
+                        if !blockedByCurrentUser && !currentUserBlockedByUser {
+                            matchedUsers.append(userData);
+                        }
+                    }
+                }
             }
         }
     }

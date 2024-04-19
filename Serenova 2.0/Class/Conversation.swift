@@ -23,7 +23,7 @@ class Conversation: Codable, Identifiable {
     init(participants: [String]) {
         self.participants = participants
         self.participants.append(Auth.auth().currentUser!.uid)
-        self.numParticipants = participants.count
+        self.numParticipants = self.participants.count
     }
 
     func addMessage(_ messageToAdd: Message) {
