@@ -116,17 +116,23 @@ struct ConversationListView: View {
                             ForEach(conversationList.indices, id: \.self) { index in
                                 ZStack {
                                     
-                                    for convo in conversationList {
-                                        
-                                        VStack(alignment: .leading){
-                                            Text(convo.messages[0])
-                                                .font(.system(size: 13))
-                                                .fontWeight(.semibold)
-                                                .foregroundColor(Color.white)
-                                                .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                        
+                                        ForEach(conversationList, id: \.convoId) { conversation in
+            
+                                                VStack(alignment: .leading, spacing: 5) {
+                                                    Text(conversation.messages[0])
+                                                        .font(.headline)
+                                                        .fontWeight(.semibold)
+                                                        .foregroundColor(.white) // Adjust text color as needed
+                                                        .lineLimit(2) // Limit title to 2 lines
+                                                }
+                                                .padding()
+                                                .background(Color.moonlitSerenityLilac.opacity(0.1)) // Set background color
+                                                .cornerRadius(10)
+                                                .shadow(radius: 2)
                                             
                                         }
-                                    }
+                                    
                                     /*
                                     NavigationLink(destination: ForumPostDetailView(post: $conversationList[index]).navigationBarBackButtonHidden(true)) {
                                         EmptyView()
