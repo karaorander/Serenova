@@ -24,6 +24,8 @@ struct MessagingView: View {
     @State private var errorMess: String = ""
     @State private var queryNum: Int = 25
     @State private var lastReply: DocumentSnapshot?
+    @State private var selectedImage: UIImage?
+    @State private var showImagePicker: Bool = false
     
     var body: some View {
         ZStack {
@@ -172,8 +174,8 @@ struct MessagingView: View {
     
     @ViewBuilder
     func AddReplyView() -> some View {
-        HStack(alignment: .bottom) {
-            HStack(alignment: .bottom){
+        VStack {
+            HStack(alignment: .bottom) {
                 TextField("Write your message here...", text: $reply, axis: .vertical)
                     .padding(15)
                     .lineLimit(5)
@@ -181,28 +183,46 @@ struct MessagingView: View {
                     .background(Color.white.opacity(0.8))
                     .cornerRadius(20)
                     .submitLabel(.send)
+                
                 Button {
-                    // Create reply
-                    print("creating reply")
-                    createReply()
+                    // Present image picker
+                    showImagePicker.toggle()
                 } label: {
-                    Image(systemName: "arrow.up.circle.fill")
+                    Image(systemName: "photo")
                         .resizable()
                         .frame(width: 35, height: 35)
                         .foregroundColor(Color.nightfallHarmonyRoyalPurple)
-                        .brightness(0.3)
-                        .saturation(1.5)
-                        .disabled(reply.isEmpty)
-                        .opacity(reply.isEmpty ? 0.4 : 1)
                 }
                 .padding(.horizontal, 5).padding(.vertical, 9)
+            }
+            
+            if let image = selectedImage {
+                Image(uiImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(maxWidth: .infinity, maxHeight: 200)
+                    .padding()
+            }
+            Spacer()
+            Button(action: {
+                // Create reply
+                print("creating reply")
+                createReply()
+            }) {
+                Image(systemName: "paperplane.fill")
+                    .resizable()
+                    .frame(width: 35, height: 35)
+                    .foregroundColor(Color.blue)
+                    .padding()
             }
         }
         .padding()
         .cornerRadius(20)
+        .sheet(isPresented: $showImagePicker) {
+            ImagePicker(selectedImage: $selectedImage)
+        }
     }
 }
-
 
 struct MessageCommentView: View {
     
