@@ -40,16 +40,46 @@ class CreateConvoViewModel: ObservableObject  {
     
     func fetchUsernames(completion: @escaping () -> Void) {
         let db = Database.database().reference().child("User")
-        db.observeSingleEvent(of: .value) { snapshot in
+        db.observeSingleEvent(of: .value) { [weak self] snapshot in
             guard let usersData = snapshot.value as? [String: [String: Any]] else {
                 print("Error fetching user data")
                 return
             }
-            // Extract names from usersData
-            let names = usersData.compactMap { $0.value["name"] as? String }
-            self.usernames = names
-            self.userIDs = Array(usersData.keys)
-            completion()
+
+            let currentUserID = Auth.auth().currentUser?.uid
+
+            // Use a dispatch group to wait for all blocking checks to complete
+            let dispatchGroup = DispatchGroup()
+            var tempUsernames: [String] = []
+            var tempUserIDs: [String] = []
+
+            for (userID, userInfo) in usersData {
+                guard let name = userInfo["name"] as? String else {
+                    continue
+                }
+
+                dispatchGroup.enter() // Enter the dispatch group
+
+                // Check if the current user has blocked the user and vice versa
+                self?.checkIfBlocked(by: userID) { blockedByCurrentUser in
+                    self?.checkIfCurrUserBlocked(by: userID) { currentUserBlockedByUser in
+                        if !blockedByCurrentUser && !currentUserBlockedByUser {
+                            tempUsernames.append(name)
+                            tempUserIDs.append(userID)
+                        }
+
+                        // Leave the dispatch group
+                        dispatchGroup.leave()
+                    }
+                }
+            }
+
+            // Wait for all checks to complete
+            dispatchGroup.notify(queue: .main) {
+                self?.usernames = tempUsernames
+                self?.userIDs = tempUserIDs
+                completion()
+            }
         }
     }
     
@@ -84,9 +114,10 @@ class CreateConvoViewModel: ObservableObject  {
         }
     }
     
-    func checkIfBlocked(by userID: String) {
+    func checkIfBlocked(by userID: String, completion: @escaping (Bool) -> Void) {
         guard let currentUserID = Auth.auth().currentUser?.uid else {
             print("No authenticated user found")
+            completion(false)
             return
         }
 
@@ -98,18 +129,19 @@ class CreateConvoViewModel: ObservableObject  {
             DispatchQueue.main.async {
                 if let document = document, document.exists {
                     print("Blocked: true")
-                    self?.isBlocked = true
+                    completion(true)
                 } else {
                     print("Blocked: false")
-                    self?.isBlocked = false
+                    completion(false)
                 }
             }
         }
     }
     
-    func checkIfCurrUserBlocked(by userID: String) {
+    func checkIfCurrUserBlocked(by userID: String, completion: @escaping (Bool) -> Void) {
         guard let currentUserID = Auth.auth().currentUser?.uid else {
             print("No authenticated user found")
+            completion(false)
             return
         }
         
@@ -121,10 +153,10 @@ class CreateConvoViewModel: ObservableObject  {
             DispatchQueue.main.async {
                 if let document = document, document.exists {
                     print("CurrUserBlocked: true")
-                    self?.isBlocked = true
+                    completion(true)
                 } else {
                     print("CurrUserBlocked: false")
-                    self?.isBlocked = false
+                    completion(false)
                 }
             }
         }
