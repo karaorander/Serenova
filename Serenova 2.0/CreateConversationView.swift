@@ -130,7 +130,7 @@ struct CreateConversationView: View {
                         // Add a picker view to select a username
                         Picker("Select User", selection: $selectedUsernameIndex) {
                             ForEach(0..<viewModel.userIDs.count, id: \.self) { index in
-                                Text(viewModel.userIDs[index])
+                                Text(viewModel.usernames[index])
                             }
                         }
                         .pickerStyle(MenuPickerStyle())
@@ -141,7 +141,7 @@ struct CreateConversationView: View {
                     .onAppear {
                         // Fetch usernames when the view appears
                       //  viewModel.fetchUsernames { }
-                        viewModel.fetchUserIDs {}
+                        viewModel.fetchUsernames {}
                     }
             
             

@@ -115,12 +115,10 @@ struct ConversationListView: View {
                         List {
                             ForEach(conversationList.indices, id: \.self) { index in
                                 ZStack {
-                                    
-                        
                                         ForEach(conversationList, id: \.convoId) { conversation in
             
                                                 VStack(alignment: .leading, spacing: 5) {
-                                                    Text(conversation.messages[0])
+                                                    Text("\(conversation.messages[0])")
                                                         .font(.headline)
                                                         .fontWeight(.semibold)
                                                         .foregroundColor(.white) // Adjust text color as needed
