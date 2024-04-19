@@ -27,6 +27,29 @@ class Conversation: Codable, Identifiable {
 
     func addMessage(_ messageToAdd: Message) {
         messages.append(messageToAdd)
+        
+        for participant in participants {
+            // Send participants notification when a message is sent in the conversation
+            let db = Firestore.firestore()
+            let messageNotifications = db.collection("FriendRequests").document(participant).collection("notifications")
+            let currentid = currUser?.userID;
+            let currentName = currUser?.name;
+            let content = messageToAdd.content
+            
+            //if let username = currUser?.username {
+            if (participant != currentid) {
+                messageNotifications.document().setData([
+                    "message": "\(currentName!): \(content)",
+                    "type": "message"
+                ], merge: true) { error in
+                    if let error = error {
+                        print("Error adding notification: \(error)")
+                    } else {
+                        print("Notification added successfully to Firestore2: \(participant)")
+                    }
+                }
+            }
+        }
     }
     
     func updateValues(newValues: [String: Any], completion: @escaping (Error?) -> Void) {
