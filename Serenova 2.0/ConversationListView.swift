@@ -83,14 +83,14 @@ struct IndividualConversation: View {
                         .padding(.horizontal)
                 }
                 VStack(alignment: .leading){
-                    Text("\(names.joined(separator: ", ")))")
-                        .font(.system(size: 15))
+                    Text("\(names.joined(separator: ", "))")
+                        .font(.system(size: 13))
                         .fontWeight(.semibold)
                         .foregroundColor(Color.white)
                         .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
                         .padding(.bottom, 5)
                     Text("MOST RECENT MESSAGE")
-                        .font(.system(size: 15))
+                        .font(.system(size: 13))
                         .fontWeight(.semibold)
                         .foregroundColor(.moonlitSerenityLilac)
                         .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)

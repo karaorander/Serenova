@@ -348,7 +348,6 @@ struct CreateBrandNewConversationView: View {
                                 Button {
                                     // TODO: Create new chat
                                     createConversation(participants: [(matchedUsers[index]["key"] as? String)].compactMap { $0 })
-                                    hasClicked = true
                                 } label: {
                                     MatchedUsersView(user: matchedUsers[index])
                                         .padding(10)
@@ -408,7 +407,6 @@ struct CreateBrandNewConversationView: View {
                     return
                 }
                 userData["key"] = snapshot.key
-                
                 if (userData["key"] as! String) == Auth.auth().currentUser?.uid {
                     continue
                 }
@@ -445,6 +443,7 @@ struct CreateBrandNewConversationView: View {
                         print("user is blocked")
                     }*/
                     try await newConvo!.createConversation()
+                    hasClicked = true
                     // Save the conversation to Firestore or your backend database
                     
                     //}
@@ -596,7 +595,6 @@ struct CreateGroupConversationView: View {
                     Button {
                         if groupUsers.count != 0 {
                             createConversation(participants: groupUsers.compactMap { $0["key"] as? String })
-                            hasClicked = true
                         }
                     } label: {
                         Text("Create Group")
@@ -686,6 +684,7 @@ struct CreateGroupConversationView: View {
                  print("user is blocked")
                  }*/
                 try await newConvo!.createConversation()
+                hasClicked = true
                 // Save the conversation to Firestore or your backend database
                 //}
             } catch {
