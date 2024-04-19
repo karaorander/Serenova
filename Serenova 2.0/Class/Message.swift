@@ -37,6 +37,8 @@ class MessageReply: Codable, Identifiable {
         try await ref.document(self.otherID!).updateData([
             "numReplies" : FieldValue.increment(Int64(1))
         ]);
+        
+        
     }
     
     /*
