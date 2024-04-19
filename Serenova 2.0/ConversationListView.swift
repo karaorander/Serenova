@@ -115,6 +115,18 @@ struct ConversationListView: View {
                         List {
                             ForEach(conversationList.indices, id: \.self) { index in
                                 ZStack {
+                                    
+                                    for convo in conversationList {
+                                        
+                                        VStack(alignment: .leading){
+                                            Text(convo.messages[0])
+                                                .font(.system(size: 13))
+                                                .fontWeight(.semibold)
+                                                .foregroundColor(Color.white)
+                                                .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                                            
+                                        }
+                                    }
                                     /*
                                     NavigationLink(destination: ForumPostDetailView(post: $conversationList[index]).navigationBarBackButtonHidden(true)) {
                                         EmptyView()
