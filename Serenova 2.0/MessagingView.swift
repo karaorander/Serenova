@@ -110,6 +110,14 @@ struct MessagingView: View {
                     }
                     
                     try await newReply.createReply()
+                    
+                    // UPDATE PREVIEW
+                    let convoCollectionRef = Firestore.firestore().collection("Conversations").document(convoID)
+                    try await convoCollectionRef.updateData([
+                        "mostRecentMessage": newReply.replyContent,
+                        "mostRecentTimestamp": newReply.timeStamp
+                    ])
+                    
                     replies.append(newReply)
                     print("reply appenededed.")
                     reply = ""

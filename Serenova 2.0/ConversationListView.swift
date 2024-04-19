@@ -60,8 +60,10 @@ struct NoConversationsView: View {
 
 struct IndividualConversation: View {
     // Parameter
-    var conversation: Conversation
+    @Binding var conversation: Conversation
     @State private var names: [String] = []
+    @State private var previewListener: ListenerRegistration?
+    @State private var hasChanged: Bool = false
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -89,11 +91,19 @@ struct IndividualConversation: View {
                         .foregroundColor(Color.white)
                         .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
                         .padding(.bottom, 5)
-                    Text("MOST RECENT MESSAGE")
-                        .font(.system(size: 13))
-                        .fontWeight(.semibold)
-                        .foregroundColor(.moonlitSerenityLilac)
-                        .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                    if conversation.mostRecentMessage != "" {
+                        Text("\(conversation.mostRecentMessage)")
+                            .font(.system(size: 13))
+                            .fontWeight(.semibold)
+                            .foregroundColor(.moonlitSerenityLilac)
+                            .multilineTextAlignment(.leading)
+                    } else {
+                        Text("Start chatting now!")
+                            .font(.system(size: 13))
+                            .fontWeight(.semibold)
+                            .foregroundColor(.moonlitSerenityLilac)
+                            .multilineTextAlignment(.leading)
+                    }
                     Spacer()
                 }
                 .padding(.horizontal)
@@ -109,6 +119,35 @@ struct IndividualConversation: View {
         .onAppear() {
             names = []
             fetchUsernames()
+            
+            if previewListener == nil {
+                guard let convoID = conversation.convoId else {
+                    return
+                }
+                let convoRef = Firestore.firestore().collection("Conversations")
+                previewListener = convoRef.document(convoID).addSnapshotListener { documentSnapshot, error in
+                    print("UPDATE!")
+                    if let error = error {
+                        print("Error retreiving collection: \(error)")
+                    }
+                    guard let document = documentSnapshot else {
+                        print("Error fetching document: \(error!)")
+                        return
+                    }
+                    guard let data = document.data() else {
+                        print("Document data was empty.")
+                        return
+                    }
+                    // Update preview
+                    if let mostRecentMessage = data["mostRecentMessage"] as? String {
+                        conversation.mostRecentMessage = mostRecentMessage
+                    }
+                    if let mostRecentTimestamp = data["mostRecentTimestamp"] as? Double {
+                        conversation.mostRecentTimestamp = mostRecentTimestamp
+                    }
+                    hasChanged.toggle()
+                }
+            }
         }
     }
     
@@ -201,7 +240,7 @@ struct ConversationListView: View {
                                         EmptyView()
                                     }
                                     .opacity(0)
-                                    IndividualConversation(conversation: conversationList[index])
+                                    IndividualConversation(conversation: $conversationList[index])
                                         .padding(.vertical, 15)
                                         .onAppear {
                                             if index == conversationList.count - 1 && lastConversation != nil {

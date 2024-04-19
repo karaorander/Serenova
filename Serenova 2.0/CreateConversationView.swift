@@ -708,19 +708,22 @@ struct MatchedUsersView: View {
                     .foregroundColor(.clear)
                     .padding(.trailing)
                 VStack(alignment: .leading) {
-                    Text("Hi"/*\(user["name"]!)"*/)
+                    Text("\(user["name"]!)")
                         .font(.system(size: 17))
                         .fontWeight(.semibold)
                         .foregroundColor(Color.white)
                         .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
-                    Text("Hi"/*\(user["email"]!)"*/)
+                        .padding(.trailing)
+                    Text("\(user["email"]!)")
                         .font(.system(size: 17))
                         .fontWeight(.semibold)
                         .foregroundColor(.moonlitSerenityLilac)
                         .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                        .padding(.trailing)
                 }
             }
             .padding(.vertical, 8)
+            .frame(width: 250)
         }
     }
 }

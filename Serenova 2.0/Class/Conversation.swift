@@ -11,13 +11,15 @@ class Conversation: Codable, Identifiable {
     public var messages: [Message] = []
     public var numParticipants = -1
     public var mostRecentMessage = ""
-    public var mostRecentTimestamp: Double = Date().timeIntervalSince1970
+    public var mostRecentTimestamp: Double = -1
     
     enum CodingKeys: String, CodingKey {
         case convoId
         case participants
         case messages
         case numParticipants
+        case mostRecentMessage
+        case mostRecentTimestamp
     }
 
     init(participants: [String]) {
