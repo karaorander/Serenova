@@ -253,7 +253,14 @@ struct ConversationListView: View {
                                 }
                             }
                             .onDelete { indexSet in
-                                deleteConversation(conversation: conversationList[indexSet.first!])
+                                
+                                if let index = indexSet.first {
+                                    deleteConversation(conversation: conversationList[index])
+                                }
+                                
+                                conversationList.remove(atOffsets: indexSet)
+                                
+                                
                             }
                             .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
                             .listRowBackground(
