@@ -149,6 +149,14 @@ struct IndividualConversation: View {
                 }
             }
         }
+        .onDisappear {
+            removeListener()
+        }
+    }
+    
+    func removeListener() {
+        previewListener?.remove()
+        previewListener = nil
     }
     
     func fetchUsernames() {
@@ -253,13 +261,14 @@ struct ConversationListView: View {
                                 }
                             }
                             .onDelete { indexSet in
-                                
                                 if let index = indexSet.first {
-                                    deleteConversation(conversation: conversationList[index])
+                                    Task {
+                                        deleteConversation(conversation: conversationList[index])
+                                        conversationList = []
+                                        await queryChats(NUM_CHATS: queryNum)
+                                    }
                                 }
-                                
-                                conversationList.remove(atOffsets: indexSet)
-                                
+                                /*conversationList.remove(atOffsets: indexSet)*/
                                 
                             }
                             .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))

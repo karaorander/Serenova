@@ -113,20 +113,6 @@ struct MessagingView: View {
                         return
                     }
                     
-                    try await newReply.createReply()
-                    
-                    // UPDATE PREVIEW
-                    let convoCollectionRef = Firestore.firestore().collection("Conversations").document(convoID)
-                    try await convoCollectionRef.updateData([
-                        "mostRecentMessage": newReply.replyContent,
-                        "mostRecentTimestamp": newReply.timeStamp
-                    ])
-                    
-                    replies.append(newReply)
-                    print("reply appenededed.")
-                    reply = ""
-                    
-                    
                     if imageData != nil {
                         // Completion block for uploading image
                         try await storeImage()
@@ -140,6 +126,12 @@ struct MessagingView: View {
                         
                         // Save post to Firebase (media)
                         try await newReply.createReply()
+                        // UPDATE PREVIEW
+                        let convoCollectionRef = Firestore.firestore().collection("Conversations").document(convoID)
+                        try await convoCollectionRef.updateData([
+                            "mostRecentMessage": newReply.replyContent,
+                            "mostRecentTimestamp": newReply.timeStamp
+                        ])
                         replies.append(newReply)
                         print("reply appenededed.")
                         reply = ""
@@ -148,6 +140,12 @@ struct MessagingView: View {
                     } else {
                         // Save post to Firebase (no media)
                         try await newReply.createReply()
+                        // UPDATE PREVIEW
+                        let convoCollectionRef = Firestore.firestore().collection("Conversations").document(convoID)
+                        try await convoCollectionRef.updateData([
+                            "mostRecentMessage": newReply.replyContent,
+                            "mostRecentTimestamp": newReply.timeStamp
+                        ])
                         replies.append(newReply)
                         print("reply appenededed.")
                         reply = ""
