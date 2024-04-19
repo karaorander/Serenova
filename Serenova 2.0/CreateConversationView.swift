@@ -684,6 +684,28 @@ struct CreateGroupConversationView: View {
                  print("user is blocked")
                  }*/
                 try await newConvo!.createConversation()
+                /*let db = Firestore.firestore()
+                for participant in newConvo!.participants {
+                    // Send participants a notification on addition to a groupchat
+                    let joinNotifications = db.collection("FriendRequests").document(participant).collection("notifications")
+                    let currentid = currUser?.userID;
+                    let currentName = currUser?.name;
+
+                    //if let username = currUser?.username {
+                    if (participant != currentid) {
+                        joinNotifications.document().setData([
+                            "message": "\(currentName!) added you to a chat",
+                            "type": "message"
+                        ], merge: true) { error in
+                            if let error = error {
+                                print("Error adding notification: \(error)")
+                            } else {
+                                print("Notification added successfully to Firestore2: \(participant)")
+                            }
+                        }
+                    }
+                }*/
+                
                 hasClicked = true
                 // Save the conversation to Firestore or your backend database
                 //}
