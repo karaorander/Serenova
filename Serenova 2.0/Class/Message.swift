@@ -7,13 +7,28 @@ import FirebaseDatabase
 
 struct Message: Codable {
     var senderID: String
-    var timestamp: Date
+    var timeStamp: Double = Date().timeIntervalSince1970
     var content: String
     
-    init(senderID: String, timestamp: Date, content: String) {
+    init(senderID: String, content: String) {
         self.senderID = senderID
-        self.timestamp = timestamp
         self.content = content
+    }
+    
+    /*
+     * Function to get relative date
+     */
+    func getRelativeTime() -> String {
+        let dateFormatter = RelativeDateTimeFormatter()
+        return dateFormatter.localizedString(for: Date(timeIntervalSince1970: TimeInterval(timeStamp)), relativeTo: Date())
+    }
+    
+    /*
+     * Function to get date
+     */
+    func getRealTime() -> String {
+        let dateFormatter = DateFormatter()
+        return dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(timeStamp)))
     }
 }
 /*class Message {
@@ -59,19 +74,5 @@ struct Message: Codable {
         self.recipientUsername = messageReceiver
     }
     
-    /*
-     * Function to get relative date
-     */
-    func getRelativeTime() -> String {
-        let dateFormatter = RelativeDateTimeFormatter()
-        return dateFormatter.localizedString(for: Date(timeIntervalSince1970: TimeInterval(timeStamp)), relativeTo: Date())
-    }
-    
-    /*
-     * Function to get date
-     */
-    func getRealTime() -> String {
-        let dateFormatter = DateFormatter()
-        return dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(timeStamp)))
-    }
+
 }*/
