@@ -214,8 +214,7 @@ struct ConversationListView: View {
                                 }
                             }
                             .onDelete { indexSet in
-                                conversationList.remove(atOffsets: indexSet)
-                                // TODO: Delete conversation @ index
+                                deleteConversation(conversation: conversationList[indexSet.first!])
                             }
                             .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
                             .listRowBackground(
@@ -286,11 +285,12 @@ struct ConversationListView: View {
 //        if let index = newParticipants.firstIndex(of: currentUserID) {
 //            newParticipants.remove(at: index)
 //        }
-        
+        conversation.numParticipants -= 1
         convoCollectionRef.updateData([
             "participants": FieldValue.arrayRemove([currUser!.userID])
         ])
-        
+        // REMOVE FROM LIST
+        conversationList.removeAll(where: {$0.convoId == conversation.convoId})
     }
     
     /*

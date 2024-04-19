@@ -9,9 +9,9 @@ class Conversation: Codable, Identifiable {
     @DocumentID var convoId: String?
     public var participants: [String] = []
     public var messages: [Message] = []
-   // public var convoId: String = ""
     public var numParticipants = -1
-    
+    public var mostRecentMessage = ""
+    public var mostRecentTimestamp: Double = Date().timeIntervalSince1970
     
     enum CodingKeys: String, CodingKey {
         case convoId
