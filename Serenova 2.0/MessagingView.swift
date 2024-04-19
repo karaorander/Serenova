@@ -10,6 +10,7 @@ import Firebase
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 import FirebaseStorage
+import _PhotosUI_SwiftUI
 
 struct MessagingView: View {
     
@@ -24,7 +25,10 @@ struct MessagingView: View {
     @State private var errorMess: String = ""
     @State private var queryNum: Int = 25
     @State private var lastReply: DocumentSnapshot?
-    @State private var selectedImage: UIImage?
+    @State private var imageURL: URL?
+    @State private var imageData: Data?
+    @State var selectedPhoto: PhotosPickerItem?
+   
     @State private var showImagePicker: Bool = false
     
     var body: some View {
@@ -105,14 +109,37 @@ struct MessagingView: View {
                     let newReply = MessageReply(replyContent: reply, otherID: convoID, authorID: user.name, writerID: user.userID)
                     
                     print("content: \(reply) and \(newReply.authorID)")
-                    if (newReply.replyContent == "") {
+                    if (newReply.replyContent == "" && imageData == nil) {
                         return
                     }
                     
-                    try await newReply.createReply()
-                    replies.append(newReply)
-                    print("reply appenededed.")
-                    reply = ""
+                    
+                    
+                    if imageData != nil {
+                        // Completion block for uploading image
+                        try await storeImage()
+                        
+                        // Set imageURL of Post
+                        guard let imageURL = imageURL else {
+                            await errorAlerts("Failed to upload photo.")
+                            return
+                        }
+                        newReply.imageURL = imageURL
+                        
+                        // Save post to Firebase (media)
+                        try await newReply.createReply()
+                        replies.append(newReply)
+                        print("reply appenededed.")
+                        reply = ""
+                        self.imageData = nil
+                        //isPosted = true
+                    } else {
+                        // Save post to Firebase (no media)
+                        try await newReply.createReply()
+                        replies.append(newReply)
+                        print("reply appenededed.")
+                        reply = ""
+                    }
                 }
             } catch {
                 print("error caugh \(error)")
@@ -120,6 +147,20 @@ struct MessagingView: View {
             }
         }
         print("end")
+        
+    }
+    func storeImage() async throws {
+        //Create reference to postMedia bucket
+        let storageRef = Storage.storage().reference()
+        
+        // Create a reference to the file you want to upload
+        let messageImageRef = storageRef.child("postMedia/\(UUID().uuidString).jpg")
+
+        // Upload image
+        if let imageData = imageData {
+            let _ = try await messageImageRef.putDataAsync(imageData)
+            try await imageURL = messageImageRef.downloadURL()
+        }
     }
     
     func errorAlerts(_ error: Error)async{
@@ -174,6 +215,8 @@ struct MessagingView: View {
     
     @ViewBuilder
     func AddReplyView() -> some View {
+        
+
         VStack {
             HStack(alignment: .bottom) {
                 TextField("Write your message here...", text: $reply, axis: .vertical)
@@ -183,31 +226,57 @@ struct MessagingView: View {
                     .background(Color.white.opacity(0.8))
                     .cornerRadius(20)
                     .submitLabel(.send)
-                
-                Button {
-                    // Present image picker
-                    showImagePicker.toggle()
-                } label: {
-                    Image(systemName: "photo")
-                        .resizable()
-                        .frame(width: 35, height: 35)
-                        .foregroundColor(Color.nightfallHarmonyRoyalPurple)
+                if let imageData, let image = UIImage(data:imageData) {
+                    GeometryReader{
+                        let size = $0.size
+                        Image(uiImage: image)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width:size.width, height: size.height)
+                            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                            .overlay(alignment: .topTrailing) {
+                                Button {
+                                    withAnimation(.easeInOut(duration:0.25)) {
+                                        self.imageData = nil
+                                    }
+                                } label: {
+                                    Image(systemName: "trash").font(.system(size: 20, weight: .bold))
+                                        .foregroundColor(.red)
+                                        .background(.white.opacity(0.5)).cornerRadius(5)
+                                }
+                                .padding(10)
+                            }
+                        
+                    }.clipped()
+                        .frame(height: 220)
+                } else {
+                    
+                    Button {
+                        // Present image picker
+                        showImagePicker.toggle()
+                    } label: {
+                        Image(systemName: "photo")
+                            .resizable()
+                            .frame(width: 35, height: 35)
+                            .foregroundColor(Color.nightfallHarmonyRoyalPurple)
+                    }
+                    .padding(.horizontal, 5).padding(.vertical, 9)
                 }
-                .padding(.horizontal, 5).padding(.vertical, 9)
             }
             
-            if let image = selectedImage {
+          /*  if let image = imageURL {
                 Image(uiImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(maxWidth: .infinity, maxHeight: 200)
                     .padding()
-            }
+            }*/
             Spacer()
             Button(action: {
                 // Create reply
                 print("creating reply")
                 createReply()
+                
             }) {
                 Image(systemName: "paperplane.fill")
                     .resizable()
@@ -218,8 +287,18 @@ struct MessagingView: View {
         }
         .padding()
         .cornerRadius(20)
-        .sheet(isPresented: $showImagePicker) {
-            ImagePicker(selectedImage: $selectedImage)
+        .photosPicker(isPresented: $showImagePicker, selection: $selectedPhoto)
+        .onChange(of: selectedPhoto) { newValue in
+            if let newValue {
+                Task{
+                    if let rawImageData = try? await newValue.loadTransferable(type: Data.self), let image = UIImage(data: rawImageData), let compressedImageData = image.jpegData(compressionQuality: 0.5) {
+                        await MainActor.run(body: {
+                            imageData = compressedImageData
+                            selectedPhoto = nil
+                        })
+                    }
+                }
+            }
         }
     }
 }
@@ -228,6 +307,7 @@ struct MessageCommentView: View {
     
     // Parameter
     @Binding var commentReply: MessageReply
+    @State private var postImage: UIImage?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -258,6 +338,25 @@ struct MessageCommentView: View {
                 
                 Spacer()
             }
+            if let imageURL = commentReply.imageURL {
+                let _ = self.loadImage(imageURL: imageURL)
+                if let postImage = postImage {
+                    Image(uiImage: postImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 230, height: 150)
+                        .cornerRadius(10)
+                        .padding(.horizontal, 0).padding(.bottom, 8)
+                        .clipped()
+                } else {
+                    Image(systemName: "rectangle.fill")
+                        .resizable()
+                        .frame(width: 330, height: 250)
+                        .foregroundColor(Color.white.opacity(0.1))
+                        .cornerRadius(10)
+                        .padding(.horizontal, 0).padding(.bottom, 8)
+                }
+            }
             
             Text("\(commentReply.replyContent)")
                 .foregroundColor(.white)
@@ -266,6 +365,22 @@ struct MessageCommentView: View {
         .padding(8)
         .background(RoundedRectangle(cornerRadius: 10).fill(Color.soothingNightDeepIndigo))
         .listRowSeparator(.hidden)
+    }
+    
+    func loadImage(imageURL: URL) {
+        let storageRef = Storage.storage().reference(forURL: imageURL.absoluteString)
+        // Fetch image
+        storageRef.getData(maxSize: Int64(5 * 1024 * 1024)) { data, error in
+            if let error = error {
+                print(error)
+                return
+            } else {
+                let retrievedImage = UIImage(data: data!)
+                DispatchQueue.main.async {
+                    postImage = retrievedImage
+                }
+            }
+        }
     }
 }
 

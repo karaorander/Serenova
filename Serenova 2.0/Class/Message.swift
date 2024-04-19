@@ -9,6 +9,7 @@ class MessageReply: Codable, Identifiable {
     @DocumentID var replyID: String?
     public var otherID: String?
     public var replyContent: String = ""
+    public var imageURL: URL?
     public var timeStamp: Double = Date().timeIntervalSince1970
     public var authorID: String = ""
     public var writerID: String = ""
