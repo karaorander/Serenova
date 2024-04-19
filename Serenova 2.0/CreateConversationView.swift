@@ -19,7 +19,8 @@ class CreateConvoViewModel: ObservableObject  {
     @Published var userIDs: [String] = []
     @Published var usernames: [String] = []
     
-    
+    @Published var isBlocked: Bool = false
+ 
         
         // Function to fetch usernames from the database
         func fetchUserIDs(completion: @escaping () -> Void) {
@@ -52,10 +53,12 @@ class CreateConvoViewModel: ObservableObject  {
         }
     }
     
-    func fetchUsername(completion: @escaping () -> Void) {
+    func fetchUsername(/*completion: @escaping () -> Void*/) {
         let db = Database.database().reference()
         let id = Auth.auth().currentUser!.uid
         let ur = db.child("User").child(id)
+                
+        //self.userID = id
         
         ur.observe(.value) { snapshot,arg  in
             guard let userData = snapshot.value as? [String: Any] else {
@@ -77,33 +80,54 @@ class CreateConvoViewModel: ObservableObject  {
             self.objectWillChange.send()
             
             // Call the completion closure to indicate that data fetching is completed
-            completion()
+            //completion()
         }
     }
     
-    func checkIfBlocked(by userID: String) -> Bool {
+    func checkIfBlocked(by userID: String) {
         guard let currentUserID = Auth.auth().currentUser?.uid else {
             print("No authenticated user found")
-            return false
+            return
+        }
+
+        let db = Firestore.firestore()
+        let userBlockedRef = db.collection("Users").document(currentUserID).collection("BlockedUsers")
+
+        // Check if the current user's ID exists in the userID's "BlockedUsers" collection
+        userBlockedRef.document(userID).getDocument { [weak self] (document, error) in
+            DispatchQueue.main.async {
+                if let document = document, document.exists {
+                    print("Blocked: true")
+                    self?.isBlocked = true
+                } else {
+                    print("Blocked: false")
+                    self?.isBlocked = false
+                }
+            }
+        }
+    }
+    
+    func checkIfCurrUserBlocked(by userID: String) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else {
+            print("No authenticated user found")
+            return
         }
         
         let db = Firestore.firestore()
-        let userBlockedRef = db.collection("Users").document(currentUserID).collection("BlockedUsers")
+        let userBlockedRef = db.collection("Users").document(userID).collection("BlockedUsers")
         
-        var isBlocked = false
-        
-        userBlockedRef.document(userID).getDocument { document, error in
-            if let error = error {
-                print("Error checking blocked status:", error.localizedDescription)
-                return
-            }
-            
-            if let _ = document?.data() {
-                isBlocked = true
+        // Check if the current user's ID exists in the userID's "BlockedUsers" collection
+        userBlockedRef.document(currentUserID).getDocument { [weak self] (document, error) in
+            DispatchQueue.main.async {
+                if let document = document, document.exists {
+                    print("CurrUserBlocked: true")
+                    self?.isBlocked = true
+                } else {
+                    print("CurrUserBlocked: false")
+                    self?.isBlocked = false
+                }
             }
         }
-        
-        return isBlocked
     }
     
     
@@ -177,29 +201,35 @@ struct CreateConversationView: View {
         }
         
         // Check if the recipient exists and is not blocked
-        viewModel.fetchUsername {
-            Task {
-                do {
-                    
-                  /*  if viewModel.username.isEmpty {
-                        // Show an alert indicating that the recipient does not exist
-                        //  } else if viewModel.checkIfBlocked(by: viewModel.username) {
-                        // Show an alert indicating that the recipient is blocked
-                    } else {*/
+        //viewModel.checkIfBlocked(by: viewModel.userIDs[selectedUsernameIndex]) {}
+            
+            viewModel.fetchUsername() //{
+                Task {
+                    do {
+                        
+                        /*if viewModel.username.isEmpty {
+                         // Show an alert indicating that the recipient does not exist
+                         } else
+                         } else {*/
                         print("CREATING MESSAGE")
                         // Create a new conversation
-                        let message = Message(senderID: Auth.auth().currentUser!.uid, timestamp: Date(), content: messageText)
-                    let newConversation = Conversation(participants: [Auth.auth().currentUser!.uid, viewModel.userIDs[selectedUsernameIndex]])
+                        let message = Message(senderID: Auth.auth().currentUser!.uid, content: messageText)
+                        let newConversation = Conversation(participants: [Auth.auth().currentUser!.uid, viewModel.userIDs[selectedUsernameIndex]])
                         newConversation.addMessage(message)
+                        /*viewModel.checkIfCurrUserBlocked(by: viewModel.userIDs[selectedUsernameIndex])
+                        if viewModel.isBlocked {
+                            // TODO: Show an alert indicating that the recipient is blocked
+                            print("user is blocked")
+                        }*/
                         try await newConversation.createConversation()
                         // Save the conversation to Firestore or your backend database
                         
-                    //}
-                } catch {
-                    
+                        //}
+                    } catch {
+                        
+                    }
                 }
-            }
-        }
+            //}
     }
 }
 
@@ -242,28 +272,7 @@ class CreateConvoViewModel: ObservableObject  {
         }
     }
     
-    func checkIfBlocked(by userID: String) -> Bool {
-        var result = false;
-        guard let currentUserID = Auth.auth().currentUser?.uid else {
-            print("No authenticated user found")
-            return false
-        }
-
-        let db = Firestore.firestore()
-        let userBlockedRef = db.collection("Users").document(currentUserID).collection("BlockedUsers")
-
-        // Check if the current user's ID exists in the userID's "BlockedUsers" collection
-        userBlockedRef.document(userID).getDocument { [weak self] (document, error) in
-            DispatchQueue.main.async {
-                if let document = document, document.exists {
-                    result = true
-                } else {
-                   result = false
-                }
-            }
-        }
-        return result
-    }
+    
     
     func checkIfCurrUserBlocked(by userID: String) -> Bool {
         var result = false;

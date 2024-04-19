@@ -215,17 +215,17 @@ struct ConversationListView: View {
     func deleteConversation(conversation: Conversation) {
         let db = Firestore.firestore()
         
-        let currentUserID = Auth.auth().currentUser!.uid
+//        let currentUserID = Auth.auth().currentUser!.uid
            
            // Reference to the particular "conversation" collection
         let convoCollectionRef = db.collection("Conversations").document(conversation.convoId!)
-           
-           // Delete the userID from conversation
-        var newParticipants = viewModel.participants
-        
-        if let index = newParticipants.firstIndex(of: currentUserID) {
-            newParticipants.remove(at: index)
-        }
+//           
+//           // Delete the userID from conversation
+//        var newParticipants = viewModel.participants
+//        
+//        if let index = newParticipants.firstIndex(of: currentUserID) {
+//            newParticipants.remove(at: index)
+//        }
         
         convoCollectionRef.updateData([
             "participants": FieldValue.arrayRemove([currUser!.userID])
