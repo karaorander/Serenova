@@ -235,7 +235,14 @@ struct FriendRequestView: View {
                     .ignoresSafeArea()
                 VStack {
                     HStack {
+                        NavigationLink(destination: AccountInfoView().navigationBarBackButtonHidden(true)) {
                             
+                            Image(systemName: "line.horizontal.3.decrease")
+                                .resizable()
+                                .frame(width: 25, height: 25)
+                                .foregroundColor(.white)
+                            
+                        }
                         Spacer()
                         
                         Text("Friend Requests")

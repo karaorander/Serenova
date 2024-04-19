@@ -150,7 +150,7 @@ class Reply: Codable, Identifiable {
     /*
      * Function to write new post to Firebase
      */
-    func createReply() async throws{
+    func createReply() async throws {
         // Create Firestore document ref
         let ref = Firestore.firestore().collection("Posts")
         // Write new Post object to Database

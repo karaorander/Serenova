@@ -417,7 +417,7 @@ struct AccountInfoView: View {
                                 .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
                             
                             // Friend Request Button
-                            NavigationLink(destination: FriendRequestView()){
+                            NavigationLink(destination: FriendRequestView().navigationBarBackButtonHidden(true)){
                                 HStack{
                                     Text("Friend Requests")
                                         .padding()
@@ -430,9 +430,35 @@ struct AccountInfoView: View {
                             }
                             
                             // Notifications Button
-                            NavigationLink(destination: TipsView()){
+                            NavigationLink(destination: NotificationsView().navigationBarBackButtonHidden(true)){
                                 HStack{
                                     Text("Notifications")
+                                        .padding()
+                                    Spacer()
+                                    Image(systemName:
+                                            "arrow.right")
+                                    .padding()
+                                }
+                                .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
+                            }
+                            
+                            // Tips Button
+                            NavigationLink(destination: TipsView().navigationBarBackButtonHidden(true)){
+                                HStack{
+                                    Text("Tips")
+                                        .padding()
+                                    Spacer()
+                                    Image(systemName:
+                                            "arrow.right")
+                                    .padding()
+                                }
+                                .font(.system(size: 17)).fontWeight(.medium).frame(width: 300, height: 40, alignment: .leading).background(Color.tranquilMistAshGray).foregroundColor(.nightfallHarmonyNavyBlue).cornerRadius(5)
+                            }
+                            
+                            // Conversations Button
+                            NavigationLink(destination: ConversationListView().navigationBarBackButtonHidden(true)){
+                                HStack{
+                                    Text("Conversations")
                                         .padding()
                                     Spacer()
                                     Image(systemName:

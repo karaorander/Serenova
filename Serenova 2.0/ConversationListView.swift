@@ -80,7 +80,7 @@ struct ConversationListView: View {
                 VStack(spacing: 0) {
                     HStack {
                         // TODO: Make Dropdown Menu with different options (e.g. Home)
-                        NavigationLink(destination: SleepGoalsView().navigationBarBackButtonHidden(true)) {
+                        NavigationLink(destination: AccountInfoView().navigationBarBackButtonHidden(true)) {
                             
                             Image(systemName: "line.horizontal.3.decrease")
                                 .resizable()
@@ -115,6 +115,24 @@ struct ConversationListView: View {
                         List {
                             ForEach(conversationList.indices, id: \.self) { index in
                                 ZStack {
+                                    
+                        
+                                        ForEach(conversationList, id: \.convoId) { conversation in
+            
+                                                VStack(alignment: .leading, spacing: 5) {
+                                                    Text(conversation.messages[0])
+                                                        .font(.headline)
+                                                        .fontWeight(.semibold)
+                                                        .foregroundColor(.white) // Adjust text color as needed
+                                                        .lineLimit(2) // Limit title to 2 lines
+                                                }
+                                                .padding()
+                                                .background(Color.moonlitSerenityLilac.opacity(0.1)) // Set background color
+                                                .cornerRadius(10)
+                                                .shadow(radius: 2)
+                                            
+                                        }
+                                    
                                     /*
                                     NavigationLink(destination: ForumPostDetailView(post: $conversationList[index]).navigationBarBackButtonHidden(true)) {
                                         EmptyView()

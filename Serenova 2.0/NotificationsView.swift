@@ -26,7 +26,7 @@ struct NotificationsView: View {
 
                 VStack(spacing: 0) {
                     HStack {
-                        NavigationLink(destination: SleepGoalsView().navigationBarBackButtonHidden(true)) {
+                        NavigationLink(destination: AccountInfoView().navigationBarBackButtonHidden(true)) {
                             
                             Image(systemName: "line.horizontal.3.decrease")
                                 .resizable()

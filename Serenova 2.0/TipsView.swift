@@ -289,11 +289,23 @@ struct TipsView: View {
                 VStack {
                     ScrollView {
                         VStack(spacing: 30) {
-                            Text("Sleep Tips")
-                                .font(Font.custom("NovaSquare-Bold", size: 50))
-                                .foregroundColor(Color.dreamyTwilightMidnightBlue)
-                                .fontWeight(.bold) // Ensure bold font weight
-                                .padding(.top, 20)
+                            HStack {
+                                NavigationLink(destination: AccountInfoView().navigationBarBackButtonHidden(true)) {
+                                    
+                                    Image(systemName: "line.horizontal.3.decrease")
+                                        .resizable()
+                                        .frame(width: 25, height: 25)
+                                        .foregroundColor(.white)
+                                    
+                                }
+                                Spacer()
+                                Text("Sleep Tips")
+                                    .font(Font.custom("NovaSquare-Bold", size: 50))
+                                    .foregroundColor(Color.dreamyTwilightMidnightBlue)
+                                    .fontWeight(.bold) // Ensure bold font weight
+                                    .padding(.top, 20)
+                                Spacer()
+                            }
                             
                             Divider() // Add a line below the "Sleep Tips" text
                                 .frame(height: 3)
