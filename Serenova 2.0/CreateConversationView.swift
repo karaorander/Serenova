@@ -165,8 +165,6 @@ class CreateConvoViewModel: ObservableObject  {
     
 }
 
-
-
 struct CreateConversationView: View {
     @StateObject var viewModel = CreateConvoViewModel()
     @State private var messageReceiver: String = ""
@@ -302,6 +300,7 @@ class CreateConvoViewModel: ObservableObject  {
                             // Call the completion closure to indicate that data fetching is completed
                             completion()
         }
+        .navigationTitle("New Conversation")
     }
     
     
@@ -333,7 +332,228 @@ class CreateConvoViewModel: ObservableObject  {
 private var viewModel = CreateConvoViewModel()
 
 //Create New Conversation View
-struct CreateConversationView: View {
+struct CreateBrandNewConversationView: View {
+    /// callback
+    //var onPos: (Post)->()
+    @State var messageText: String = ""
+    @State var messageReceiver: String = ""
+    @State var messageImageData: Data?
+    @State var matchedUsers: [[String:Any]] = []
+    
+    ///use app storage to get user data from firebase.  EX:
+    //@AppStorage("userName") var userName: String = ""
+    @State private var isLoading:Bool = false
+    @State private var showError:Bool = false
+    @State private var showCamera:Bool = false
+    @State private var errorMess: String = ""
+    @State private var showImagePicker: Bool = false
+    @State private var selectedPhoto: PhotosPickerItem?
+    @FocusState private var showkeyboard: Bool
+    
+    @State private var isCreatingPost: Bool = false
+    @State private var isPosted: Bool = false
+    
+
+    @State private var tagOption: Int = 0
+    @State private var showTagOptions: Bool = false
+    
+    @Environment(\.dismiss) private var dismiss
+    var body: some View {
+        NavigationView{
+            ZStack {
+                LinearGradient(gradient: Gradient(colors: [
+                    .nightfallHarmonyRoyalPurple.opacity(0.7),
+                    .dreamyTwilightMidnightBlue.opacity(0.7),
+                    .dreamyTwilightOrchid]),
+                     startPoint: .topLeading, endPoint: .bottomLeading)
+                    .ignoresSafeArea()
+                VStack {
+                    HStack {
+                        HStack {
+                            Image(systemName: "magnifyingglass")
+                                .fontWeight(.semibold)
+                                .foregroundColor(.dreamyTwilightOrchid)
+                            TextField("Search users...", text: $messageReceiver)
+                                .foregroundColor(.black)
+                                .onSubmit {
+                                    matchedUsers = []
+                                    getUsers()
+                                }
+                                .submitLabel(.search)
+                            if !messageText.isEmpty {
+                                Button(action:{messageText = ""}){
+                                    Image(systemName: "multiply.circle.fill")
+                                        .resizable()
+                                        .frame(width: 18, height: 18)
+                                        .foregroundColor(.dreamyTwilightOrchid)
+                                }
+                            }
+                        }
+                        .padding()
+                        .background(Color.white.opacity(0.8))
+                        .cornerRadius(20)
+                        
+                        // Cancel Button
+                        Button {
+                            dismiss()
+                        } label: {
+                            Text("Cancel")
+                                .font(.callout)
+                                .foregroundColor(Color.dreamyTwilightOrchid)
+                                .padding(.leading, 5)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                    }
+                    .padding(.horizontal)
+                    List {
+                        ForEach(matchedUsers.indices, id: \.self) { index in
+                            VStack {
+                                Button {
+                                    // TODO: Create new chat
+                                    // TODO: Navigate to new chat
+                                } label: {
+                                    MatchedUsersView(user: matchedUsers[index])
+                                        .padding(10)
+                                }
+                            }
+                        }
+                        .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                        .listRowBackground(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color.soothingNightDeepIndigo)
+                        )
+                    }
+                    .padding(8)
+                    .listRowSpacing(2)
+                    .listStyle(PlainListStyle())
+                    .scrollIndicators(ScrollIndicatorVisibility.hidden)
+
+                }.vSpacing(.top)
+                    .alert(
+                        "Conversation Creation Failure",
+                        isPresented: $showError
+                    ) {
+                        Button("OK") {}
+                    } message: {
+                        Text(errorMess)
+                    }
+                }
+
+        }
+    }
+    //error handling -> error alerts
+    func errorAlerts(_ error: Error)async{
+        await MainActor.run(body: {
+            errorMess = error.localizedDescription
+            showError.toggle()
+        })
+    }
+    
+    //error handling -> error alerts (String version)
+    func errorAlerts(_ error: String)async{
+        await MainActor.run(body: {
+            errorMess = error
+            showError.toggle()
+        })
+    }
+
+    func getUsers() {
+        let db = Database.database().reference().child("User")
+        db.queryOrdered(byChild: "name").queryEqual(toValue: messageReceiver).observeSingleEvent(of:.value) { snapshots, arg in
+            for snapshot in snapshots.children.allObjects as! [DataSnapshot] {
+                guard let userData = snapshot.value as? [String: Any] else {
+                    print("Error fetching data")
+                    return
+                }
+                // TODO: Check if blocked
+                matchedUsers.append(userData);
+                print("HERE IS THE COUNT: ")
+                print(matchedUsers.count)
+            }
+        }
+    }
+
+    func createConversation(recipient: String, message: Message) {
+        showkeyboard = false
+        isLoading = true
+
+        Task {
+            do {
+                // TESTING IN PREVIEW MODE:
+                // Comment out the guard below and use
+                // the second constructor for Post (uncomment it)
+                                
+                guard currUser != nil else {
+                    await errorAlerts("ERROR! Not signed in.")
+                    return
+                }
+                
+
+                // Create new Post Object
+                //var newPost = Post(title: postTitle, content: postText
+                                   //authorUsername: currUser.username,
+                                   //authorID: currUser.userID,
+                                   //authorProfilePhoto: currUser.profileURL)
+                var allParticipants: [String] = []
+                
+                allParticipants.append(recipient)
+                print(recipient)
+                // check if user is blocked -- TODO: needs to be for each user added
+                if (!(viewModel.checkIfBlocked(by: viewModel.username))) {
+                    allParticipants.append(viewModel.username)
+                    print(viewModel.username)
+                }
+                              
+                
+                //allParticipants.append(<#T##newElement: Any##Any#>)
+                let newConversation = Conversation(participants: allParticipants)
+                newConversation.messages.append(message)
+                currUser?.addConversation(newConversation)
+                // notify user they've been added to a Conversation -- TODO: needs to be for each user added
+                let db = Firestore.firestore()
+                let convoNotification = db.collection("FriendRequests").document(viewModel.userID).collection("notifications")
+                
+                convoNotification.document().setData([
+                    "message": "You've been added to a new conversation",
+                    "type": "message"
+                ], merge: true) { error in
+                    if let error = error {
+                        print("Error adding notification: \(error)")
+                    } else {
+                        print("Notification added successfully to Firestore2: \(viewModel.userID)")
+                    }
+                }
+                /*
+                // Store Image & Get DownloadURL
+                if messageImageData != nil {
+                    // Completion block for uploading image
+                    try await storeImage()
+                    
+                    // Set imageURL of Post
+                    guard let postImageURL = postImageURL else {
+                        await errorAlerts("Failed to upload photo.")
+                        return
+                    }
+                    //newMessage.imageURL = postImageURL
+                            
+                    // Save post to Firebase (media)
+                    //try await newMessage.createPost()
+                    //isPosted = true
+                } else {
+                    // Save post to Firebase (no media)
+                    //try await newMessage.createPost()
+                    //isPosted = true
+                }
+                */
+            } catch {
+                await errorAlerts(error)
+            }
+        }
+    }
+}
+
+//Create New Conversation View
+struct CreateGroupConversationView: View {
     /// callback
     //var onPos: (Post)->()
     
@@ -343,6 +563,8 @@ struct CreateConversationView: View {
     @State var messageReceiver: String = ""
     @State var messageImageData: Data?
     @State var postImageURL: URL?
+    @State var matchedUsers: [[String:Any]] = []
+    @State var groupUsers: [[String:Any]] = []
     
     
     ///use app storage to get user data from firebase.  EX:
@@ -374,115 +596,113 @@ struct CreateConversationView: View {
                     .ignoresSafeArea()
                 VStack {
                     HStack {
-                        Menu {
-                            Button("Delete Conversation", role: .destructive) {
-                                dismiss()
-                            }
-                        } label: {
-                            Text("Cancel").font(.callout).foregroundColor(Color.dreamyTwilightOrchid)
-                        }
-                        NavigationLink ("", destination: ConversationListView().navigationBarBackButtonHidden(true))
-                        Spacer()
-                        Button(action: {
-                            //createPost()
-                            let newMessage = Message(messageContent: messageText, messageSender: currUser?.username ?? "", messageReceiver: messageReceiver)
-                            createConversation(recipient: messageReceiver, message: newMessage)
-                            //isCreatingPost = true
-                        }) {
-                            Text("Send").font(.callout)
+                        HStack {
+                            Image(systemName: "magnifyingglass")
+                                .fontWeight(.semibold)
                                 .foregroundColor(.dreamyTwilightOrchid)
-                                .padding(.horizontal,20)
-                                .padding(.vertical, 6)
-                                .background(.white, in: Capsule())
-                        }
-                        .disabled(messageText == "" || messageReceiver == "")
-                        .opacity((messageText == "" || messageReceiver == "") ? 0.4 : 1)
-                    }.padding(.horizontal, 15).padding(.vertical, 10)
-                    ScrollView(.vertical, showsIndicators:false) {
-                        VStack(spacing: 15){
-                            HStack {
-                                TextField("To: ", text: $messageReceiver)
-                                    .fontWeight(.bold)
-                                    .focused($showkeyboard)
-                            }.padding()
-                                .background(Color.white.opacity(0.1))
-                                .cornerRadius(10)
-                            HStack {
-                                TextField("Let's chat!", text: $messageText, axis: .vertical)
-                                    .focused($showkeyboard)
-                                    .frame(minHeight: 150, alignment: .top)
-                            }.padding()
+                            TextField("Search users...", text: $messageReceiver)
                                 .foregroundColor(.black)
-                                .background(Color.white.opacity(0.1))
-                                .cornerRadius(10)
-                        }.padding(15)
-                            if let messageImageData, let image = UIImage(data: messageImageData) {
-                                GeometryReader{
-                                    let size = $0.size
-                                    Image(uiImage: image)
+                                .onSubmit {
+                                    matchedUsers = []
+                                    getUsers()
+                                }
+                                .submitLabel(.search)
+                            if !messageText.isEmpty {
+                                Button(action:{messageText = ""}){
+                                    Image(systemName: "multiply.circle.fill")
                                         .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .frame(width:size.width, height: size.height)
-                                        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-                                        .overlay(alignment: .topTrailing) {
-                                            Button {
-                                                withAnimation(.easeInOut(duration:0.25)) {
-                                                    self.messageImageData = nil
-                                                }
-                                            } label: {
-                                                Image(systemName: "trash").font(.system(size: 20, weight: .bold))
-                                                    .foregroundColor(.red)
-                                                    .background(.white.opacity(0.5)).cornerRadius(5)
-                                            }
-                                            .padding(10)
-                                        }
-                                    
-                                }.clipped()
-                                    .frame(height: 220)
-                            } else {
-                                Spacer()
-                                Button {
-                                    showImagePicker.toggle()
-                                }label : {
-                                    Image(systemName: "photo")
-                                        .foregroundColor(.soothingNightLightGray)
-                                        .font(.system(size: 200))
-                                        .background(.white.opacity(0.1))
-                                        .cornerRadius(10)
-                                        
-                                }.hSpacing(.center).vSpacing(.center)
-                                
-                            }
-                    }
-                    
-                    Divider()
-                    HStack {
-                        Button {
-                            showImagePicker.toggle()
-                        }label : {
-                            Image(systemName: "photo.badge.plus")
-                                .font( .title3)
-                                .foregroundColor(.white)
-                        }.hSpacing(.leading)
-                        Button("Done") {
-                            showkeyboard = false
-                        }.foregroundColor(.white)
-                    }.padding(.horizontal, 15).padding(.vertical, 10)
-                }.vSpacing(.top)
-                    .photosPicker(isPresented: $showImagePicker, selection: $selectedPhoto)
-                    .onChange(of: selectedPhoto) { newValue in
-                        if let newValue {
-                            Task{
-                                if let rawImageData = try? await newValue.loadTransferable(type: Data.self), let image = UIImage(data: rawImageData), let compressedImageData = image.jpegData(compressionQuality: 0.5) {
-                                    await MainActor.run(body: {
-                                        messageImageData = compressedImageData
-                                        selectedPhoto = nil
-                                    })
+                                        .frame(width: 18, height: 18)
+                                        .foregroundColor(.dreamyTwilightOrchid)
                                 }
                             }
                         }
+                        .padding()
+                        .background(Color.white.opacity(0.8))
+                        .cornerRadius(20)
+                        
+                        // Cancel Button
+                        Button {
+                            dismiss()
+                        } label: {
+                            Text("Cancel")
+                                .font(.callout)
+                                .foregroundColor(Color.dreamyTwilightOrchid)
+                                .padding(.leading, 5)
+                        }
+                        .buttonStyle(PlainButtonStyle())
                     }
-                    //.alert(errorMess, isPresented: $showImagePicker, actions: {})
+                    .padding(.horizontal)
+                    
+                    ScrollView(.horizontal, showsIndicators:false) {
+                        HStack {
+                            Text("Users:")
+                                .font(.system(size: 20))
+                                .fontWeight(.semibold)
+                                .foregroundColor(Color.dreamyTwilightOrchid)
+                                .padding(.horizontal).padding(.vertical, 10)
+                            ForEach(groupUsers.indices, id: \.self) { index in
+                                HStack {
+                                    Text("\(groupUsers[index]["name"] as! String)")
+                                        .foregroundColor(Color.dreamyTwilightOrchid)
+                                    Button {
+                                        groupUsers.remove(at: index)
+                                    } label: {
+                                        Image(systemName: "xmark")
+                                            .resizable()
+                                            .frame(width: 10, height: 10)
+                                            .foregroundColor(Color.dreamyTwilightOrchid)
+                                    }
+                                }
+                                .padding(.vertical, 12).padding(.horizontal, 22)
+                                .background(Color.moonlitSerenityLilac)
+                                .cornerRadius(10)
+                                .buttonStyle(NoStyle())
+                            }
+                        }
+                    }
+                    .padding(.vertical).padding(.horizontal, 10)
+                    
+                    List {
+                        ForEach(matchedUsers.indices, id: \.self) { index in
+                            VStack {
+                                Button {
+                                    print(matchedUsers[index])
+                                    // Check if user is ALREADY THERE!
+                                    if !groupUsers.contains(where: {($0["email"] as? String) == (matchedUsers[index]["email"] as? String)}) {
+                                        groupUsers.append(matchedUsers[index])
+                                    }
+                                } label: {
+                                    MatchedUsersView(user: matchedUsers[index])
+                                        .padding(10)
+                                }
+                            }
+                        }
+                        .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                        .listRowBackground(
+                            RoundedRectangle(cornerRadius: 10)
+                                .fill(Color.soothingNightDeepIndigo)
+                        )
+                    }
+                    .padding(8)
+                    .listRowSpacing(2)
+                    .listStyle(PlainListStyle())
+                    .scrollIndicators(ScrollIndicatorVisibility.hidden)
+                    
+                    Button {
+                        if groupUsers.count != 0 {
+                            // TODO: Create new chat
+                            // TODO: Handle navigation to new chat
+                        }
+                    } label: {
+                        Text("Create Group")
+                            .foregroundColor(Color.soothingNightDeepIndigo)
+                            .frame(width: 313, height: 40)
+                    }
+                    .padding(.vertical, 12).padding(.horizontal, 22)
+                    .background(Color.moonlitSerenityLilac)
+                    .cornerRadius(20)
+                    .buttonStyle(NoStyle())
+                }.vSpacing(.top)
                     .alert(
                         "Conversation Creation Failure",
                         isPresented: $showError
@@ -491,14 +711,6 @@ struct CreateConversationView: View {
                     } message: {
                         Text(errorMess)
                     }
-                /*
-                    if isCreatingPost {
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle())
-                            .tint(.white)
-                            .scaleEffect(2)
-                    }
-                 */
                 }
 
         }
@@ -519,7 +731,23 @@ struct CreateConversationView: View {
         })
     }
     
-    func createConversation(recipient: String, message: Message) {
+    func getUsers() {
+        let db = Database.database().reference().child("User")
+        db.queryOrdered(byChild: "name").queryEqual(toValue: messageReceiver).observeSingleEvent(of:.value) { snapshots, arg in
+            for snapshot in snapshots.children.allObjects as! [DataSnapshot] {
+                guard let userData = snapshot.value as? [String: Any] else {
+                    print("Error fetching data")
+                    return
+                }
+                // TODO: Check if blocked
+                matchedUsers.append(userData);
+                print("HERE IS THE COUNT: ")
+                print(matchedUsers.count)
+            }
+        }
+    }
+    
+    func createConversation() {
         showkeyboard = false
         isLoading = true
         
@@ -541,21 +769,17 @@ struct CreateConversationView: View {
                                    //authorID: currUser.userID,
                                    //authorProfilePhoto: currUser.profileURL)
                 var allParticipants: [String] = []
-                
-                allParticipants.append(recipient)
-                print(recipient)
+                /*
                 // check if user is blocked -- TODO: needs to be for each user added
                 if (!(viewModel.checkIfBlocked(by: viewModel.username)) &&
                     !(viewModel.checkIfCurrUserBlocked(by: viewModel.username))) {
                     allParticipants.append(viewModel.username)
-                    print(viewModel.username)
                 }
-                              
+                */
                 
                 //allParticipants.append(<#T##newElement: Any##Any#>)
                 let newConversation = Conversation(participants: allParticipants)
-                newConversation.messages.append(message)
-                currUser?.addConversation(newConversation)
+                
                 // notify user they've been added to a Conversation -- TODO: needs to be for each user added
                 let db = Firestore.firestore()
                 let convoNotification = db.collection("FriendRequests").document(viewModel.userID).collection("notifications")
@@ -570,7 +794,7 @@ struct CreateConversationView: View {
                         print("Notification added successfully to Firestore2: \(viewModel.userID)")
                     }
                 }
-                
+                /*
                 // Store Image & Get DownloadURL
                 if messageImageData != nil {
                     // Completion block for uploading image
@@ -591,88 +815,110 @@ struct CreateConversationView: View {
                     //try await newMessage.createPost()
                     //isPosted = true
                 }
-                
-            } catch {
-                await errorAlerts(error)
-            }
-        }
-        
-    }
-    
-    /*
-    func createPost() {
-        showkeyboard = false
-        isLoading = true
-
-        Task {
-            do {
-                // TESTING IN PREVIEW MODE:
-                // Comment out the guard below and use
-                // the second constructor for Post (uncomment it)
-                
-                guard currUser != nil else {
-                    await errorAlerts("ERROR! Not signed in.")
-                    return
-                }
-                
-
-                // Create new Post Object
-                //var newPost = Post(title: postTitle, content: postText
-                                   //authorUsername: currUser.username,
-                                   //authorID: currUser.userID,
-                                   //authorProfilePhoto: currUser.profileURL)
-                
-                let newMessage = Post(title: messageReceiver, content: messageText)
-                
-                // Store Image & Get DownloadURL
-                if messageImageData != nil {
-                    // Completion block for uploading image
-                    try await storeImage()
-                    
-                    // Set imageURL of Post
-                    guard let postImageURL = postImageURL else {
-                        await errorAlerts("Failed to upload photo.")
-                        return
-                    }
-                    newMessage.imageURL = postImageURL
-                            
-                    // Save post to Firebase (media)
-                    try await newMessage.createPost()
-                    isPosted = true
-                } else {
-                    // Save post to Firebase (no media)
-                    try await newMessage.createPost()
-                    isPosted = true
-                }
-                
+                */
             } catch {
                 await errorAlerts(error)
             }
         }
     }
-    */
-    
-    /*
-     * Function to store image in Firebase Storage
-     */
-    func storeImage() async throws {
-        //Create reference to postMedia bucket
-        let storageRef = Storage.storage().reference()
-        
-        // Create a reference to the file you want to upload
-        let messageImageRef = storageRef.child("postMedia/\(UUID().uuidString).jpg")
-
-        // Upload image
-        if let messageImage = messageImageData {
-            let _ = try await messageImageRef.putDataAsync(messageImage)
-            try await postImageURL = messageImageRef.downloadURL()
-        }
-    }
-    
 }
 
+struct MatchedUsersView: View {
+    var user: [String: Any]
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Image(systemName: "person.crop.circle.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 45, height: 45)
+                    .foregroundColor(Color.white)
+                    .foregroundColor(.clear)
+                    .padding(.trailing)
+                VStack(alignment: .leading) {
+                    Text("\(user["name"]!)")
+                        .font(.system(size: 17))
+                        .fontWeight(.semibold)
+                        .foregroundColor(Color.white)
+                        .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                    Text("\(user["email"]!)")
+                        .font(.system(size: 17))
+                        .fontWeight(.semibold)
+                        .foregroundColor(.moonlitSerenityLilac)
+                        .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                }
+            }
+            .padding(.vertical, 8)
+        }
+    }
+}
+
+struct ChooseConversationOptionView: View {
+    @Environment(\.dismiss) private var dismiss
+    var body: some View {
+        NavigationView {
+            ZStack {
+                LinearGradient(gradient: Gradient(colors: [
+                    .nightfallHarmonyRoyalPurple.opacity(0.7),
+                    .dreamyTwilightMidnightBlue.opacity(0.7),
+                    .dreamyTwilightOrchid]),
+                               startPoint: .topLeading, endPoint: .bottomLeading)
+                .ignoresSafeArea()
+                VStack {
+                    HStack {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image(systemName: "line.horizontal.3.decrease")
+                                .resizable()
+                                .frame(width: 25, height: 25)
+                                .foregroundColor(.white)
+                        }
+                        Spacer()
+                        Spacer()
+                        Text("Choose Type")
+                            .font(Font.custom("NovaSquareSlim-Bold", size: 35))
+                            .foregroundColor(.white)
+                        Spacer()
+                        Spacer()
+                        Spacer()
+                    }
+                    .padding().padding(.horizontal, 15)
+                    //Option 1
+                    NavigationLink(destination: CreateBrandNewConversationView().navigationBarBackButtonHidden(true)) {
+                        Text("Create One-on-One Chat")
+                            .font(Font.custom("NovaSquareSlim-Bold", size: 20))
+                            .foregroundColor(.white)
+                            .padding(50)
+                            .background(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(Color.dreamyTwilightOrchid)
+                                    .frame(width: 375)
+                            )
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    //Option 2
+                    NavigationLink(destination: CreateGroupConversationView().navigationBarBackButtonHidden(true)) {
+                        Text("Create Group Chat")
+                            .font(Font.custom("NovaSquareSlim-Bold", size: 20))
+                            .foregroundColor(.white)
+                            .padding(50)
+                            .background(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(Color.dreamyTwilightOrchid)
+                                    .frame(width: 375)
+                            )
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    Spacer()
+                }
+            }
+        }
+    }
+}
 
 #Preview {
-    ForumPostView()
+    ChooseConversationOptionView()
 }
-*/
+

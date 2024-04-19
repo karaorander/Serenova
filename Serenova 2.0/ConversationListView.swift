@@ -58,53 +58,92 @@ struct NoConversationsView: View {
     }
 }
 
+struct IndividualConversation: View {
+    // Parameter
+    var conversation: Conversation
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                if conversation.numParticipants == 0 {
+                    Image(systemName: "person.fill")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 35, height: 35)
+                        .foregroundColor(Color.white)
+                        .foregroundColor(.clear)
+                        .padding(.horizontal)
+                } else if conversation.numParticipants == 1 {
+                    Image(systemName: "person.3.fill")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 35, height: 40)
+                        .foregroundColor(Color.white)
+                        .padding(.horizontal)
+                }
+                VStack(alignment: .leading){
+                    Text("[NAME(S)]")
+                        .font(.system(size: 13))
+                        .fontWeight(.semibold)
+                        .foregroundColor(Color.white)
+                        .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                        .padding(.bottom, 5)
+                    Text("MOST RECENT MESSAGE")
+                        .font(.system(size: 13))
+                        .fontWeight(.semibold)
+                        .foregroundColor(.moonlitSerenityLilac)
+                        .multilineTextAlignment(/*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/)
+                    Spacer()
+                }
+                .padding(.horizontal)
+                Image(systemName: "circle.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 5, height: 5)
+                    .foregroundColor(Color.white)
+                    .padding(.leading)
+            }
+            .padding(.vertical, 8).padding(.horizontal, 10)
+        }
+    }
+}
+
 struct ConversationListView: View {
     
     @StateObject private var viewModel = ConversationViewModel()
     
-    @State var conversationList: [Conversation] = []
+    @State var conversationList: [Conversation] = [Conversation(participants: []), Conversation(participants: ["ELLO"])]
     @State private var queryNum: Int = 25
     @State private var lastConversation: DocumentSnapshot?
     
     var body: some View {
         NavigationView {
             ZStack {
-                
                 LinearGradient(gradient: Gradient(colors: [
                     .nightfallHarmonyRoyalPurple.opacity(0.7),
                     .dreamyTwilightMidnightBlue.opacity(0.7),
                     .dreamyTwilightOrchid]),
                      startPoint: .topLeading, endPoint: .bottomLeading)
                     .ignoresSafeArea()
-                
                 VStack(spacing: 0) {
                     HStack {
-                        // TODO: Make Dropdown Menu with different options (e.g. Home)
-                        NavigationLink(destination: AccountInfoView().navigationBarBackButtonHidden(true)) {
-                            
+                        NavigationLink(destination: ForumView().navigationBarBackButtonHidden(true)) {
                             Image(systemName: "line.horizontal.3.decrease")
                                 .resizable()
                                 .frame(width: 25, height: 25)
                                 .foregroundColor(.white)
-                            
                         }
-                            
                         Spacer()
-                        
-                        Text("Direct Messages")
+                        Text("Messages")
                             .font(Font.custom("NovaSquareSlim-Bold", size: 35))
                             .foregroundColor(.white)
-                        
                         Spacer()
-                        
-                        NavigationLink(destination: SearchForumView().navigationBarBackButtonHidden(true)) {
-                            Image(systemName: "magnifyingglass")
+                        NavigationLink(destination: ChooseConversationOptionView().navigationBarBackButtonHidden(true)) {
+                            Image(systemName: "square.and.pencil")
                                 .resizable()
-                                .fontWeight(.semibold)
-                                .frame(width: 25, height: 25)
+                                .frame(width: 30, height: 30)
                                 .foregroundColor(.white)
-                        }
-                        
+                        }.isDetailLink(false)
                     }
                     .padding()
                     .padding(.horizontal, 15)
@@ -136,8 +175,9 @@ struct ConversationListView: View {
                                         EmptyView()
                                     }
                                     .opacity(0)
-                                     
-                                    PostListingView(isFullView: false, post: $conversationList[index])
+                                    */
+                                    IndividualConversation(conversation: conversationList[index])
+                                        .padding(.vertical, 15)
                                         .onAppear {
                                             if index == conversationList.count - 1 && lastConversation != nil {
                                                 Task {
@@ -146,28 +186,23 @@ struct ConversationListView: View {
                                             }
                                         }
                                         .padding(5)
-                                     */
                                 }
+                            }
+                            .onDelete { indexSet in
+                                conversationList.remove(atOffsets: indexSet)
+                                // TODO: Delete conversation @ index
                             }
                             .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
                             .listRowBackground(
                                 RoundedRectangle(cornerRadius: 10)
-                                    .fill(Color.soothingNightDeepIndigo)
+                                    .fill(Color.dreamyTwilightOrchid)
                             )
                         }
                         .padding(8)
-                        .listRowSpacing(5)
+                        .listRowSpacing(2)
                         .listStyle(PlainListStyle())
                         .scrollIndicators(ScrollIndicatorVisibility.hidden)
-                        .refreshable {
-                            Task {
-                                conversationList = []
-                                lastConversation = nil
-                                //await queryConversations(NUM_POSTS: queryNum)
-                            }
-                        }
                     }
-
                     HStack(content: {
                         NavigationLink(destination: NotificationsView().navigationBarBackButtonHidden(true)) {
                             Image(systemName: "bell.fill")
@@ -199,8 +234,8 @@ struct ConversationListView: View {
                     .padding(.horizontal, 15)
                     .hSpacing(.center)
                 }
+                
             }.onAppear() {
-                UIRefreshControl.appearance().tintColor = .white
                 Task {
                     // Prevents crash but data will not be loaded
                     // Need to run in simulator
@@ -239,3 +274,4 @@ struct ConversationListView_Previews: PreviewProvider {
         ConversationListView()
     }
 }
+
