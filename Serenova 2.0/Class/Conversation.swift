@@ -120,4 +120,5 @@ class Conversation: Codable, Identifiable {
             }
         }
     }
+    
 }

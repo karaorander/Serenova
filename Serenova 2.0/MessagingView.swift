@@ -102,7 +102,7 @@ struct MessagingView: View {
                 }
                 // Save post to Firebase
                 if let user = currUser {
-                    let newReply = MessageReply(replyContent: reply, otherID: convoID, authorID: user.name)
+                    let newReply = MessageReply(replyContent: reply, otherID: convoID, authorID: user.name, writerID: user.userID)
                     
                     print("content: \(reply) and \(newReply.authorID)")
                     if (newReply.replyContent == "") {

@@ -11,15 +11,17 @@ class MessageReply: Codable, Identifiable {
     public var replyContent: String = ""
     public var timeStamp: Double = Date().timeIntervalSince1970
     public var authorID: String = ""
+    public var writerID: String = ""
     
     /*
      * Constructor for Reply
      * TODO: Fill in other details! (i.e authorID, authorUsername, authorProfilePicture)
      */
-    init(replyContent: String, otherID: String, authorID: String) {
+    init(replyContent: String, otherID: String, authorID: String, writerID: String) {
         self.replyContent = replyContent
         self.otherID = otherID
         self.authorID = authorID
+        self.writerID = writerID
     }
     
     /*
@@ -38,7 +40,66 @@ class MessageReply: Codable, Identifiable {
             "numReplies" : FieldValue.increment(Int64(1))
         ]);
         
+        let db = Firestore.firestore()
+        //Add notification to users page
         
+        // Retrieve participants and send notifications
+        getParticipants(from: self.otherID!) { result in
+            switch result {
+            case .success(let participants):
+                // Loop through each participant and send notifications
+                for participant in participants {
+                    if participant != currUser?.userID {
+                        let joinNotifications = Firestore.firestore()
+                            .collection("FriendRequests")
+                            .document(participant)
+                            .collection("notifications")
+                        
+                        let message = "\(currUser?.name ?? "Someone"): \(self.replyContent)"
+                        
+                        joinNotifications.document().setData([
+                            "message": message,
+                            "type": "message"
+                        ], merge: true) { error in
+                            if let error = error {
+                                print("Error adding notification: \(error)")
+                            } else {
+                                print("Notification added successfully to Firestore: \(participant)")
+                            }
+                        }
+                    }
+                }
+            case .failure(let error):
+                // Handle any errors that occur when fetching participants
+                print("Failed to retrieve participants: \(error)")
+            }
+        }
+    }
+    
+    // Function to retrieve participants of a conversation given a conversation ID
+    func getParticipants(from convoId: String, completion: @escaping (Result<[String], Error>) -> Void) {
+        let db = Firestore.firestore()
+        let conversationRef = db.collection("Conversations").document(convoId)
+        
+        conversationRef.getDocument { (document, error) in
+            if let error = error {
+                // Handle any error that occurs during the query
+                completion(.failure(error))
+            } else if let document = document, document.exists {
+                // Convert the document data into a Conversation object
+                do {
+                    let conversation = try document.data(as: Conversation.self)
+                    // Return the list of participants in the completion handler
+                    completion(.success(conversation.participants ?? []))
+                } catch {
+                    // Handle any error that occurs during data conversion
+                    completion(.failure(error))
+                }
+            } else {
+                // Handle the case where the document does not exist
+                completion(.success([]))
+            }
+        }
     }
     
     /*
