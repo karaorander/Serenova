@@ -104,6 +104,8 @@
 		F2C2EFCB2BCCC970005BC175 /* AlarmTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C2EFCA2BCCC970005BC175 /* AlarmTests.swift */; };
 		F2D887002B8E8E9200C0A87E /* AlarmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D886FF2B8E8E9200C0A87E /* AlarmView.swift */; };
 		F2D887022B8EA03A00C0A87E /* AlarmListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D887012B8EA03A00C0A87E /* AlarmListView.swift */; };
+		F2DFCD402BD21C740086A1B7 /* NotificationViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2DFCD3F2BD21C740086A1B7 /* NotificationViewTests.swift */; };
+		F2DFCD422BD22E4A0086A1B7 /* MessagingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2DFCD412BD22E4A0086A1B7 /* MessagingView.swift */; };
 		F2E2195E2B82EC6200235824 /* SignUpTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E2195D2B82EC6200235824 /* SignUpTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -204,6 +206,8 @@
 		F2C2EFCA2BCCC970005BC175 /* AlarmTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmTests.swift; sourceTree = "<group>"; };
 		F2D886FF2B8E8E9200C0A87E /* AlarmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmView.swift; sourceTree = "<group>"; };
 		F2D887012B8EA03A00C0A87E /* AlarmListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmListView.swift; sourceTree = "<group>"; };
+		F2DFCD3F2BD21C740086A1B7 /* NotificationViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewTests.swift; sourceTree = "<group>"; };
+		F2DFCD412BD22E4A0086A1B7 /* MessagingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagingView.swift; sourceTree = "<group>"; };
 		F2E219542B82EBEB00235824 /* Serenova 2.0Tests2.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Serenova 2.0Tests2.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2E2195D2B82EC6200235824 /* SignUpTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -316,6 +320,7 @@
 				F20DE1C02BB4D8EB009D1C27 /* NotificationsView.swift */,
 				B163D1DB2B8F9ED200DBC5A3 /* ForumView.swift */,
 				B1A7C3962BA7CDB800BCE27F /* ForumPostDetailView.swift */,
+				F2DFCD412BD22E4A0086A1B7 /* MessagingView.swift */,
 				E0EF57522B8A489D00D72221 /* ForumPostView.swift */,
 				B1379ECC2BA3E70B00697317 /* SearchForumView.swift */,
 				F2C2EFC82BCC93A8005BC175 /* MenuView.swift */,
@@ -365,6 +370,7 @@
 				F2C2EFCA2BCCC970005BC175 /* AlarmTests.swift */,
 				F21F80C62BD0FC8100A8B0B5 /* TipsTests.swift */,
 				F21F80C82BD0FD6000A8B0B5 /* JournalRepliesTests.swift */,
+				F2DFCD3F2BD21C740086A1B7 /* NotificationViewTests.swift */,
 			);
 			path = "Serenova 2.0Tests";
 			sourceTree = "<group>";
@@ -625,6 +631,7 @@
 				E02A2BF72B8E62F000235A39 /* SleepManager.swift in Sources */,
 				B1379ECD2BA3E70B00697317 /* SearchForumView.swift in Sources */,
 				F23D7CDF2B7FAF320018F325 /* ResetPasswordView.swift in Sources */,
+				F2DFCD422BD22E4A0086A1B7 /* MessagingView.swift in Sources */,
 				8FE41FBD2BB4CB940067CEB9 /* SleepScoreView.swift in Sources */,
 				F20CA4D32BC0495F00C49411 /* TipsView.swift in Sources */,
 				B1CB24612B87C18B00AE8685 /* LoginView.swift in Sources */,
@@ -662,6 +669,7 @@
 				F22430F22BB69F93007EE5B7 /* SearchForumTests.swift in Sources */,
 				23D1E0F42B7A8FDF00539A62 /* Serenova_2_0Tests.swift in Sources */,
 				F2C2EFCB2BCCC970005BC175 /* AlarmTests.swift in Sources */,
+				F2DFCD402BD21C740086A1B7 /* NotificationViewTests.swift in Sources */,
 				F22430F62BB6BC8C007EE5B7 /* BlockedTests.swift in Sources */,
 				E0C98A2C2B90277E00A3D369 /* SleepManagerTests.swift in Sources */,
 				F2E2195E2B82EC6200235824 /* SignUpTests.swift in Sources */,
@@ -850,7 +858,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -883,7 +891,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -8,27 +8,6 @@
 import XCTest
 @testable import Serenova_2_0
 
-func calculateSleepScore(deepSleepMinutes: Int, coreSleepMinutes: Int, remSleepMinutes: Int, totalSleepMinutes: Int) -> Int {
-    // Using Double for weights to match with the Double type of literals like 0.4, 0.2, etc.
-    let deepSleepWeight: Double = 0.4
-    let coreSleepWeight: Double = 0.2
-    let remSleepWeight: Double = 0.1
-    let otherSleepWeight: Double = 0.3
-
-    // Calculate "Other" sleep minutes. Convert Int to Double for consistency in calculations.
-    let otherSleepMinutes = max(0.0, Double(totalSleepMinutes) - (Double(deepSleepMinutes) + Double(coreSleepMinutes) + Double(remSleepMinutes)))
-
-    // Calculate weighted scores for each sleep type. The result is in Double, which is consistent with the weight type.
-    let deepSleepScore = Double(deepSleepMinutes) * deepSleepWeight
-    let coreSleepScore = Double(coreSleepMinutes) * coreSleepWeight
-    let remSleepScore = Double(remSleepMinutes) * remSleepWeight
-    let otherSleepScore = otherSleepMinutes * otherSleepWeight
-
-    // Sum up the scores and convert the total score to Int before returning.
-    let totalScore = Int(deepSleepScore + coreSleepScore + remSleepScore + otherSleepScore)
-
-    return totalScore
-}
 
 class SleepScoreTests: XCTestCase {
     
@@ -113,3 +92,25 @@ class SleepScoreTests: XCTestCase {
     }
 }
 
+
+func calculateSleepScore(deepSleepMinutes: Int, coreSleepMinutes: Int, remSleepMinutes: Int, totalSleepMinutes: Int) -> Int {
+    // Using Double for weights to match with the Double type of literals like 0.4, 0.2, etc.
+    let deepSleepWeight: Double = 0.4
+    let coreSleepWeight: Double = 0.2
+    let remSleepWeight: Double = 0.1
+    let otherSleepWeight: Double = 0.3
+
+    // Calculate "Other" sleep minutes. Convert Int to Double for consistency in calculations.
+    let otherSleepMinutes = max(0.0, Double(totalSleepMinutes) - (Double(deepSleepMinutes) + Double(coreSleepMinutes) + Double(remSleepMinutes)))
+
+    // Calculate weighted scores for each sleep type. The result is in Double, which is consistent with the weight type.
+    let deepSleepScore = Double(deepSleepMinutes) * deepSleepWeight
+    let coreSleepScore = Double(coreSleepMinutes) * coreSleepWeight
+    let remSleepScore = Double(remSleepMinutes) * remSleepWeight
+    let otherSleepScore = otherSleepMinutes * otherSleepWeight
+
+    // Sum up the scores and convert the total score to Int before returning.
+    let totalScore = Int(deepSleepScore + coreSleepScore + remSleepScore + otherSleepScore)
+
+    return totalScore
+}

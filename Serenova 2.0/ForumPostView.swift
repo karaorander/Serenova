@@ -10,6 +10,54 @@ import PhotosUI
 import Firebase
 import FirebaseStorage
 
+
+class ForumPostViewModel: ObservableObject {
+    @Published var postText: String = ""
+    @Published var postTitle: String = ""
+    @Published var postImageData: Data?
+    @Published var postImageURL: URL?
+    @Published var isLoading: Bool = false
+    @Published var showError: Bool = false
+    @Published var errorMess: String = ""
+    @Published var tagOptions: [String] = ["None", "Questions", "Tips", "Hacks", "Support", "Goals", "Midnight Thoughts"]
+    @Published var tagOption: Int = 0
+    @Published var isDropdownOpen: Bool = false
+    @Published var selectedFriends = Set<String>()
+    @Published var friendNames: [String: String] = [:]
+    @Published var isCreatingPost: Bool = false
+    @Published var isPosted: Bool = false
+    
+    // Function to create a post
+    func createPost() async {
+        do {
+            // Check if the user is signed in
+            guard let currentUser = Auth.auth().currentUser else {
+                throw NSError(domain: "", code: 401, userInfo: [NSLocalizedDescriptionKey: "Error! Not signed in."])
+            }
+            
+            // Create a new Post object
+            var newPost = Post(title: postTitle, content: postText, tag: tagOptions[tagOption], userTags: Array(selectedFriends))
+            
+            // Store Image & Get DownloadURL
+            if let postImageData = postImageData {
+               // try await storeImage()
+                
+                // Set imageURL of Post
+                guard let postImageURL = postImageURL else {
+                    throw NSError(domain: "", code: 500, userInfo: [NSLocalizedDescriptionKey: "Failed to upload photo."])
+                }
+                newPost.imageURL = postImageURL
+            }
+            
+            // Save post to Firebase
+            try await newPost.createPost()
+            isPosted = true
+        } catch {
+            errorMess = error.localizedDescription
+            showError = true
+        }
+    }
+}
 //Create New Post View
 struct ForumPostView: View {
     /// callback
@@ -33,14 +81,14 @@ struct ForumPostView: View {
     @FocusState private var showkeyboard: Bool
     
     @State private var isCreatingPost: Bool = false
-    @State private var isPosted: Bool = false
+    @State var isPosted: Bool = false
     
     @State var tagOptions: [String] = ["None", "Questions", "Tips", "Hacks", "Support", "Goals", "Midnight Thoughts"]
     @State private var tagOption: Int = 0
     @State private var showTagOptions: Bool = false
     
     @State private var isDropdownOpen:Bool = false
-    @State private var selectedFriends = Set<String>()
+    @State var selectedFriends = Set<String>()
     @State private var friendNames: [String: String] = [:]
     
     @Environment(\.dismiss) private var dismiss
