@@ -13,6 +13,7 @@ import FirebaseFirestoreSwift
 
 struct NotificationsView: View {
     @StateObject var notificationsModel = NotificationsModel()
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         NavigationView {
@@ -26,14 +27,16 @@ struct NotificationsView: View {
 
                 VStack(spacing: 0) {
                     HStack {
-                        NavigationLink(destination: AccountInfoView().navigationBarBackButtonHidden(true)) {
+                        Button(action:{
+                            dismiss()
+                        }, label: {
                             
-                            Image(systemName: "line.horizontal.3.decrease")
+                            Image(systemName: "chevron.backward")
                                 .resizable()
                                 .frame(width: 25, height: 25)
                                 .foregroundColor(.white)
                             
-                        }
+                        })
                         Spacer()
                         
                         Text("Notifications")

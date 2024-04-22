@@ -33,7 +33,7 @@ struct ForumView: View {
                         // TODO: Make Dropdown Menu with different options (e.g. Home)
                         NavigationLink(destination: SleepGoalsView().navigationBarBackButtonHidden(true)) {
                             
-                            Image(systemName: "line.horizontal.3.decrease")
+                            Image(systemName: "house.fill")
                                 .resizable()
                                 .frame(width: 25, height: 25)
                                 .foregroundColor(.white)
@@ -290,8 +290,12 @@ struct PostListingView: View {
                         if tag == currUser?.userID {
                             Menu {
                                 Button("Remove tag?", role: .destructive) {
-                                    post.userTags.removeAll(where: { $0 == tag })
-                                    post.updateValues(newValues: ["userTags" : post.userTags]){_ in }
+                                    
+                                        let tagToRemove = tag // Capture the tag value to avoid a capture list in the DispatchQueue closure
+                                    DispatchQueue.main.async {
+                                        post.userTags.removeAll(where: { $0 == tagToRemove })
+                                        post.updateValues(newValues: ["userTags" : post.userTags]) { _ in }
+                                    }
                                 }
                             } label: {
                                 Text(friendName)

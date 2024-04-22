@@ -290,9 +290,9 @@ struct TipsView: View {
                     ScrollView {
                         VStack(spacing: 30) {
                             HStack {
-                                NavigationLink(destination: AccountInfoView().navigationBarBackButtonHidden(true)) {
+                                NavigationLink(destination: SleepGoalsView().navigationBarBackButtonHidden(true)) {
                                     
-                                    Image(systemName: "line.horizontal.3.decrease")
+                                    Image(systemName: "chevron.left")
                                         .resizable()
                                         .frame(width: 25, height: 25)
                                         .foregroundColor(.white)

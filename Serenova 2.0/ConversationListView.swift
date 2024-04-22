@@ -202,9 +202,9 @@ struct ConversationListView: View {
                 VStack(spacing: 0) {
                     HStack {
                         NavigationLink(destination: ForumView().navigationBarBackButtonHidden(true)) {
-                            Image(systemName: "line.horizontal.3.decrease")
+                            Image(systemName: "chevron.left")
                                 .resizable()
-                                .frame(width: 25, height: 25)
+                                .frame(width: 20, height: 20)
                                 .foregroundColor(.white)
                         }
                         Spacer()
@@ -302,7 +302,7 @@ struct ConversationListView: View {
                         
                         Spacer()
                         
-                        NavigationLink(destination: ForumPostView(postText: "", postTitle: "").navigationBarBackButtonHidden(true)) {
+                        NavigationLink(destination:ForumView().navigationBarBackButtonHidden(true)) {
                             Image(systemName: "person.2")
                                 .resizable()
                                 .frame(width: 45, height: 30)
