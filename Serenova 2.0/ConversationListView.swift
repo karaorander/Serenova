@@ -244,7 +244,7 @@ struct ConversationListView: View {
                                                  */
                                         }
                                     
-                                    NavigationLink(destination: MessagingView(convoID: conversationList[index].convoId!).navigationBarBackButtonHidden(false)) {
+                                    NavigationLink(destination: MessagingView(convoID: conversationList[index].convoId!).navigationBarBackButtonHidden(true)) {
                                         EmptyView()
                                     }
                                     .opacity(0)

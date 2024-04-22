@@ -31,62 +31,79 @@ struct MessagingView: View {
    
     @State private var showImagePicker: Bool = false
     
+    
     var body: some View {
-        ZStack {
-            // Background gradient
-            LinearGradient(gradient: Gradient(colors: [.nightfallHarmonySilverGray.opacity(0.9), .nightfallHarmonyRoyalPurple.opacity(0.5), .dreamyTwilightMidnightBlue.opacity(0.7), .nightfallHarmonyNavyBlue.opacity(0.8)]), startPoint: .top, endPoint: .bottom)
-                .ignoresSafeArea()
-            
-            VStack(alignment: .leading) {
-                Text("Chat") // Title
-                    .font(.custom("NovaSquare-Bold", size: 30)) // Set custom font
-                    .foregroundColor(.white)
-                    .padding(.top, 20)
-                    .padding(.bottom, 10)
-                    .padding(.horizontal)
+        NavigationView {
+            ZStack {
+                // Background gradient
+                LinearGradient(gradient: Gradient(colors: [.nightfallHarmonySilverGray.opacity(0.9), .nightfallHarmonyRoyalPurple.opacity(0.5), .dreamyTwilightMidnightBlue.opacity(0.7), .nightfallHarmonyNavyBlue.opacity(0.8)]), startPoint: .top, endPoint: .bottom)
+                    .ignoresSafeArea()
                 
-                if replies.count > 0 {
-                    ForEach(replies.indices, id: \.self) { index in
-                        MessageCommentView(commentReply: $replies[index])
-                            .onAppear {
-                                if index == replies.count - 1 && lastReply != nil {
-                                    Task {
-                                        await queryReplies(NUM_REPLIES: queryNum)
+                VStack(alignment: .leading) {
+                    ScrollView(.vertical, showsIndicators: false) {
+                    HStack {
+                        NavigationLink(destination: ConversationListView().navigationBarBackButtonHidden(true)) {
+                            
+                            Image(systemName: "chevron.backward")
+                               
+                               
+                                .foregroundColor(.white)
+                            
+                        }.padding(.leading)
+                        Text("Chat") // Title
+                            .font(.custom("NovaSquare-Bold", size: 30)) // Set custom font
+                            .foregroundColor(.white)
+                            .padding(.top, 20)
+                            .padding(.bottom, 10)
+                            
+                            .hSpacing(.center)
+                    }.vSpacing(.top)
+                    
+                        if replies.count > 0 {
+                            ForEach(replies.indices, id: \.self) { index in
+                                MessageCommentView(commentReply: $replies[index])
+                                    .onAppear {
+                                        if index == replies.count - 1 && lastReply != nil {
+                                            Task {
+                                                await queryReplies(NUM_REPLIES: queryNum)
+                                            }
+                                        }
                                     }
-                                }
+                                    .padding(5)
                             }
-                            .padding(5)
+                            .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
+                            .listRowBackground(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(Color.soothingNightDeepIndigo)
+                            )
+                        }
                     }
-                    .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
-                    .listRowBackground(
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(Color.soothingNightDeepIndigo)
-                    )
+                    
+                    Button(action: {
+                        isReplying.toggle()
+                    }) {
+                        Text("Message")
+                            .foregroundColor(.white)
+                            .padding()
+                            .background(Color.blue)
+                            .cornerRadius(10)
+                            .padding()
+                    }
+                    if isReplying {
+                        AddReplyView()
+                            .padding()
+                    }
                 }
-                
-                Button(action: {
-                    isReplying.toggle()
-                }) {
-                    Text("Message")
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color.blue)
-                        .cornerRadius(10)
-                }
-                if isReplying {
-                    AddReplyView()
-                        .padding()
-                }
-            }
-            .onAppear() {
-                UIRefreshControl.appearance().tintColor = .white
-                Task {
-                    print("in here???")
-                    // Prevents crash but data will not be loaded
-                    // Need to run in simulator
-                    if replies.count == 0 && currUser != nil {
-                        print("in HERE???")
-                        await queryReplies(NUM_REPLIES: queryNum)
+                .onAppear() {
+                    UIRefreshControl.appearance().tintColor = .white
+                    Task {
+                        print("in here???")
+                        // Prevents crash but data will not be loaded
+                        // Need to run in simulator
+                        if replies.count == 0 && currUser != nil {
+                            print("in HERE???")
+                            await queryReplies(NUM_REPLIES: queryNum)
+                        }
                     }
                 }
             }

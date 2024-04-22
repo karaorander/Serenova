@@ -43,7 +43,7 @@ struct JournalView: View {
                         // TODO: Make Dropdown Menu with different options (e.g. Home)
                         NavigationLink(destination: SleepGoalsView().navigationBarBackButtonHidden(true)) {
                             
-                            Image(systemName: "line.horizontal.3.decrease")
+                            Image(systemName: "chevron.backward")
                                 .resizable()
                                 .frame(width: 25, height: 25)
                                 .foregroundColor(.white)

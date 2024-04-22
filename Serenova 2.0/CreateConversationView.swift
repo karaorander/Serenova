@@ -366,7 +366,7 @@ struct CreateBrandNewConversationView: View {
                     .scrollIndicators(ScrollIndicatorVisibility.hidden)
                     
                     if let newConvo = newConvo {
-                        NavigationLink ("", destination: MessagingView(convoID: newConvo.convoId!).navigationBarBackButtonHidden(false), isActive: $hasClicked)
+                        NavigationLink ("", destination: MessagingView(convoID: newConvo.convoId!).navigationBarBackButtonHidden(true), isActive: $hasClicked)
                     }
 
                 }.vSpacing(.top)
@@ -607,7 +607,7 @@ struct CreateGroupConversationView: View {
                     .buttonStyle(NoStyle())
                     
                     if let newConvo = newConvo {
-                        NavigationLink ("", destination: MessagingView(convoID: newConvo.convoId!).navigationBarBackButtonHidden(false), isActive: $hasClicked)
+                        NavigationLink ("", destination: MessagingView(convoID: newConvo.convoId!).navigationBarBackButtonHidden(true), isActive: $hasClicked)
                     }
                 }.vSpacing(.top)
                     .alert(
