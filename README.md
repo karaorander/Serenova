@@ -1,6 +1,6 @@
 # Serenova
 
-Welcome to the Serenova GitHub repository! Serenova is an innovative application focused on enhancing user experience through a variety of real-time communication and personal health management features. Our team is dedicated to leveraging cutting-edge technology to facilitate seamless interactions and foster community building.
+Welcome to the Serenova GitHub repository! Serenova is an innovative sleep managing application focused on enhancing user experience through a variety of real-time communication and personal health features. We are dedicated to leveraging cutting-edge technology while also fostering community building.
 
 ## Table of Contents
 
